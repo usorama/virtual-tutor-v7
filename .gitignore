@@ -1,0 +1,130 @@
+# Legacy and archived content
+vt-app-legacy/
+.archive/
+
+# Dependencies
+node_modules/
+*/node_modules/
+**/node_modules/
+
+# Next.js
+.next/
+*/.next/
+out/
+*/out/
+
+# Production builds
+build/
+dist/
+*/build/
+*/dist/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+.env.local
+.env.*.local
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Testing
+coverage/
+.nyc_output/
+.jest-cache/
+*.lcov
+
+# Typescript
+*.tsbuildinfo
+.tsc-cache/
+
+# Package manager files
+.pnpm-store/
+.yarn/
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# OS generated files
+Desktop.ini
+.Spotlight-V100
+.Trashes
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+
+# Uploads and generated content
+uploads/
+public/uploads/
+static/uploads/
+
+# Security
+*.pem
+*.key
+*.crt
+*.cert
+
+# Backup files
+*.backup
+*.bak
+*.old
+
+# Lock files (keep package-lock.json)
+yarn.lock
+pnpm-lock.yaml
+
+# Monitoring and observability
+.monitoring/
+grafana-storage/
+
+# Cache directories
+.cache/
+.parcel-cache/
+.turbo/
+
+# Build artifacts
+.vercel/
+.netlify/
+
+# Documentation builds
+docs/.vitepress/dist/
+docs/.vuepress/dist/
+
+# Miscellaneous
+.history/
+.husky/_/

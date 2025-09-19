@@ -1,0 +1,324 @@
+/* LiveKit Animation System - Keyframes and Transitions */
+
+/* Core Keyframe Animations */
+@keyframes lk-fade-in {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes lk-fade-out {
+  from { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+  to { 
+    opacity: 0; 
+    transform: translateY(-10px); 
+  }
+}
+
+@keyframes lk-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes lk-pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+@keyframes lk-bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes lk-shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+  20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+@keyframes lk-scale-in {
+  from { 
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes lk-scale-out {
+  from { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  to { 
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes lk-slide-in-from-top {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lk-slide-in-from-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lk-slide-in-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes lk-slide-in-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Connection Status Animations */
+@keyframes lk-connection-pulse {
+  0%, 100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes lk-recording-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.3; }
+}
+
+/* Loading Animations */
+@keyframes lk-loading-dots {
+  0%, 20% {
+    color: var(--lk-accent-bg);
+    transform: scale(1);
+  }
+  50% {
+    color: var(--lk-accent-bg-secondary);
+    transform: scale(1.2);
+  }
+  80%, 100% {
+    color: var(--lk-accent-bg);
+    transform: scale(1);
+  }
+}
+
+@keyframes lk-skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+/* Utility Animation Classes */
+.lk-animate-fade-in {
+  animation: lk-fade-in var(--lk-transition-duration-slow) var(--lk-transition-timing-smooth);
+}
+
+.lk-animate-fade-out {
+  animation: lk-fade-out var(--lk-transition-duration-slow) var(--lk-transition-timing-smooth);
+}
+
+.lk-animate-spin {
+  animation: lk-spin 1s linear infinite;
+}
+
+.lk-animate-pulse {
+  animation: lk-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.lk-animate-bounce {
+  animation: lk-bounce 1s infinite;
+}
+
+.lk-animate-shake {
+  animation: lk-shake var(--lk-transition-duration-normal) var(--lk-transition-timing-ease-in-out);
+}
+
+.lk-animate-scale-in {
+  animation: lk-scale-in var(--lk-transition-duration-normal) var(--lk-transition-timing-smooth);
+}
+
+.lk-animate-scale-out {
+  animation: lk-scale-out var(--lk-transition-duration-normal) var(--lk-transition-timing-smooth);
+}
+
+.lk-animate-slide-in-top {
+  animation: lk-slide-in-from-top var(--lk-transition-duration-slow) var(--lk-transition-timing-smooth);
+}
+
+.lk-animate-slide-in-bottom {
+  animation: lk-slide-in-from-bottom var(--lk-transition-duration-slow) var(--lk-transition-timing-smooth);
+}
+
+.lk-animate-slide-in-left {
+  animation: lk-slide-in-from-left var(--lk-transition-duration-slow) var(--lk-transition-timing-smooth);
+}
+
+.lk-animate-slide-in-right {
+  animation: lk-slide-in-from-right var(--lk-transition-duration-slow) var(--lk-transition-timing-smooth);
+}
+
+/* Connection Status Animation Classes */
+.lk-connection-status.excellent {
+  color: var(--lk-connection-excellent);
+  animation: lk-connection-pulse 2s ease-in-out infinite;
+}
+
+.lk-connection-status.good {
+  color: var(--lk-connection-good);
+}
+
+.lk-connection-status.poor {
+  color: var(--lk-connection-poor);
+  animation: lk-shake 0.5s ease-in-out;
+}
+
+.lk-recording-indicator {
+  animation: lk-recording-blink 1s infinite;
+}
+
+/* Loading Animation Classes */
+.lk-loading-dots::after {
+  content: '...';
+  display: inline-block;
+  animation: lk-loading-dots 1.4s infinite ease-in-out both;
+}
+
+.lk-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--lk-bg-secondary) 0%,
+    var(--lk-bg-tertiary) 50%,
+    var(--lk-bg-secondary) 100%
+  );
+  background-size: 200px 100%;
+  animation: lk-skeleton-loading 1.5s infinite;
+}
+
+/* Interactive Animation Classes */
+.lk-hover-lift {
+  transition: transform var(--lk-transition-duration-normal) var(--lk-transition-timing-smooth);
+}
+
+.lk-hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+.lk-hover-scale {
+  transition: transform var(--lk-transition-duration-normal) var(--lk-transition-timing-smooth);
+}
+
+.lk-hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.lk-click-scale {
+  transition: transform var(--lk-transition-duration-fast) var(--lk-transition-timing-smooth);
+}
+
+.lk-click-scale:active {
+  transform: scale(0.95);
+}
+
+/* Focus Animation Classes */
+.lk-focus-ring {
+  transition: box-shadow var(--lk-transition-duration-fast) var(--lk-transition-timing-smooth);
+}
+
+.lk-focus-ring:focus {
+  outline: none;
+  box-shadow: var(--lk-shadow-focus);
+}
+
+/* Performance Optimizations */
+.lk-will-animate {
+  will-change: transform, opacity;
+}
+
+.lk-hardware-accelerate {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Motion Preference Handling */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .lk-animate-spin {
+    animation: none;
+  }
+  
+  .lk-animate-bounce,
+  .lk-animate-pulse,
+  .lk-connection-status.excellent {
+    animation: none;
+  }
+}
+
+/* Staggered Animation Utilities */
+.lk-stagger-children > * {
+  animation-delay: calc(var(--lk-stagger-delay, 0.1s) * var(--lk-stagger-index, 0));
+}
+
+/* Usage: Set --lk-stagger-index as inline style on each child */
+.lk-stagger-1 { --lk-stagger-index: 1; }
+.lk-stagger-2 { --lk-stagger-index: 2; }
+.lk-stagger-3 { --lk-stagger-index: 3; }
+.lk-stagger-4 { --lk-stagger-index: 4; }
+.lk-stagger-5 { --lk-stagger-index: 5; }

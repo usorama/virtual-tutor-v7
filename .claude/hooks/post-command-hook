@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Post-Command Hook for Claude Code
+# Automatically runs quality checks after phase completions
+
+# Check if auto-quality is enabled
+if [ -f ".claude/auto-quality-enabled" ]; then
+    # Check if last command was a phase completion
+    if [[ "$CLAUDE_LAST_COMMAND" == *"verify-phase"* ]] || 
+       [[ "$CLAUDE_LAST_OUTPUT" == *"Phase"*"complete"* ]] ||
+       [[ "$CLAUDE_LAST_OUTPUT" == *"COMPLETE"* ]]; then
+        
+        echo ""
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "🌉 Auto-Quality: Detected phase completion, running checks..."
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        
+        # Run the phase completion hook
+        node .claude/automation/hooks/phase-completion-hook.js "$CLAUDE_LAST_OUTPUT"
+    fi
+fi

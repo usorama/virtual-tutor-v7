@@ -1,0 +1,664 @@
+/* LiveKit Design System - Base CSS Framework v1.0.0 */
+/* This file contains every class and style needed to implement LiveKit's design */
+
+/* ============================================
+   CSS CUSTOM PROPERTIES (Design Tokens)
+   ============================================ */
+
+:root {
+  /* Color System */
+  --lk-accent-bg: #1f8cf9;
+  --lk-accent-bg-hover: #2f96fa;
+  --lk-accent-bg-active: #3fa0fb;
+  --lk-accent-fg: #ffffff;
+  
+  /* Dark Theme Colors (Default) */
+  --lk-bg: #111111;
+  --lk-bg-secondary: #1a1a1a;
+  --lk-bg-tertiary: #242424;
+  --lk-bg-quaternary: #2e2e2e;
+  --lk-bg-quinary: #383838;
+  
+  --lk-fg: #ffffff;
+  --lk-fg-secondary: #f5f5f5;
+  --lk-fg-tertiary: #ebebeb;
+  --lk-fg-muted: rgba(255, 255, 255, 0.8);
+  --lk-fg-subtle: rgba(255, 255, 255, 0.6);
+  
+  --lk-border: rgba(255, 255, 255, 0.1);
+  --lk-border-hover: rgba(255, 255, 255, 0.2);
+  
+  /* Semantic Colors */
+  --lk-success: #1ff968;
+  --lk-success-bg: rgba(31, 249, 104, 0.1);
+  --lk-danger: #f91f31;
+  --lk-danger-bg: rgba(249, 31, 49, 0.1);
+  --lk-warning: #f9b11f;
+  --lk-warning-bg: rgba(249, 177, 31, 0.1);
+  
+  /* Typography */
+  --lk-font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Helvetica Neue', 'Helvetica', sans-serif;
+  --lk-font-family-mono: 'SFMono-Regular', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Consolas', 'Courier New', monospace;
+  
+  /* Spacing */
+  --lk-spacing-xs: 4px;
+  --lk-spacing-sm: 8px;
+  --lk-spacing-md: 16px;
+  --lk-spacing-lg: 24px;
+  --lk-spacing-xl: 32px;
+  --lk-spacing-2xl: 48px;
+  --lk-spacing-3xl: 64px;
+  --lk-spacing-4xl: 80px;
+  
+  /* Border Radius */
+  --lk-radius-sm: 6px;
+  --lk-radius-base: 8px;
+  --lk-radius-md: 10px;
+  --lk-radius-lg: 12px;
+  --lk-radius-xl: 16px;
+  --lk-radius-full: 9999px;
+  
+  /* Transitions */
+  --lk-transition-fast: 0.1s ease-in-out;
+  --lk-transition-normal: 0.2s ease-in-out;
+  --lk-transition-slow: 0.3s ease;
+  
+  /* Shadows */
+  --lk-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --lk-shadow-base: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --lk-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --lk-shadow-lg: 0 24px 48px rgba(0, 0, 0, 0.2);
+  --lk-shadow-focus: 0 0 0 3px rgba(31, 140, 249, 0.2);
+}
+
+/* Light Theme Override */
+[data-theme="light"] {
+  --lk-bg: #ffffff;
+  --lk-bg-secondary: #f5f5f5;
+  --lk-bg-tertiary: #ebebeb;
+  
+  --lk-fg: #111111;
+  --lk-fg-secondary: #333333;
+  --lk-fg-muted: rgba(17, 17, 17, 0.8);
+  --lk-fg-subtle: rgba(17, 17, 17, 0.6);
+  
+  --lk-border: rgba(0, 0, 0, 0.1);
+  --lk-border-hover: rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================
+   BASE RESET & FOUNDATION
+   ============================================ */
+
+.lk-app {
+  font-family: var(--lk-font-family);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--lk-fg);
+  background: var(--lk-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.lk-app * {
+  box-sizing: border-box;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+.lk-h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.lk-h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.lk-h3 {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.lk-h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.lk-h5 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.lk-h6 {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.lk-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.lk-text-sm {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.lk-text-xs {
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.lk-text-muted {
+  color: var(--lk-fg-muted);
+}
+
+.lk-text-subtle {
+  color: var(--lk-fg-subtle);
+}
+
+.lk-code {
+  font-family: var(--lk-font-family-mono);
+  font-size: 0.875em;
+  padding: 0.125em 0.25em;
+  background: var(--lk-bg-tertiary);
+  border-radius: var(--lk-radius-sm);
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+.lk-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lk-spacing-sm);
+  padding: 12px 24px;
+  font-family: var(--lk-font-family);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  border: none;
+  border-radius: var(--lk-radius-base);
+  cursor: pointer;
+  transition: all var(--lk-transition-normal);
+  user-select: none;
+  text-decoration: none;
+  white-space: nowrap;
+  min-height: 44px;
+}
+
+.lk-button:focus-visible {
+  outline: none;
+  box-shadow: var(--lk-shadow-focus);
+}
+
+.lk-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Button Variants */
+.lk-button-primary {
+  background: var(--lk-accent-bg);
+  color: var(--lk-accent-fg);
+}
+
+.lk-button-primary:hover:not(:disabled) {
+  background: var(--lk-accent-bg-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(31, 140, 249, 0.25);
+}
+
+.lk-button-primary:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.lk-button-secondary {
+  background: transparent;
+  color: var(--lk-accent-bg);
+  border: 1px solid var(--lk-accent-bg);
+  padding: 11px 23px;
+}
+
+.lk-button-secondary:hover:not(:disabled) {
+  background: rgba(31, 140, 249, 0.1);
+  border-color: var(--lk-accent-bg-hover);
+}
+
+.lk-button-ghost {
+  background: transparent;
+  color: var(--lk-fg);
+  border: 1px solid var(--lk-border);
+  padding: 11px 23px;
+}
+
+.lk-button-ghost:hover:not(:disabled) {
+  background: var(--lk-bg-secondary);
+  border-color: var(--lk-border-hover);
+}
+
+/* Button Sizes */
+.lk-button-sm {
+  padding: 8px 16px;
+  font-size: 12px;
+  min-height: 36px;
+}
+
+.lk-button-lg {
+  padding: 16px 32px;
+  font-size: 16px;
+  min-height: 52px;
+}
+
+/* ============================================
+   FORMS & INPUTS
+   ============================================ */
+
+.lk-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-family: var(--lk-font-family);
+  font-size: 14px;
+  color: var(--lk-fg);
+  background: var(--lk-bg-secondary);
+  border: 1px solid var(--lk-border);
+  border-radius: var(--lk-radius-base);
+  transition: all var(--lk-transition-normal);
+  min-height: 44px;
+}
+
+.lk-input::placeholder {
+  color: var(--lk-fg-subtle);
+}
+
+.lk-input:focus {
+  outline: none;
+  border-color: var(--lk-accent-bg);
+  box-shadow: var(--lk-shadow-focus);
+}
+
+.lk-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--lk-bg);
+}
+
+/* Input States */
+.lk-input-error {
+  border-color: var(--lk-danger);
+}
+
+.lk-input-error:focus {
+  box-shadow: 0 0 0 3px rgba(249, 31, 49, 0.1);
+}
+
+.lk-input-success {
+  border-color: var(--lk-success);
+}
+
+.lk-input-success:focus {
+  box-shadow: 0 0 0 3px rgba(31, 249, 104, 0.1);
+}
+
+/* Textarea */
+.lk-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Select */
+.lk-select {
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 20px;
+  padding-right: 40px;
+}
+
+/* ============================================
+   CARDS
+   ============================================ */
+
+.lk-card {
+  background: var(--lk-bg-secondary);
+  border: 1px solid var(--lk-border);
+  border-radius: var(--lk-radius-lg);
+  padding: var(--lk-spacing-lg);
+  transition: all var(--lk-transition-slow);
+}
+
+.lk-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--lk-shadow-md);
+  border-color: rgba(31, 140, 249, 0.3);
+}
+
+.lk-card-header {
+  margin-bottom: var(--lk-spacing-md);
+  padding-bottom: var(--lk-spacing-md);
+  border-bottom: 1px solid var(--lk-border);
+}
+
+.lk-card-body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--lk-fg-muted);
+}
+
+.lk-card-footer {
+  margin-top: var(--lk-spacing-md);
+  padding-top: var(--lk-spacing-md);
+  border-top: 1px solid var(--lk-border);
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+
+.lk-nav {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--lk-spacing-lg);
+  background: rgba(17, 17, 17, 0.8);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--lk-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.lk-nav-link {
+  color: var(--lk-fg-muted);
+  text-decoration: none;
+  padding: var(--lk-spacing-sm) var(--lk-spacing-md);
+  border-radius: var(--lk-radius-sm);
+  transition: all var(--lk-transition-normal);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.lk-nav-link:hover {
+  color: var(--lk-fg);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lk-nav-link-active {
+  color: var(--lk-accent-bg);
+  background: rgba(31, 140, 249, 0.1);
+}
+
+/* ============================================
+   BADGES
+   ============================================ */
+
+.lk-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lk-badge-default {
+  background: var(--lk-border);
+  color: var(--lk-fg);
+}
+
+.lk-badge-success {
+  background: var(--lk-success-bg);
+  color: var(--lk-success);
+}
+
+.lk-badge-danger {
+  background: var(--lk-danger-bg);
+  color: var(--lk-danger);
+}
+
+.lk-badge-warning {
+  background: var(--lk-warning-bg);
+  color: var(--lk-warning);
+}
+
+.lk-badge-info {
+  background: rgba(31, 140, 249, 0.1);
+  color: var(--lk-accent-bg);
+}
+
+/* ============================================
+   MODALS
+   ============================================ */
+
+.lk-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: lk-fade-in 0.2s ease;
+}
+
+.lk-modal-content {
+  background: var(--lk-bg-secondary);
+  border-radius: var(--lk-radius-xl);
+  padding: var(--lk-spacing-xl);
+  max-width: 560px;
+  width: 90%;
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: var(--lk-shadow-lg);
+  border: 1px solid var(--lk-border);
+  animation: lk-slide-up 0.3s ease;
+}
+
+/* ============================================
+   LOADING STATES
+   ============================================ */
+
+.lk-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--lk-border);
+  border-top: 2px solid var(--lk-accent-bg);
+  border-radius: 50%;
+  animation: lk-spin 0.8s linear infinite;
+}
+
+.lk-skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: lk-shimmer 1.5s infinite;
+  border-radius: var(--lk-radius-sm);
+}
+
+/* ============================================
+   LAYOUT & GRID
+   ============================================ */
+
+.lk-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--lk-spacing-lg);
+}
+
+.lk-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--lk-spacing-lg);
+}
+
+.lk-flex {
+  display: flex;
+}
+
+.lk-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lk-flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ============================================
+   UTILITIES
+   ============================================ */
+
+.lk-mt-xs { margin-top: var(--lk-spacing-xs); }
+.lk-mt-sm { margin-top: var(--lk-spacing-sm); }
+.lk-mt-md { margin-top: var(--lk-spacing-md); }
+.lk-mt-lg { margin-top: var(--lk-spacing-lg); }
+.lk-mt-xl { margin-top: var(--lk-spacing-xl); }
+
+.lk-mb-xs { margin-bottom: var(--lk-spacing-xs); }
+.lk-mb-sm { margin-bottom: var(--lk-spacing-sm); }
+.lk-mb-md { margin-bottom: var(--lk-spacing-md); }
+.lk-mb-lg { margin-bottom: var(--lk-spacing-lg); }
+.lk-mb-xl { margin-bottom: var(--lk-spacing-xl); }
+
+.lk-p-xs { padding: var(--lk-spacing-xs); }
+.lk-p-sm { padding: var(--lk-spacing-sm); }
+.lk-p-md { padding: var(--lk-spacing-md); }
+.lk-p-lg { padding: var(--lk-spacing-lg); }
+.lk-p-xl { padding: var(--lk-spacing-xl); }
+
+.lk-gap-xs { gap: var(--lk-spacing-xs); }
+.lk-gap-sm { gap: var(--lk-spacing-sm); }
+.lk-gap-md { gap: var(--lk-spacing-md); }
+.lk-gap-lg { gap: var(--lk-spacing-lg); }
+.lk-gap-xl { gap: var(--lk-spacing-xl); }
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes lk-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes lk-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes lk-fade-in {
+  from { 
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lk-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lk-pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================ */
+
+@media (max-width: 768px) {
+  .lk-h1 { font-size: 2rem; }
+  .lk-h2 { font-size: 1.75rem; }
+  .lk-h3 { font-size: 1.5rem; }
+  
+  .lk-grid {
+    grid-template-columns: 1fr;
+    gap: var(--lk-spacing-md);
+  }
+  
+  .lk-container {
+    padding: 0 var(--lk-spacing-md);
+  }
+  
+  .lk-modal-content {
+    padding: var(--lk-spacing-lg);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .lk-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--lk-spacing-lg);
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.lk-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
