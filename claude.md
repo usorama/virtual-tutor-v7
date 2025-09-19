@@ -56,3 +56,4 @@
 - Textbooks: Located at /text-books/
 - Voice: LiveKit integration required
 - Testing: Comprehensive testing before feature transitions
+- After completing every phase and before starting a new phase implementation, add, commit and push to remote, merge with main and create a new branch for the new phase
