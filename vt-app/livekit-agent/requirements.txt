@@ -1,8 +1,0 @@
-# LiveKit Agent Dependencies
-livekit-agents==0.11.0
-livekit-plugins-gemini==0.3.0
-python-dotenv==1.0.0
-supabase==2.9.2
-aiohttp==3.10.11
-numpy==1.26.4
-asyncio==3.4.3

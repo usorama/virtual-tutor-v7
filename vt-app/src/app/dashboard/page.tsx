@@ -5,8 +5,10 @@ import { getUserProfile, checkWizardCompletion, getTextbookCount } from '@/lib/w
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui'
 import { Badge } from '@/components/ui/badge'
 import { signOut } from '@/lib/auth/actions'
-import { BookOpen, Brain, Trophy, Clock, GraduationCap, CheckCircle2 } from 'lucide-react'
+import { BookOpen, Brain, Trophy, Clock, GraduationCap, CheckCircle2, Mic } from 'lucide-react'
 import { GRADE_LABELS } from '@/types/wizard'
+import { SessionHistory } from '@/components/session/SessionHistory'
+import { QuickStart } from '@/components/session/QuickStart'
 
 export default async function DashboardPage() {
   const user = await getUser()
@@ -109,6 +111,27 @@ export default async function DashboardPage() {
           </Card>
         </div>
 
+        <div className="grid lg:grid-cols-3 gap-6 mb-8">
+          {/* Quick Start Section */}
+          <div className="lg:col-span-1">
+            <QuickStart 
+              currentChapter={profile?.current_chapter}
+              chapterTitle="NCERT Mathematics - Class 10"
+              lastSessionDate={profile?.last_session_at}
+              suggestedTopics={['Quadratic Equations', 'Triangles', 'Probability']}
+              masteryLevel={45}
+            />
+          </div>
+          
+          {/* Session History */}
+          <div className="lg:col-span-2">
+            <SessionHistory 
+              studentId={user.id}
+              limit={5}
+            />
+          </div>
+        </div>
+
         <div className="grid md:grid-cols-2 gap-6">
           {/* Learning Profile Card */}
           <Card>
@@ -174,9 +197,9 @@ export default async function DashboardPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <Link href="/classroom" className="block">
-                <Button className="w-full justify-start" variant="outline">
-                  <Brain className="h-4 w-4 mr-2" />
-                  Start Learning Session
+                <Button className="w-full justify-start" size="lg">
+                  <Mic className="h-4 w-4 mr-2" />
+                  Start Voice Session
                 </Button>
               </Link>
               

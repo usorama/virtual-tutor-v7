@@ -57,3 +57,6 @@
 - Voice: LiveKit integration required
 - Testing: Comprehensive testing before feature transitions
 - After completing every phase and before starting a new phase implementation, add, commit and push to remote, merge with main and create a new branch for the new phase
+- Do not create a document if it is not required
+- Always look for where should a document or artifact go, after reviewing what exists where, with evidence.  Do not create any document out of it's rightful place.
+- no mocking of any kind unless user specifies. If something need to be mocked, get user approval first with valid reason

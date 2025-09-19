@@ -4,13 +4,16 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { AccessToken, VideoGrant } from 'livekit-server-sdk';
-import { createClient } from '@/lib/supabase/server';
-import { cookies } from 'next/headers';
+import { createClient as createServerClient } from '@supabase/supabase-js';
 
 // LiveKit configuration from environment
 const LIVEKIT_URL = process.env.LIVEKIT_URL || 'wss://ai-tutor-prototype-ny9l58vd.livekit.cloud';
 const LIVEKIT_API_KEY = process.env.LIVEKIT_API_KEY || 'APIz7rWgBkZqPDq';
 const LIVEKIT_API_SECRET = process.env.LIVEKIT_API_SECRET || 'kHLVuf6fCfcTdB8ClOT223Fn4npSckCXYyJkse8Op7VA';
+
+// Supabase configuration
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
 /**
  * POST /api/livekit
@@ -18,17 +21,29 @@ const LIVEKIT_API_SECRET = process.env.LIVEKIT_API_SECRET || 'kHLVuf6fCfcTdB8ClO
  */
 export async function POST(request: NextRequest) {
   try {
-    const cookieStore = await cookies();
-    const supabase = createClient(cookieStore);
+    // Get the authorization header
+    const authorization = request.headers.get('authorization');
+    const token = authorization?.replace('Bearer ', '');
     
-    // Get authenticated user
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (!token) {
+      console.error('No auth token provided');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    
+    // Create service role client for database operations
+    const supabase = createServerClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+    
+    // Verify the token and get user
+    const { data: { user }, error: userError } = await supabase.auth.getUser(token);
     if (userError || !user) {
+      console.error('Auth error:', userError);
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
     const body = await request.json();
     const { action } = body;
+    
+    console.log('Processing action:', action, 'for user:', user.id);
     
     switch (action) {
       case 'create-room':
@@ -43,7 +58,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('LiveKit API error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }
@@ -55,31 +70,39 @@ export async function POST(request: NextRequest) {
 async function createRoom(userId: string, body: any) {
   const { chapterId, topicId } = body;
   
+  console.log('Creating room for user:', userId);
+  
   // Generate unique room name
-  const roomName = `tutor-${userId}-${Date.now()}`;
+  const roomName = `tutor-${userId.substring(0, 8)}-${Date.now()}`;
   
   // Create session record in database
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+  
+  const sessionData = {
+    student_id: userId,
+    room_name: roomName,
+    chapter_focus: chapterId || null,
+    topics_discussed: topicId ? [topicId] : [],
+    started_at: new Date().toISOString()
+  };
+  
+  console.log('Creating session with data:', sessionData);
   
   const { data: session, error: sessionError } = await supabase
     .from('learning_sessions')
-    .insert({
-      student_id: userId,
-      room_name: roomName,
-      chapter_focus: chapterId,
-      topics_discussed: topicId ? [topicId] : [],
-      started_at: new Date().toISOString()
-    })
+    .insert(sessionData)
     .select()
     .single();
   
   if (sessionError) {
+    console.error('Failed to create session:', sessionError);
     return NextResponse.json(
-      { error: 'Failed to create session' },
+      { error: 'Failed to create session', details: sessionError.message },
       { status: 500 }
     );
   }
+  
+  console.log('Session created:', session.id);
   
   // Generate access token for the student
   const at = new AccessToken(LIVEKIT_API_KEY, LIVEKIT_API_SECRET, {
@@ -109,6 +132,8 @@ async function createRoom(userId: string, body: any) {
   
   const token = await at.toJwt();
   
+  console.log('Token generated for room:', roomName);
+  
   return NextResponse.json({
     token,
     roomName,
@@ -131,8 +156,7 @@ async function getToken(userId: string, body: any) {
   }
   
   // Verify user owns this session
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
   
   const { data: session, error } = await supabase
     .from('learning_sessions')
@@ -193,8 +217,7 @@ async function endSession(userId: string, body: any) {
     );
   }
   
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
   
   // Get session to calculate duration
   const { data: session, error: fetchError } = await supabase
@@ -216,42 +239,59 @@ async function endSession(userId: string, body: any) {
   const endTime = new Date();
   const durationMinutes = Math.floor((endTime.getTime() - startTime.getTime()) / 60000);
   
-  // Update session record
+  // Update session with end time and duration
   const { error: updateError } = await supabase
     .from('learning_sessions')
     .update({
       ended_at: endTime.toISOString(),
-      duration_minutes: durationMinutes
+      duration_minutes: durationMinutes,
+      updated_at: new Date().toISOString()
     })
-    .eq('id', sessionId);
+    .eq('id', sessionId)
+    .eq('student_id', userId);
   
   if (updateError) {
     return NextResponse.json(
-      { error: 'Failed to update session' },
+      { error: 'Failed to end session' },
       { status: 500 }
     );
   }
   
-  // Update student's total session time
-  const { data: profile, error: profileError } = await supabase
+  // Update user's total session minutes
+  // First get current minutes
+  const { data: profile } = await supabase
     .from('profiles')
     .select('total_session_minutes')
     .eq('id', userId)
     .single();
   
-  if (!profileError && profile) {
-    const currentTotal = profile.total_session_minutes || 0;
-    await supabase
-      .from('profiles')
-      .update({
-        total_session_minutes: currentTotal + durationMinutes,
-        last_session_at: endTime.toISOString()
-      })
-      .eq('id', userId);
-  }
+  const currentMinutes = profile?.total_session_minutes || 0;
+  
+  await supabase
+    .from('profiles')
+    .update({
+      total_session_minutes: currentMinutes + durationMinutes,
+      last_session_at: endTime.toISOString()
+    })
+    .eq('id', userId);
   
   return NextResponse.json({
     success: true,
     duration_minutes: durationMinutes
+  });
+}
+
+/**
+ * OPTIONS /api/livekit
+ * Handle CORS preflight requests
+ */
+export async function OPTIONS(request: NextRequest) {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
   });
 }

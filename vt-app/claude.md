@@ -54,8 +54,8 @@
 **Duration**: 4-5 days  
 **Dependencies**: Phase 3 completion  
 **Artifacts**: 
-- [Detailed Plan](/docs/phases/phase-5-support-system.md)
-- [Implementation Prompt](/docs/phases/phase-5-implementation-prompt.md)
+- [Detailed Plan](./docs/phases/phase-5-support-system.md)
+- [Implementation Prompt](./docs/phases/phase-5-implementation-prompt.md)
 
 ## Architecture Revolution
 
