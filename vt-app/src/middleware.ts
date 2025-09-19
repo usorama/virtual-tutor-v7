@@ -2,12 +2,18 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+// Define auth routes and protected routes
+const AUTH_ROUTES = ['/login', '/register', '/forgot-password']
+const PROTECTED_ROUTES = ['/dashboard', '/wizard', '/classroom', '/textbooks', '/profile']
+
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next({
     request: {
       headers: request.headers,
     },
   })
+
+  const pathname = request.nextUrl.pathname
 
   // Skip Supabase auth if credentials are not configured
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -38,8 +44,24 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // Refresh session if expired
-  await supabase.auth.getUser()
+  // Get user session
+  const { data: { user } } = await supabase.auth.getUser()
+
+  // Check if the route requires authentication
+  const isProtectedRoute = PROTECTED_ROUTES.some(route => pathname.startsWith(route))
+  const isAuthRoute = AUTH_ROUTES.some(route => pathname.startsWith(route))
+
+  // Redirect to login if accessing protected route without authentication
+  if (isProtectedRoute && !user) {
+    const redirectUrl = new URL('/login', request.url)
+    redirectUrl.searchParams.set('redirect', pathname)
+    return NextResponse.redirect(redirectUrl)
+  }
+
+  // Redirect to dashboard if accessing auth routes while authenticated
+  if (isAuthRoute && user) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
 
   return response
 }
