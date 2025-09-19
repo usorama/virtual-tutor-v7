@@ -3,8 +3,9 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 // Define auth routes and protected routes
-const AUTH_ROUTES = ['/login', '/register', '/forgot-password']
+const AUTH_ROUTES = ['/login', '/register', '/forgot-password', '/auth/signin', '/auth/signup', '/auth/reset-password']
 const PROTECTED_ROUTES = ['/dashboard', '/wizard', '/classroom', '/textbooks', '/profile']
+const ROUTES_REQUIRING_WIZARD = ['/dashboard', '/classroom', '/textbooks']
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next({
@@ -61,6 +62,23 @@ export async function middleware(request: NextRequest) {
   // Redirect to dashboard if accessing auth routes while authenticated
   if (isAuthRoute && user) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
+
+  // Check if user needs to complete wizard (for authenticated users accessing certain routes)
+  if (user && ROUTES_REQUIRING_WIZARD.some(route => pathname.startsWith(route))) {
+    // Check if user has completed wizard by checking their profile
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('grade, preferred_subjects')
+      .eq('id', user.id)
+      .single()
+
+    // If no profile or incomplete profile, redirect to wizard
+    if (!profile || !profile.grade || !profile.preferred_subjects || profile.preferred_subjects.length === 0) {
+      if (pathname !== '/wizard') {
+        return NextResponse.redirect(new URL('/wizard', request.url))
+      }
+    }
   }
 
   return response

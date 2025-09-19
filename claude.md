@@ -38,11 +38,19 @@
 - Student memory system
 - Progress tracking
 
+### PRIORITY 1.5 - Operational Essentials (NEW)
+- Support & Communication System
+- Professional email responses
+- Ticket tracking and SLA management
+- COPPA/FERPA request handling
+- Compliance audit trail
+
 ### PRIORITY 2 - Enhancements (Not Started)
-- COPPA/FERPA compliance
+- COPPA/FERPA full compliance suite
 - Multi-language support
 - Parental controls
 - Personalization features
+- Advanced analytics
 
 ## Key Constraints
 - Textbooks: Located at /text-books/

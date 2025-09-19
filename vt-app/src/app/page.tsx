@@ -1,5 +1,6 @@
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui'
 import { BookOpen, Brain, Users, Trophy } from 'lucide-react'
+import Link from 'next/link'
 
 export default function Home() {
   return (
@@ -67,12 +68,16 @@ export default function Home() {
 
         <div className="text-center">
           <div className="inline-flex gap-4">
-            <Button size="lg">
-              Get Started
-            </Button>
-            <Button size="lg" variant="outline">
-              Learn More
-            </Button>
+            <Link href="/login">
+              <Button size="lg">
+                Get Started
+              </Button>
+            </Link>
+            <Link href="#features">
+              <Button size="lg" variant="outline">
+                Learn More
+              </Button>
+            </Link>
           </div>
         </div>
 
