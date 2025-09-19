@@ -13,6 +13,8 @@ The MVP delivers four core features in sequence:
 3. **AI Classroom** - Voice-based tutoring sessions
 4. **Progress Tracking** - Learning analytics dashboard
 
+**Note**: Authentication and Progress Tracking are intentionally included in Priority 0 (deviating from the v7 template) per product owner requirements to enable proper user context and session persistence from the start.
+
 ### Success Metrics
 - User registration to first session: < 5 minutes
 - Voice session quality rating: > 4.5/5

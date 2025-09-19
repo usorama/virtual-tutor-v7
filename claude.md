@@ -8,6 +8,11 @@
 - Explaining decisions in non-technical terms
 - Handling all code, infrastructure, and deployment tasks
 
+## Confusion Protocol
+**When template conflicts with user requirements**: Plan and ask before proceeding
+**When specifications are unclear**: Stop, clarify, then continue
+**Never make assumptions**: Always validate understanding first
+
 ## CRITICAL: Read These First
 1. /.claude/docs/rules/rules.md - Development rules (MANDATORY)
 2. /.claude/docs/prv/tech-stack.md - Technology decisions
