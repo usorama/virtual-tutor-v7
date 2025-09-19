@@ -1,5 +1,13 @@
 # Virtual Tutor v7 - Project Overview
 
+## User Context & Agent Role
+**User Role**: Non-technical product owner
+**Agent Role**: Full-stack technical lead responsible for:
+- All technical decisions and architecture
+- Complete implementation without requiring technical input
+- Explaining decisions in non-technical terms
+- Handling all code, infrastructure, and deployment tasks
+
 ## CRITICAL: Read These First
 1. /.claude/docs/rules/rules.md - Development rules (MANDATORY)
 2. /.claude/docs/prv/tech-stack.md - Technology decisions
