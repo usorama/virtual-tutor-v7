@@ -3,6 +3,19 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { userEvent } from '@testing-library/user-event'
 import { MultiModalClassroom } from '../../MultiModalClassroom'
 
+// Mock props for MultiModalClassroom
+const mockProps = {
+  sessionId: 'test-session-123',
+  liveKitRoom: null,
+  isConnected: true,
+  isMuted: false,
+  onMuteToggle: vi.fn(),
+  onEndSession: vi.fn(),
+  studentName: 'Test Student',
+  sessionDuration: '00:15:30',
+  connectionQuality: 'excellent' as const
+}
+
 // Mock dependencies for integration testing
 vi.mock('@tldraw/tldraw', () => ({
   Tldraw: vi.fn(({ children, onMount, ...props }) => {
@@ -113,7 +126,7 @@ describe('MultiModalClassroom Integration Tests', () => {
     it('integrates voice commands with whiteboard drawing', async () => {
       const user = userEvent.setup()
 
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       // Wait for components to mount
       await waitFor(() => {
@@ -134,7 +147,7 @@ describe('MultiModalClassroom Integration Tests', () => {
     it('integrates math notation with canvas display', async () => {
       const user = userEvent.setup()
 
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       // Wait for canvas to mount
       await waitFor(() => {
@@ -163,7 +176,7 @@ describe('MultiModalClassroom Integration Tests', () => {
     it('maintains collaboration indicators during multi-modal interactions', async () => {
       const user = userEvent.setup()
 
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       // Wait for components to load
       await waitFor(() => {
@@ -186,7 +199,7 @@ describe('MultiModalClassroom Integration Tests', () => {
     it('properly flows voice commands to drawing actions', async () => {
       const user = userEvent.setup()
 
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       await waitFor(() => {
         expect(screen.getByTestId('tldraw-canvas')).toBeInTheDocument()
@@ -203,7 +216,7 @@ describe('MultiModalClassroom Integration Tests', () => {
     it('handles math expression data flow to canvas', async () => {
       const user = userEvent.setup()
 
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       await waitFor(() => {
         expect(screen.getByTestId('tldraw-canvas')).toBeInTheDocument()
@@ -228,7 +241,7 @@ describe('MultiModalClassroom Integration Tests', () => {
     it('coordinates toolbar actions with canvas state', async () => {
       const user = userEvent.setup()
 
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       await waitFor(() => {
         expect(screen.getByTestId('tldraw-canvas')).toBeInTheDocument()
@@ -248,7 +261,7 @@ describe('MultiModalClassroom Integration Tests', () => {
     it('synchronizes voice commands across components', async () => {
       const user = userEvent.setup()
 
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       await waitFor(() => {
         expect(screen.getByTestId('tldraw-canvas')).toBeInTheDocument()
@@ -265,7 +278,7 @@ describe('MultiModalClassroom Integration Tests', () => {
     it('maintains sync during multi-modal operations', async () => {
       const user = userEvent.setup()
 
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       await waitFor(() => {
         expect(screen.getByTestId('tldraw-canvas')).toBeInTheDocument()
@@ -293,7 +306,7 @@ describe('MultiModalClassroom Integration Tests', () => {
       const startTime = performance.now()
       const user = userEvent.setup()
 
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       await waitFor(() => {
         expect(screen.getByTestId('tldraw-canvas')).toBeInTheDocument()
@@ -318,7 +331,7 @@ describe('MultiModalClassroom Integration Tests', () => {
     it('handles concurrent multi-modal operations efficiently', async () => {
       const user = userEvent.setup()
 
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       await waitFor(() => {
         expect(screen.getByTestId('tldraw-canvas')).toBeInTheDocument()
@@ -339,7 +352,7 @@ describe('MultiModalClassroom Integration Tests', () => {
     it('gracefully handles errors across integrated components', async () => {
       const user = userEvent.setup()
 
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       await waitFor(() => {
         expect(screen.getByTestId('tldraw-canvas')).toBeInTheDocument()
@@ -362,7 +375,7 @@ describe('MultiModalClassroom Integration Tests', () => {
     it('recovers from component integration failures', async () => {
       const user = userEvent.setup()
 
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       await waitFor(() => {
         expect(screen.getByTestId('tldraw-canvas')).toBeInTheDocument()

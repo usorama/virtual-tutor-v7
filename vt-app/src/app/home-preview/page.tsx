@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { GlassNavigation, GlassButton, GlassCard } from '@/components/glass'
+import { LiquidGlassEngine } from '@/components/glass/LiquidGlassEngine'
 import { AnimatedHero, FloatingElementsBackground } from '@/components/animated'
 import { Brain, BookOpen, Zap, Shield, Users, Trophy, ChevronRight, Mail, Phone, MapPin, Star } from 'lucide-react'
 
@@ -77,7 +78,7 @@ export default function HomePreviewPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-secondary/5">
+    <LiquidGlassEngine className="min-h-screen bg-gradient-to-br from-background via-background/95 to-secondary/5">
       {/* Floating background elements */}
       <FloatingElementsBackground density="medium" />
 
@@ -85,9 +86,10 @@ export default function HomePreviewPage() {
       <GlassNavigation
         logo={<VirtualTutorLogo />}
         items={[
-          { label: "Enter", href: "/auth/signin", variant: "glass-primary", size: "lg" },
-          { label: "Contact Us", onClick: scrollToContact, variant: "glass" }
+          { label: "Enter", href: "/auth/signin", variant: "liquid-primary", size: "lg" },
+          { label: "Contact Us", onClick: scrollToContact, variant: "liquid-glass" }
         ]}
+        depth="floating"
         fixed
         transparent
       />
@@ -98,11 +100,11 @@ export default function HomePreviewPage() {
         title="Transform Your Learning with Virtual Tutor"
         description="Experience the future of personalized education. Our AI-powered platform provides one-on-one tutoring for CBSE students with real-time voice interaction and adaptive learning."
       >
-        <GlassButton variant="glass-primary" size="xl" glow>
+        <GlassButton variant="liquid-primary" size="xl" glow depth="deep">
           Start Learning Now
           <ChevronRight className="ml-2 w-5 h-5" />
         </GlassButton>
-        <GlassButton variant="glass-outline" size="xl">
+        <GlassButton variant="liquid-outline" size="xl" depth="medium">
           Watch Demo
         </GlassButton>
       </AnimatedHero>
@@ -194,11 +196,11 @@ export default function HomePreviewPage() {
               Join thousands of students who are already experiencing personalized AI tutoring. Start your journey today!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <GlassButton variant="glass-primary" size="xl" glow>
+              <GlassButton variant="liquid-primary" size="xl" glow depth="deep">
                 Get Started Free
                 <ChevronRight className="ml-2 w-5 h-5" />
               </GlassButton>
-              <GlassButton variant="glass-outline" size="xl">
+              <GlassButton variant="liquid-outline" size="xl" depth="medium">
                 Schedule Demo
               </GlassButton>
             </div>
@@ -264,25 +266,25 @@ export default function HomePreviewPage() {
                   <input
                     type="text"
                     placeholder="Your Name"
-                    className="w-full p-3 rounded-lg glass-morphism border-0 bg-transparent placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full p-3 rounded-lg liquid-glass border-0 bg-transparent placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-300"
                   />
                   <input
                     type="email"
                     placeholder="Your Email"
-                    className="w-full p-3 rounded-lg glass-morphism border-0 bg-transparent placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full p-3 rounded-lg liquid-glass border-0 bg-transparent placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-300"
                   />
                 </div>
                 <input
                   type="text"
                   placeholder="Subject"
-                  className="w-full p-3 rounded-lg glass-morphism border-0 bg-transparent placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full p-3 rounded-lg liquid-glass border-0 bg-transparent placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-300"
                 />
                 <textarea
                   rows={4}
                   placeholder="Your Message"
-                  className="w-full p-3 rounded-lg glass-morphism border-0 bg-transparent placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+                  className="w-full p-3 rounded-lg liquid-glass border-0 bg-transparent placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none transition-all duration-300"
                 />
-                <GlassButton variant="glass-primary" size="lg" className="w-full">
+                <GlassButton variant="liquid-primary" size="lg" className="w-full" glow depth="medium">
                   Send Message
                 </GlassButton>
               </form>
@@ -300,13 +302,13 @@ export default function HomePreviewPage() {
               © 2025 Virtual Tutor. All rights reserved. Transforming education with AI.
             </p>
             <div className="flex gap-4">
-              <GlassButton variant="glass-ghost" size="sm">Privacy</GlassButton>
-              <GlassButton variant="glass-ghost" size="sm">Terms</GlassButton>
-              <GlassButton variant="glass-ghost" size="sm">Support</GlassButton>
+              <GlassButton variant="liquid-ghost" size="sm">Privacy</GlassButton>
+              <GlassButton variant="liquid-ghost" size="sm">Terms</GlassButton>
+              <GlassButton variant="liquid-ghost" size="sm">Support</GlassButton>
             </div>
           </div>
         </div>
       </footer>
-    </div>
+    </LiquidGlassEngine>
   )
 }

@@ -3,6 +3,19 @@ import { render, screen, waitFor } from '@testing-library/react'
 import { VoiceCommandProcessor } from '../../VoiceCommandProcessor'
 import { MultiModalClassroom } from '../../MultiModalClassroom'
 
+// Mock props for MultiModalClassroom
+const mockProps = {
+  sessionId: 'test-session-123',
+  liveKitRoom: null,
+  isConnected: true,
+  isMuted: false,
+  onMuteToggle: vi.fn(),
+  onEndSession: vi.fn(),
+  studentName: 'Test Student',
+  sessionDuration: '00:15:30',
+  connectionQuality: 'excellent' as const
+}
+
 // Mock tldraw for canvas integration testing
 const mockEditor = {
   getViewportScreenBounds: vi.fn(() => ({
@@ -83,7 +96,7 @@ describe('Voice to Canvas Integration Tests', () => {
       start: vi.fn(),
       stop: vi.fn(),
       state: 'inactive'
-    }))
+    })) as any
     global.MediaRecorder.isTypeSupported = vi.fn().mockReturnValue(true)
 
     // Clear mock calls
@@ -186,7 +199,7 @@ describe('Voice to Canvas Integration Tests', () => {
     it('integrates voice commands with canvas shape creation', async () => {
       const mockHandleVoiceCommand = vi.fn()
 
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       await waitFor(() => {
         expect(screen.getByTestId('tldraw-canvas')).toBeInTheDocument()
@@ -204,7 +217,7 @@ describe('Voice to Canvas Integration Tests', () => {
     })
 
     it('handles canvas selection via voice commands', async () => {
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       await waitFor(() => {
         expect(screen.getByTestId('tldraw-canvas')).toBeInTheDocument()
@@ -220,7 +233,7 @@ describe('Voice to Canvas Integration Tests', () => {
     })
 
     it('executes erase commands on canvas', async () => {
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       await waitFor(() => {
         expect(screen.getByTestId('tldraw-canvas')).toBeInTheDocument()
@@ -321,7 +334,7 @@ describe('Voice to Canvas Integration Tests', () => {
     })
 
     it('recovers from canvas integration errors', async () => {
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       await waitFor(() => {
         expect(screen.getByTestId('tldraw-canvas')).toBeInTheDocument()
@@ -352,7 +365,7 @@ describe('Voice to Canvas Integration Tests', () => {
 
   describe('Real-time Sync Integration', () => {
     it('synchronizes voice commands with canvas state in real-time', async () => {
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       await waitFor(() => {
         expect(screen.getByTestId('tldraw-canvas')).toBeInTheDocument()
@@ -364,7 +377,7 @@ describe('Voice to Canvas Integration Tests', () => {
     })
 
     it('handles concurrent voice and manual canvas operations', async () => {
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       await waitFor(() => {
         expect(screen.getByTestId('tldraw-canvas')).toBeInTheDocument()
@@ -380,6 +393,7 @@ describe('Voice to Canvas Integration Tests', () => {
   describe('Latency Testing', () => {
     it('measures voice-to-canvas latency', async () => {
       const latencyMeasurements: number[] = []
+      const startTime = performance.now()
 
       render(
         <VoiceCommandProcessor

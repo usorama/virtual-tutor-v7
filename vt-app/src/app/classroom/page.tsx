@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { LiveKitRoom, AudioConference, ControlBar, useTracks, TrackReference } from '@livekit/components-react';
 import '@livekit/components-styles';
-import { Track, Room, RoomEvent, ConnectionState } from 'livekit-client';
+import { Track, RoomEvent, ConnectionState } from 'livekit-client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -12,6 +12,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Mic, MicOff, Volume2, VolumeX, PhoneOff, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
 import { AudioStreamManager, AudioQualityMonitor } from '@/lib/livekit/audio-manager';
 import { AudioVisualizer } from '@/components/ui/audio-visualizer';
+import { MultiModalClassroom } from '@/components/classroom/MultiModalClassroom';
 import { createClient } from '@/lib/supabase/client';
 
 interface SessionData {
@@ -237,6 +238,7 @@ export default function ClassroomPage() {
     console.log('Room connected successfully');
     setConnectionState(ConnectionState.Connected);
     setIsConnecting(false);
+    // Note: Room instance can be accessed via useRoom hook inside the LiveKitRoom context
 
     // Initialize audio manager
     if (audioManager) {
@@ -292,23 +294,21 @@ export default function ClassroomPage() {
           onConnected={handleRoomConnected}
           onDisconnected={handleRoomDisconnected}
         >
-          <div className="max-w-4xl mx-auto space-y-6">
-            {/* Beautiful Audio Interface */}
-            <AudioVisualizer
-              isConnected={connectionState === ConnectionState.Connected}
-              isMuted={isMuted}
-              onMuteToggle={toggleMute}
-              onEndSession={endSession}
-              studentName="Student" 
-              sessionDuration={formatDuration(sessionDuration)}
-              connectionQuality={audioQuality}
-              className="min-h-[600px]"
-            />
-            
-            {/* Hidden Audio Conference Component */}
-            <div className="hidden">
-              <AudioConference />
-            </div>
+          {/* Phase 4 Multi-Modal Classroom */}
+          <MultiModalClassroom
+            sessionId={sessionData.sessionId}
+            isConnected={connectionState === ConnectionState.Connected}
+            isMuted={isMuted}
+            onMuteToggle={toggleMute}
+            onEndSession={endSession}
+            studentName="Student"
+            sessionDuration={formatDuration(sessionDuration)}
+            connectionQuality={audioQuality}
+          />
+
+          {/* Hidden Audio Conference Component */}
+          <div className="hidden">
+            <AudioConference />
           </div>
         </LiveKitRoom>
       </div>

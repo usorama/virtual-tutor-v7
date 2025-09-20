@@ -10,6 +10,7 @@ interface FloatingElementProps {
   delay?: number
   duration?: number
   distance?: number
+  style?: React.CSSProperties
 }
 
 const FloatingElement: React.FC<FloatingElementProps> = ({
@@ -43,6 +44,7 @@ interface FloatingCardProps {
   size?: 'sm' | 'md' | 'lg' | 'xl'
   opacity?: number
   blur?: boolean
+  style?: React.CSSProperties
 }
 
 const FloatingCard: React.FC<FloatingCardProps> = ({
@@ -64,7 +66,7 @@ const FloatingCard: React.FC<FloatingCardProps> = ({
       duration={4 + Math.random() * 4}
       distance={10 + Math.random() * 20}
       className={cn(
-        "absolute rounded-full glass-morphism",
+        "absolute rounded-full liquid-glass",
         sizeClasses[size],
         blur && "backdrop-blur-xl",
         className

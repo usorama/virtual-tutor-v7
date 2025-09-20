@@ -33,7 +33,7 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.8,
-      ease: [0.25, 0.25, 0, 1]
+      ease: "easeOut" as const
     }
   }
 }
@@ -43,7 +43,7 @@ const floatingAnimation = {
   transition: {
     duration: 6,
     repeat: Infinity,
-    ease: "easeInOut"
+    ease: "easeInOut" as const
   }
 }
 
@@ -73,7 +73,7 @@ const AnimatedHero: React.FC<AnimatedHeroProps> = ({
         {/* Floating glass orbs */}
         <motion.div
           animate={floatingAnimation}
-          className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full glass-morphism opacity-30"
+          className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full liquid-glass opacity-30"
         />
         <motion.div
           animate={{
@@ -82,10 +82,10 @@ const AnimatedHero: React.FC<AnimatedHeroProps> = ({
             transition: {
               duration: 8,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: "easeInOut" as const
             }
           }}
-          className="absolute top-1/3 right-1/4 w-24 h-24 rounded-full glass-morphism opacity-20"
+          className="absolute top-1/3 right-1/4 w-24 h-24 rounded-full liquid-glass opacity-20"
         />
         <motion.div
           animate={{
@@ -93,10 +93,10 @@ const AnimatedHero: React.FC<AnimatedHeroProps> = ({
             transition: {
               duration: 10,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: "easeInOut" as const
             }
           }}
-          className="absolute bottom-1/4 left-1/3 w-40 h-40 rounded-full glass-morphism opacity-10"
+          className="absolute bottom-1/4 left-1/3 w-40 h-40 rounded-full liquid-glass opacity-10"
         />
       </div>
 
@@ -119,7 +119,7 @@ const AnimatedHero: React.FC<AnimatedHeroProps> = ({
             variants={itemVariants}
             className="mb-6"
           >
-            <span className="inline-block px-4 py-2 rounded-full glass-morphism text-sm font-medium text-muted-foreground">
+            <span className="inline-block px-4 py-2 rounded-full liquid-glass text-sm font-medium text-muted-foreground">
               {subtitle}
             </span>
           </motion.div>
@@ -165,7 +165,7 @@ const AnimatedHero: React.FC<AnimatedHeroProps> = ({
             transition: {
               duration: 2,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: "easeInOut" as const
             }
           }}
           className="w-6 h-10 border-2 border-muted-foreground/30 rounded-full flex justify-center"
@@ -177,7 +177,7 @@ const AnimatedHero: React.FC<AnimatedHeroProps> = ({
               transition: {
                 duration: 2,
                 repeat: Infinity,
-                ease: "easeInOut"
+                ease: "easeInOut" as const
               }
             }}
             className="w-1 h-3 bg-muted-foreground/50 rounded-full mt-2"

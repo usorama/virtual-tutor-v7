@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { Room } from 'livekit-client';
+import { useEnsureRoom } from '@livekit/components-react';
 import { Tldraw, Editor } from '@tldraw/tldraw';
 import { useSyncDemo } from '@tldraw/sync';
 import { AudioVisualizer } from '@/components/ui/audio-visualizer';
@@ -24,7 +25,6 @@ import { cn } from '@/lib/utils';
 
 interface MultiModalClassroomProps {
   sessionId: string;
-  liveKitRoom: Room | null;
   isConnected: boolean;
   isMuted: boolean;
   onMuteToggle: () => void;
@@ -46,7 +46,6 @@ interface DrawingCommand {
 
 export function MultiModalClassroom({
   sessionId,
-  liveKitRoom,
   isConnected,
   isMuted,
   onMuteToggle,
@@ -55,6 +54,8 @@ export function MultiModalClassroom({
   sessionDuration,
   connectionQuality
 }: MultiModalClassroomProps) {
+  // Use LiveKit hook to get room instance
+  const liveKitRoom = useEnsureRoom();
   // UI State
   const [whiteboardVisible, setWhiteboardVisible] = useState(true);
   const [isListeningForCommands, setIsListeningForCommands] = useState(false);

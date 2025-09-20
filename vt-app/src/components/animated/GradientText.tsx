@@ -13,15 +13,7 @@ interface GradientTextProps {
 
 const letterVariants = {
   hidden: { opacity: 0, y: 50 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.05,
-      duration: 0.6,
-      ease: [0.25, 0.25, 0, 1]
-    }
-  })
+  visible: { opacity: 1, y: 0 }
 }
 
 const GradientText: React.FC<GradientTextProps> = ({
@@ -51,10 +43,14 @@ const GradientText: React.FC<GradientTextProps> = ({
           {word.split('').map((letter, letterIndex) => (
             <motion.span
               key={letterIndex}
-              custom={wordIndex * 10 + letterIndex}
               variants={letterVariants}
               initial="hidden"
               animate="visible"
+              transition={{
+                delay: (wordIndex * 10 + letterIndex) * 0.05,
+                duration: 0.6,
+                ease: "easeOut"
+              }}
               className={cn(
                 "inline-block bg-gradient-to-r bg-clip-text text-transparent",
                 gradient
@@ -65,10 +61,14 @@ const GradientText: React.FC<GradientTextProps> = ({
           ))}
           {wordIndex < words.length - 1 && (
             <motion.span
-              custom={wordIndex * 10 + word.length}
               variants={letterVariants}
               initial="hidden"
               animate="visible"
+              transition={{
+                delay: (wordIndex * 10 + word.length) * 0.05,
+                duration: 0.6,
+                ease: "easeOut"
+              }}
               className="inline-block"
             >
               &nbsp;
