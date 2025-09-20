@@ -44,8 +44,22 @@ export default function WizardPage() {
       try {
         const { data } = await getUserProfile()
         if (data && data.grade) {
-          // User already completed wizard, redirect to dashboard
-          router.push('/dashboard')
+          // User has existing preferences - populate the wizard with current data
+          updateGrade(data.grade)
+          if (data.preferred_subjects && data.preferred_subjects.length > 0) {
+            updateSubjects(data.preferred_subjects)
+          }
+          
+          // Load selected topics for each subject
+          if (data.selected_topics && data.preferred_subjects) {
+            data.preferred_subjects.forEach(subject => {
+              const topicsForSubject = data.selected_topics?.[subject]
+              if (topicsForSubject && topicsForSubject.length > 0) {
+                updateTopics(subject, topicsForSubject)
+              }
+            })
+          }
+          // Note: Allow user to modify preferences instead of redirecting
         }
       } catch (error) {
         console.error('Error loading profile:', error)
@@ -55,7 +69,7 @@ export default function WizardPage() {
     }
     
     loadProfile()
-  }, [router])
+  }, [router, updateGrade, updateSubjects, updateTopics])
 
   // Fetch curriculum data when grade is selected
   useEffect(() => {
@@ -101,6 +115,19 @@ export default function WizardPage() {
     }
   }
 
+  function handleCancel() {
+    // Show confirmation if user has made changes
+    if (state.grade || state.subjects.length > 0) {
+      const confirmed = window.confirm(
+        'Are you sure you want to cancel? Any unsaved changes will be lost.'
+      )
+      if (!confirmed) return
+    }
+    
+    // Return to dashboard
+    router.push('/dashboard')
+  }
+
   // Get available subjects for current grade
   const availableSubjects = Array.from(
     new Set(curriculumData.map(item => item.subject))
@@ -127,74 +154,81 @@ export default function WizardPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8">
-      {/* Header */}
-      <div className="text-center space-y-2">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-          Welcome to Virtual Tutor
-        </h1>
-        <p className="text-gray-600 text-lg">
-          Let&apos;s personalize your learning journey
-        </p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
+      <div className="max-w-6xl mx-auto space-y-8 p-6">
+        {/* Header */}
+        <div className="text-center space-y-2">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+            Welcome to Virtual Tutor
+          </h1>
+          <p className="text-muted-foreground text-lg">
+            Let&apos;s personalize your learning journey
+          </p>
+        </div>
 
       {/* Step Indicator */}
       <StepIndicator currentStep={state.currentStep} />
 
-      {/* Main Content Card */}
-      <Card className="p-8">
-        {isLoading ? (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-          </div>
-        ) : (
-          <>
-            {/* Step Content */}
-            {state.currentStep === WIZARD_STEPS.GRADE_SELECTION && (
-              <GradeSelector
-                selectedGrade={state.grade}
-                onGradeSelect={updateGrade}
-              />
-            )}
+      {/* Apple-Style Wizard Container */}
+      <div className="relative">
+        {/* Main Content Card */}
+        <Card className="mx-16 p-8 min-h-[500px] relative">
+          {isLoading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+            </div>
+          ) : (
+            <>
+              {/* Step Content */}
+              {state.currentStep === WIZARD_STEPS.GRADE_SELECTION && (
+                <GradeSelector
+                  selectedGrade={state.grade}
+                  onGradeSelect={updateGrade}
+                />
+              )}
 
-            {state.currentStep === WIZARD_STEPS.SUBJECT_SELECTION && (
-              <SubjectSelector
-                availableSubjects={availableSubjects}
-                selectedSubjects={state.subjects}
-                onSubjectsChange={updateSubjects}
-              />
-            )}
+              {state.currentStep === WIZARD_STEPS.SUBJECT_SELECTION && (
+                <SubjectSelector
+                  availableSubjects={availableSubjects}
+                  selectedSubjects={state.subjects}
+                  onSubjectsChange={updateSubjects}
+                />
+              )}
 
-            {state.currentStep === WIZARD_STEPS.TOPIC_SELECTION && (
-              <TopicSelector
-                subjects={state.subjects}
-                availableTopics={availableTopics}
-                selectedTopics={state.topics}
-                onTopicsChange={updateTopics}
-              />
-            )}
+              {state.currentStep === WIZARD_STEPS.TOPIC_SELECTION && (
+                <TopicSelector
+                  subjects={state.subjects}
+                  availableTopics={availableTopics}
+                  selectedTopics={state.topics}
+                  onTopicsChange={updateTopics}
+                />
+              )}
 
-            {state.currentStep === WIZARD_STEPS.SUMMARY && (
-              <WizardSummary
-                grade={state.grade}
-                subjects={state.subjects}
-                topics={state.topics}
-              />
-            )}
-          </>
-        )}
-      </Card>
+              {state.currentStep === WIZARD_STEPS.SUMMARY && (
+                <WizardSummary
+                  grade={state.grade}
+                  subjects={state.subjects}
+                  topics={state.topics}
+                />
+              )}
+            </>
+          )}
+        </Card>
 
-      {/* Navigation */}
-      <NavigationButtons
-        canGoNext={canGoNext()}
-        canGoPrevious={canGoPrevious()}
-        onNext={handleNext}
-        onPrevious={previousStep}
-        isLastStep={state.currentStep === WIZARD_STEPS.SUMMARY}
-        isLoading={isSaving}
-        className="max-w-3xl mx-auto"
-      />
+        {/* Apple-Style Navigation - Floating over the card */}
+        <NavigationButtons
+          canGoNext={canGoNext()}
+          canGoPrevious={canGoPrevious()}
+          onNext={handleNext}
+          onPrevious={previousStep}
+          onCancel={handleCancel}
+          isLastStep={state.currentStep === WIZARD_STEPS.SUMMARY}
+          isLoading={isSaving}
+          showCancel={true}
+          className="absolute inset-0 pointer-events-none [&>*]:pointer-events-auto"
+        />
+      </div>
+      </div>
     </div>
   )
 }

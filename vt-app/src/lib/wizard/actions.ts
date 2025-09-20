@@ -12,15 +12,25 @@ export async function getCurriculumData(grade: number): Promise<{
   try {
     const supabase = await createClient()
     
+    console.log('🔍 getCurriculumData called with grade:', grade)
+    
     const { data, error } = await supabase
       .from('curriculum_data')
       .select('*')
       .eq('grade', grade)
       .order('subject')
 
+    console.log('📚 Curriculum data response:', { data, error })
+
     if (error) {
       console.error('Error fetching curriculum data:', error)
       return { data: null, error: error.message }
+    }
+
+    // Log first item to debug structure
+    if (data && data.length > 0) {
+      console.log('📖 First curriculum item:', data[0])
+      console.log('📝 First subject topics count:', data[0].topics?.length)
     }
 
     return { data, error: null }

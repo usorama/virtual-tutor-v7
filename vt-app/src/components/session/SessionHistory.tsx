@@ -18,9 +18,6 @@ interface Session {
   chapter_focus?: string;
   quality_score?: number;
   session_summary?: string;
-  chapters?: {
-    title: string;
-  };
 }
 
 interface SessionHistoryProps {
@@ -44,12 +41,7 @@ export function SessionHistory({ studentId, limit = 5, onSessionClick }: Session
       // Fetch recent sessions
       const { data: sessionsData, error } = await supabase
         .from('learning_sessions')
-        .select(`
-          *,
-          chapters:chapter_focus (
-            title
-          )
-        `)
+        .select('*')
         .eq('student_id', studentId)
         .order('started_at', { ascending: false })
         .limit(limit);
@@ -170,10 +162,10 @@ export function SessionHistory({ studentId, limit = 5, onSessionClick }: Session
                 {/* Session Details */}
                 <div className="space-y-2">
                   {/* Chapter/Topic */}
-                  {session.chapters?.title && (
+                  {session.chapter_focus && (
                     <div className="flex items-center gap-2">
                       <BookOpen className="w-3 h-3 text-muted-foreground" />
-                      <span className="text-sm">{session.chapters.title}</span>
+                      <span className="text-sm">{session.chapter_focus}</span>
                     </div>
                   )}
                   

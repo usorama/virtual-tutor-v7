@@ -14,6 +14,12 @@ Building on the revolutionary audio-to-audio foundation from Phase 3, Phase 4 ad
 
 ## Part A: Multi-Modal Learning Enhancement (4 SP)
 
+**🚨 MANDATORY BEFORE IMPLEMENTATION:**
+1. **Read Research Document:** [Phase 4 Multi-Modal Whiteboard Research](../research/phase-4-multi-modal-whiteboard-research.md)
+2. **Follow Implementation Guide:** [Phase 4 Implementation Prompt](./phase-4-implementation-prompt.md)
+3. **Use Context7 for Package Documentation:** Verify current tldraw, KaTeX, Deepgram APIs
+4. **Web Search Current Best Practices:** Search for September 2025 implementations
+
 ### 4.1 Visual Content Integration (1.5 SP)
 
 #### 4.1.1: Screen Sharing & Visual Context (0.5 SP)
@@ -24,11 +30,14 @@ Building on the revolutionary audio-to-audio foundation from Phase 3, Phase 4 ad
 - Test visual-audio integration
 
 #### 4.1.2: Interactive Whiteboard (0.5 SP)
-- Create shared whiteboard for problem solving
-- Implement real-time collaborative drawing
-- Add mathematical notation support
-- Enable voice-directed drawing commands
-- Test collaborative problem solving
+- Create shared whiteboard for problem solving using **tldraw SDK** (production-ready)
+- Implement real-time collaborative drawing via **Supabase real-time**
+- Add mathematical notation support with **KaTeX rendering**
+- Enable voice-directed drawing commands via **Deepgram API**
+- Test collaborative problem solving with multi-user sessions
+
+**📋 Research Foundation:** [Phase 4 Multi-Modal Whiteboard Research](../research/phase-4-multi-modal-whiteboard-research.md)
+**🛠️ Implementation Guide:** [Phase 4 Implementation Prompt](./phase-4-implementation-prompt.md)
 
 #### 4.1.3: Textbook Page Display (0.5 SP)
 - Show relevant textbook pages during conversation
@@ -248,26 +257,35 @@ CREATE TABLE teaching_patterns (
 ### Enhanced AI Configuration
 
 ```typescript
-// Advanced Gemini Live configuration
+// Advanced Gemini Live configuration with whiteboard integration
 const enhancedAIConfig = {
   model: "gemini-live-2.5-flash",
   features: {
     multimodal: true,
     screenSharing: true,
     emotionalIntelligence: true,
-    adaptiveTeaching: true
+    adaptiveTeaching: true,
+    voiceControlledDrawing: true  // NEW: Voice commands trigger drawings
   },
   conversationStyle: {
     personality: "encouraging_teacher",
     adaptability: "high",
     emotionalSupport: "enabled",
-    difficultyAdjustment: "automatic"
+    difficultyAdjustment: "automatic",
+    visualExplanations: "enabled"  // NEW: AI can draw while explaining
   },
   analytics: {
     comprehensionTracking: true,
     engagementMonitoring: true,
     learningPatternAnalysis: true,
-    interventionAlerts: true
+    interventionAlerts: true,
+    visualLearningEffectiveness: true  // NEW: Track visual aid impact
+  },
+  whiteboard: {
+    library: "tldraw",
+    mathNotation: "katex", 
+    voiceAPI: "deepgram",
+    collaboration: "supabase-realtime"
   }
 }
 ```

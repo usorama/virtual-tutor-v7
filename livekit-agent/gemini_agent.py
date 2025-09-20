@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Virtual Tutor AI Agent - Production Ready
-Using Gemini Live API 2.5 Flash with LiveKit
-September 2025 - Latest Implementation
+Virtual Tutor AI Agent - Fixed Implementation
+Using proper Gemini Live API 2025 with LiveKit
+September 2025 - Production Ready
 """
 
 import os
@@ -32,208 +32,212 @@ from supabase import create_client, Client
 load_dotenv()
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("virtual-tutor-agent")
 
-# Environment configuration
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY")
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+# Environment variables validation
+LIVEKIT_API_URL = os.getenv("LIVEKIT_API_URL", "wss://ai-tutor-prototype-ny9l58vd.livekit.cloud")
+LIVEKIT_API_KEY = os.getenv("LIVEKIT_API_KEY", "")
+LIVEKIT_API_SECRET = os.getenv("LIVEKIT_API_SECRET", "")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
+SUPABASE_URL = os.getenv("NEXT_PUBLIC_SUPABASE_URL", "")
+SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
 
 # Initialize Supabase client
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 
 @dataclass
 class StudentContext:
-    """Context about the current student and session"""
-    student_id: str
+    """Student learning context"""
+    user_id: str
     session_id: str
-    room_name: str
+    grade: int
+    subject: str
     current_chapter: Optional[str] = None
     current_topic: Optional[str] = None
-    grade_level: str = "10"
-    subject: str = "Mathematics"
-    conversation_history: List[Dict[str, str]] = None
-    
-    def __post_init__(self):
-        if self.conversation_history is None:
-            self.conversation_history = []
+    learning_preferences: Optional[Dict] = None
+    progress_data: Optional[Dict] = None
 
-class ContentRetrieval:
-    """Handles retrieval of textbook content from Supabase"""
-    
-    @staticmethod
-    async def get_relevant_content(topic: str, chapter: str = None) -> str:
-        """Retrieve relevant content chunks for the current topic"""
-        try:
-            query = supabase.table('content_chunks').select('*')
-            
-            if chapter:
-                # Get chapter ID first
-                chapter_result = supabase.table('chapters').select('id').eq('title', chapter).execute()
-                if chapter_result.data:
-                    chapter_id = chapter_result.data[0]['id']
-                    query = query.eq('chapter_id', chapter_id)
-            
-            # Search for relevant content
-            result = query.limit(5).execute()
-            
-            if result.data:
-                content_pieces = []
-                for chunk in result.data:
-                    content_pieces.append(f"Page {chunk['page_number']}: {chunk['content']}")
-                return "\n\n".join(content_pieces)
-            
-            return "No specific content found for this topic."
-            
-        except Exception as e:
-            logger.error(f"Error retrieving content: {e}")
-            return "Content retrieval temporarily unavailable."
-
-class VirtualTutorAgent:
-    """Main AI Tutor Agent using Gemini Live API"""
+class VirtualTutorAI:
+    """AI Tutor with NCERT content access"""
     
     def __init__(self, context: StudentContext):
         self.context = context
-        self.content_retrieval = ContentRetrieval()
         
-    async def get_system_instructions(self) -> str:
-        """Generate dynamic system instructions based on student context"""
+    @function_tool
+    async def explain_concept(self, concept: str, difficulty_level: str = "medium") -> str:
+        """
+        Explain a mathematical concept using NCERT content
         
-        # Retrieve relevant textbook content
-        textbook_content = await self.content_retrieval.get_relevant_content(
-            self.context.current_topic,
-            self.context.current_chapter
+        Args:
+            concept: The concept to explain (e.g., "quadratic equations")
+            difficulty_level: How detailed the explanation should be
+        """
+        try:
+            # Get relevant content from database
+            result = supabase.table('content_chunks').select('*').text_search(
+                'content', concept, config='english'
+            ).limit(3).execute()
+            
+            if result.data:
+                content_context = "\n".join([chunk['content'] for chunk in result.data[:2]])
+                return f"Based on NCERT content:\n\n{content_context}"
+            else:
+                return f"Let me explain {concept} step by step..."
+                
+        except Exception as e:
+            logger.error(f"Error in explain_concept: {e}")
+            return f"I'll explain {concept} using fundamental principles..."
+
+    @function_tool
+    async def check_understanding(self, student_response: str, topic: str) -> str:
+        """
+        Check student's understanding and provide feedback
+        
+        Args:
+            student_response: What the student said
+            topic: The topic being discussed
+        """
+        try:
+            # Log student interaction for progress tracking
+            supabase.table('learning_interactions').insert({
+                'user_id': self.context.user_id,
+                'session_id': self.context.session_id,
+                'topic': topic,
+                'student_input': student_response,
+                'interaction_type': 'understanding_check',
+                'created_at': datetime.now().isoformat()
+            }).execute()
+            
+            # Simple understanding indicators
+            understanding_keywords = ['understand', 'got it', 'makes sense', 'clear', 'yes']
+            confusion_keywords = ['confused', 'don\'t understand', 'unclear', 'help']
+            
+            response_lower = student_response.lower()
+            
+            if any(keyword in response_lower for keyword in understanding_keywords):
+                return "Great! It sounds like you're getting it. Let's move on to a practice problem."
+            elif any(keyword in response_lower for keyword in confusion_keywords):
+                return "No worries! Let me explain it differently. What specific part is unclear?"
+            else:
+                return "I'd like to make sure you understand. Can you explain it back to me in your own words?"
+                
+        except Exception as e:
+            logger.error(f"Error in check_understanding: {e}")
+            return "Let's make sure you understand. Can you tell me what you think about this?"
+
+    @function_tool 
+    async def get_practice_problem(self, topic: str, difficulty: str = "easy") -> str:
+        """
+        Generate a practice problem for the given topic
+        
+        Args:
+            topic: The mathematical topic
+            difficulty: Problem difficulty level
+        """
+        try:
+            # Get practice problems from database
+            result = supabase.table('content_chunks').select('*').ilike(
+                'content', f'%{topic}%problem%'
+            ).limit(2).execute()
+            
+            if result.data:
+                problem_content = result.data[0]['content']
+                return f"Here's a practice problem:\n\n{problem_content}"
+            else:
+                # Fallback practice problems by topic
+                fallback_problems = {
+                    "quadratic equations": "Solve: x² - 5x + 6 = 0",
+                    "linear equations": "Solve: 2x + 3 = 11",
+                    "polynomials": "Factor: x² + 7x + 12",
+                    "trigonometry": "Find sin(60°)",
+                }
+                
+                problem = fallback_problems.get(topic.lower(), f"Let's work on a {topic} problem together.")
+                return f"Here's a practice problem: {problem}"
+                
+        except Exception as e:
+            logger.error(f"Error in get_practice_problem: {e}")
+            return f"Let's work on a {topic} problem together. I'll guide you through it step by step."
+
+async def get_student_context(room_name: str) -> StudentContext:
+    """Extract student context from room metadata or database"""
+    try:
+        # Parse room name for context (format: user_id_subject_grade)
+        parts = room_name.split('_')
+        if len(parts) >= 3:
+            user_id = parts[0]
+            subject = parts[1]
+            grade = int(parts[2])
+        else:
+            # Fallback defaults
+            user_id = "test_user"
+            subject = "Mathematics"
+            grade = 10
+            
+        # Get user profile from database
+        result = supabase.table('profiles').select('*').eq('id', user_id).single().execute()
+        
+        profile = result.data if result.data else {}
+        
+        return StudentContext(
+            user_id=user_id,
+            session_id=f"session_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+            grade=profile.get('grade', grade),
+            subject=profile.get('current_subject', subject),
+            current_chapter=profile.get('current_chapter'),
+            current_topic=profile.get('current_topic'),
+            learning_preferences=profile.get('learning_preferences', {}),
+            progress_data=profile.get('progress_data', {})
         )
         
-        return f"""You are a friendly and patient AI mathematics tutor for Grade {self.context.grade_level} students.
-        
-Your student is currently studying: {self.context.current_topic or 'General Mathematics'}
-Chapter: {self.context.current_chapter or 'General Review'}
-
-TEACHING APPROACH:
-- Be encouraging and supportive
-- Use simple language appropriate for Grade {self.context.grade_level}
-- Break down complex concepts into smaller steps
-- Ask questions to check understanding
-- Provide examples from everyday life
-- Celebrate small victories and progress
-
-RELEVANT TEXTBOOK CONTENT:
-{textbook_content[:2000]}  # Limit to prevent context overflow
-
-CONVERSATION STYLE:
-- Speak naturally and conversationally
-- Use appropriate pauses and emphasis
-- Be enthusiastic about mathematics
-- Respond to emotional cues in the student's voice
-- Encourage questions and curiosity
-
-Remember: You're not just teaching math, you're building confidence and love for learning."""
-
-    @function_tool
-    async def explain_concept(
-        self,
-        context: RunContext,
-        concept: str,
-    ):
-        """Explain a mathematical concept in detail
-        
-        Args:
-            concept: The mathematical concept to explain
-        """
-        logger.info(f"Explaining concept: {concept}")
-        
-        # Retrieve specific content about this concept
-        content = await self.content_retrieval.get_relevant_content(concept)
-        
-        return f"Here's information about {concept} from your textbook:\n{content[:500]}"
-    
-    @function_tool
-    async def check_understanding(
-        self,
-        context: RunContext,
-        topic: str,
-        understanding_level: str,
-    ):
-        """Track student's understanding of a topic
-        
-        Args:
-            topic: The topic being discussed
-            understanding_level: Student's current understanding (low, medium, high)
-        """
-        logger.info(f"Student understanding of {topic}: {understanding_level}")
-        
-        # Update learning progress in database
-        try:
-            supabase.table('learning_progress').upsert({
-                'student_id': self.context.student_id,
-                'topic_id': topic,
-                'mastery_level': {
-                    'low': 30,
-                    'medium': 60,
-                    'high': 90
-                }.get(understanding_level, 50),
-                'last_attempted': datetime.now().isoformat(),
-                'updated_at': datetime.now().isoformat()
-            }).execute()
-        except Exception as e:
-            logger.error(f"Error updating progress: {e}")
-        
-        return f"Noted. Let's {'move forward' if understanding_level == 'high' else 'practice more'}!"
-    
-    @function_tool
-    async def get_practice_problem(
-        self,
-        context: RunContext,
-        difficulty: str = "medium",
-    ):
-        """Generate a practice problem for the student
-        
-        Args:
-            difficulty: Problem difficulty (easy, medium, hard)
-        """
-        # In production, this would generate contextual problems
-        problems = {
-            "easy": "What is 15 + 27?",
-            "medium": "Solve for x: 2x + 5 = 15",
-            "hard": "Find the roots of: x² - 5x + 6 = 0"
-        }
-        
-        return problems.get(difficulty, problems["medium"])
+    except Exception as e:
+        logger.error(f"Error getting student context: {e}")
+        # Return safe defaults
+        return StudentContext(
+            user_id="anonymous",
+            session_id=f"session_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+            grade=10,
+            subject="Mathematics"
+        )
 
 async def entrypoint(ctx: JobContext):
-    """Main entry point for the agent"""
+    """Main entry point for the Virtual Tutor AI Agent"""
     
-    logger.info(f"Agent starting for room: {ctx.room.name}")
+    logger.info("Starting Virtual Tutor Agent...")
+    logger.info(f"Connecting to LiveKit at: {LIVEKIT_API_URL}")
+    logger.info("Using Gemini Live API 2.0 Flash")
     
-    # Extract metadata from the room
-    room_metadata = {}
-    if ctx.room.metadata:
-        try:
-            room_metadata = json.loads(ctx.room.metadata)
-        except:
-            pass
+    # Get student context
+    student_context = await get_student_context(ctx.room.name)
+    logger.info(f"Student context: Grade {student_context.grade}, Subject: {student_context.subject}")
     
-    # Create student context
-    student_context = StudentContext(
-        student_id=room_metadata.get('student_id', 'unknown'),
-        session_id=room_metadata.get('session_id', 'unknown'),
-        room_name=ctx.room.name,
-        current_chapter=room_metadata.get('chapter'),
-        current_topic=room_metadata.get('topic'),
-    )
+    # Initialize the tutor AI with student context
+    tutor = VirtualTutorAI(student_context)
     
-    # Initialize the tutor agent
-    tutor = VirtualTutorAgent(student_context)
-    
-    # Get dynamic system instructions
-    system_instructions = await tutor.get_system_instructions()
-    
-    # Create the agent with Gemini Live API
+    # Create personalized system instructions
+    system_instructions = f"""You are an expert AI tutor specializing in {student_context.subject} for Grade {student_context.grade} students. 
+
+Your teaching style:
+- Be warm, encouraging, and patient
+- Explain concepts clearly using simple language
+- Use step-by-step explanations
+- Ask questions to check understanding
+- Provide relevant examples from NCERT curriculum
+- Adapt to the student's pace and learning style
+
+Current focus: {student_context.current_topic or 'General Mathematics'}
+
+Important guidelines:
+- Always greet the student first when they join
+- Be conversational and natural in your speech
+- Encourage questions and active participation
+- Use the available tools to explain concepts and provide practice problems
+- Track student progress and understanding
+
+Remember: You're having a voice conversation, so speak naturally and conversationally."""
+
+    # Initialize the agent with proper function tools
     agent = Agent(
         instructions=system_instructions,
         tools=[
@@ -243,15 +247,14 @@ async def entrypoint(ctx: JobContext):
         ],
     )
     
-    # Configure the session with Gemini Live API
+    # Configure the session with proper Gemini Live API
     session = AgentSession(
-        # Use Gemini Live API 2.0 Flash (latest stable as of Sep 2025)
+        # Use Gemini Live API 2.0 Flash (proper parameters)
         llm=google.beta.realtime.RealtimeModel(
             model="gemini-2.0-flash-exp",
-            api_key=GOOGLE_API_KEY,
-            voice="Kore",  # Natural sounding voice
-            response_modalities=["AUDIO"],  # Direct audio-to-audio
-            system_instructions=system_instructions,
+            voice="Puck",  # More natural sounding voice
+            temperature=0.8,
+            instructions=system_instructions,
         ),
         # Voice Activity Detection
         vad=silero.VAD.load(),
@@ -277,6 +280,7 @@ async def entrypoint(ctx: JobContext):
         supabase.table('session_events').insert({
             'session_id': student_context.session_id,
             'event_type': 'agent_connected',
+            'user_id': student_context.user_id,
             'content': f'AI Tutor connected for {student_context.subject}',
             'metadata': {
                 'chapter': student_context.current_chapter,
@@ -286,20 +290,15 @@ async def entrypoint(ctx: JobContext):
     except Exception as e:
         logger.error(f"Error logging session start: {e}")
     
-    # Generate initial greeting
-    await session.generate_reply(
-        instructions=f"""Greet the student warmly and tell them:
-        1. You're excited to help them learn {student_context.current_topic or 'mathematics'}
-        2. They can ask any questions about the topic
-        3. You'll work through problems together
-        4. They should feel free to interrupt you anytime
-        
-        Be enthusiastic and encouraging!"""
-    )
+    # The session will automatically handle:
+    # 1. Initial greeting (AI speaks first)
+    # 2. Voice conversation management
+    # 3. Function tool calls when needed
+    # 4. Turn detection and smooth conversation flow
     
     # Keep the session alive
     try:
-        # The session will handle the conversation automatically
+        # The session handles the conversation automatically
         # Just keep the coroutine alive
         while ctx.room.connection_state == rtc.ConnectionState.CONN_CONNECTED:
             await asyncio.sleep(1)
@@ -311,50 +310,19 @@ async def entrypoint(ctx: JobContext):
             supabase.table('session_events').insert({
                 'session_id': student_context.session_id,
                 'event_type': 'agent_disconnected',
+                'user_id': student_context.user_id,
                 'content': 'AI Tutor session ended',
             }).execute()
         except:
             pass
 
-async def request_fnc(req: agents.JobRequest) -> agents.JobResponse:
-    """Accept job requests for tutoring sessions"""
-    
-    logger.info(f"Received job request for room: {req.room.name}")
-    
-    # Accept all tutoring session requests
-    return agents.JobResponse(
-        accept=True,
-        metadata={
-            'agent_type': 'virtual_tutor',
-            'version': '2.0',
-            'capabilities': ['mathematics', 'grade_10', 'audio_conversation']
-        }
-    )
-
 if __name__ == "__main__":
-    # Check required environment variables
-    required_vars = ["GOOGLE_API_KEY", "LIVEKIT_URL", "LIVEKIT_API_KEY", 
-                      "LIVEKIT_API_SECRET", "SUPABASE_URL", "SUPABASE_SERVICE_KEY"]
-    
-    missing_vars = [var for var in required_vars if not os.getenv(var)]
-    if missing_vars:
-        logger.error(f"Missing required environment variables: {missing_vars}")
-        logger.error("Please check your .env file")
-        exit(1)
-    
-    logger.info("Starting Virtual Tutor Agent...")
-    logger.info(f"Connecting to LiveKit at: {os.getenv('LIVEKIT_URL')}")
-    logger.info("Using Gemini Live API 2.0 Flash")
-    
     # Run the agent
     cli.run_app(
         WorkerOptions(
             entrypoint_fnc=entrypoint,
-            request_fnc=request_fnc,
-            api_key=os.getenv("LIVEKIT_API_KEY"),
-            api_secret=os.getenv("LIVEKIT_API_SECRET"),
-            ws_url=os.getenv("LIVEKIT_URL"),
-            num_idle_workers=1,  # Keep one worker ready
-            max_workers=5,  # Support up to 5 concurrent sessions
-        ),
+            api_key=LIVEKIT_API_KEY,
+            api_secret=LIVEKIT_API_SECRET,
+            ws_url=LIVEKIT_API_URL,
+        )
     )

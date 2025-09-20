@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Mic, MicOff, Volume2, VolumeX, PhoneOff, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
 import { AudioStreamManager, AudioQualityMonitor } from '@/lib/livekit/audio-manager';
+import { AudioVisualizer } from '@/components/ui/audio-visualizer';
 import { createClient } from '@/lib/supabase/client';
 
 interface SessionData {
@@ -78,21 +79,12 @@ export default function ClassroomPage() {
     // Load user profile for topic preference
     const { data: profile } = await supabase
       .from('profiles')
-      .select('current_chapter, current_subject')
+      .select('grade, preferred_subjects, selected_topics')
       .eq('id', user.id)
       .single();
     
-    if (profile?.current_chapter) {
-      // Get chapter name
-      const { data: chapter } = await supabase
-        .from('chapters')
-        .select('title')
-        .eq('id', profile.current_chapter)
-        .single();
-      
-      if (chapter) {
-        setCurrentTopic(chapter.title);
-      }
+    if (profile?.preferred_subjects && profile.preferred_subjects.length > 0) {
+      setCurrentTopic(`Grade ${profile.grade} ${profile.preferred_subjects[0]}`);
     }
   }
   
@@ -158,10 +150,13 @@ export default function ClassroomPage() {
       });
       
       if (!response.ok) {
-        throw new Error('Failed to create room');
+        const errorData = await response.json();
+        console.error('API Error:', errorData);
+        throw new Error(`Failed to create room: ${errorData.error || response.statusText}`);
       }
       
       const data: SessionData = await response.json();
+      console.log('Session created successfully:', data);
       setSessionData(data);
       setSessionStartTime(new Date());
       
@@ -239,20 +234,23 @@ export default function ClassroomPage() {
    * Handle room connection
    */
   function handleRoomConnected(room: Room) {
+    console.log('Room connected successfully:', room?.name);
     setConnectionState(ConnectionState.Connected);
     setIsConnecting(false);
     
     // Initialize audio manager with room
-    if (audioManager) {
+    if (audioManager && room) {
       audioManager.initializeAudio(room);
     }
     
     // Listen for connection quality changes
-    room.on(RoomEvent.ConnectionQualityChanged, (quality, participant) => {
-      if (participant === room.localParticipant) {
-        console.log('Connection quality:', quality);
-      }
-    });
+    if (room) {
+      room.on(RoomEvent.ConnectionQualityChanged, (quality, participant) => {
+        if (participant === room.localParticipant) {
+          console.log('Connection quality:', quality);
+        }
+      });
+    }
   }
   
   /**
@@ -260,7 +258,12 @@ export default function ClassroomPage() {
    */
   function handleRoomDisconnected() {
     setConnectionState(ConnectionState.Disconnected);
-    endSession();
+    console.log('Room disconnected - cleaning up session');
+    // Only end session if we actually had a successful connection
+    // Don't auto-redirect on connection failures
+    if (sessionData && sessionStartTime) {
+      endSession();
+    }
   }
   
   /**
@@ -295,111 +298,21 @@ export default function ClassroomPage() {
           connect={true}
           audio={true}
           video={false}
-          onConnected={() => handleRoomConnected(undefined as any)}
+          onConnected={handleRoomConnected}
           onDisconnected={handleRoomDisconnected}
         >
           <div className="max-w-4xl mx-auto space-y-6">
-            {/* Header */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle>AI Mathematics Classroom</CardTitle>
-                    <CardDescription>
-                      Topic: {currentTopic} | Session: {formatDuration(sessionDuration)}
-                    </CardDescription>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant={connectionState === ConnectionState.Connected ? 'default' : 'secondary'}>
-                      {connectionState === ConnectionState.Connected ? 'Connected' : 'Connecting...'}
-                    </Badge>
-                    <Badge className={getQualityColor(audioQuality)}>
-                      {audioQuality} quality
-                    </Badge>
-                  </div>
-                </div>
-              </CardHeader>
-            </Card>
-            
-            {/* Main Audio Interface */}
-            <Card className="min-h-[400px]">
-              <CardContent className="pt-6">
-                <div className="flex flex-col items-center space-y-8">
-                  {/* AI Avatar/Visualization */}
-                  <div className="relative w-48 h-48 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                    <div className="absolute inset-0 rounded-full animate-pulse opacity-50" />
-                    <div 
-                      className="w-32 h-32 rounded-full bg-primary/30 flex items-center justify-center"
-                      style={{
-                        transform: `scale(${1 + volumeLevel * 0.5})`,
-                        transition: 'transform 0.1s ease-out'
-                      }}
-                    >
-                      <Volume2 className="w-16 h-16 text-primary" />
-                    </div>
-                  </div>
-                  
-                  {/* Status Text */}
-                  <div className="text-center space-y-2">
-                    <p className="text-lg font-medium">
-                      {connectionState === ConnectionState.Connected 
-                        ? 'AI Tutor is listening...' 
-                        : 'Connecting to AI Tutor...'}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Speak naturally - you can interrupt anytime
-                    </p>
-                  </div>
-                  
-                  {/* Audio Level Indicator */}
-                  <div className="w-full max-w-xs">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-muted-foreground">Audio Level:</span>
-                      <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-primary transition-all duration-100"
-                          style={{ width: `${volumeLevel * 100}%` }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            {/* Controls */}
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-center gap-4">
-                  <Button
-                    variant={isMuted ? "destructive" : "default"}
-                    size="lg"
-                    onClick={toggleMute}
-                    className="gap-2"
-                  >
-                    {isMuted ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
-                    {isMuted ? 'Unmute' : 'Mute'}
-                  </Button>
-                  
-                  <Button
-                    variant="destructive"
-                    size="lg"
-                    onClick={endSession}
-                    className="gap-2"
-                  >
-                    <PhoneOff className="w-5 h-5" />
-                    End Session
-                  </Button>
-                </div>
-                
-                {/* Additional Controls */}
-                <div className="mt-4 text-center">
-                  <p className="text-xs text-muted-foreground">
-                    Tip: Press and hold spacebar for push-to-talk
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+            {/* Beautiful Audio Interface */}
+            <AudioVisualizer
+              isConnected={connectionState === ConnectionState.Connected}
+              isMuted={isMuted}
+              onMuteToggle={toggleMute}
+              onEndSession={endSession}
+              studentName="Student" 
+              sessionDuration={formatDuration(sessionDuration)}
+              connectionQuality={audioQuality}
+              className="min-h-[600px]"
+            />
             
             {/* Hidden Audio Conference Component */}
             <div className="hidden">
