@@ -158,7 +158,18 @@ async function processSingleFile(filename: string): Promise<ProcessingResult> {
 
     // Process PDF using script-specific pipeline
     console.log(`  🔄 Processing PDF content...`)
-    await processTextbookScript(textbookId, filePath)
+    const title = extractTitleFromFilename(filename)
+    const chapterNumberMatch = filename.match(/^(\d+)-/)
+    const chapterNumber = chapterNumberMatch ? parseInt(chapterNumberMatch[1]) : null
+
+    await processTextbookScript(
+      filePath,
+      textbookId,
+      title,
+      processingConfig.grade,
+      processingConfig.subject,
+      chapterNumber
+    )
     
     const processingTime = Date.now() - startTime
     console.log(`  ✅ Successfully processed in ${Math.round(processingTime / 1000)}s`)

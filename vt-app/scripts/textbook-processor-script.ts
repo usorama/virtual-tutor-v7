@@ -38,7 +38,22 @@ function createScriptClient() {
   })
 }
 
-export async function processTextbookScript(textbookId: string, filePath: string) {
+interface ProcessingResult {
+  success: boolean
+  pageCount?: number
+  chunkCount?: number
+  topicCount?: number
+  error?: string
+}
+
+export async function processTextbookScript(
+  filePath: string,
+  textbookId: string,
+  chapterTitle: string,
+  grade: number,
+  subject: string,
+  chapterNumber: number | null
+): Promise<ProcessingResult> {
   const supabase = createScriptClient()
   
   try {
@@ -60,80 +75,80 @@ export async function processTextbookScript(textbookId: string, filePath: string
       .update({ total_pages: numPages })
       .eq('id', textbookId)
     
-    // Identify chapters
-    const chapters = identifyChapters(fullText)
-    console.log(`Identified ${chapters.length} chapters`)
-    
-    // Process each chapter
-    for (let i = 0; i < chapters.length; i++) {
-      const chapter = chapters[i]
-      
-      // Save chapter to database
-      const { data: savedChapter, error: chapterError } = await supabase
-        .from('chapters')
-        .insert({
-          textbook_id: textbookId,
-          chapter_number: i + 1,
-          title: chapter.title,
-          topics: chapter.topics,
-          start_page: chapter.pageStart,
-          end_page: chapter.pageEnd,
-        })
-        .select()
-        .single()
-      
-      if (chapterError) {
-        console.error(`Error saving chapter ${i + 1}:`, chapterError)
-        continue
-      }
-      
-      // Chunk chapter content
-      const chunks = chunkContent(chapter.content)
-      console.log(`Chapter ${i + 1} split into ${chunks.length} chunks`)
-      
-      // Save chunks to database
-      const chunkRecords = chunks.map((chunk, index) => ({
-        chapter_id: savedChapter.id,
-        chunk_index: index,
-        content: chunk.content,
-        content_type: chunk.type as 'text' | 'example' | 'exercise' | 'summary',
-        token_count: estimateTokenCount(chunk.content),
-        page_number: chapter.pageStart + Math.floor((index / chunks.length) * (chapter.pageEnd - chapter.pageStart)),
-      }))
-      
-      const { error: chunksError } = await supabase
-        .from('content_chunks')
-        .insert(chunkRecords)
-      
-      if (chunksError) {
-        console.error(`Error saving chunks for chapter ${i + 1}:`, chunksError)
+    // For single chapter processing, create one chapter record
+    // Save chapter to database
+    const { data: savedChapter, error: chapterError } = await supabase
+      .from('chapters')
+      .insert({
+        textbook_id: textbookId,
+        chapter_number: chapterNumber,
+        title: chapterTitle,
+        topics: [], // Will be populated from content analysis
+        start_page: 1,
+        end_page: numPages,
+      })
+      .select()
+      .single()
+
+    if (chapterError) {
+      console.error(`Error saving chapter:`, chapterError)
+      return {
+        success: false,
+        error: chapterError.message
       }
     }
-    
-    // Update textbook status to ready
+
+    // Chunk chapter content
+    const chunks = chunkContent(fullText)
+    console.log(`Chapter split into ${chunks.length} chunks`)
+
+    // Save chunks to database
+    const chunkRecords = chunks.map((chunk, index) => ({
+      chapter_id: savedChapter.id,
+      chunk_index: index,
+      content: chunk.content,
+      content_type: chunk.type as 'text' | 'example' | 'exercise' | 'summary',
+      token_count: estimateTokenCount(chunk.content),
+      page_number: 1 + Math.floor((index / chunks.length) * numPages),
+    }))
+
+    const { error: chunksError } = await supabase
+      .from('content_chunks')
+      .insert(chunkRecords)
+
+    if (chunksError) {
+      console.error(`Error saving chunks:`, chunksError)
+      return {
+        success: false,
+        error: chunksError.message
+      }
+    }
+
+    // Extract unique topics from chunks
+    const topics = Array.from(new Set(chunks.map(chunk => chunk.type)))
+
+    // Update chapter with topics
     await supabase
-      .from('textbooks')
-      .update({ 
-        status: 'ready',
-        processed_at: new Date().toISOString()
-      })
-      .eq('id', textbookId)
-    
-    console.log(`Textbook ${textbookId} processing completed successfully`)
-    
+      .from('chapters')
+      .update({ topics })
+      .eq('id', savedChapter.id)
+
+    console.log(`Chapter processing completed successfully`)
+
+    return {
+      success: true,
+      pageCount: numPages,
+      chunkCount: chunks.length,
+      topicCount: topics.length
+    }
+
   } catch (error) {
     console.error('Error processing textbook:', error)
-    
-    // Update textbook status to failed
-    await supabase
-      .from('textbooks')
-      .update({ 
-        status: 'failed',
-        error_message: error instanceof Error ? error.message : 'Processing failed'
-      })
-      .eq('id', textbookId)
-    
-    throw error
+
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Processing failed'
+    }
   }
 }
 

@@ -114,10 +114,10 @@ export default async function DashboardPage() {
         <div className="grid lg:grid-cols-3 gap-6 mb-8">
           {/* Quick Start Section */}
           <div className="lg:col-span-1">
-            <QuickStart 
-              currentChapter={profile?.current_chapter}
+            <QuickStart
+              currentChapter="1"
               chapterTitle="NCERT Mathematics - Class 10"
-              lastSessionDate={profile?.last_session_at}
+              lastSessionDate={undefined}
               suggestedTopics={['Quadratic Equations', 'Triangles', 'Probability']}
               masteryLevel={45}
             />

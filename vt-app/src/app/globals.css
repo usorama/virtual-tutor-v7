@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import '@tldraw/tldraw/tldraw.css';
+@import 'katex/dist/katex.min.css';
 
 :root {
   --background: #ffffff;
@@ -21,6 +23,22 @@
   --input: #e2e8f0;
   --ring: #020617;
   --radius: 0.5rem;
+
+  /* Glassmorphism Custom Properties */
+  --glass-blur: 10px;
+  --glass-opacity: 0.1;
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: rgba(0, 0, 0, 0.1);
+  --glass-bg: rgba(255, 255, 255, 0.1);
+
+  /* Responsive Blur Values */
+  --glass-blur-sm: 6px;
+  --glass-blur-md: 10px;
+  --glass-blur-lg: 16px;
+
+  /* Glass Gradients */
+  --glass-gradient: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  --glass-border-gradient: linear-gradient(145deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
 }
 
 @media (prefers-color-scheme: dark) {
@@ -44,6 +62,13 @@
     --border: #1e293b;
     --input: #1e293b;
     --ring: #cbd5e1;
+
+    /* Dark Mode Glassmorphism */
+    --glass-bg: rgba(0, 0, 0, 0.2);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: rgba(0, 0, 0, 0.3);
+    --glass-gradient: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    --glass-border-gradient: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
   }
 }
 
@@ -76,4 +101,32 @@
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+/* Mobile-first Responsive Glassmorphism */
+@media (max-width: 768px) {
+  :root {
+    --glass-blur: var(--glass-blur-sm);
+    --glass-opacity: 0.15; /* Stronger on mobile for better visibility */
+  }
+}
+
+/* Base glassmorphism utility classes */
+.glass-morphism {
+  backdrop-filter: blur(var(--glass-blur));
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px var(--glass-shadow);
+}
+
+.glass-card {
+  @apply glass-morphism rounded-xl;
+}
+
+.glass-button {
+  @apply glass-morphism rounded-lg transition-all duration-300 hover:backdrop-blur-lg;
+}
+
+.glass-nav {
+  @apply glass-morphism backdrop-blur-xl border-b;
 }

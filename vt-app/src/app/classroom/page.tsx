@@ -233,23 +233,14 @@ export default function ClassroomPage() {
   /**
    * Handle room connection
    */
-  function handleRoomConnected(room: Room) {
-    console.log('Room connected successfully:', room?.name);
+  function handleRoomConnected() {
+    console.log('Room connected successfully');
     setConnectionState(ConnectionState.Connected);
     setIsConnecting(false);
-    
-    // Initialize audio manager with room
-    if (audioManager && room) {
-      audioManager.initializeAudio(room);
-    }
-    
-    // Listen for connection quality changes
-    if (room) {
-      room.on(RoomEvent.ConnectionQualityChanged, (quality, participant) => {
-        if (participant === room.localParticipant) {
-          console.log('Connection quality:', quality);
-        }
-      });
+
+    // Initialize audio manager
+    if (audioManager) {
+      // Note: Will initialize audio when room reference is available
     }
   }
   

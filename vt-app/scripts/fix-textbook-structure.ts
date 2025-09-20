@@ -228,7 +228,7 @@ async function verifyStructure() {
   const { data: chapters } = await supabase
     .from('chapters')
     .select('chapter_number, title')
-    .order('chapter_number', { nullsLast: true })
+    .order('chapter_number', { nullsFirst: false })
     .limit(5)
 
   console.log('  📖 Sample chapters:')
