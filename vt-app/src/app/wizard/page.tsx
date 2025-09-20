@@ -7,6 +7,7 @@ import { StepIndicator } from '@/components/wizard/StepIndicator'
 import { NavigationButtons } from '@/components/wizard/NavigationButtons'
 import { GradeSelector } from '@/components/wizard/GradeSelector'
 import { SubjectSelector } from '@/components/wizard/SubjectSelector'
+import { PurposeSelector } from '@/components/wizard/PurposeSelector'
 import { TopicSelector } from '@/components/wizard/TopicSelector'
 import { WizardSummary } from '@/components/wizard/WizardSummary'
 import { WIZARD_STEPS, CurriculumData } from '@/types/wizard'
@@ -26,6 +27,7 @@ export default function WizardPage() {
     state,
     updateGrade,
     updateSubjects,
+    updatePurpose,
     updateTopics,
     nextStep,
     previousStep,
@@ -49,7 +51,12 @@ export default function WizardPage() {
           if (data.preferred_subjects && data.preferred_subjects.length > 0) {
             updateSubjects(data.preferred_subjects)
           }
-          
+
+          // Load learning purpose if available
+          if (data.learning_purpose) {
+            updatePurpose(data.learning_purpose as 'new_class' | 'revision' | 'exam_prep')
+          }
+
           // Load selected topics for each subject
           if (data.selected_topics && data.preferred_subjects) {
             data.preferred_subjects.forEach(subject => {
@@ -69,7 +76,7 @@ export default function WizardPage() {
     }
     
     loadProfile()
-  }, [router, updateGrade, updateSubjects, updateTopics])
+  }, [router, updateGrade, updateSubjects, updateTopics, updatePurpose])
 
   // Fetch curriculum data when grade is selected
   useEffect(() => {
@@ -195,11 +202,19 @@ export default function WizardPage() {
                 />
               )}
 
+              {state.currentStep === WIZARD_STEPS.PURPOSE_SELECTION && (
+                <PurposeSelector
+                  selectedPurpose={state.purpose}
+                  onPurposeSelect={updatePurpose}
+                />
+              )}
+
               {state.currentStep === WIZARD_STEPS.TOPIC_SELECTION && (
                 <TopicSelector
                   subjects={state.subjects}
                   availableTopics={availableTopics}
                   selectedTopics={state.topics}
+                  selectedPurpose={state.purpose}
                   onTopicsChange={updateTopics}
                 />
               )}
@@ -208,6 +223,7 @@ export default function WizardPage() {
                 <WizardSummary
                   grade={state.grade}
                   subjects={state.subjects}
+                  purpose={state.purpose}
                   topics={state.topics}
                 />
               )}

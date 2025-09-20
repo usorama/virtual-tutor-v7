@@ -19,19 +19,25 @@ test.describe('Class Wizard Flow', () => {
     await page.getByText('Mathematics').click();
     await page.getByText('Science').click();
     await page.getByRole('button', { name: /next/i }).click();
-    
-    // Step 3: Topic Selection
+
+    // Step 3: Purpose Selection (NEW)
+    await expect(page.getByRole('heading', { name: /learning goal/i })).toBeVisible();
+    await page.getByText('New Class').click();
+    await page.getByRole('button', { name: /next/i }).click();
+
+    // Step 4: Topic Selection
     await expect(page.getByRole('heading', { name: /select.*topics/i })).toBeVisible();
     // Select some topics
     await page.getByText('Real Numbers').first().click();
     await page.getByText('Chemical Reactions').first().click();
     await page.getByRole('button', { name: /next/i }).click();
     
-    // Step 4: Summary
+    // Step 5: Summary
     await expect(page.getByRole('heading', { name: /review.*selections/i })).toBeVisible();
     await expect(page.getByText(/grade.*10/i)).toBeVisible();
     await expect(page.getByText(/mathematics/i)).toBeVisible();
     await expect(page.getByText(/science/i)).toBeVisible();
+    await expect(page.getByText(/new class/i)).toBeVisible();
     
     // Complete wizard
     await page.getByRole('button', { name: /complete|finish|start learning/i }).click();

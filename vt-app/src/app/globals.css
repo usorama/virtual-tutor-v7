@@ -24,6 +24,22 @@
   --ring: #020617;
   --radius: 0.5rem;
 
+  /* PingLearn Brand Colors */
+  --ping-primary: #0066ff;        /* Vibrant blue for technology */
+  --ping-secondary: #ff6b35;      /* Orange for education/energy */
+  --ping-accent: #00d4aa;         /* Teal for voice/audio */
+  --ping-dark: #1a1a1a;          /* Professional dark */
+  --ping-light: #f8fafc;         /* Clean light */
+
+  /* PingLearn Glassmorphism Integration */
+  --ping-glass-primary: rgba(0, 102, 255, 0.1);
+  --ping-glass-secondary: rgba(255, 107, 53, 0.1);
+  --ping-glass-accent: rgba(0, 212, 170, 0.1);
+
+  /* Voice-specific effects */
+  --ping-voice-glow: 0 0 20px rgba(0, 212, 170, 0.3);
+  --ping-tech-shadow: 0 8px 32px rgba(0, 102, 255, 0.2);
+
   /* Glassmorphism Custom Properties */
   --glass-blur: 10px;
   --glass-opacity: 0.1;

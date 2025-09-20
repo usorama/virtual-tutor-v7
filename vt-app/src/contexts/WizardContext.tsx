@@ -9,6 +9,7 @@ const initialState: WizardState = {
   currentStep: WIZARD_STEPS.GRADE_SELECTION,
   grade: null,
   subjects: [],
+  purpose: null,
   topics: {},
   isComplete: false,
 }
@@ -58,6 +59,7 @@ export function WizardProvider({ children }: WizardProviderProps) {
       grade,
       // Reset subsequent selections when grade changes
       subjects: [],
+      purpose: null,
       topics: {},
     }))
   }, [])
@@ -71,13 +73,24 @@ export function WizardProvider({ children }: WizardProviderProps) {
           delete newTopics[subject]
         }
       })
-      
+
       return {
         ...prev,
         subjects,
+        // Reset purpose and topics when subjects change
+        purpose: null,
         topics: newTopics,
       }
     })
+  }, [])
+
+  const updatePurpose = useCallback((purpose: 'new_class' | 'revision' | 'exam_prep') => {
+    setState(prev => ({
+      ...prev,
+      purpose,
+      // Reset topics when purpose changes to allow purpose-driven selection
+      topics: {},
+    }))
   }, [])
 
   const updateTopics = useCallback((subject: string, topics: string[]) => {
@@ -122,9 +135,11 @@ export function WizardProvider({ children }: WizardProviderProps) {
         return state.grade !== null
       case WIZARD_STEPS.SUBJECT_SELECTION:
         return state.subjects.length > 0
+      case WIZARD_STEPS.PURPOSE_SELECTION:
+        return state.purpose !== null
       case WIZARD_STEPS.TOPIC_SELECTION:
         // Ensure all selected subjects have topics selected
-        return state.subjects.every(subject => 
+        return state.subjects.every(subject =>
           state.topics[subject] && state.topics[subject].length > 0
         )
       case WIZARD_STEPS.SUMMARY:
@@ -142,6 +157,7 @@ export function WizardProvider({ children }: WizardProviderProps) {
     state,
     updateGrade,
     updateSubjects,
+    updatePurpose,
     updateTopics,
     nextStep,
     previousStep,

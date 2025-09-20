@@ -3,21 +3,23 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import { GRADE_LABELS } from '@/types/wizard'
-import { CheckCircle2, GraduationCap, BookOpen, Target } from 'lucide-react'
+import { GRADE_LABELS, PURPOSE_OPTIONS, LearningPurpose } from '@/types/wizard'
+import { CheckCircle2, GraduationCap, BookOpen, Target, Play, RotateCcw } from 'lucide-react'
 
 interface WizardSummaryProps {
   grade: number | null
   subjects: string[]
+  purpose: LearningPurpose | null
   topics: Record<string, string[]>
   className?: string
 }
 
-export function WizardSummary({ 
-  grade, 
-  subjects, 
+export function WizardSummary({
+  grade,
+  subjects,
+  purpose,
   topics,
-  className 
+  className
 }: WizardSummaryProps) {
   const totalTopics = Object.values(topics).reduce((sum, topicList) => sum + topicList.length, 0)
 
@@ -67,6 +69,50 @@ export function WizardSummary({
             </div>
           </CardContent>
         </Card>
+
+        {/* Learning Purpose Summary */}
+        {purpose && (
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-2">
+                {purpose === 'new_class' && <Play className="h-5 w-5 text-blue-600" />}
+                {purpose === 'revision' && <RotateCcw className="h-5 w-5 text-orange-600" />}
+                {purpose === 'exam_prep' && <Target className="h-5 w-5 text-red-600" />}
+                <CardTitle className="text-lg">Learning Purpose</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {(() => {
+                const purposeConfig = PURPOSE_OPTIONS.find(p => p.value === purpose)
+                if (!purposeConfig) return null
+
+                return (
+                  <div className="flex items-center gap-3">
+                    <div className="text-2xl">{purposeConfig.icon}</div>
+                    <div>
+                      <Badge
+                        variant="secondary"
+                        className={cn(
+                          'text-sm py-1 px-3',
+                          {
+                            'bg-blue-100 text-blue-800': purpose === 'new_class',
+                            'bg-orange-100 text-orange-800': purpose === 'revision',
+                            'bg-red-100 text-red-800': purpose === 'exam_prep',
+                          }
+                        )}
+                      >
+                        {purposeConfig.label}
+                      </Badge>
+                      <p className="text-sm text-gray-600 mt-1">
+                        {purposeConfig.description}
+                      </p>
+                    </div>
+                  </div>
+                )
+              })()}
+            </CardContent>
+          </Card>
+        )}
 
         {/* Topics Summary */}
         <Card>

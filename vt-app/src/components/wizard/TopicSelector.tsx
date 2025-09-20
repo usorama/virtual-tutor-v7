@@ -3,24 +3,28 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, Play, RotateCcw, Target } from 'lucide-react'
 import { useState } from 'react'
+import { LearningPurpose } from '@/types/wizard'
 
 interface TopicSelectorProps {
   subjects: string[]
   availableTopics: Record<string, string[]>
   selectedTopics: Record<string, string[]>
+  selectedPurpose: LearningPurpose | null
   onTopicsChange: (subject: string, topics: string[]) => void
   className?: string
 }
 
-export function TopicSelector({ 
+export function TopicSelector({
   subjects,
   availableTopics,
-  selectedTopics, 
+  selectedTopics,
+  selectedPurpose,
   onTopicsChange,
-  className 
+  className
 }: TopicSelectorProps) {
   const [expandedSubject, setExpandedSubject] = useState<string | null>(
     subjects.length > 0 ? subjects[0] : null
@@ -42,7 +46,7 @@ export function TopicSelector({
   const handleSelectAll = (subject: string) => {
     const allTopics = availableTopics[subject] || []
     const currentTopics = selectedTopics[subject] || []
-    
+
     if (currentTopics.length === allTopics.length) {
       // Deselect all
       onTopicsChange(subject, [])
@@ -50,6 +54,55 @@ export function TopicSelector({
       // Select all
       onTopicsChange(subject, allTopics)
     }
+  }
+
+  const handleStartAtBeginning = (subject: string) => {
+    const allTopics = availableTopics[subject] || []
+    // For "start at beginning", select all topics but emphasize starting from first
+    onTopicsChange(subject, allTopics)
+  }
+
+  const handlePurposeBasedSelection = (subject: string) => {
+    const allTopics = availableTopics[subject] || []
+
+    if (selectedPurpose === 'new_class') {
+      // New class: select all topics, start from beginning
+      onTopicsChange(subject, allTopics)
+    } else if (selectedPurpose === 'revision') {
+      // Revision: select first few key topics as starting point
+      const keyTopics = allTopics.slice(0, Math.min(3, allTopics.length))
+      onTopicsChange(subject, keyTopics)
+    } else if (selectedPurpose === 'exam_prep') {
+      // Exam prep: focus on important/common exam topics
+      const examTopics = allTopics.filter((_, index) => index % 2 === 0) // Simple algorithm: every other topic
+      onTopicsChange(subject, examTopics.length > 0 ? examTopics : allTopics.slice(0, 2))
+    }
+  }
+
+  const getPurposeBasedSuggestion = () => {
+    if (selectedPurpose === 'new_class') {
+      return {
+        title: 'New Class Learning',
+        description: 'Start from the beginning and cover all topics systematically',
+        icon: Play,
+        action: 'Start at Chapter 1'
+      }
+    } else if (selectedPurpose === 'revision') {
+      return {
+        title: 'Revision Focus',
+        description: 'Review key concepts and strengthen understanding',
+        icon: RotateCcw,
+        action: 'Select Key Topics'
+      }
+    } else if (selectedPurpose === 'exam_prep') {
+      return {
+        title: 'Exam Preparation',
+        description: 'Focus on important topics commonly asked in exams',
+        icon: Target,
+        action: 'Select Exam Topics'
+      }
+    }
+    return null
   }
 
   return (
@@ -60,6 +113,39 @@ export function TopicSelector({
           Choose specific topics for each subject you want to focus on
         </p>
       </div>
+
+      {/* Purpose-based suggestion card */}
+      {selectedPurpose && getPurposeBasedSuggestion() && (
+        <Card className="max-w-3xl mx-auto bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                {(() => {
+                  const suggestion = getPurposeBasedSuggestion()!
+                  const Icon = suggestion.icon
+                  return (
+                    <>
+                      <Icon className="h-5 w-5 text-blue-600" />
+                      <div>
+                        <h4 className="font-medium text-blue-900">{suggestion.title}</h4>
+                        <p className="text-sm text-blue-700">{suggestion.description}</p>
+                      </div>
+                    </>
+                  )
+                })()}
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => subjects.forEach(subject => handlePurposeBasedSelection(subject))}
+                className="border-blue-300 text-blue-700 hover:bg-blue-100"
+              >
+                {getPurposeBasedSuggestion()!.action}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="max-w-4xl mx-auto space-y-4">
         {subjects.map(subject => {
@@ -102,19 +188,49 @@ export function TopicSelector({
               {isExpanded && (
                 <CardContent className="pt-0">
                   <div className="space-y-3">
-                    {/* Select all checkbox */}
-                    <div className="flex items-center space-x-2 pb-2 border-b">
-                      <Checkbox
-                        id={`${subject}-all`}
-                        checked={selected.length === topics.length && topics.length > 0}
-                        onCheckedChange={() => handleSelectAll(subject)}
-                      />
-                      <label 
-                        htmlFor={`${subject}-all`}
-                        className="text-sm font-medium cursor-pointer"
-                      >
-                        Select All
-                      </label>
+                    {/* Quick action buttons */}
+                    <div className="flex flex-wrap items-center gap-2 pb-2 border-b">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id={`${subject}-all`}
+                          checked={selected.length === topics.length && topics.length > 0}
+                          onCheckedChange={() => handleSelectAll(subject)}
+                        />
+                        <label
+                          htmlFor={`${subject}-all`}
+                          className="text-sm font-medium cursor-pointer"
+                        >
+                          Select All
+                        </label>
+                      </div>
+
+                      <div className="flex gap-1 ml-auto">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleStartAtBeginning(subject)}
+                          className="h-7 px-2 text-xs"
+                        >
+                          <Play className="h-3 w-3 mr-1" />
+                          Start at Beginning
+                        </Button>
+
+                        {selectedPurpose && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handlePurposeBasedSelection(subject)}
+                            className="h-7 px-2 text-xs"
+                          >
+                            {selectedPurpose === 'new_class' && <Play className="h-3 w-3 mr-1" />}
+                            {selectedPurpose === 'revision' && <RotateCcw className="h-3 w-3 mr-1" />}
+                            {selectedPurpose === 'exam_prep' && <Target className="h-3 w-3 mr-1" />}
+                            {selectedPurpose === 'new_class' ? 'All Topics' :
+                             selectedPurpose === 'revision' ? 'Key Topics' :
+                             'Exam Topics'}
+                          </Button>
+                        )}
+                      </div>
                     </div>
 
                     {/* Topics grid */}

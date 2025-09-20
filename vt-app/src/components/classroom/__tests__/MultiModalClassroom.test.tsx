@@ -103,7 +103,6 @@ describe('MultiModalClassroom', () => {
 
   const defaultProps = {
     sessionId: 'test-session-123',
-    liveKitRoom: mockRoom as any,
     isConnected: true,
     isMuted: false,
     onMuteToggle: mockOnMuteToggle,
@@ -353,8 +352,8 @@ describe('MultiModalClassroom', () => {
   })
 
   describe('Error Handling', () => {
-    it('handles missing livekit room gracefully', () => {
-      render(<MultiModalClassroom {...defaultProps} liveKitRoom={null} />)
+    it('handles component initialization gracefully', () => {
+      render(<MultiModalClassroom {...defaultProps} />)
 
       expect(screen.getByText('AI Mathematics Classroom')).toBeInTheDocument()
     })

@@ -52,6 +52,12 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // PingLearn Brand Colors
+        "ping-primary": "var(--ping-primary)",
+        "ping-secondary": "var(--ping-secondary)",
+        "ping-accent": "var(--ping-accent)",
+        "ping-dark": "var(--ping-dark)",
+        "ping-light": "var(--ping-light)",
       },
       borderRadius: {
         lg: "var(--radius)",

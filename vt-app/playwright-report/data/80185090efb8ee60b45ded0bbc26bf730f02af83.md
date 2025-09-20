@@ -1,0 +1,155 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - heading "Virtual Tutor" [level=1] [ref=e5]
+      - paragraph [ref=e6]: Your AI-powered learning companion
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - generic [ref=e10]: Welcome Back
+        - generic [ref=e11]: Enter your credentials to access your account
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - generic [ref=e14]:
+            - generic [ref=e15]: Email
+            - generic [ref=e16]:
+              - img [ref=e17]
+              - textbox "Email" [ref=e20]
+          - generic [ref=e21]:
+            - generic [ref=e22]:
+              - generic [ref=e23]: Password
+              - link "Forgot password?" [ref=e24] [cursor=pointer]:
+                - /url: /forgot-password
+            - generic [ref=e25]:
+              - img [ref=e26]
+              - textbox "Password" [ref=e29]
+          - generic [ref=e30]:
+            - checkbox "Remember me" [ref=e31]
+            - generic [ref=e32]: Remember me
+        - generic [ref=e33]:
+          - button "Sign In" [ref=e34]
+          - generic [ref=e35]:
+            - text: Don't have an account?
+            - link "Sign up" [ref=e36] [cursor=pointer]:
+              - /url: /register
+  - generic [active]:
+    - generic [ref=e39]:
+      - generic [ref=e40]:
+        - generic [ref=e41]:
+          - navigation [ref=e42]:
+            - button "previous" [disabled] [ref=e43]:
+              - img "previous" [ref=e44]
+            - generic [ref=e46]:
+              - generic [ref=e47]: 1/
+              - generic [ref=e48]: "1"
+            - button "next" [disabled] [ref=e49]:
+              - img "next" [ref=e50]
+          - img
+        - generic [ref=e52]:
+          - generic [ref=e53]:
+            - img [ref=e54]
+            - generic "Latest available version is detected (15.5.3)." [ref=e56]: Next.js 15.5.3
+            - generic [ref=e57]: Turbopack
+          - img
+      - dialog "Build Error" [ref=e59]:
+        - generic [ref=e62]:
+          - generic [ref=e63]:
+            - generic [ref=e64]:
+              - generic [ref=e66]: Build Error
+              - generic [ref=e67]:
+                - button "Copy Error Info" [ref=e68] [cursor=pointer]:
+                  - img [ref=e69] [cursor=pointer]
+                - button "No related documentation found" [disabled] [ref=e71]:
+                  - img [ref=e72]
+                - link "Learn more about enabling Node.js inspector for server code with Chrome DevTools" [ref=e74] [cursor=pointer]:
+                  - /url: https://nextjs.org/docs/app/building-your-application/configuring/debugging#server-side-code
+                  - img [ref=e75] [cursor=pointer]
+            - paragraph [ref=e84]: Parsing ecmascript source code failed
+          - generic [ref=e86]:
+            - generic [ref=e88]:
+              - img [ref=e90]
+              - generic [ref=e93]: ./src/app/home-preview/page.tsx (248:69)
+              - button "Open in editor" [ref=e94] [cursor=pointer]:
+                - img [ref=e96] [cursor=pointer]
+            - generic [ref=e99]:
+              - generic [ref=e100]: Parsing ecmascript source code failed
+              - generic [ref=e102]: 246 |
+              - generic [ref=e104]: <
+              - generic [ref=e105]: /
+              - generic [ref=e106]: div
+              - generic [ref=e107]: ">"
+              - generic [ref=e109]: 247 |
+              - generic [ref=e111]: <
+              - generic [ref=e112]: div
+              - generic [ref=e113]: className
+              - generic [ref=e114]: =
+              - generic [ref=e115]: "\"mt-6 text-center\""
+              - generic [ref=e116]: ">"
+              - generic [ref=e117]: ">"
+              - generic [ref=e118]: 248 |
+              - generic [ref=e120]: <
+              - generic [ref=e121]: span
+              - generic [ref=e122]: className
+              - generic [ref=e123]: =
+              - generic [ref=e124]: "\"text-ping-accent font-semibold\""
+              - generic [ref=e125]: ">"
+              - generic [ref=e126]: <
+              - generic [ref=e128]: "500"
+              - generic [ref=e129]: ms total latency
+              - generic [ref=e130]: <
+              - generic [ref=e131]: /
+              - generic [ref=e132]: span
+              - generic [ref=e133]: ">"
+              - generic [ref=e135]: "|"
+              - generic [ref=e137]: ^
+              - generic [ref=e138]: ^
+              - generic [ref=e140]: 249 |
+              - generic [ref=e142]: <
+              - generic [ref=e143]: span
+              - generic [ref=e144]: className
+              - generic [ref=e145]: =
+              - generic [ref=e146]: "\"text-muted-foreground mx-2\""
+              - generic [ref=e147]: ">"
+              - generic [ref=e148]: •
+              - generic [ref=e149]: <
+              - generic [ref=e150]: /
+              - generic [ref=e151]: span
+              - generic [ref=e152]: ">"
+              - generic [ref=e154]: 250 |
+              - generic [ref=e156]: <
+              - generic [ref=e157]: span
+              - generic [ref=e158]: className
+              - generic [ref=e159]: =
+              - generic [ref=e160]: "\"text-muted-foreground\""
+              - generic [ref=e161]: ">"
+              - generic [ref=e162]: Powered
+              - generic [ref=e163]: by
+              - generic [ref=e164]: LiveKit
+              - generic [ref=e166]: +
+              - generic [ref=e168]: Gemini
+              - generic [ref=e170]: Live
+              - generic [ref=e171]: <
+              - generic [ref=e172]: /
+              - generic [ref=e173]: span
+              - generic [ref=e174]: ">"
+              - generic [ref=e176]: 251 |
+              - generic [ref=e178]: <
+              - generic [ref=e179]: /
+              - generic [ref=e180]: div
+              - generic [ref=e181]: ">"
+              - generic [ref=e182]: "Expected '</', got 'ms' Import traces: Client Component Browser: ./src/app/home-preview/page.tsx [Client Component Browser] ./src/app/home-preview/page.tsx [Server Component] Client Component SSR: ./src/app/home-preview/page.tsx [Client Component SSR] ./src/app/home-preview/page.tsx [Server Component]"
+        - generic [ref=e183]:
+          - generic [ref=e184]: "1"
+          - generic [ref=e185]: "2"
+    - generic [ref=e190] [cursor=pointer]:
+      - button "Open Next.js Dev Tools" [ref=e191] [cursor=pointer]:
+        - img [ref=e192] [cursor=pointer]
+      - button "Open issues overlay" [ref=e196] [cursor=pointer]:
+        - generic [ref=e197] [cursor=pointer]:
+          - generic [ref=e198] [cursor=pointer]: "0"
+          - generic [ref=e199] [cursor=pointer]: "1"
+        - generic [ref=e200] [cursor=pointer]: Issue
+  - alert [ref=e201]
+```

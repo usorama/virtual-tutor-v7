@@ -12,14 +12,17 @@ import { WhiteboardToolbar } from './WhiteboardToolbar';
 import { CollaborationIndicator } from './CollaborationIndicator';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
-  PanelLeftOpen,
-  PanelLeftClose,
   Mic,
   MicOff,
   Palette,
   Calculator,
-  Users
+  Users,
+  MessageSquare,
+  FileText,
+  Phone
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -57,11 +60,12 @@ export function MultiModalClassroom({
   // Use LiveKit hook to get room instance
   const liveKitRoom = useEnsureRoom();
   // UI State
-  const [whiteboardVisible, setWhiteboardVisible] = useState(true);
   const [isListeningForCommands, setIsListeningForCommands] = useState(false);
   const [lastVoiceCommand, setLastVoiceCommand] = useState<DrawingCommand | null>(null);
   const [mathMode, setMathMode] = useState(false);
   const [collaborators, setCollaborators] = useState<string[]>([]);
+  const [transcript, setTranscript] = useState<string[]>([]);
+  const [notes, setNotes] = useState<string>('');
 
   // Whiteboard State
   const [editor, setEditor] = useState<Editor | null>(null);
@@ -226,151 +230,208 @@ export function MultiModalClassroom({
   }, []);
 
   /**
-   * Toggle whiteboard visibility
-   */
-  const toggleWhiteboard = useCallback(() => {
-    setWhiteboardVisible(!whiteboardVisible);
-  }, [whiteboardVisible]);
-
-  /**
    * Toggle voice command listening
    */
   const toggleVoiceCommands = useCallback(() => {
     setIsListeningForCommands(!isListeningForCommands);
   }, [isListeningForCommands]);
 
+  /**
+   * Add message to transcript
+   */
+  const addToTranscript = useCallback((speaker: string, message: string) => {
+    const timestamp = new Date().toLocaleTimeString();
+    setTranscript(prev => [...prev, `[${timestamp}] ${speaker}: ${message}`]);
+  }, []);
+
   return (
-    <div className="h-screen flex flex-col bg-gradient-to-b from-background to-muted">
-      {/* Header Controls */}
-      <div className="flex items-center justify-between p-4 border-b bg-background/95 backdrop-blur-sm">
-        {/* Left: Session Info */}
-        <div className="flex items-center gap-4">
-          <h1 className="text-lg font-semibold">AI Mathematics Classroom</h1>
-          <Badge variant="outline" className="gap-2">
+    <div className="h-screen flex bg-gradient-to-b from-background to-muted">
+      {/* Main Whiteboard Area - 80% */}
+      <div className="flex-1 flex flex-col relative">
+        {/* Status Indicators - Top Right Overlay */}
+        <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
+          <Badge variant="outline" className="gap-1 text-xs">
             <Users className="h-3 w-3" />
-            {collaborators.length + 1} participant{collaborators.length !== 0 ? 's' : ''}
+            {collaborators.length + 1}
           </Badge>
           <Badge
             variant={isConnected ? "default" : "destructive"}
-            className="gap-2"
+            className="gap-1 text-xs"
           >
-            Duration: {sessionDuration}
+            {isConnected ? 'Connected' : 'Disconnected'}
+          </Badge>
+          <Badge variant="secondary" className="text-xs">
+            {connectionQuality}
           </Badge>
         </div>
 
-        {/* Right: Controls */}
-        <div className="flex items-center gap-2">
-          <Button
-            variant={isListeningForCommands ? "default" : "outline"}
-            size="sm"
-            onClick={toggleVoiceCommands}
-            className="gap-2"
-          >
-            {isListeningForCommands ? <Mic className="h-4 w-4" /> : <MicOff className="h-4 w-4" />}
-            Voice Drawing
-          </Button>
-
-          <Button
-            variant={mathMode ? "default" : "outline"}
-            size="sm"
-            onClick={() => setMathMode(!mathMode)}
-            className="gap-2"
-          >
-            <Calculator className="h-4 w-4" />
-            Math Mode
-          </Button>
-
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={toggleWhiteboard}
-            className="gap-2"
-          >
-            {whiteboardVisible ? <PanelLeftClose className="h-4 w-4" /> : <PanelLeftOpen className="h-4 w-4" />}
-            {whiteboardVisible ? 'Hide' : 'Show'} Whiteboard
-          </Button>
-        </div>
-      </div>
-
-      {/* Main Content Area */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Left Side: Audio Interface */}
-        <div className={cn(
-          "flex flex-col transition-all duration-300",
-          whiteboardVisible ? "w-1/2" : "w-full"
-        )}>
-          {/* Audio Visualizer */}
-          <div className="flex-1">
-            <AudioVisualizer
-              isConnected={isConnected}
-              isMuted={isMuted}
-              onMuteToggle={onMuteToggle}
-              onEndSession={onEndSession}
-              studentName={studentName}
-              sessionDuration={sessionDuration}
-              connectionQuality={connectionQuality}
-              className="h-full"
+        {/* Whiteboard Toolbar - Top Left Overlay */}
+        <div className="absolute top-4 left-4 z-20">
+          <div className="bg-background/95 backdrop-blur-sm rounded-lg p-2 border shadow-lg">
+            <WhiteboardToolbar
+              editor={editor}
+              mathMode={mathMode}
+              onMathModeToggle={() => setMathMode(!mathMode)}
             />
           </div>
+        </div>
 
-          {/* Voice Command Processor */}
-          {isListeningForCommands && (
-            <div className="p-4 border-t">
+        {/* Tldraw Canvas - Full Area */}
+        <div className="flex-1 relative">
+          <Tldraw
+            store={whiteboardStore}
+            onMount={handleWhiteboardMount}
+          />
+
+          {/* Collaboration Indicator */}
+          <CollaborationIndicator
+            collaborators={collaborators}
+            sessionId={sessionId}
+          />
+
+          {/* Math Notation Overlay */}
+          {mathMode && (
+            <MathNotationOverlay
+              editor={editor}
+              onMathInsert={createMathExpression}
+            />
+          )}
+        </div>
+
+        {/* Audio Controls - Bottom Center Floating */}
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20">
+          <div className="bg-background/95 backdrop-blur-sm rounded-full p-3 border shadow-lg flex items-center gap-3">
+            <Button
+              variant={isMuted ? "destructive" : "outline"}
+              size="sm"
+              onClick={onMuteToggle}
+              className="rounded-full"
+            >
+              {isMuted ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+            </Button>
+
+            <div className="text-xs text-muted-foreground px-2">
+              {sessionDuration}
+            </div>
+
+            <Button
+              variant={isListeningForCommands ? "default" : "outline"}
+              size="sm"
+              onClick={toggleVoiceCommands}
+              className="rounded-full gap-2"
+            >
+              <Palette className="h-3 w-3" />
+              Voice Drawing
+            </Button>
+
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={onEndSession}
+              className="rounded-full"
+            >
+              <Phone className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Voice Command Processor - Hidden but Active */}
+        {isListeningForCommands && (
+          <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-10">
+            <div className="bg-background/95 backdrop-blur-sm rounded-lg p-3 border shadow-lg max-w-sm">
               <VoiceCommandProcessor
                 onCommand={executeDrawingCommand}
                 isActive={isListeningForCommands}
                 lastCommand={lastVoiceCommand}
               />
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
-        {/* Right Side: Interactive Whiteboard */}
-        {whiteboardVisible && (
-          <div className="w-1/2 border-l flex flex-col">
-            {/* Whiteboard Toolbar */}
-            <div className="p-2 border-b bg-muted/30">
-              <WhiteboardToolbar
-                editor={editor}
-                mathMode={mathMode}
-                onMathModeToggle={() => setMathMode(!mathMode)}
-              />
-            </div>
-
-            {/* Tldraw Canvas */}
-            <div className="flex-1 relative">
-              <Tldraw
-                store={whiteboardStore}
-                onMount={handleWhiteboardMount}
-              />
-
-              {/* Collaboration Indicator */}
-              <CollaborationIndicator
-                collaborators={collaborators}
-                sessionId={sessionId}
-              />
-
-              {/* Math Notation Overlay */}
-              {mathMode && (
-                <MathNotationOverlay
-                  editor={editor}
-                  onMathInsert={createMathExpression}
-                />
-              )}
-            </div>
+        {/* Command Feedback */}
+        {lastVoiceCommand && (
+          <div className="absolute top-20 left-1/2 transform -translate-x-1/2 z-30">
+            <Badge variant="secondary" className="gap-2 animate-in fade-in duration-300">
+              <Palette className="h-3 w-3" />
+              {lastVoiceCommand.action} {lastVoiceCommand.shape || lastVoiceCommand.text || lastVoiceCommand.mathExpression}
+            </Badge>
           </div>
         )}
       </div>
 
-      {/* Command Feedback */}
-      {lastVoiceCommand && (
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-50">
-          <Badge variant="secondary" className="gap-2 animate-in fade-in duration-300">
-            <Palette className="h-3 w-3" />
-            Last command: {lastVoiceCommand.action} {lastVoiceCommand.shape || lastVoiceCommand.text || lastVoiceCommand.mathExpression}
-          </Badge>
+      {/* Right Sidebar - Transcript & Notes - 20% */}
+      <div className="w-80 border-l bg-background/50 backdrop-blur-sm flex flex-col">
+        {/* Header */}
+        <div className="p-4 border-b">
+          <h2 className="font-semibold text-sm flex items-center gap-2">
+            <MessageSquare className="h-4 w-4" />
+            AI Mathematics Classroom
+          </h2>
+          <p className="text-xs text-muted-foreground mt-1">
+            Topic: Grade 10 Mathematics | Session: {sessionDuration}
+          </p>
         </div>
-      )}
+
+        {/* Tabs */}
+        <Tabs defaultValue="transcript" className="flex-1 flex flex-col">
+          <TabsList className="grid w-full grid-cols-2 mx-4 mt-4">
+            <TabsTrigger value="transcript" className="text-xs">
+              <MessageSquare className="h-3 w-3 mr-1" />
+              Transcript
+            </TabsTrigger>
+            <TabsTrigger value="notes" className="text-xs">
+              <FileText className="h-3 w-3 mr-1" />
+              Notes
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="transcript" className="flex-1 px-4 pb-4">
+            <ScrollArea className="h-full">
+              <div className="space-y-3">
+                {transcript.length === 0 ? (
+                  <div className="text-center text-muted-foreground text-sm py-8">
+                    <MessageSquare className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                    <p>Conversation will appear here</p>
+                    <p className="text-xs mt-1">Speak naturally - you can interrupt anytime</p>
+                  </div>
+                ) : (
+                  transcript.map((line, index) => (
+                    <div key={index} className="text-sm p-2 rounded bg-muted/30">
+                      {line}
+                    </div>
+                  ))
+                )}
+
+                {/* Placeholder conversation */}
+                <div className="space-y-3 opacity-60">
+                  <div className="text-sm p-2 rounded bg-blue-50 border-l-2 border-blue-500">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Users className="h-3 w-3" />
+                      <span className="font-medium">AI Tutor</span>
+                      <span className="text-xs text-muted-foreground">is listening...</span>
+                    </div>
+                    <p className="text-muted-foreground text-xs">Speak naturally - you can interrupt anytime</p>
+                  </div>
+                </div>
+              </div>
+            </ScrollArea>
+          </TabsContent>
+
+          <TabsContent value="notes" className="flex-1 px-4 pb-4">
+            <div className="h-full flex flex-col">
+              <textarea
+                placeholder="Take notes during your session..."
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                className="flex-1 p-3 text-sm border rounded-md bg-background resize-none focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <p className="text-xs text-muted-foreground mt-2">
+                Notes auto-save during your session
+              </p>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 }

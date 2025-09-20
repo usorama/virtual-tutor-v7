@@ -14,7 +14,7 @@ const mockEditor = {
   insertText: vi.fn(),
   createTextShape: vi.fn(),
   addMathElement: vi.fn()
-}
+} as any
 
 vi.mock('@tldraw/tldraw', () => ({
   Tldraw: vi.fn(({ onMount, ...props }) => {
@@ -41,6 +41,17 @@ vi.mock('katex', () => ({
 
 describe('Math Notation to Canvas Integration Tests', () => {
   let mockOnMathInsert: any
+
+  const mockProps = {
+    sessionId: 'test-session-123',
+    isConnected: true,
+    isMuted: false,
+    onMuteToggle: vi.fn(),
+    onEndSession: vi.fn(),
+    studentName: 'Test Student',
+    sessionDuration: '00:15:30',
+    connectionQuality: 'excellent' as const
+  }
 
   beforeEach(() => {
     mockOnMathInsert = vi.fn()
@@ -136,7 +147,7 @@ describe('Math Notation to Canvas Integration Tests', () => {
     it('integrates math overlay with full classroom canvas', async () => {
       const user = userEvent.setup()
 
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       await waitFor(() => {
         expect(screen.getByTestId('tldraw-canvas')).toBeInTheDocument()
@@ -335,7 +346,7 @@ describe('Math Notation to Canvas Integration Tests', () => {
     it('coordinates with voice commands in full classroom', async () => {
       const user = userEvent.setup()
 
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       await waitFor(() => {
         expect(screen.getByTestId('tldraw-canvas')).toBeInTheDocument()
@@ -356,7 +367,7 @@ describe('Math Notation to Canvas Integration Tests', () => {
     it('maintains canvas state during math operations', async () => {
       const user = userEvent.setup()
 
-      render(<MultiModalClassroom />)
+      render(<MultiModalClassroom {...mockProps} />)
 
       await waitFor(() => {
         expect(screen.getByTestId('tldraw-canvas')).toBeInTheDocument()
