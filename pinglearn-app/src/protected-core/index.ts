@@ -36,5 +36,25 @@ export type { ConnectionEvent } from './websocket/manager/singleton-manager';
 export type { RetryConfig, RetryAttempt } from './websocket/retry/exponential-backoff';
 export type { HealthMetrics, PingResult } from './websocket/health/monitor';
 
-// Note: Actual service implementations will be added in Phase 1
-// WebSocket singleton manager implementation is now complete
+// Export Voice Engine functionality
+export {
+  LiveKitVoiceService,
+  AudioStreamManager,
+  AudioQualityMonitor,
+  LiveKitSessionManager,
+  AudioPipeline
+} from './voice-engine';
+
+// Export Voice Engine types
+export type {
+  AudioConfig,
+  AudioQualityMetrics,
+  AudioPipelineConfig,
+  AudioProcessingState,
+  SessionMetrics,
+  SessionError,
+  ParticipantInfo,
+  RecordingConfig
+} from './voice-engine';
+
+// WebSocket singleton manager and LiveKit service implementations are now complete
