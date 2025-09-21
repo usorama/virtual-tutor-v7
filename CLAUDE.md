@@ -657,6 +657,12 @@ All user data is protected with RLS policies:
 
 ## 🚨 PRIMARY DEFENSE: PROTECTED CORE NEVER MODIFY
 
+### 📋 PROTECTED CORE DECISION FRAMEWORK
+**Before considering ANY protected-core modification, ALWAYS consult:**
+- **Decision Framework**: `docs/kb/PROTECTED_CORE_DECISION_FRAMEWORK.md`
+- **Change Process**: Create change record in `docs/change_records/protected_core_changes/`
+- **Approval Required**: Explicit stakeholder approval before ANY protected-core changes
+
 ### ⛔ CRITICAL: NEVER MODIFY THESE FILES
 ```
 src/protected-core/*                     # ENTIRE PROTECTED CORE
