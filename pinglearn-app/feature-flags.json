@@ -4,6 +4,7 @@
   "enableNewDashboard": false,
   "enableAIGeneratedFeatures": false,
   "enableVoiceFlow": false,
+  "enableLiveKitCore": false,
   "enableAdvancedProtection": false,
   "enableMonitoring": false,
   "enableRollback": false,

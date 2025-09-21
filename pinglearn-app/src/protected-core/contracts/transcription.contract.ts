@@ -33,7 +33,7 @@ export interface DisplayItem {
   content: string;
   timestamp: number;
   speaker?: 'student' | 'teacher';
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface TranscriptionContract {
