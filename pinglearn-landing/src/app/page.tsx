@@ -146,7 +146,7 @@ export default function Home() {
             <img
               src="/logos/logo-transparent.svg"
               alt="PingLearn Logo"
-              className="h-32 md:h-40 lg:h-48 w-auto"
+              className="h-16 md:h-20 lg:h-24 w-auto"
             />
           </motion.div>
 
