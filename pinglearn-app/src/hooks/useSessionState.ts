@@ -63,8 +63,8 @@ export function useSessionState(): UseSessionStateReturn {
   const [lastStateChange, setLastStateChange] = useState<Date | null>(null);
   const [stateChangeCount, setStateChangeCount] = useState(0);
 
-  const managerRef = useRef<VoiceSessionManager>();
-  const uptimeIntervalRef = useRef<NodeJS.Timeout | undefined>();
+  const managerRef = useRef<VoiceSessionManager | undefined>(undefined);
+  const uptimeIntervalRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const sessionStartTimeRef = useRef<Date | null>(null);
 
   // Initialize manager and event listeners

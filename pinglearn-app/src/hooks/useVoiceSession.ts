@@ -42,7 +42,7 @@ export function useVoiceSession(): UseVoiceSessionReturn {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const managerRef = useRef<VoiceSessionManager>();
+  const managerRef = useRef<VoiceSessionManager | undefined>(undefined);
   const eventListenersRegistered = useRef(false);
 
   // Initialize manager and event listeners

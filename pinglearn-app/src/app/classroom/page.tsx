@@ -1,70 +1,97 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Mic, MicOff, Loader2, AlertCircle, Play, Pause, Square } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Mic, MicOff, Loader2, AlertCircle, Play, Pause, Square, Activity, BarChart3, Zap } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { TranscriptionDisplay } from '@/components/transcription/TranscriptionDisplay';
-import { SessionOrchestrator } from '@/protected-core';
+import { useVoiceSession } from '@/hooks/useVoiceSession';
+import { useSessionState } from '@/hooks/useSessionState';
+import { useSessionMetrics } from '@/hooks/useSessionMetrics';
 
-interface SessionData {
-  sessionId: string;
-  studentId: string;
-  topic: string;
-  startTime: number;
-  status: 'idle' | 'connecting' | 'active' | 'paused' | 'ended';
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error?: Error;
+}
+
+interface AudioControlState {
+  isMuted: boolean;
+  volume: number;
+  hasPermissions: boolean;
 }
 
 export default function ClassroomPage() {
   const router = useRouter();
   const supabase = createClient();
 
-  // Session state
-  const [sessionData, setSessionData] = useState<SessionData | null>(null);
-  const [isConnecting, setIsConnecting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [sessionStartTime, setSessionStartTime] = useState<Date | null>(null);
-  const [sessionDuration, setSessionDuration] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+  // Voice session management hooks
+  const {
+    session,
+    isLoading,
+    error: voiceError,
+    controls,
+    createSession,
+    endSession,
+    isActive,
+    isPaused,
+    isConnecting,
+    isError,
+    clearError
+  } = useVoiceSession();
 
-  // Audio state
-  const [isMuted, setIsMuted] = useState(false);
-  const [hasPermissions, setHasPermissions] = useState(false);
+  const {
+    state: sessionState,
+    sessionId,
+    getDetailedStatus
+  } = useSessionState();
 
-  // User state
+  const {
+    liveMetrics,
+    qualityScore,
+    engagementTrend
+  } = useSessionMetrics();
+
+  // Local UI state
+  const [audioControls, setAudioControls] = useState<AudioControlState>({
+    isMuted: false,
+    volume: 100,
+    hasPermissions: false
+  });
   const [userId, setUserId] = useState<string | null>(null);
   const [currentTopic, setCurrentTopic] = useState<string>('General Mathematics');
-
-  // Orchestrator instance
-  const [orchestrator, setOrchestrator] = useState<SessionOrchestrator | null>(null);
+  const [errorBoundary, setErrorBoundary] = useState<ErrorBoundaryState>({ hasError: false });
 
   // Check authentication and load user data
   useEffect(() => {
     checkAuth();
-
-    // Get orchestrator singleton instance
-    const orch = SessionOrchestrator.getInstance();
-    setOrchestrator(orch);
-
-    return () => {
-      // Cleanup if needed
-    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Update session duration timer
+  // Clear voice errors when user dismisses them
   useEffect(() => {
-    if (sessionStartTime && !isPaused) {
-      const interval = setInterval(() => {
-        const duration = Math.floor((Date.now() - sessionStartTime.getTime()) / 1000);
-        setSessionDuration(duration);
-      }, 1000);
+    if (voiceError) {
+      const timer = setTimeout(() => {
+        clearError();
+      }, 10000); // Auto-clear errors after 10 seconds
 
-      return () => clearInterval(interval);
+      return () => clearTimeout(timer);
     }
-  }, [sessionStartTime, isPaused]);
+  }, [voiceError, clearError]);
+
+  // Error boundary effect
+  useEffect(() => {
+    const handleError = (error: ErrorEvent) => {
+      console.error('Global error caught:', error);
+      setErrorBoundary({ hasError: true, error: new Error(error.message) });
+    };
+
+    window.addEventListener('error', handleError);
+    return () => window.removeEventListener('error', handleError);
+  }, []);
 
   /**
    * Check if user is authenticated
@@ -92,7 +119,7 @@ export default function ClassroomPage() {
   }
 
   /**
-   * Request microphone permissions
+   * Request microphone permissions with enhanced error handling
    */
   async function requestPermissions(): Promise<boolean> {
     try {
@@ -100,29 +127,35 @@ export default function ClassroomPage() {
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
-          autoGainControl: true
+          autoGainControl: true,
+          sampleRate: 48000,
+          channelCount: 1
         }
       });
 
       // Stop the stream immediately - we just needed to request permissions
       stream.getTracks().forEach(track => track.stop());
 
-      setHasPermissions(true);
+      setAudioControls(prev => ({ ...prev, hasPermissions: true }));
       return true;
     } catch (err) {
       console.error('Permission denied:', err);
-      setError('Microphone access is required for the AI classroom. Please allow microphone access and refresh the page.');
-      setHasPermissions(false);
+      const errorMessage = err instanceof DOMException && err.name === 'NotAllowedError'
+        ? 'Microphone access was denied. Please allow microphone access and refresh the page.'
+        : 'Unable to access microphone. Please check your device settings and try again.';
+
+      setErrorBoundary({ hasError: true, error: new Error(errorMessage) });
+      setAudioControls(prev => ({ ...prev, hasPermissions: false }));
       return false;
     }
   }
 
   /**
-   * Start a new learning session
+   * Start a new learning session with comprehensive error handling
    */
-  async function startSession() {
-    if (!userId || !orchestrator) {
-      setError('Please log in to start a session');
+  async function startVoiceSession() {
+    if (!userId) {
+      setErrorBoundary({ hasError: true, error: new Error('Please log in to start a session') });
       return;
     }
 
@@ -132,36 +165,32 @@ export default function ClassroomPage() {
       return;
     }
 
-    setIsConnecting(true);
-    setError(null);
-
     try {
-      // Start the session with config
-      const sessionId = await orchestrator.startSession({
+      clearError();
+      setErrorBoundary({ hasError: false });
+
+      // Create session through VoiceSessionManager
+      const voiceSessionId = await createSession({
         studentId: userId,
         topic: currentTopic,
         voiceEnabled: true,
-        mathTranscriptionEnabled: true
+        mathTranscriptionEnabled: true,
+        recordingEnabled: true
       });
 
-      // Update session data
-      setSessionData({
-        sessionId,
-        studentId: userId,
-        topic: currentTopic,
-        startTime: Date.now(),
-        status: 'active'
-      });
+      console.log('Voice session created successfully:', voiceSessionId);
 
-      setSessionStartTime(new Date());
-      setIsConnecting(false);
+      // Start the session
+      await controls.start();
 
-      console.log('Session started successfully:', sessionId);
+      console.log('Voice session started successfully');
 
     } catch (err) {
-      console.error('Error starting session:', err);
-      setError('Failed to start session. Please try again.');
-      setIsConnecting(false);
+      console.error('Error starting voice session:', err);
+      setErrorBoundary({
+        hasError: true,
+        error: err instanceof Error ? err : new Error('Failed to start session. Please try again.')
+      });
     }
   }
 
@@ -169,49 +198,50 @@ export default function ClassroomPage() {
    * Pause/Resume the session
    */
   async function togglePause() {
-    if (!orchestrator || !sessionData) return;
-
-    if (isPaused) {
-      await orchestrator.resumeSession();
-      setIsPaused(false);
-      setSessionData(prev => prev ? {...prev, status: 'active'} : null);
-    } else {
-      await orchestrator.pauseSession();
-      setIsPaused(true);
-      setSessionData(prev => prev ? {...prev, status: 'paused'} : null);
+    try {
+      if (isPaused) {
+        await controls.resume();
+      } else {
+        await controls.pause();
+      }
+    } catch (err) {
+      console.error('Error toggling pause:', err);
+      setErrorBoundary({
+        hasError: true,
+        error: err instanceof Error ? err : new Error('Failed to pause/resume session')
+      });
     }
   }
 
   /**
    * End the current session
    */
-  async function endSession() {
-    if (!orchestrator || !sessionData) return;
-
+  async function endVoiceSession() {
     try {
-      await orchestrator.endSession(sessionData.sessionId);
+      const finalMetrics = await endSession();
 
-      // Save session to Supabase
-      if (userId) {
+      // Save session to Supabase with metrics
+      if (userId && finalMetrics) {
         await supabase.from('learning_sessions').insert({
           student_id: userId,
           topic: currentTopic,
-          duration: sessionDuration,
-          ended_at: new Date().toISOString()
+          duration: finalMetrics.duration,
+          ended_at: new Date().toISOString(),
+          engagement_score: finalMetrics.engagementScore,
+          comprehension_score: finalMetrics.comprehensionScore
         });
       }
 
-      // Reset state
-      setSessionData(null);
-      setSessionStartTime(null);
-      setSessionDuration(0);
-      setIsPaused(false);
-
-      // Redirect to dashboard
-      router.push('/dashboard');
+      // Show success message briefly then redirect
+      setTimeout(() => {
+        router.push('/dashboard');
+      }, 2000);
     } catch (err) {
       console.error('Error ending session:', err);
-      setError('Failed to end session properly');
+      setErrorBoundary({
+        hasError: true,
+        error: err instanceof Error ? err : new Error('Failed to end session properly')
+      });
     }
   }
 
@@ -219,11 +249,23 @@ export default function ClassroomPage() {
    * Toggle mute state
    */
   async function toggleMute() {
-    if (!orchestrator) return;
-
-    // This would be connected to the actual audio stream
-    setIsMuted(!isMuted);
+    try {
+      if (audioControls.isMuted) {
+        await controls.unmute();
+      } else {
+        await controls.mute();
+      }
+      setAudioControls(prev => ({ ...prev, isMuted: !prev.isMuted }));
+    } catch (err) {
+      console.error('Error toggling mute:', err);
+      setErrorBoundary({
+        hasError: true,
+        error: err instanceof Error ? err : new Error('Failed to toggle mute')
+      });
+    }
   }
+
+  // Note: Volume control available through setAudioControls state
 
   /**
    * Format duration for display
@@ -239,8 +281,66 @@ export default function ClassroomPage() {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   }
 
+  /**
+   * Get status badge variant based on session state
+   */
+  function getStatusBadgeVariant(status: string): 'default' | 'secondary' | 'destructive' | 'outline' {
+    switch (status) {
+      case 'active': return 'default';
+      case 'connecting': return 'outline';
+      case 'paused': return 'secondary';
+      case 'error': return 'destructive';
+      default: return 'outline';
+    }
+  }
+
+  /**
+   * Clear error boundary
+   */
+  function clearErrorBoundary() {
+    setErrorBoundary({ hasError: false });
+    clearError();
+  }
+
+  // Error boundary display
+  if (errorBoundary.hasError) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background to-muted flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle className="text-destructive">Session Error</CardTitle>
+            <CardDescription>
+              Something went wrong with your learning session
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                {errorBoundary.error?.message || 'An unexpected error occurred'}
+              </AlertDescription>
+            </Alert>
+
+            <div className="flex space-x-2">
+              <Button onClick={clearErrorBoundary} className="flex-1">
+                Try Again
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => router.push('/dashboard')}
+                className="flex-1"
+              >
+                Back to Dashboard
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   // If we have an active session, show the transcription interface
-  if (sessionData) {
+  if (session && (isActive || isPaused)) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-background to-muted p-4">
         <div className="max-w-6xl mx-auto space-y-4">
@@ -248,27 +348,54 @@ export default function ClassroomPage() {
           <Card>
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <CardTitle>AI Learning Session</CardTitle>
-                  <CardDescription>
-                    {currentTopic} • Duration: {formatDuration(sessionDuration)}
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <CardTitle>AI Learning Session</CardTitle>
+                    <Badge variant={getStatusBadgeVariant(sessionState.status)}>
+                      {getDetailedStatus()}
+                    </Badge>
+                  </div>
+                  <CardDescription className="flex items-center space-x-4">
+                    <span>{currentTopic}</span>
+                    <span>•</span>
+                    <span>Duration: {formatDuration(liveMetrics.duration)}</span>
+                    <span>•</span>
+                    <span>Quality: {qualityScore}%</span>
                   </CardDescription>
+
+                  {/* Real-time metrics */}
+                  <div className="flex items-center space-x-4 text-xs text-muted-foreground">
+                    <div className="flex items-center space-x-1">
+                      <Activity className="h-3 w-3" />
+                      <span>{liveMetrics.messagesExchanged} messages</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <BarChart3 className="h-3 w-3" />
+                      <span>Engagement: {engagementTrend}</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Zap className="h-3 w-3" />
+                      <span>{liveMetrics.mathEquationsCount} equations</span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Session Controls */}
                 <div className="flex items-center space-x-2">
                   <Button
-                    variant={isMuted ? "destructive" : "secondary"}
+                    variant={audioControls.isMuted ? "destructive" : "secondary"}
                     size="icon"
                     onClick={toggleMute}
+                    disabled={isConnecting || isLoading}
                   >
-                    {isMuted ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                    {audioControls.isMuted ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                   </Button>
 
                   <Button
                     variant="secondary"
                     size="icon"
                     onClick={togglePause}
+                    disabled={isConnecting || isLoading}
                   >
                     {isPaused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
                   </Button>
@@ -276,9 +403,10 @@ export default function ClassroomPage() {
                   <Button
                     variant="destructive"
                     size="icon"
-                    onClick={endSession}
+                    onClick={endVoiceSession}
+                    disabled={isConnecting || isLoading}
                   >
-                    <Square className="h-4 w-4" />
+                    {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Square className="h-4 w-4" />}
                   </Button>
                 </div>
               </div>
@@ -287,7 +415,7 @@ export default function ClassroomPage() {
 
           {/* Main Transcription Display */}
           <TranscriptionDisplay
-            sessionId={sessionData.sessionId}
+            sessionId={sessionId || undefined}
             className="min-h-[600px]"
           />
 
@@ -301,10 +429,29 @@ export default function ClassroomPage() {
             </Alert>
           )}
 
-          {error && (
+          {voiceError && (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{error}</AlertDescription>
+              <AlertDescription>
+                {voiceError}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="ml-2"
+                  onClick={clearError}
+                >
+                  Dismiss
+                </Button>
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {isError && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                Session encountered an error. Attempting to recover...
+              </AlertDescription>
             </Alert>
           )}
         </div>
@@ -324,7 +471,7 @@ export default function ClassroomPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Permission Status */}
-          {!hasPermissions && (
+          {!audioControls.hasPermissions && (
             <Alert>
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
@@ -358,21 +505,31 @@ export default function ClassroomPage() {
           </div>
 
           {/* Error Display */}
-          {error && (
+          {(voiceError || errorBoundary.hasError) && (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{error}</AlertDescription>
+              <AlertDescription>
+                {voiceError || errorBoundary.error?.message || 'An error occurred'}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="ml-2"
+                  onClick={clearErrorBoundary}
+                >
+                  Dismiss
+                </Button>
+              </AlertDescription>
             </Alert>
           )}
 
           {/* Start Button */}
           <Button
-            onClick={startSession}
-            disabled={isConnecting}
+            onClick={startVoiceSession}
+            disabled={isConnecting || isLoading}
             size="lg"
             className="w-full"
           >
-            {isConnecting ? (
+            {(isConnecting || isLoading) ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Connecting to AI Teacher...

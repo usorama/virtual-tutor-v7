@@ -74,9 +74,9 @@ export function useSessionMetrics(): UseSessionMetricsReturn {
   const [engagementTrend, setEngagementTrend] = useState<'improving' | 'declining' | 'stable'>('stable');
   const [qualityScore, setQualityScore] = useState(0);
 
-  const managerRef = useRef<VoiceSessionManager>();
+  const managerRef = useRef<VoiceSessionManager | undefined>(undefined);
   const sessionStartTimeRef = useRef<Date | null>(null);
-  const metricsIntervalRef = useRef<NodeJS.Timeout | undefined>();
+  const metricsIntervalRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const responseTimes = useRef<number[]>([]);
   const lastTranscriptTimeRef = useRef<Date | null>(null);
 
