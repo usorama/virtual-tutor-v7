@@ -167,27 +167,123 @@ import { VoiceService } from '@/protected-core';
 6. **ALWAYS handle errors gracefully**
 7. **ALWAYS maintain 0 TypeScript errors**
 
+## 📍 PROJECT NAVIGATION GUIDE
+
+### Planning Documents Location
+```
+/docs/new-arch-impl-planning/
+├── MASTER-PLAN.md           # 🎯 START HERE - 6-day implementation roadmap
+├── 01-analysis/             # Why we failed 7 times
+├── 02-architecture/         # Protected Core design
+├── 03-phases/               # Detailed phase plans
+│   ├── phase-0-foundation.md      # Day 1: Emergency fixes
+│   ├── phase-1-core-services.md   # Days 2-3: Core services
+│   ├── phase-2-gemini-integration.md # Days 4-5: Voice flow
+│   └── phase-3-stabilization.md   # Day 6: Hardening
+└── 04-prompts/              # AI implementation prompts
+```
+
+### How to Use the Master Plan
+1. **ALWAYS start by reading**: `/docs/new-arch-impl-planning/MASTER-PLAN.md`
+2. **Check current phase**: See "Current Implementation Status" below
+3. **Read phase-specific docs**: In `/docs/new-arch-impl-planning/03-phases/`
+4. **Use AI prompts**: Copy from `/docs/new-arch-impl-planning/04-prompts/`
+5. **Update status**: After completing each task in Master Plan
+
+## 🔀 GIT WORKFLOW - MANDATORY
+
+### Starting a New Phase
+```bash
+# 1. Ensure main branch is clean
+git checkout main
+git pull origin main
+
+# 2. Create phase branch from main
+git checkout -b phase-[number]-[name]
+# Example: git checkout -b phase-0-foundation
+
+# 3. Create initial checkpoint
+git commit -am "checkpoint: Starting Phase [number] - [name]"
+```
+
+### During Implementation
+```bash
+# After EACH task completion
+git add .
+git commit -m "[type]: Task [number] - [description]"
+# Example: git commit -m "feat: Task 1.1 - WebSocket singleton implementation"
+
+# Push regularly to prevent loss
+git push origin [branch-name]
+```
+
+### Completing a Phase
+```bash
+# 1. Run all verifications
+npm run typecheck  # MUST be 0 errors
+npm run lint       # MUST pass
+npm test           # MUST pass
+npm run build      # MUST succeed
+
+# 2. Create PR
+gh pr create --title "Phase [number]: [name]" \
+  --body "Completes Phase [number] as per MASTER-PLAN.md"
+
+# 3. After PR approval, merge to main
+git checkout main
+git merge phase-[number]-[name]
+git push origin main
+
+# 4. Tag the phase completion
+git tag -a phase-[number]-complete -m "Phase [number] completed"
+git push origin --tags
+```
+
+### Emergency Rollback
+```bash
+# If something breaks critically
+git reset --hard HEAD~1  # Undo last commit
+# OR
+git checkout main        # Abandon current branch
+```
+
 ## 🎯 Current Implementation Status
 
-### Phase 0: Foundation (PLANNING COMPLETE)
-- Protected Core structure planned
-- TypeScript fixes identified
-- Dependencies listed
+### Status Overview
+- **Current Date**: 2025-09-21
+- **Target Completion**: 2025-09-26
+- **Active Branch**: architecture-pivot-planning (planning complete)
+- **Next Phase**: Phase 0 - Foundation (Day 1)
+
+### Phase 0: Foundation (PLANNING COMPLETE - READY TO START)
+- ✅ Protected Core structure planned
+- ✅ TypeScript fixes identified
+- ✅ Dependencies listed
+- 🔄 **Next**: Create `phase-0-foundation` branch and start implementation
 
 ### Phase 1: Core Services (NOT STARTED)
-- WebSocket singleton pending
-- LiveKit integration pending
-- Transcription service pending
+- ⏳ WebSocket singleton pending
+- ⏳ LiveKit integration pending
+- ⏳ Transcription service pending
+- 📅 **Scheduled**: Days 2-3
 
 ### Phase 2: Gemini Integration (NOT STARTED)
-- Gemini Live API pending
-- Math rendering pending
-- Voice flow pending
+- ⏳ Gemini Live API pending
+- ⏳ Math rendering pending
+- ⏳ Voice flow pending
+- 📅 **Scheduled**: Days 4-5
 
 ### Phase 3: Stabilization (NOT STARTED)
-- Testing pending
-- Monitoring pending
-- Documentation pending
+- ⏳ Testing pending
+- ⏳ Monitoring pending
+- ⏳ Documentation pending
+- 📅 **Scheduled**: Day 6
+
+### How to Update Status
+After completing each task:
+1. Update this section with ✅ for completed items
+2. Commit with message: `docs: Update CLAUDE.md status for Task [number]`
+3. Keep MASTER-PLAN.md in sync
 
 ## 🔄 Rollback Procedures
 
@@ -239,6 +335,30 @@ If you need clarification:
 2. Review phase-specific documentation
 3. Look at existing implementations in protected-core
 4. Check test files for usage examples
+
+## 📝 MASTER PLAN MAINTENANCE
+
+### When to Update Master Plan
+- **After each task completion**: Mark as ✅ in relevant phase doc
+- **When blockers found**: Document in risk section
+- **After phase completion**: Update status and metrics
+- **When timeline changes**: Adjust dates and notify
+
+### Master Plan Quick Reference
+The Master Plan (`/docs/new-arch-impl-planning/MASTER-PLAN.md`) contains:
+- **Timeline**: 6-day implementation schedule
+- **Success Metrics**: What must be achieved
+- **Risk Mitigation**: How to handle problems
+- **Command Center**: Quick commands for common tasks
+- **Verification Checkpoints**: What to run after each task
+
+### Keeping Documents in Sync
+When you complete a task:
+1. Update task status in phase doc (`/docs/new-arch-impl-planning/03-phases/phase-X-*.md`)
+2. Update CLAUDE.md implementation status
+3. Update MASTER-PLAN.md progress
+4. Commit with clear message
+5. Push to remote branch
 
 ## ⚠️ Final Warning
 
