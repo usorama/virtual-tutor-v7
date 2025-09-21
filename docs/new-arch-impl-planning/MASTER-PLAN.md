@@ -67,7 +67,7 @@ After 7 failed attempts, we're implementing a Protected Core Architecture that p
 - Tests passing with >90% coverage
 
 ### Days 4-5: Phase 2 - Gemini Integration (16 hours)
-**Goal**: Connect Gemini Live API and implement real-time transcription
+**Goal**: Connect Gemini Live API and implement simplified transcription display
 
 **Day 4 Deliverables**:
 - Gemini Live API connected
@@ -76,10 +76,10 @@ After 7 failed attempts, we're implementing a Protected Core Architecture that p
 - Math detection functional
 
 **Day 5 Deliverables**:
-- React components for display
+- **CRITICAL**: Remove tldraw completely
+- Build simplified TranscriptionDisplay (from ux-flow.md)
 - Voice session management
-- End-to-end flow working
-- Performance optimization
+- End-to-end flow working (no whiteboard)
 
 **Success Metrics**:
 - < 300ms transcription latency
@@ -87,15 +87,37 @@ After 7 failed attempts, we're implementing a Protected Core Architecture that p
 - Voice flow works end-to-end
 - No console errors
 
-### Day 6: Phase 3 - Stabilization (8 hours)
-**Goal**: Harden system and prepare for production
+### Day 6-7: Phase 2.5 + 3 - Cleanup, UAT & Deployment (16 hours)
+**Goal**: Remove legacy code, perfect the app through UAT, and deploy to production
 
-**Key Deliverables**:
-- 95% test coverage achieved
-- Monitoring system operational
-- Rollback mechanisms working
-- Security measures implemented
-- Documentation complete
+**Day 6 Morning (4 hours) - Phase 2.5 App Cleanup**:
+- Remove all dead code from 7 failed attempts
+- Clean up dependencies (remove 50+ unused packages)
+- Simplify application structure
+- Production build verification
+
+**Day 6 Afternoon (4 hours) - Phase 3 Critical Testing & UAT Start**:
+- Critical path testing (2 hours):
+  - Core user journey (login → session → learn)
+  - Voice flow end-to-end
+  - Math rendering across browsers
+  - Mobile responsiveness
+- UAT Round 1-2 (2 hours):
+  - Core functionality testing by human
+  - UI/UX initial feedback
+  - Immediate implementation of changes
+
+**Day 7 Morning (4 hours) - UAT Continuation**:
+- UAT Round 3: Edge cases & error scenarios
+- UAT Round 4: Final polish & optimizations
+- Iterative refinement until human approval
+- Performance tuning based on feedback
+
+**Day 7 Afternoon (4 hours) - Deployment**:
+- Vercel deployment configuration (post-UAT)
+- Comprehensive monitoring setup (Sentry + analytics)
+- Deploy to production
+- Human verification of live deployment
 
 **Success Metrics**:
 - AI cannot break protected core

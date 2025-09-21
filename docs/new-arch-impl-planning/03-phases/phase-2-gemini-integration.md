@@ -229,19 +229,65 @@ Integrate Google Gemini Live API for real-time AI teacher functionality, complet
 
 ## Day 5 Tasks (8 hours)
 
-### Task 2.6: React Component Integration
+### Task 2.6: Remove Tldraw & Simplify Display
 **Duration**: 2 hours
 **Owner**: Human + AI
-**Feature Flag**: `enableTranscriptionDisplay`
+**Feature Flag**: `enableSimplifiedDisplay`
+**CRITICAL**: Must complete before building new components
 
 #### Subtasks:
-1. **Create TranscriptionDisplay component**
+1. **Remove tldraw dependencies completely**
+   ```bash
+   # Remove from package.json
+   npm uninstall @tldraw/tldraw @tldraw/assets
+
+   # Remove all tldraw imports and components
+   # Delete: src/components/whiteboard/
+   # Delete: src/features/collaborative-drawing/
+   # Clean up: src/app/classroom/page.tsx
+   ```
+
+2. **Clean up collaborative features**
+   ```typescript
+   // Remove from codebase:
+   - Canvas/drawing tools
+   - Collaborative cursors
+   - Shape synchronization
+   - Whiteboard state management
+   ```
+
+3. **Simplify state management**
+   ```typescript
+   // Keep only:
+   - Voice session state
+   - Transcription buffer
+   - User authentication
+   // Remove:
+   - Canvas state
+   - Drawing state
+   - Collaboration state
+   ```
+
+4. **Git commit checkpoint**
+   ```bash
+   git commit -am "refactor: Remove tldraw and collaborative features"
+   ```
+
+### Task 2.6b: Build Focused TranscriptionDisplay
+**Duration**: 2 hours
+**Owner**: AI
+**Feature Flag**: `enableTranscriptionDisplay`
+**Based on**: docs/kb.md/ux-flow.md specifications
+
+#### Subtasks:
+1. **Create simplified TranscriptionDisplay component**
    ```tsx
    // src/components/transcription/TranscriptionDisplay.tsx
-   - Real-time text display
-   - Math equation rendering
+   // Exactly as specified in ux-flow.md:
+   - Live AI teacher audio indicator
+   - Real-time text with math rendering
    - Synchronized highlighting
-   - Auto-scroll behavior
+   - No drawing tools, just display
    ```
 
 2. **Implement MathRenderer component**
@@ -250,30 +296,30 @@ Integrate Google Gemini Live API for real-time AI teacher functionality, complet
    - KaTeX integration
    - Inline/block rendering
    - Error boundaries
-   - Copy functionality
+   - Visual highlighting during speech
    ```
 
-3. **Build AudioVisualizer component**
+3. **Build minimal AudioIndicator**
    ```tsx
-   // src/components/transcription/AudioVisualizer.tsx
-   - Waveform display
-   - Speaking indicator
-   - Volume levels
-   - Activity detection
+   // src/components/transcription/AudioIndicator.tsx
+   - Simple "AI Teacher Speaking" indicator
+   - Volume visualization
+   - No complex controls
    ```
 
-4. **Create TranscriptionControls**
+4. **Create focused layout**
    ```tsx
-   // src/components/transcription/TranscriptionControls.tsx
-   - Playback speed
-   - Font size adjustment
-   - Theme toggle
-   - Export options
+   // src/app/classroom/page.tsx
+   // Clean, focused layout:
+   - Header: Session info
+   - Main: TranscriptionDisplay only
+   - Footer: Basic controls (pause/resume)
+   - No sidebar, no tools, no canvas
    ```
 
 5. **Git commit checkpoint**
    ```bash
-   git commit -am "feat: Create transcription UI components"
+   git commit -am "feat: Implement focused transcription display from ux-flow"
    ```
 
 ### Task 2.7: Voice Session Management

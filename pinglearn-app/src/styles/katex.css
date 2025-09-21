@@ -1,0 +1,19 @@
+/* Import KaTeX styles globally */
+@import 'katex/dist/katex.min.css';
+
+/* Custom math display styles */
+.math-renderer {
+  font-size: 1.1em;
+  line-height: 1.5;
+}
+
+.math-renderer.display-math {
+  display: block;
+  text-align: center;
+  margin: 1.5em 0;
+}
+
+.math-renderer.inline-math {
+  display: inline;
+  vertical-align: middle;
+}
