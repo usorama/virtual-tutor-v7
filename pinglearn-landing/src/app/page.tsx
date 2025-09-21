@@ -4,7 +4,6 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import TypewriterText from "@/components/TypewriterText";
 import ConicGradientButton from "@/components/ConicGradientButton";
-import LiquidMetalP from "@/components/LiquidMetalP";
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -142,11 +141,10 @@ export default function Home() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-3xl tracking-tight"
+            className="text-4xl font-bold"
             style={{
-              fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-              fontWeight: 500,
-              letterSpacing: "-0.02em"
+              fontFamily: "var(--font-jakarta)",
+              letterSpacing: "-0.04em"
             }}
           >
             <span className="text-white">ping</span>
