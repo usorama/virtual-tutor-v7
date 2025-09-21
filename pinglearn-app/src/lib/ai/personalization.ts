@@ -4,6 +4,7 @@
  */
 
 import { createClient } from '@/lib/supabase/server';
+import { CurriculumData } from '@/types/curriculum';
 
 export interface StudentProfile {
   id: string;
@@ -289,7 +290,7 @@ export class PersonalizationEngine {
   /**
    * Get next recommended topic based on curriculum and progress
    */
-  static async getNextTopic(studentId: string): Promise<any> {
+  static async getNextTopic(studentId: string): Promise<CurriculumData | null> {
     const supabase = await createClient();
     
     try {

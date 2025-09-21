@@ -5,6 +5,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { CurriculumTopic, AIPersonalizationData } from '@/types/ai-context';
+import { LearningPath, CurriculumData } from '@/types/curriculum';
 
 export interface ContentChunk {
   id: string;
@@ -163,7 +164,7 @@ export class ContentContextManager {
   /**
    * Get learning path based on student progress
    */
-  static async getLearningPath(studentId: string): Promise<any> {
+  static async getLearningPath(studentId: string): Promise<LearningPath | null> {
     const supabase = await createClient();
     
     try {
