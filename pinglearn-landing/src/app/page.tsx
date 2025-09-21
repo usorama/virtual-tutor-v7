@@ -133,7 +133,7 @@ export default function Home() {
         />
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 min-h-screen flex flex-col justify-between py-8">
+      <div className="relative z-10 container mx-auto px-4 min-h-screen flex flex-col justify-between pt-0 pb-8">
 
         {/* Header */}
         <header className="flex justify-between items-center">
