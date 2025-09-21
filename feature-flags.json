@@ -1,0 +1,14 @@
+{
+  "voice_session_enabled": false,
+  "gemini_live_api": false,
+  "math_rendering": true,
+  "transcription_service": true,
+  "websocket_optimization": false,
+  "performance_monitoring": true,
+  "debug_mode": false,
+  "experimental_features": false,
+  "livekit_integration": false,
+  "auto_reconnect": true,
+  "error_logging": true,
+  "session_analytics": false
+}

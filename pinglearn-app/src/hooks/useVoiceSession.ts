@@ -80,13 +80,23 @@ export function useVoiceSession(): UseVoiceSessionReturn {
       };
 
       // Error handling events
-      const handleSessionError = (sessionError: any) => {
-        setError(sessionError?.message || 'Session error occurred');
+      const handleSessionError = (sessionError: Error | unknown) => {
+        const errorMessage = sessionError instanceof Error
+          ? sessionError.message
+          : typeof sessionError === 'string'
+            ? sessionError
+            : 'Session error occurred';
+        setError(errorMessage);
         setIsLoading(false);
       };
 
-      const handleSessionFailed = ({ error: failureError }: { session: VoiceSession; error: any }) => {
-        setError(failureError?.message || 'Session failed');
+      const handleSessionFailed = ({ error: failureError }: { session: VoiceSession; error: Error | unknown }) => {
+        const errorMessage = failureError instanceof Error
+          ? failureError.message
+          : typeof failureError === 'string'
+            ? failureError
+            : 'Session failed';
+        setError(errorMessage);
         setIsLoading(false);
       };
 

@@ -7,6 +7,7 @@
  */
 
 import { VoiceServiceContract, VoiceSession } from '../../contracts/voice.contract';
+import { WebSocketManager } from '../../websocket/manager/singleton-manager';
 import {
   GeminiConfig,
   GeminiSessionConfig,
@@ -25,7 +26,8 @@ import {
 
 export class GeminiVoiceService implements Partial<VoiceServiceContract> {
   private config: GeminiSessionConfig;
-  private websocket: WebSocket | null = null;
+  private wsManager: WebSocketManager;
+  private connectionId: string | null = null;
   private sessionActive = false;
   private currentSession: VoiceSession | null = null;
   private connectionState: GeminiConnectionState = 'disconnected';
@@ -37,6 +39,7 @@ export class GeminiVoiceService implements Partial<VoiceServiceContract> {
 
   constructor(config?: Partial<GeminiSessionConfig>) {
     this.config = createSessionConfig(config);
+    this.wsManager = WebSocketManager.getInstance();
   }
 
   async initialize(): Promise<void> {
@@ -70,37 +73,26 @@ export class GeminiVoiceService implements Partial<VoiceServiceContract> {
     this.connectionState = 'connecting';
     this.onConnectionChange?.(this.connectionState);
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       try {
-        this.websocket = new WebSocket(wsUrl);
-
-        this.websocket.onopen = () => {
-          console.log('Gemini WebSocket connected');
-          this.connectionState = 'connected';
-          this.onConnectionChange?.('connected');
-          this.reconnectAttempts = 0;
-          this.startHeartbeat();
-          this.flushMessageQueue();
+        // Set up event listeners before connecting
+        this.wsManager.on('connected', () => {
+          this.handleOpen();
           resolve();
-        };
-
-        this.websocket.onmessage = (event) => {
+        });
+        this.wsManager.on('message', (event) => {
           this.handleMessage(event.data);
-        };
+        });
+        this.wsManager.on('error', (event) => {
+          this.handleError(new Error('WebSocket connection error'));
+        });
+        this.wsManager.on('disconnected', () => {
+          this.handleClose();
+        });
 
-        this.websocket.onerror = (error) => {
-          console.error('Gemini WebSocket error:', error);
-          this.onError?.(new Error('WebSocket connection error'));
-        };
-
-        this.websocket.onclose = () => {
-          console.log('Gemini WebSocket closed');
-          this.connectionState = 'disconnected';
-          this.onConnectionChange?.('disconnected');
-          this.stopHeartbeat();
-          this.attemptReconnection();
-        };
-
+        // Connect using singleton manager
+        await this.wsManager.connect(wsUrl);
+        this.connectionId = 'gemini-voice-connection';
       } catch (error) {
         console.error('Failed to create WebSocket:', error);
         this.connectionState = 'error';
@@ -158,9 +150,9 @@ export class GeminiVoiceService implements Partial<VoiceServiceContract> {
   }
 
   async cleanup(): Promise<void> {
-    if (this.websocket) {
-      this.websocket.close();
-      this.websocket = null;
+    if (this.connectionId) {
+      this.wsManager.disconnect();
+      this.connectionId = null;
     }
     this.sessionActive = false;
     this.currentSession = null;
@@ -169,7 +161,7 @@ export class GeminiVoiceService implements Partial<VoiceServiceContract> {
   }
 
   async sendAudio(audioData: ArrayBuffer): Promise<void> {
-    if (!this.sessionActive || !this.websocket) {
+    if (!this.sessionActive || !this.connectionId) {
       console.warn('Cannot send audio: no active session');
       return;
     }
@@ -216,17 +208,17 @@ export class GeminiVoiceService implements Partial<VoiceServiceContract> {
   }
 
   private sendMessage(message: GeminiMessage): void {
-    if (this.websocket?.readyState === WebSocket.OPEN) {
-      this.websocket.send(JSON.stringify(message));
+    if (this.connectionId) {
+      this.wsManager.send(JSON.stringify(message));
     } else {
       this.messageQueue.push(message);
     }
   }
 
   private flushMessageQueue(): void {
-    while (this.messageQueue.length > 0 && this.websocket?.readyState === WebSocket.OPEN) {
+    while (this.messageQueue.length > 0 && this.connectionId) {
       const message = this.messageQueue.shift()!;
-      this.websocket.send(JSON.stringify(message));
+      this.wsManager.send(JSON.stringify(message));
     }
   }
 
@@ -322,8 +314,8 @@ export class GeminiVoiceService implements Partial<VoiceServiceContract> {
   private startHeartbeat(): void {
     this.stopHeartbeat();
     this.heartbeatInterval = setInterval(() => {
-      if (this.websocket?.readyState === WebSocket.OPEN) {
-        this.websocket.send(JSON.stringify({ type: 'ping' }));
+      if (this.connectionId) {
+        this.wsManager.send(JSON.stringify({ type: 'ping' }));
       }
     }, 30000); // Ping every 30 seconds
   }
@@ -333,6 +325,29 @@ export class GeminiVoiceService implements Partial<VoiceServiceContract> {
       clearInterval(this.heartbeatInterval);
       this.heartbeatInterval = null;
     }
+  }
+
+  // WebSocket callback methods for singleton pattern
+  private handleOpen(): void {
+    console.log('Gemini WebSocket connected');
+    this.connectionState = 'connected';
+    this.onConnectionChange?.('connected');
+    this.reconnectAttempts = 0;
+    this.startHeartbeat();
+    this.flushMessageQueue();
+  }
+
+  private handleError(error: Error): void {
+    console.error('Gemini WebSocket error:', error);
+    this.onError?.(new Error('WebSocket connection error'));
+  }
+
+  private handleClose(): void {
+    console.log('Gemini WebSocket closed');
+    this.connectionState = 'disconnected';
+    this.onConnectionChange?.('disconnected');
+    this.stopHeartbeat();
+    this.attemptReconnection();
   }
 
   // Mock implementation for testing other services

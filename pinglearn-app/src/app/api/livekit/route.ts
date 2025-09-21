@@ -67,7 +67,12 @@ export async function POST(request: NextRequest) {
 /**
  * Create a new LiveKit room for tutoring session
  */
-async function createRoom(userId: string, body: any) {
+interface CreateRoomRequest {
+  chapterId?: string;
+  topicId?: string;
+}
+
+async function createRoom(userId: string, body: CreateRoomRequest) {
   const { chapterId, topicId } = body;
   
   console.log('Creating room for user:', userId);
@@ -145,7 +150,12 @@ async function createRoom(userId: string, body: any) {
 /**
  * Get access token for existing room
  */
-async function getToken(userId: string, body: any) {
+interface GetTokenRequest {
+  roomName: string;
+  sessionId?: string;
+}
+
+async function getToken(userId: string, body: GetTokenRequest) {
   const { roomName, sessionId } = body;
   
   if (!roomName) {
@@ -207,7 +217,11 @@ async function getToken(userId: string, body: any) {
 /**
  * End a learning session
  */
-async function endSession(userId: string, body: any) {
+interface EndSessionRequest {
+  sessionId: string;
+}
+
+async function endSession(userId: string, body: EndSessionRequest) {
   const { sessionId } = body;
   
   if (!sessionId) {

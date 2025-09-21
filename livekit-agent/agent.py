@@ -12,7 +12,7 @@ import json
 
 from livekit import agents
 from livekit.agents import AutoSubscribe, JobContext, WorkerOptions, cli, llm
-from livekit.agents.voice_assistant import VoiceAssistant
+from livekit.agents import voice
 from livekit.plugins import gemini
 from dotenv import load_dotenv
 from supabase import create_client, Client
