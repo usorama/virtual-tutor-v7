@@ -64,7 +64,26 @@ export {
   TextNormalization,
   BufferManager,
   getTextProcessor,
-  resetTextProcessor
+  resetTextProcessor,
+  DisplayBuffer,
+  getDisplayBuffer,
+  resetDisplayBuffer,
+  DisplayFormatter,
+  TranscriptionService
 } from './transcription';
 
-// WebSocket singleton manager, LiveKit service, and transcription implementations are now complete
+// Export Transcription types
+export type {
+  FormatterOptions,
+  FormattedContent
+} from './transcription';
+
+// Export Session Orchestration
+export { SessionOrchestrator } from './session';
+export type {
+  SessionConfig,
+  SessionState,
+  SessionSummaryMetrics
+} from './session';
+
+// WebSocket singleton manager, LiveKit service, transcription implementations, and session orchestration are now complete

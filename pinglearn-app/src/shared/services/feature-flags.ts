@@ -11,6 +11,7 @@ export interface FeatureFlags {
   enableNewDashboard: boolean;
   enableAIGeneratedFeatures: boolean;
   enableVoiceFlow: boolean;
+  enableLiveKitCore: boolean;
   enableAdvancedProtection: boolean;
   enableMonitoring: boolean;
   enableRollback: boolean;
@@ -42,6 +43,7 @@ export class FeatureFlagService {
           enableGeminiLive: flags.enableGeminiLive,
           enableMathTranscription: flags.enableMathTranscription,
           enableVoiceFlow: flags.enableVoiceFlow,
+          enableLiveKitCore: flags.enableLiveKitCore,
         };
       case 'experimental':
         return {

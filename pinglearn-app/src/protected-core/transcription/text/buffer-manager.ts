@@ -83,10 +83,11 @@ export class BufferManager {
 
     return this.displayBuffer.filter(item => {
       const content = item.content.toLowerCase();
+      const tags = item.metadata?.tags;
       return content.includes(normalizedQuery) ||
-             (item.metadata?.tags &&
-              item.metadata.tags.some((tag: string) =>
-                tag.toLowerCase().includes(normalizedQuery)
+             (Array.isArray(tags) &&
+              tags.some((tag: unknown) =>
+                typeof tag === 'string' && tag.toLowerCase().includes(normalizedQuery)
               ));
     });
   }
