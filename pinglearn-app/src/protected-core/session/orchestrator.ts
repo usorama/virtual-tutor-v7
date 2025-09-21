@@ -92,7 +92,7 @@ export class SessionOrchestrator {
 
   async startSession(config: SessionConfig): Promise<string> {
     try {
-      const sessionId = `session_${Date.now()}_${config.studentId}`;
+      const sessionId = crypto.randomUUID();
       this.sessionStartTime = Date.now();
       this.messageCount = 0;
       this.mathEquationCount = 0;
