@@ -384,14 +384,14 @@ export class ContentContextManager {
     const recommendations: string[] = [];
     
     // Find topics not yet mastered
-    if (curriculum && profile.topics_mastered) {
+    if (curriculum && profile.learningPath) {
       const unmasteredTopics = curriculum.filter(
-        topic => !profile.topics_mastered.includes(topic.id)
+        topic => !profile.learningPath.topics.some(mastered => mastered.id === topic.id)
       );
-      
+
       // Recommend the next 3 topics
       recommendations.push(
-        ...unmasteredTopics.slice(0, 3).map(t => t.topic_name)
+        ...unmasteredTopics.slice(0, 3).map(t => t.name)
       );
     }
     

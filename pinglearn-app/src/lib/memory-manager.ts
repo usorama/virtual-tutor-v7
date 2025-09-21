@@ -303,8 +303,8 @@ class MemoryManager {
             // Keep only recent 25 items instead of 50
             const entries = Array.from(cache.entries());
             cache.clear();
-            entries.slice(-25).forEach((entry: [string, unknown]) => {
-              const [key, value] = entry;
+            entries.slice(-25).forEach((entry: unknown) => {
+              const [key, value] = entry as [string, unknown];
               cache.set(key, value);
             });
             console.log('Math cache trimmed (gentle)');

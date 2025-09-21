@@ -101,16 +101,16 @@ export function useSessionMetrics(): UseSessionMetricsReturn {
       addToMetricsHistory(metrics);
     };
 
-    const handleTranscriptAdded = ({ transcript }: { transcript: TranscriptEntry }) => {
+    const handleTranscriptAdded = ({ transcript }: { transcript: Record<string, unknown> }) => {
       const newTranscript: TranscriptEntry = {
-        id: transcript.id,
-        voiceSessionId: transcript.voice_session_id,
-        speaker: transcript.speaker,
-        content: transcript.content,
-        timestamp: transcript.timestamp,
-        confidence: transcript.confidence,
-        mathContent: transcript.math_content,
-        processed: transcript.processed
+        id: transcript.id as string,
+        voiceSessionId: (transcript.voice_session_id as string) || '',
+        speaker: transcript.speaker as 'student' | 'tutor',
+        content: transcript.content as string,
+        timestamp: transcript.timestamp as string,
+        confidence: transcript.confidence as number | undefined,
+        mathContent: transcript.math_content as boolean,
+        processed: transcript.processed as boolean
       };
 
       setTranscripts(prev => [...prev, newTranscript]);
@@ -119,13 +119,13 @@ export function useSessionMetrics(): UseSessionMetricsReturn {
       setLiveMetrics(prev => ({
         ...prev,
         messagesExchanged: prev.messagesExchanged + 1,
-        mathEquationsCount: transcript.math_content ? prev.mathEquationsCount + 1 : prev.mathEquationsCount,
-        lastTranscriptTime: new Date(transcript.timestamp)
+        mathEquationsCount: (transcript.math_content as boolean) ? prev.mathEquationsCount + 1 : prev.mathEquationsCount,
+        lastTranscriptTime: new Date(transcript.timestamp as string)
       }));
 
       // Track response times
       if (lastTranscriptTimeRef.current) {
-        const responseTime = new Date(transcript.timestamp).getTime() - lastTranscriptTimeRef.current.getTime();
+        const responseTime = new Date(transcript.timestamp as string).getTime() - lastTranscriptTimeRef.current.getTime();
         responseTimes.current.push(responseTime);
 
         // Keep only last 20 response times
@@ -141,7 +141,7 @@ export function useSessionMetrics(): UseSessionMetricsReturn {
         }));
       }
 
-      lastTranscriptTimeRef.current = new Date(transcript.timestamp);
+      lastTranscriptTimeRef.current = new Date(transcript.timestamp as string);
     };
 
     const handleSessionError = () => {

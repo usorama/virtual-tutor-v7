@@ -94,7 +94,7 @@ export class PersonalizationEngine {
     const supabase = await createClient();
     
     try {
-      const updateData: any = { ...preferences };
+      const updateData: Record<string, unknown> = { ...preferences };
       
       // Convert voice preferences to JSON if provided
       if (preferences.voice_preferences) {

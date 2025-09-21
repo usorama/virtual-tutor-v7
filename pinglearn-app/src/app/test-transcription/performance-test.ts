@@ -3,6 +3,8 @@
  * Validates performance analysis findings
  */
 
+import { DisplayBufferItem } from '@/types/performance';
+
 // Performance testing utilities that can be run in browser console
 export const PerformanceTestSuite = {
   // Test 1: Measure buffer operation overhead
@@ -11,7 +13,7 @@ export const PerformanceTestSuite = {
     
     // Mock display buffer for testing
     class MockDisplayBuffer {
-      private items: any[] = [];
+      private items: DisplayBufferItem[] = [];
       
       constructor() {
         // Fill with test items
@@ -237,11 +239,11 @@ export const PerformanceTestSuite = {
     console.log('🔄 Testing Polling vs Subscription Performance...');
     
     class TestBuffer {
-      private items: any[] = [];
+      private items: DisplayBufferItem[] = [];
       private subscribers: Set<Function> = new Set();
       private lastChangeId = 0;
       
-      addItem(item: any) {
+      addItem(item: DisplayBufferItem) {
         this.items.push(item);
         this.lastChangeId++;
         this.notifySubscribers();
@@ -294,7 +296,7 @@ export const PerformanceTestSuite = {
       
       console.time('Subscription approach (10 actual changes)');
       
-      const unsubscribe = buffer.subscribe((items: any[]) => {
+      const unsubscribe = buffer.subscribe((items: DisplayBufferItem[]) => {
         const start = performance.now();
         // Process items (no copying needed)
         const end = performance.now();
@@ -323,7 +325,7 @@ export const PerformanceTestSuite = {
       // Add items to trigger subscription updates
       for (let i = 0; i < 10; i++) {
         setTimeout(() => {
-          buffer.addItem({ id: i, content: `Item ${i}` });
+          buffer.addItem({ id: `item_${i}`, content: `Item ${i}`, timestamp: Date.now(), type: 'text' });
         }, i * 100);
       }
     }

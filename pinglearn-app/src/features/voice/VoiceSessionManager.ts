@@ -381,14 +381,14 @@ export class VoiceSessionManager {
         throw new Error(`Failed to fetch transcripts: ${error.message}`);
       }
 
-      return transcripts.map((t: any) => ({
-        id: t.id,
-        voiceSessionId: t.voice_session_id,
-        speaker: t.speaker,
-        content: t.content,
-        timestamp: t.timestamp,
-        confidence: t.confidence,
-        mathContent: t.math_content,
+      return transcripts.map((t: Record<string, unknown>) => ({
+        id: t.id as string,
+        voiceSessionId: (t.voice_session_id as string) || '',
+        speaker: t.speaker as Speaker,
+        content: t.content as string,
+        timestamp: t.timestamp as string,
+        confidence: t.confidence as number | undefined,
+        mathContent: t.math_content as boolean,
         processed: t.processed
       }));
     } catch (error) {
@@ -577,7 +577,7 @@ export class VoiceSessionManager {
     }
   }
 
-  private emit(event: string, data?: any): void {
+  private emit(event: string, data?: unknown): void {
     const listeners = this.eventListeners.get(event);
     if (listeners) {
       listeners.forEach(callback => {

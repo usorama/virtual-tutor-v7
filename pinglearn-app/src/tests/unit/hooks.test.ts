@@ -55,7 +55,7 @@ vi.mock('@/protected-core', () => ({
 }));
 
 describe('useVoiceSession Hook', () => {
-  let useVoiceSession: any;
+  let useVoiceSession: () => unknown;
 
   beforeEach(async () => {
     vi.clearAllMocks();
@@ -136,7 +136,7 @@ describe('useVoiceSession Hook', () => {
 });
 
 describe('useSessionState Hook', () => {
-  let useSessionState: any;
+  let useSessionState: () => unknown;
 
   beforeEach(async () => {
     vi.clearAllMocks();
@@ -172,7 +172,7 @@ describe('useSessionState Hook', () => {
 });
 
 describe('useSessionMetrics Hook', () => {
-  let useSessionMetrics: any;
+  let useSessionMetrics: () => unknown;
 
   beforeEach(async () => {
     vi.clearAllMocks();
@@ -220,7 +220,7 @@ describe('useSessionMetrics Hook', () => {
 });
 
 describe('useOptimizedDisplayBuffer Hook', () => {
-  let useOptimizedDisplayBuffer: any;
+  let useOptimizedDisplayBuffer: () => unknown;
 
   beforeEach(async () => {
     vi.clearAllMocks();
