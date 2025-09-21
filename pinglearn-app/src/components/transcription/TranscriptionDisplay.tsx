@@ -4,9 +4,10 @@
  * Transcription Display Component
  * Simple, focused display for AI teacher transcription with math rendering
  * Based on docs/kb/ux-flow.md specifications
+ * OPTIMIZED: Smart polling, conditional scrolling, change detection
  */
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import type { DisplayBuffer } from '@/protected-core';
 
 // Use local DisplayItem type that matches what DisplayBuffer returns
@@ -33,6 +34,48 @@ export function TranscriptionDisplay({ sessionId, className = '' }: Transcriptio
   const [isTeacherSpeaking, setIsTeacherSpeaking] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const displayBufferRef = useRef<DisplayBuffer | null>(null);
+  const lastItemCountRef = useRef<number>(0);
+  const lastUpdateTimeRef = useRef<number>(0);
+  const updateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Debounced scroll function to prevent excessive scrolling
+  const scrollToBottom = useCallback(() => {
+    if (updateTimeoutRef.current) {
+      clearTimeout(updateTimeoutRef.current);
+    }
+
+    updateTimeoutRef.current = setTimeout(() => {
+      if (containerRef.current) {
+        containerRef.current.scrollTop = containerRef.current.scrollHeight;
+      }
+    }, 50); // Debounce scrolling by 50ms
+  }, []);
+
+  // Smart update function that only triggers when content actually changes
+  const checkForUpdates = useCallback(() => {
+    if (!displayBufferRef.current) return;
+
+    const items = displayBufferRef.current.getItems();
+    const currentItemCount = items.length;
+
+    // Only update if:
+    // 1. Item count changed (new items added)
+    // 2. Last item timestamp is newer than our last update
+    const shouldUpdate = currentItemCount !== lastItemCountRef.current ||
+      (items.length > 0 && items[items.length - 1].timestamp > lastUpdateTimeRef.current);
+
+    if (shouldUpdate) {
+      setDisplayItems(items);
+      lastItemCountRef.current = currentItemCount;
+      lastUpdateTimeRef.current = Date.now();
+
+      // Only scroll if new content was added
+      if (currentItemCount > lastItemCountRef.current ||
+          (items.length > 0 && items[items.length - 1].timestamp > lastUpdateTimeRef.current - 1000)) {
+        scrollToBottom();
+      }
+    }
+  }, [scrollToBottom]);
 
   useEffect(() => {
     // Get display buffer instance from protected core
@@ -40,23 +83,27 @@ export function TranscriptionDisplay({ sessionId, className = '' }: Transcriptio
       import('@/protected-core').then(({ getDisplayBuffer }) => {
         displayBufferRef.current = getDisplayBuffer();
 
-        // Subscribe to display updates
-        const updateInterval = setInterval(() => {
-          if (displayBufferRef.current) {
-            const items = displayBufferRef.current.getItems();
-            setDisplayItems(items);
+        // Initial load
+        checkForUpdates();
 
-            // Auto-scroll to bottom
-            if (containerRef.current) {
-              containerRef.current.scrollTop = containerRef.current.scrollHeight;
-            }
+        // Smart polling: Use longer intervals and smart checking
+        const updateInterval = setInterval(checkForUpdates, 250); // Reduced from 100ms to 250ms
+
+        return () => {
+          clearInterval(updateInterval);
+          if (updateTimeoutRef.current) {
+            clearTimeout(updateTimeoutRef.current);
           }
-        }, 100); // Update every 100ms for smooth display
-
-        return () => clearInterval(updateInterval);
+        };
       });
     }
-  }, [sessionId]);
+
+    return () => {
+      if (updateTimeoutRef.current) {
+        clearTimeout(updateTimeoutRef.current);
+      }
+    };
+  }, [sessionId, checkForUpdates]);
 
   return (
     <Card className={`flex flex-col h-full ${className}`}>
@@ -79,9 +126,7 @@ export function TranscriptionDisplay({ sessionId, className = '' }: Transcriptio
             <p className="text-sm mt-2">The AI teacher will appear here when the session begins.</p>
           </div>
         ) : (
-          displayItems.map((item) => (
-            <TranscriptionItem key={item.id} item={item} />
-          ))
+          <TranscriptionItems items={displayItems} />
         )}
       </div>
 
@@ -104,9 +149,24 @@ export function TranscriptionDisplay({ sessionId, className = '' }: Transcriptio
 }
 
 /**
- * Individual Transcription Item
+ * Memoized list of transcription items for performance
  */
-function TranscriptionItem({ item }: { item: DisplayItem }) {
+const TranscriptionItems = React.memo(({ items }: { items: DisplayItem[] }) => {
+  return (
+    <>
+      {items.map((item) => (
+        <TranscriptionItem key={item.id} item={item} />
+      ))}
+    </>
+  );
+});
+
+TranscriptionItems.displayName = 'TranscriptionItems';
+
+/**
+ * Individual Transcription Item - Memoized for performance
+ */
+const TranscriptionItem = React.memo(({ item }: { item: DisplayItem }) => {
   const [isHighlighted, setIsHighlighted] = useState(false);
 
   useEffect(() => {
@@ -173,4 +233,14 @@ function TranscriptionItem({ item }: { item: DisplayItem }) {
         </div>
       );
   }
-}
+}, (prevProps, nextProps) => {
+  // Custom comparison: only re-render if item content or timestamp changed
+  return (
+    prevProps.item.id === nextProps.item.id &&
+    prevProps.item.content === nextProps.item.content &&
+    prevProps.item.timestamp === nextProps.item.timestamp &&
+    prevProps.item.type === nextProps.item.type
+  );
+});
+
+TranscriptionItem.displayName = 'TranscriptionItem';

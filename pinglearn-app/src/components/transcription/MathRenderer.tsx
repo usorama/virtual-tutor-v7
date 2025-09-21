@@ -4,9 +4,26 @@
  * Math Renderer Component
  * Renders LaTeX math expressions using KaTeX
  * Handles both inline and display math with error boundaries
+ * OPTIMIZED: Memoization, async rendering, and caching
  */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+
+// Math rendering cache to avoid re-rendering identical equations
+const mathCache = new Map<string, { html: string; error: string | null }>();
+const MAX_CACHE_SIZE = 100; // Prevent memory leaks by limiting cache size
+
+// Cache cleanup function
+const cleanupCache = () => {
+  if (mathCache.size > MAX_CACHE_SIZE) {
+    // Remove oldest entries (keep last 50)
+    const entries = Array.from(mathCache.entries());
+    mathCache.clear();
+    entries.slice(-50).forEach(([key, value]) => {
+      mathCache.set(key, value);
+    });
+  }
+};
 
 interface MathRendererProps {
   latex: string;
@@ -25,48 +42,89 @@ export function MathRenderer({
   const [isLoaded, setIsLoaded] = useState(false);
   const [mathHtml, setMathHtml] = useState<string>('');
 
+  // Create cache key for memoization
+  const cacheKey = useMemo(() => `${latex}:${display}`, [latex, display]);
+
+  // Check cache first
+  const cachedResult = useMemo(() => mathCache.get(cacheKey), [cacheKey]);
+
   useEffect(() => {
-    // Dynamically import KaTeX to avoid SSR issues
-    const loadKatex = async () => {
+    // Return cached result immediately if available
+    if (cachedResult) {
+      setMathHtml(cachedResult.html);
+      setError(cachedResult.error);
+      setIsLoaded(true);
+      return;
+    }
+
+    // Reset state for new rendering
+    setIsLoaded(false);
+    setError(null);
+
+    // Async math rendering to avoid blocking UI
+    const renderMathAsync = async () => {
       try {
         const katex = await import('katex');
-        // CSS is loaded globally in _app.tsx or layout.tsx
 
-        try {
-          // Use renderToString to avoid DOM manipulation conflicts
-          const html = katex.default.renderToString(latex, {
-            displayMode: display,
-            throwOnError: false,
-            errorColor: '#cc0000',
-            strict: false,
-            trust: true,
-            macros: {
-              '\\RR': '\\mathbb{R}',
-              '\\NN': '\\mathbb{N}',
-              '\\ZZ': '\\mathbb{Z}',
-              '\\QQ': '\\mathbb{Q}',
-              '\\CC': '\\mathbb{C}'
-            }
-          });
-          setMathHtml(html);
-          setIsLoaded(true);
-          setError(null);
-        } catch (err) {
-          console.error('KaTeX rendering error:', err);
-          setError(`Math rendering error: ${err}`);
-          // Fallback: display raw LaTeX
-          setMathHtml(latex);
-        }
+        // Use requestIdleCallback for non-blocking rendering when available
+        const renderFunction = window.requestIdleCallback || ((callback) => {
+          setTimeout(callback, 0);
+        });
+
+        renderFunction(() => {
+          try {
+            // Use renderToString to avoid DOM manipulation conflicts
+            const html = katex.default.renderToString(latex, {
+              displayMode: display,
+              throwOnError: false,
+              errorColor: '#cc0000',
+              strict: false,
+              trust: true,
+              macros: {
+                '\\RR': '\\mathbb{R}',
+                '\\NN': '\\mathbb{N}',
+                '\\ZZ': '\\mathbb{Z}',
+                '\\QQ': '\\mathbb{Q}',
+                '\\CC': '\\mathbb{C}'
+              }
+            });
+
+            // Cache the result with cleanup
+            mathCache.set(cacheKey, { html, error: null });
+            cleanupCache();
+
+            setMathHtml(html);
+            setIsLoaded(true);
+            setError(null);
+          } catch (err) {
+            const errorMsg = `Math rendering error: ${err}`;
+            console.error('KaTeX rendering error:', err);
+
+            // Cache the error result with cleanup
+            mathCache.set(cacheKey, { html: latex, error: errorMsg });
+            cleanupCache();
+
+            setError(errorMsg);
+            setMathHtml(latex); // Fallback: display raw LaTeX
+            setIsLoaded(true);
+          }
+        });
       } catch (err) {
+        const errorMsg = 'Failed to load math renderer';
         console.error('Failed to load KaTeX:', err);
-        setError('Failed to load math renderer');
-        // Fallback: display raw LaTeX
-        setMathHtml(latex);
+
+        // Cache the loading error with cleanup
+        mathCache.set(cacheKey, { html: latex, error: errorMsg });
+        cleanupCache();
+
+        setError(errorMsg);
+        setMathHtml(latex); // Fallback: display raw LaTeX
+        setIsLoaded(true);
       }
     };
 
-    loadKatex();
-  }, [latex, display]);
+    renderMathAsync();
+  }, [latex, display, cacheKey, cachedResult]);
 
   const containerClasses = [
     'math-renderer',

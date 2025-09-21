@@ -4,9 +4,10 @@
  * Audio Indicator Component
  * Simple "AI Teacher Speaking" indicator with volume visualization
  * No complex controls - just visual feedback
+ * OPTIMIZED: Memoization and reduced re-renders
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 
 interface AudioIndicatorProps {
   isActive: boolean;
@@ -15,12 +16,12 @@ interface AudioIndicatorProps {
   className?: string;
 }
 
-export function AudioIndicator({
+export const AudioIndicator = React.memo(({
   isActive,
   label = 'AI Teacher',
   volume = 0,
   className = ''
-}: AudioIndicatorProps) {
+}: AudioIndicatorProps) => {
   const [animationFrame, setAnimationFrame] = useState(0);
 
   useEffect(() => {
@@ -36,25 +37,52 @@ export function AudioIndicator({
     return () => clearInterval(interval);
   }, [isActive]);
 
+  // Memoize dots to prevent re-rendering when animation frame doesn't affect them
+  const animatedDots = useMemo(() => {
+    return [0, 1, 2].map((index) => (
+      <div
+        key={index}
+        className={`
+          transition-all duration-300
+          ${isActive ? 'bg-green-500' : 'bg-gray-300'}
+          rounded-full
+        `}
+        style={{
+          width: '8px',
+          height: isActive && animationFrame === index ? '20px' : '8px',
+          opacity: isActive ? 1 : 0.3
+        }}
+      />
+    ));
+  }, [isActive, animationFrame]);
+
+  // Memoize volume bars to prevent re-rendering when volume doesn't change
+  const volumeBars = useMemo(() => {
+    if (!isActive || volume <= 0) return null;
+
+    return (
+      <div className="flex items-end space-x-1 ml-3">
+        {[0.2, 0.4, 0.6, 0.8, 1.0].map((threshold, index) => (
+          <div
+            key={index}
+            className={`
+              w-1 bg-green-500 rounded-sm transition-all duration-100
+              ${volume >= threshold ? 'opacity-100' : 'opacity-20'}
+            `}
+            style={{
+              height: `${8 + index * 3}px`
+            }}
+          />
+        ))}
+      </div>
+    );
+  }, [isActive, volume]);
+
   return (
     <div className={`flex items-center space-x-3 ${className}`}>
       {/* Animated dots indicator */}
       <div className="flex items-center space-x-1">
-        {[0, 1, 2].map((index) => (
-          <div
-            key={index}
-            className={`
-              transition-all duration-300
-              ${isActive ? 'bg-green-500' : 'bg-gray-300'}
-              rounded-full
-            `}
-            style={{
-              width: '8px',
-              height: isActive && animationFrame === index ? '20px' : '8px',
-              opacity: isActive ? 1 : 0.3
-            }}
-          />
-        ))}
+        {animatedDots}
       </div>
 
       {/* Label */}
@@ -64,31 +92,27 @@ export function AudioIndicator({
       </span>
 
       {/* Volume bars (optional) */}
-      {isActive && volume > 0 && (
-        <div className="flex items-end space-x-1 ml-3">
-          {[0.2, 0.4, 0.6, 0.8, 1.0].map((threshold, index) => (
-            <div
-              key={index}
-              className={`
-                w-1 bg-green-500 rounded-sm transition-all duration-100
-                ${volume >= threshold ? 'opacity-100' : 'opacity-20'}
-              `}
-              style={{
-                height: `${8 + index * 3}px`
-              }}
-            />
-          ))}
-        </div>
-      )}
+      {volumeBars}
     </div>
   );
-}
+}, (prevProps, nextProps) => {
+  // Only re-render if props actually changed
+  return (
+    prevProps.isActive === nextProps.isActive &&
+    prevProps.label === nextProps.label &&
+    prevProps.volume === nextProps.volume &&
+    prevProps.className === nextProps.className
+  );
+});
+
+AudioIndicator.displayName = 'AudioIndicator';
 
 /**
  * Simplified Audio Visualizer
  * Shows real-time audio waveform
+ * OPTIMIZED: Memoization and reduced updates
  */
-export function AudioVisualizer({
+export const AudioVisualizer = React.memo(({
   isActive,
   audioData,
   className = ''
@@ -96,7 +120,7 @@ export function AudioVisualizer({
   isActive: boolean;
   audioData?: number[]; // Array of amplitude values
   className?: string;
-}) {
+}) => {
   const [bars, setBars] = useState<number[]>(new Array(20).fill(0));
 
   useEffect(() => {
@@ -109,7 +133,7 @@ export function AudioVisualizer({
     if (!audioData) {
       const interval = setInterval(() => {
         setBars(prev => prev.map(() => Math.random()));
-      }, 100);
+      }, 150); // Reduced frequency from 100ms to 150ms
       return () => clearInterval(interval);
     }
 
@@ -122,21 +146,35 @@ export function AudioVisualizer({
     }
   }, [isActive, audioData]);
 
+  // Memoize bars rendering
+  const barElements = useMemo(() => {
+    return bars.map((height, index) => (
+      <div
+        key={index}
+        className={`
+          w-1 rounded-full transition-all duration-75
+          ${isActive ? 'bg-blue-500' : 'bg-gray-300'}
+        `}
+        style={{
+          height: `${4 + height * 28}px`,
+          opacity: isActive ? 0.8 + height * 0.2 : 0.2
+        }}
+      />
+    ));
+  }, [bars, isActive]);
+
   return (
     <div className={`flex items-center justify-center space-x-1 h-8 ${className}`}>
-      {bars.map((height, index) => (
-        <div
-          key={index}
-          className={`
-            w-1 rounded-full transition-all duration-75
-            ${isActive ? 'bg-blue-500' : 'bg-gray-300'}
-          `}
-          style={{
-            height: `${4 + height * 28}px`,
-            opacity: isActive ? 0.8 + height * 0.2 : 0.2
-          }}
-        />
-      ))}
+      {barElements}
     </div>
   );
-}
+}, (prevProps, nextProps) => {
+  // Only re-render if props actually changed
+  return (
+    prevProps.isActive === nextProps.isActive &&
+    prevProps.className === nextProps.className &&
+    JSON.stringify(prevProps.audioData) === JSON.stringify(nextProps.audioData)
+  );
+});
+
+AudioVisualizer.displayName = 'AudioVisualizer';
