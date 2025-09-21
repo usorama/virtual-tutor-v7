@@ -24,7 +24,7 @@
 
 @layer base {
   * {
-    @apply border-border outline-none;
+    @apply outline-none;
   }
 
   html {

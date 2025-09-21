@@ -8,6 +8,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://pinglearn.app'),
   title: "PingLearn - AI-Powered Personalized Education Platform",
   description: "Revolutionary AI tutoring platform for grades 9-12. Real-time voice interaction, personalized learning paths, and comprehensive progress tracking. Join the future of education.",
   keywords: [
