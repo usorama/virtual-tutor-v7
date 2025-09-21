@@ -35,25 +35,25 @@ You are implementing Phase 2 of the PingLearn architecture pivot. This is the mo
 ### ⛔ PROTECTED CORE STATUS
 ```
 Phase 0: Created protected core structure ✅
-Phase 1: Added services IN protected core ✅
-Phase 2 (NOW): Protected core is COMPLETELY READ-ONLY 🔒
+Phase 1: Created services IN protected core (Gemini, LiveKit, WebSocket) ✅
+Phase 2 (NOW): USE protected core services from feature layer 🔒
 ```
 
 ### WHERE YOU CAN AND CANNOT WORK
 ```bash
-# ❌ CANNOT modify or create files in:
-src/protected-core/    # COMPLETELY OFF LIMITS!
+# ❌ CANNOT modify existing files in:
+src/protected-core/    # Already created in Phase 1 - READ ONLY!
 
 # ✅ CAN create new files in:
-src/features/          # New feature implementations
+src/features/          # New feature implementations that USE protected core
 src/app/               # Page updates
 src/components/        # UI components
+src/hooks/             # Custom hooks
 
 # 🚨 MUST REMOVE (New for Phase 2):
 @tldraw/tldraw         # Remove completely from package.json
 src/components/whiteboard/  # Delete entire directory
 src/features/collaborative-drawing/  # Delete if exists
-src/hooks/             # Custom hooks
 ```
 
 ### Protection Check (Run every 10 minutes):
@@ -230,19 +230,22 @@ Continue implementing in FEATURES directory only.
 
 ## Common Mistakes to Avoid
 
-1. ❌ Creating files in `src/protected-core/voice-engine/gemini/`
-   ✅ Create in `src/features/gemini/` instead
+1. ❌ Modifying ANY files in `src/protected-core/`
+   ✅ USE the services already created there in Phase 1
 
-2. ❌ Modifying WebSocket singleton
+2. ❌ Recreating Gemini/LiveKit services elsewhere
+   ✅ Import and use from `@/protected-core`
+
+3. ❌ Modifying WebSocket singleton
    ✅ Use `WebSocketManager.getInstance()` from protected core
 
-3. ❌ Importing from implementation files
+4. ❌ Importing from implementation files
    ✅ Import from `@/protected-core` contracts only
 
-4. ❌ Forgetting feature flags
+5. ❌ Forgetting feature flags
    ✅ Check `enableGeminiLive` flag before using features
 
-5. ❌ Skipping checkpoint commits
+6. ❌ Skipping checkpoint commits
    ✅ Commit after EVERY major task
 
 ## Verification Steps

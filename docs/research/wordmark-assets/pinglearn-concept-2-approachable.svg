@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 50" width="280" height="50">
+  <defs>
+    <linearGradient id="pingGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
+    </linearGradient>
+    <style>
+      .wordmark-learn { fill: #1e40af; }
+      .wordmark-text {
+        font-family: -apple-system, BlinkMacSystemFont, 'Nunito', 'Segoe UI', sans-serif;
+        font-weight: 500;
+        font-size: 36px;
+        letter-spacing: 0em;
+      }
+    </style>
+  </defs>
+
+  <!-- "ping" with gradient -->
+  <text x="10" y="36" class="wordmark-text" fill="url(#pingGradient)">ping</text>
+
+  <!-- "learn" in solid color -->
+  <text x="100" y="36" class="wordmark-text wordmark-learn">learn</text>
+</svg>
