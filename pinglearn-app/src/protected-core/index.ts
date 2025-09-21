@@ -57,4 +57,14 @@ export type {
   RecordingConfig
 } from './voice-engine';
 
-// WebSocket singleton manager and LiveKit service implementations are now complete
+// Export Transcription functionality
+export {
+  TextProcessor,
+  TextSegmentation,
+  TextNormalization,
+  BufferManager,
+  getTextProcessor,
+  resetTextProcessor
+} from './transcription';
+
+// WebSocket singleton manager, LiveKit service, and transcription implementations are now complete
