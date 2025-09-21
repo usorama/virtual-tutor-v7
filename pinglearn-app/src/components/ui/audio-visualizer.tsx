@@ -32,7 +32,7 @@ export function AudioVisualizer({
   const [audioLevel, setAudioLevel] = useState(0)
   const [activeSpeaker, setActiveSpeaker] = useState<'student' | 'teacher' | null>(null)
   const [isListening, setIsListening] = useState(false)
-  const animationRef = useRef<number>()
+  const animationRef = useRef<number | undefined>(undefined)
 
   // Simulate audio level dancing animation
   useEffect(() => {

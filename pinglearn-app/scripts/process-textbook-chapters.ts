@@ -133,28 +133,16 @@ async function processTextbookWithChapters(
       const fileSizeMB = stats.size / (1024 * 1024)
       
       // Process the PDF content
-      const result = await processTextbookScript(
-        chapterPDF.filePath,
+      await processTextbookScript(
         textbookId,
-        chapterPDF.title,
-        grade,
-        subject,
-        chapterPDF.chapterNumber
+        chapterPDF.filePath
       )
-      
-      if (result.success) {
-        console.log(`    ✅ Successfully processed: ${chapterPDF.title}`)
-        console.log(`       - Pages: ${result.pageCount}`)
-        console.log(`       - Chunks: ${result.chunkCount}`)
-        console.log(`       - Topics: ${result.topicCount}`)
-        
-        totalPages += result.pageCount || 0
-        totalSize += fileSizeMB
-        successCount++
-      } else {
-        console.error(`    ❌ Failed: ${result.error}`)
-        errorCount++
-      }
+
+      console.log(`    ✅ Successfully processed: ${chapterPDF.title}`)
+      console.log(`       - Size: ${fileSizeMB.toFixed(2)} MB`)
+
+      totalSize += fileSizeMB
+      successCount++
     } catch (error) {
       console.error(`    ❌ Error processing ${chapterPDF.title}:`, error)
       errorCount++

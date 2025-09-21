@@ -1,0 +1,5 @@
+src/protected-core/**
+CLAUDE.md
+.ai-protected
+feature-flags.json
+src/shared/types/core.types.ts

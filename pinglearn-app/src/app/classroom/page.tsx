@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Mic, MicOff, Volume2, VolumeX, PhoneOff, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
-import { AudioStreamManager, AudioQualityMonitor } from '@/lib/livekit/audio-manager';
+import { AudioStreamManager, AudioQualityMonitor } from '@/protected-core/voice-engine/livekit/audio-manager';
 import { AudioVisualizer } from '@/components/ui/audio-visualizer';
 import { createClient } from '@/lib/supabase/client';
 
@@ -298,7 +298,12 @@ export default function ClassroomPage() {
           connect={true}
           audio={true}
           video={false}
-          onConnected={handleRoomConnected}
+          onConnected={() => {
+            // onConnected doesn't provide room parameter, so we handle it without
+            console.log('Room connected successfully');
+            setConnectionState(ConnectionState.Connected);
+            setIsConnecting(false);
+          }}
           onDisconnected={handleRoomDisconnected}
         >
           <div className="max-w-4xl mx-auto space-y-6">

@@ -1,0 +1,11 @@
+{
+  "enableGeminiLive": false,
+  "enableMathTranscription": false,
+  "enableNewDashboard": false,
+  "enableAIGeneratedFeatures": false,
+  "enableVoiceFlow": false,
+  "enableAdvancedProtection": false,
+  "enableMonitoring": false,
+  "enableRollback": false,
+  "enablePerformanceOptimization": false
+}

@@ -192,7 +192,7 @@ export class ContentContextManager {
         currentChapter: profile.current_chapter,
         masteredTopics: profile.topics_mastered || [],
         nextTopics: curriculum?.slice(0, 5) || [],
-        recommendedFocus: this.getRecommendedFocus(profile, curriculum)
+        recommendedFocus: this.getRecommendedFocus(profile, curriculum || [])
       };
       
       return learningPath;
