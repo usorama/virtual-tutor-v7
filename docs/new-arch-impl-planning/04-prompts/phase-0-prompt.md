@@ -1,26 +1,52 @@
 # Phase 0 Implementation Prompt
 **For use with AI assistants to execute Phase 0**
 
-## Context Setup Prompt
+## 🔴 CRITICAL: INITIAL SETUP COMMANDS (RUN THESE FIRST)
+
+```bash
+# 1. Verify your working directory
+pwd  # Should be in /Users/[username]/Projects/pinglearn
+
+# 2. Check current branch
+git branch --show-current  # Should show phase-0-foundation
+
+# 3. READ these files IN ORDER using Read tool:
+- Read /Users/[username]/Projects/pinglearn/CLAUDE.md  # Project rules
+- Read /Users/[username]/Projects/pinglearn/docs/new-arch-impl-planning/MASTER-PLAN.md  # Overall 6-day plan
+- Read /Users/[username]/Projects/pinglearn/docs/new-arch-impl-planning/01-analysis/failure-analysis.md  # Understand what NOT to do
+- Read /Users/[username]/Projects/pinglearn/docs/new-arch-impl-planning/03-phases/phase-0-foundation.md  # Today's detailed plan
+- Read /Users/[username]/Projects/pinglearn/pinglearn-app/.ai-protected  # Files you CANNOT modify (if exists)
+```
+
+## Context Setup
 
 You are implementing Phase 0 of the PingLearn architecture pivot. This is a critical foundation phase that establishes the Protected Core architecture to prevent AI agents from breaking core services.
 
-## Background
+## Background (MUST READ FROM FILES ABOVE)
 - This project has failed 7 times due to AI agents breaking core functionality
 - We are implementing a "Protected Core" pattern with clear boundaries
-- You must follow the plan exactly as specified
+- You must follow the plan exactly as specified in the files above
 
 ## Your Mission
 
-Execute Phase 0: Foundation & Emergency Fixes according to the plan in `/docs/new-arch-impl-planning/03-phases/phase-0-foundation.md`
+Execute Phase 0: Foundation & Emergency Fixes according to the plan you just read from `/docs/new-arch-impl-planning/03-phases/phase-0-foundation.md`
 
 ## Critical Rules
 
+### 🛡️ PROTECTION VERIFICATION (Run every 10 minutes)
+```bash
+# Check if you're about to modify protected files
+git status  # Review all changes
+cat .ai-protected  # Re-read protected list
+```
+
 1. **NEVER modify these files once created**:
-   - Anything in `src/protected-core/`
-   - `CLAUDE.md`
+   - Anything in `src/protected-core/` (AFTER Phase 0 creation)
+   - `CLAUDE.md` (root project file)
    - `.ai-protected`
    - `feature-flags.json`
+
+**EXCEPTION for Phase 0**: You WILL create initial files in `src/protected-core/` during Phase 0. After Phase 0, these become protected.
 
 2. **ALWAYS commit after each task** with message format:
    - `feat:` for new features
@@ -35,13 +61,35 @@ Execute Phase 0: Foundation & Emergency Fixes according to the plan in `/docs/ne
    npm test          # Must pass
    ```
 
+## 📋 Use TodoWrite Tool
+
+Before starting, create a todo list:
+```
+TodoWrite with tasks:
+1. Create protection infrastructure
+2. Fix TypeScript errors
+3. Install dependencies
+4. Move existing code
+5. Create service contracts
+6. Implement feature flags
+7. Verify Phase 0 complete
+```
+
+Mark each task as in_progress when starting, completed when done.
+
 ## Execution Steps
 
 ### Step 1: Create Protection Infrastructure
 
+**FIRST**: Verify you're in the right place:
+```bash
+pwd  # Confirm you're in project root
+cd pinglearn-app  # Navigate to app directory
+pwd  # Should show .../pinglearn/pinglearn-app
+```
+
 Create the directory structure EXACTLY as specified:
 ```bash
-cd pinglearn-app
 mkdir -p src/protected-core/{voice-engine,transcription,websocket,contracts}
 mkdir -p src/protected-core/voice-engine/{gemini,livekit,audio}
 mkdir -p src/protected-core/transcription/{text,math,display}
@@ -58,6 +106,11 @@ src/shared/types/core.types.ts
 ```
 
 ### Step 2: Fix TypeScript Errors
+
+**CHECKPOINT**: Before proceeding:
+```bash
+git add -A && git commit -m "checkpoint: Protection infrastructure created"
+```
 
 1. Run `npm run typecheck` and document ALL errors
 2. Fix each error without using `any` type
@@ -188,6 +241,15 @@ ls -la src/protected-core/
 cat feature-flags.json
 ```
 
+## Verification After EVERY Step
+
+```bash
+# After each major change:
+npm run typecheck  # Watch error count decrease
+git status  # Ensure no protected files modified
+git add -A && git commit -m "checkpoint: [description]"
+```
+
 ## Success Criteria
 
 You have successfully completed Phase 0 when:
@@ -223,9 +285,21 @@ Before marking Phase 0 complete:
 - [ ] No `any` types used
 - [ ] Tests passing
 
+## Final Verification
+
+```bash
+# Run ALL of these before declaring complete:
+npm run typecheck  # MUST show 0 errors
+npm run lint  # Document any warnings
+npm run build  # Should attempt to build
+ls -la src/protected-core/  # Verify structure exists
+cat feature-flags.json  # Verify all flags false
+cat .ai-protected  # Verify protection list exists
+```
+
 ## Handoff Notes
 
-After completing Phase 0, create a brief report:
+After completing Phase 0, create a report at `/docs/new-arch-impl-planning/phase-0-completion-report.md`:
 ```markdown
 # Phase 0 Completion Report
 

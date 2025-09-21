@@ -26,8 +26,15 @@ export type {
   WebSocketContract
 } from './contracts/websocket.contract';
 
-// Export singleton manager (but not implementation details)
-export { WebSocketManager } from './websocket/manager/singleton';
+// Export WebSocket functionality
+export { WebSocketManager } from './websocket/manager/singleton-manager';
+export { ExponentialBackoff } from './websocket/retry/exponential-backoff';
+export { WebSocketHealthMonitor } from './websocket/health/monitor';
+
+// Export WebSocket types
+export type { ConnectionEvent } from './websocket/manager/singleton-manager';
+export type { RetryConfig, RetryAttempt } from './websocket/retry/exponential-backoff';
+export type { HealthMetrics, PingResult } from './websocket/health/monitor';
 
 // Note: Actual service implementations will be added in Phase 1
-// For now, only contracts and the WebSocket singleton are exposed
+// WebSocket singleton manager implementation is now complete

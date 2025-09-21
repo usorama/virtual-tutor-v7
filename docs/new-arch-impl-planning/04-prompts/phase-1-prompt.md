@@ -1,7 +1,31 @@
 # Phase 1 Implementation Prompt
 **For use with AI assistants to execute Phase 1**
 
-## Context Setup Prompt
+## 🔴 CRITICAL: INITIAL SETUP COMMANDS (RUN THESE FIRST)
+
+```bash
+# 1. Verify your working directory
+pwd  # Should be in /Users/[username]/Projects/pinglearn
+
+# 2. Check current branch
+git branch --show-current  # Should be phase-1-core-services
+# If not, create it:
+# git checkout main && git checkout -b phase-1-core-services
+
+# 3. READ these files IN ORDER using Read tool:
+- Read /Users/[username]/Projects/pinglearn/CLAUDE.md  # Re-read project rules
+- Read /Users/[username]/Projects/pinglearn/docs/new-arch-impl-planning/MASTER-PLAN.md  # Check Day 2-3 objectives
+- Read /Users/[username]/Projects/pinglearn/docs/new-arch-impl-planning/phase-0-completion-report.md  # What was already done
+- Read /Users/[username]/Projects/pinglearn/docs/new-arch-impl-planning/03-phases/phase-1-core-services.md  # Today's detailed plan
+- Read /Users/[username]/Projects/pinglearn/pinglearn-app/.ai-protected  # Files you CANNOT modify
+
+# 4. Check existing contracts created in Phase 0:
+- Read /Users/[username]/Projects/pinglearn/pinglearn-app/src/protected-core/contracts/voice.contract.ts
+- Read /Users/[username]/Projects/pinglearn/pinglearn-app/src/protected-core/contracts/transcription.contract.ts
+- Read /Users/[username]/Projects/pinglearn/pinglearn-app/src/protected-core/contracts/websocket.contract.ts
+```
+
+## Context Setup
 
 You are implementing Phase 1 of the PingLearn architecture pivot. This phase implements the core protected services that form the stable foundation of the system. These services will be protected from future AI modifications.
 
@@ -10,30 +34,54 @@ You are implementing Phase 1 of the PingLearn architecture pivot. This phase imp
 Before starting, verify:
 ```bash
 # Phase 0 must be complete
+cd pinglearn-app
 ls src/protected-core/  # Should show directory structure
 npm run typecheck       # Must show 0 errors
 cat feature-flags.json  # Should exist with flags
+cd ..
 ```
 
 ## Your Mission
 
-Execute Phase 1: Core Service Implementation according to the plan in `/docs/new-arch-impl-planning/03-phases/phase-1-core-services.md`
+Execute Phase 1: Core Service Implementation according to the plan you just read from `/docs/new-arch-impl-planning/03-phases/phase-1-core-services.md`
 
 This phase spans 2 days with specific tasks for each day.
 
 ## Critical Rules
 
+### 🛡️ PROTECTION VERIFICATION (Run every 10 minutes)
+```bash
+# Check you haven't modified protected files
+git status
+cat .ai-protected  # Re-read what NOT to modify
+pwd  # Verify working directory
+```
+
+### ⚠️ IMPORTANT DISTINCTION
+- **Phase 0**: You CREATED files in `src/protected-core/`
+- **Phase 1**: You CREATE MORE files in `src/protected-core/` subdirectories
+- **After Phase 1**: `src/protected-core/` becomes FULLY PROTECTED
+
 1. **Work ONLY in protected-core directory** for core services
-2. **Follow contracts EXACTLY** as defined in Phase 0
+2. **Follow contracts EXACTLY** as defined in Phase 0 (you read them above)
 3. **Use feature flags** for all new functionality
 4. **Test everything** - aim for >90% coverage
 5. **Commit after each task** with descriptive messages
+
+### 📋 Use TodoWrite Tool
+Create a todo list for Day 2 and Day 3 tasks from the phase plan.
 
 ## Day 2 Implementation (Tasks 1.1 - 1.5)
 
 ### Task 1.1: WebSocket Singleton Implementation
 
-Implement the complete WebSocket singleton manager:
+**FIRST**: Check if singleton already exists from Phase 0:
+```bash
+ls -la src/protected-core/websocket/manager/
+# If singleton.ts exists, READ it first
+```
+
+Implement the complete WebSocket singleton manager (or enhance existing):
 
 ```typescript
 // src/protected-core/websocket/manager/singleton-manager.ts
@@ -143,7 +191,13 @@ Create retry handler and health monitor as specified in the plan.
 
 ### Task 1.2: LiveKit Service Wrapper
 
-Move and enhance the existing LiveKit code:
+**FIRST**: Check what was moved in Phase 0:
+```bash
+ls -la src/protected-core/voice-engine/livekit/
+# If audio-manager.ts exists, READ it first
+```
+
+Enhance the existing LiveKit code:
 
 ```typescript
 // src/protected-core/voice-engine/livekit/service.ts
@@ -455,8 +509,17 @@ describe('WebSocketManager', () => {
 
 ## Verification Steps
 
+### CHECKPOINT After EVERY Task:
+```bash
+# Save your work
+git add -A && git commit -m "checkpoint: Task [number] - [description]"
+```
+
 After each task, run:
 ```bash
+# Navigate to app directory
+cd pinglearn-app
+
 # Type checking
 npm run typecheck
 
@@ -480,6 +543,19 @@ npm test -- transcription
 6. No TypeScript errors
 7. All feature flags working
 
+## 🚨 DANGER ZONES - STOP AND CHECK
+
+Before ANY edit to these files, STOP:
+- Files in parent directories (../../)
+- Anything listed in .ai-protected
+- Files outside protected-core (except tests)
+
+If unsure, run:
+```bash
+git status  # Check what you're about to modify
+grep [filename] .ai-protected  # Check if file is protected
+```
+
 ## Common Pitfalls to Avoid
 
 1. **Don't import from features** - Protected core must be isolated
@@ -488,7 +564,21 @@ npm test -- transcription
 4. **Don't break contracts** - Follow interfaces exactly
 5. **Don't forget feature flags** - All new features need flags
 
+## Final Phase 1 Verification
+
+```bash
+# Run ALL of these before declaring Phase 1 complete:
+cd pinglearn-app
+npm run typecheck  # MUST still show 0 errors
+npm test -- --coverage  # Check coverage percentage
+ls -la src/protected-core/  # Verify all services created
+git log --oneline -10  # Verify checkpoint commits
+cd ..
+```
+
 ## Handoff Report Template
+
+Create report at: `/docs/new-arch-impl-planning/phase-1-completion-report.md`
 
 ```markdown
 # Phase 1 Completion Report
