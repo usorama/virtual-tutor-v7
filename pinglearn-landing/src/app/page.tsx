@@ -150,56 +150,12 @@ export default function Home() {
               </p>
             </motion.div>
 
-            {/* Single CTA - Email Waitlist with Conic Gradient Button */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.4 }}
-              className="max-w-md mx-auto"
-            >
-              {!isSubmitted ? (
-                <form onSubmit={handleSubmit} className="relative">
-                  <div className="relative rounded-full bg-white/[0.02] backdrop-blur-sm border border-white/10">
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter your email for early access"
-                      className="w-full px-6 py-4 pr-36 bg-transparent text-white placeholder-white/30 focus:outline-none rounded-full"
-                      required
-                    />
-                    <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                      <ConicGradientButton>
-                        Join Waitlist
-                      </ConicGradientButton>
-                    </div>
-                  </div>
-                </form>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="text-center py-4 rounded-full bg-white/[0.02] backdrop-blur-sm border border-cyan-500/30"
-                  style={{
-                    boxShadow: "0 0 40px rgba(6,182,212,0.15), inset 0 0 20px rgba(6,182,212,0.05)"
-                  }}
-                >
-                  <p className="text-cyan-500">Welcome to the future of learning.</p>
-                  <p className="text-white/60 text-sm mt-1">We'll reach out soon.</p>
-                </motion.div>
-              )}
-
-              <p className="text-center text-white/30 text-sm mt-4">
-                Join 1,247 educators and students waiting for October 4, 2025
-              </p>
-            </motion.div>
-
             {/* Infinite Features Carousel */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.6 }}
-              className="mt-20 w-full overflow-hidden"
+              transition={{ duration: 1, delay: 0.4 }}
+              className="mt-16 w-full overflow-hidden"
             >
               <div className="relative">
                 <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
@@ -243,6 +199,50 @@ export default function Home() {
                   ))}
                 </motion.div>
               </div>
+            </motion.div>
+
+            {/* Single CTA - Email Waitlist with Conic Gradient Button */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.6 }}
+              className="max-w-md mx-auto mt-20"
+            >
+              {!isSubmitted ? (
+                <form onSubmit={handleSubmit} className="relative">
+                  <div className="relative rounded-full bg-white/[0.02] backdrop-blur-sm border border-white/10">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email for early access"
+                      className="w-full px-6 py-4 pr-36 bg-transparent text-white placeholder-white/30 focus:outline-none rounded-full"
+                      required
+                    />
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                      <ConicGradientButton>
+                        Join Waitlist
+                      </ConicGradientButton>
+                    </div>
+                  </div>
+                </form>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="text-center py-4 rounded-full bg-white/[0.02] backdrop-blur-sm border border-cyan-500/30"
+                  style={{
+                    boxShadow: "0 0 40px rgba(6,182,212,0.15), inset 0 0 20px rgba(6,182,212,0.05)"
+                  }}
+                >
+                  <p className="text-cyan-500">Welcome to the future of learning.</p>
+                  <p className="text-white/60 text-sm mt-1">We'll reach out soon.</p>
+                </motion.div>
+              )}
+
+              <p className="text-center text-white/30 text-sm mt-4">
+                Join 1,247 educators and students waiting for October 4, 2025
+              </p>
             </motion.div>
           </div>
         </div>
