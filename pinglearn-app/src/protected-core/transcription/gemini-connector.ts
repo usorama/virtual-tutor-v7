@@ -5,7 +5,7 @@
  * Connects Gemini transcription events to the transcription pipeline
  */
 
-import { TranscriptionSegment } from '../contracts/transcription.contract';
+import { TextSegment, DisplayItem } from '../contracts/transcription.contract';
 import { GeminiEvents } from '../voice-engine/gemini/types';
 
 export interface TranscriptionEvent {
@@ -20,8 +20,17 @@ export interface TranscriptionEvent {
   }>;
 }
 
+interface TranscriptionSegment {
+  id: string;
+  text: string;
+  timestamp: number;
+  confidence: number;
+  isFinal: boolean;
+  speaker: string;
+}
+
 export class GeminiTranscriptionConnector {
-  private eventHandlers: Map<string, (event: TranscriptionEvent) => void> = new Map();
+  private eventHandlers: Map<string, Array<(event: TranscriptionEvent) => void>> = new Map();
   private transcriptionBuffer: TranscriptionSegment[] = [];
   private currentSegmentId = 0;
 
@@ -129,25 +138,32 @@ export class GeminiTranscriptionConnector {
    * Subscribe to transcription events
    */
   on(event: 'transcription', handler: (event: TranscriptionEvent) => void): void {
-    const handlers = this.eventHandlers.get(event) || [];
-    this.eventHandlers.set(event, [...handlers, handler] as any);
+    if (!this.eventHandlers.has(event)) {
+      this.eventHandlers.set(event, []);
+    }
+    const handlers = this.eventHandlers.get(event)!;
+    handlers.push(handler);
   }
 
   /**
    * Unsubscribe from events
    */
   off(event: string, handler: (event: TranscriptionEvent) => void): void {
-    const handlers = this.eventHandlers.get(event) || [];
-    const filtered = handlers.filter(h => h !== handler);
-    this.eventHandlers.set(event, filtered);
+    const handlers = this.eventHandlers.get(event);
+    if (handlers) {
+      const filtered = handlers.filter(h => h !== handler);
+      this.eventHandlers.set(event, filtered);
+    }
   }
 
   /**
    * Emit event to handlers
    */
   private emit(event: string, data: TranscriptionEvent): void {
-    const handlers = this.eventHandlers.get(event) || [];
-    handlers.forEach(handler => handler(data));
+    const handlers = this.eventHandlers.get(event);
+    if (handlers) {
+      handlers.forEach(handler => handler(data));
+    }
   }
 
   /**
