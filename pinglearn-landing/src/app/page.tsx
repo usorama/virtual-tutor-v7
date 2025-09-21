@@ -141,14 +141,13 @@ export default function Home() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-4xl font-bold"
-            style={{
-              fontFamily: "var(--font-jakarta)",
-              letterSpacing: "-0.04em"
-            }}
+            className="flex items-center"
           >
-            <span className="text-white">ping</span>
-            <span className="text-cyan-500">learn</span>
+            <img
+              src="/logos/logo-transparent.png"
+              alt="PingLearn Logo"
+              className="h-8 md:h-10 w-auto"
+            />
           </motion.div>
 
           <motion.div
