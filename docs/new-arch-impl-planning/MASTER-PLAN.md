@@ -87,20 +87,37 @@ After 7 failed attempts, we're implementing a Protected Core Architecture that p
 - Voice flow works end-to-end
 - No console errors
 
-### Day 6: Phase 2.5 + 3 - Cleanup & Deployment (8 hours)
-**Goal**: Remove legacy code and deploy to production
+### Day 6-7: Phase 2.5 + 3 - Cleanup, UAT & Deployment (16 hours)
+**Goal**: Remove legacy code, perfect the app through UAT, and deploy to production
 
-**Phase 2.5 (4 hours) - App Cleanup**:
+**Day 6 Morning (4 hours) - Phase 2.5 App Cleanup**:
 - Remove all dead code from 7 failed attempts
 - Clean up dependencies (remove 50+ unused packages)
 - Simplify application structure
 - Production build verification
 
-**Phase 3 (4 hours) - Deployment**:
-- Critical path testing only
-- Vercel deployment configuration
-- Basic monitoring setup (Sentry)
+**Day 6 Afternoon (4 hours) - Phase 3 Critical Testing & UAT Start**:
+- Critical path testing (2 hours):
+  - Core user journey (login → session → learn)
+  - Voice flow end-to-end
+  - Math rendering across browsers
+  - Mobile responsiveness
+- UAT Round 1-2 (2 hours):
+  - Core functionality testing by human
+  - UI/UX initial feedback
+  - Immediate implementation of changes
+
+**Day 7 Morning (4 hours) - UAT Continuation**:
+- UAT Round 3: Edge cases & error scenarios
+- UAT Round 4: Final polish & optimizations
+- Iterative refinement until human approval
+- Performance tuning based on feedback
+
+**Day 7 Afternoon (4 hours) - Deployment**:
+- Vercel deployment configuration (post-UAT)
+- Comprehensive monitoring setup (Sentry + analytics)
 - Deploy to production
+- Human verification of live deployment
 
 **Success Metrics**:
 - AI cannot break protected core

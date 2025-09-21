@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import TypewriterText from "@/components/TypewriterText";
 import ConicGradientButton from "@/components/ConicGradientButton";
+import LiquidMetalLogo from "@/components/LiquidMetalLogo";
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -141,10 +142,13 @@ export default function Home() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-2xl font-bold"
+            className="flex items-center gap-3"
           >
-            <span className="text-white">Ping</span>
-            <span className="text-cyan-500">Learn</span>
+            <LiquidMetalLogo size={36} />
+            <div className="text-2xl font-bold">
+              <span className="text-white">Ping</span>
+              <span className="text-cyan-500">Learn</span>
+            </div>
           </motion.div>
 
           <motion.div

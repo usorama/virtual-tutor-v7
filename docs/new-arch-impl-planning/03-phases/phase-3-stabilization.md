@@ -217,33 +217,59 @@ Focus on ESSENTIAL testing, basic monitoring, and getting the app deployed to pr
 
 ## Definition of Done
 
-### Must Complete
+### Pre-UAT Requirements
 - [ ] Critical tests pass
+- [ ] Core user journey verified
+- [ ] Voice flow functional
+- [ ] Math rendering working
+- [ ] Mobile responsive
+- [ ] Cross-browser tested
+
+### UAT Requirements (NEW - MANDATORY)
+- [ ] Round 1: Core functionality approved by human
+- [ ] Round 2: UI/UX polish approved by human
+- [ ] Round 3: Edge cases handled to satisfaction
+- [ ] Round 4: Final polish and approval
+- [ ] All human-requested changes implemented
+- [ ] Performance optimized based on feedback
+
+### Deployment Requirements
 - [ ] Deployed to Vercel
 - [ ] Environment variables configured
-- [ ] Basic monitoring active
+- [ ] Comprehensive monitoring active
 - [ ] Production URL working
-- [ ] Voice flow functional
-
-### Nice to Have (Skip if tight on time)
-- [ ] Advanced monitoring
-- [ ] Comprehensive tests
-- [ ] Performance optimization
-- [ ] Multiple deployment environments
+- [ ] Human verification of production deployment
 
 ## Success Metrics
-- **Deployment time**: < 30 minutes
+
+### UAT Success Metrics
+- **Human Approval**: 100% satisfaction with UI/UX
+- **Functionality**: All features working as expected
+- **Iterations**: As many as needed to achieve perfection
+- **Bug Resolution**: 100% of identified issues fixed
+
+### Technical Success Metrics
+- **Deployment time**: < 1 hour (with verification)
 - **Critical tests**: 100% pass
 - **Production errors**: 0 on launch
-- **Voice latency**: < 500ms (acceptable for MVP)
+- **Voice latency**: < 300ms (optimized during UAT)
+- **TypeScript errors**: 0 (maintained)
+- **Console errors**: 0 (verified during UAT)
 
 ## Next Steps After Launch
+
+### Immediate Post-Launch (Day 1)
+1. Human verification of production deployment
+2. Monitor initial user interactions
+3. Check error tracking for any issues
+4. Verify all UAT improvements are live
 
 ### Week 1 Post-Launch
 1. Monitor error rates
 2. Gather user feedback
 3. Fix critical bugs only
 4. Document issues for future
+5. Track usage patterns from UAT insights
 
 ### Future Enhancements (Not Now)
 - Advanced testing suite
@@ -260,4 +286,4 @@ Focus on ESSENTIAL testing, basic monitoring, and getting the app deployed to pr
 
 ---
 
-**Remember**: Perfect is the enemy of done. Get it deployed, then iterate.
+**Remember**: With UAT integrated, we achieve the perfect balance - thorough testing and refinement BEFORE deployment, ensuring a polished product that meets human expectations while maintaining timeline discipline.
