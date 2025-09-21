@@ -17,7 +17,8 @@ export type Speaker = 'student' | 'tutor';
 // Voice session interfaces
 export interface VoiceSession {
   id: string;
-  sessionId: string;
+  sessionId: string;                  // Database UUID for foreign key relationships
+  orchestratorSessionId: string;      // SessionOrchestrator session ID for protected-core communication
   livekitRoomName: string;
   startedAt: string;
   endedAt?: string;
@@ -79,6 +80,7 @@ export class VoiceSessionManager {
   private supabase = createClient();
   private currentSession: VoiceSession | null = null;
   private metrics: VoiceSessionMetrics | null = null;
+  private currentConfig: VoiceSessionConfig | null = null;
   private retryBackoff: ExponentialBackoff;
   private eventListeners: Map<string, Function[]> = new Map();
 
@@ -110,25 +112,35 @@ export class VoiceSessionManager {
     try {
       this.emit('sessionCreating', config);
 
-      // Create learning session first through SessionOrchestrator
-      const sessionConfig: SessionConfig = {
-        studentId: config.studentId,
-        topic: config.topic,
-        voiceEnabled: config.voiceEnabled ?? true,
-        mathTranscriptionEnabled: config.mathTranscriptionEnabled ?? true,
-        recordingEnabled: config.recordingEnabled ?? true
-      };
+      // Store config for later use in startSession()
+      this.currentConfig = config;
 
-      const learningSessionId = await this.sessionOrchestrator.startSession(sessionConfig);
+      // We'll start the SessionOrchestrator later in startSession() method
+      const learningSessionId = `temp_${Date.now()}_${config.studentId}`;
 
       // Generate unique room name
       const roomName = `voice-${learningSessionId}-${Date.now()}`;
 
-      // Create voice session in database
+      // First, create a proper learning session in the database
+      const { data: learningSession, error: learningSessionError } = await this.supabase
+        .from('learning_sessions')
+        .insert({
+          student_id: config.studentId,
+          room_name: roomName, // Use the room name we generated
+          chapter_focus: config.topic
+        })
+        .select()
+        .single();
+
+      if (learningSessionError) {
+        throw new Error(`Failed to create learning session: ${learningSessionError.message}`);
+      }
+
+      // Create voice session in database using the proper learning session ID
       const { data: voiceSession, error } = await this.supabase
         .from('voice_sessions')
         .insert({
-          session_id: learningSessionId,
+          session_id: learningSession.id, // Use the actual learning session UUID
           livekit_room_name: roomName,
           status: 'idle'
         })
@@ -141,7 +153,8 @@ export class VoiceSessionManager {
 
       this.currentSession = {
         id: voiceSession.id,
-        sessionId: learningSessionId,
+        sessionId: learningSession.id, // Database UUID for foreign key relationships
+        orchestratorSessionId: '',     // Will be set when SessionOrchestrator.startSession() is called
         livekitRoomName: roomName,
         startedAt: voiceSession.started_at,
         status: 'idle',
@@ -152,7 +165,7 @@ export class VoiceSessionManager {
 
       // Initialize session metrics
       this.metrics = {
-        sessionId: learningSessionId,
+        sessionId: learningSession.id, // Use the actual learning session UUID
         duration: 0,
         messagesExchanged: 0,
         transcriptionAccuracy: 0,
@@ -183,9 +196,24 @@ export class VoiceSessionManager {
       await this.updateSessionStatus('connecting');
       this.emit('sessionStarting', this.currentSession);
 
-      // Start the voice session through SessionOrchestrator
-      // Note: SessionOrchestrator.resumeSession() doesn't take parameters
-      await this.sessionOrchestrator.resumeSession();
+      // Start the voice session through SessionOrchestrator using stored config
+      if (!this.currentConfig) {
+        throw new Error('No session config available. Call createSession first.');
+      }
+
+      const sessionConfig: SessionConfig = {
+        studentId: this.currentConfig.studentId,
+        topic: this.currentConfig.topic,
+        voiceEnabled: this.currentConfig.voiceEnabled ?? true,
+        mathTranscriptionEnabled: this.currentConfig.mathTranscriptionEnabled ?? true,
+        recordingEnabled: this.currentConfig.recordingEnabled ?? true
+      };
+
+      // CRITICAL FIX: Capture orchestrator session ID for proper session end functionality
+      const orchestratorSessionId = await this.sessionOrchestrator.startSession(sessionConfig);
+
+      // Store the orchestrator session ID in our current session
+      this.currentSession.orchestratorSessionId = orchestratorSessionId;
 
       await this.updateSessionStatus('active');
       this.emit('sessionStarted', this.currentSession);
@@ -206,8 +234,8 @@ export class VoiceSessionManager {
     try {
       this.emit('sessionEnding', this.currentSession);
 
-      // End session through SessionOrchestrator
-      await this.sessionOrchestrator.endSession(this.currentSession.sessionId);
+      // CRITICAL FIX: Use orchestrator session ID for protected-core communication
+      await this.sessionOrchestrator.endSession(this.currentSession.orchestratorSessionId);
 
       // Update session in database
       const { error } = await this.supabase
