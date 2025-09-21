@@ -67,7 +67,7 @@ After 7 failed attempts, we're implementing a Protected Core Architecture that p
 - Tests passing with >90% coverage
 
 ### Days 4-5: Phase 2 - Gemini Integration (16 hours)
-**Goal**: Connect Gemini Live API and implement real-time transcription
+**Goal**: Connect Gemini Live API and implement simplified transcription display
 
 **Day 4 Deliverables**:
 - Gemini Live API connected
@@ -76,10 +76,10 @@ After 7 failed attempts, we're implementing a Protected Core Architecture that p
 - Math detection functional
 
 **Day 5 Deliverables**:
-- React components for display
+- **CRITICAL**: Remove tldraw completely
+- Build simplified TranscriptionDisplay (from ux-flow.md)
 - Voice session management
-- End-to-end flow working
-- Performance optimization
+- End-to-end flow working (no whiteboard)
 
 **Success Metrics**:
 - < 300ms transcription latency
@@ -87,15 +87,20 @@ After 7 failed attempts, we're implementing a Protected Core Architecture that p
 - Voice flow works end-to-end
 - No console errors
 
-### Day 6: Phase 3 - Stabilization (8 hours)
-**Goal**: Harden system and prepare for production
+### Day 6: Phase 2.5 + 3 - Cleanup & Deployment (8 hours)
+**Goal**: Remove legacy code and deploy to production
 
-**Key Deliverables**:
-- 95% test coverage achieved
-- Monitoring system operational
-- Rollback mechanisms working
-- Security measures implemented
-- Documentation complete
+**Phase 2.5 (4 hours) - App Cleanup**:
+- Remove all dead code from 7 failed attempts
+- Clean up dependencies (remove 50+ unused packages)
+- Simplify application structure
+- Production build verification
+
+**Phase 3 (4 hours) - Deployment**:
+- Critical path testing only
+- Vercel deployment configuration
+- Basic monitoring setup (Sentry)
+- Deploy to production
 
 **Success Metrics**:
 - AI cannot break protected core

@@ -48,6 +48,11 @@ src/protected-core/    # COMPLETELY OFF LIMITS!
 src/features/          # New feature implementations
 src/app/               # Page updates
 src/components/        # UI components
+
+# 🚨 MUST REMOVE (New for Phase 2):
+@tldraw/tldraw         # Remove completely from package.json
+src/components/whiteboard/  # Delete entire directory
+src/features/collaborative-drawing/  # Delete if exists
 src/hooks/             # Custom hooks
 ```
 
@@ -159,16 +164,43 @@ export class MathDetectionService {
 }
 ```
 
-### Task 2.3: React Components
+### 🔴 CRITICAL NEW TASK 2.6: Remove TlDraw Completely
+**MUST DO BEFORE CREATING NEW COMPONENTS**
+
+```bash
+# Step 1: Remove tldraw from dependencies
+cd pinglearn-app
+npm uninstall @tldraw/tldraw @tldraw/assets
+
+# Step 2: Delete tldraw-related directories
+rm -rf src/components/whiteboard
+rm -rf src/features/collaborative-drawing
+rm -rf src/components/canvas
+
+# Step 3: Clean up imports in classroom page
+# Edit src/app/classroom/page.tsx
+# Remove ALL tldraw imports and components
+
+# Step 4: Commit the cleanup
+git add -A
+git commit -m "refactor: Remove tldraw and collaborative features"
+```
+
+### Task 2.6b: Build Simplified TranscriptionDisplay
 
 ```typescript
-// 📍 CREATE IN: src/components/voice/TranscriptionDisplay.tsx
-// New UI component
+// 📍 CREATE IN: src/components/transcription/TranscriptionDisplay.tsx
+// Based on docs/kb.md/ux-flow.md specifications
 
 import { DisplayItem } from '@/protected-core';  // Import types only
 
+// Simple display component - NO drawing tools
+// Just shows what teacher says with math rendering
 export function TranscriptionDisplay({ items }: { items: DisplayItem[] }) {
-  // Component implementation
+  // Clean, focused implementation
+  // Audio indicator at top
+  // Transcription with math in main area
+  // No tools, no canvas, no collaboration
 }
 ```
 
