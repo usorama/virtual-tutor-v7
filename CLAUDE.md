@@ -53,6 +53,176 @@ I am your complete technical team. I will autonomously handle ALL technical aspe
 
 **My Operating Principle**: I will make all technical decisions autonomously, execute implementation without requiring technical input from you, and provide clear status updates in non-technical language.
 
+## 🧪 MANDATORY TESTING STRATEGY - EVERY PHASE
+
+### Testing Requirements for ALL AI Agents
+
+Every implementation must include comprehensive testing to prevent the failures of attempts 1-7. Testing is NOT optional - it's a core requirement for Phase 2.5+.
+
+### 1. Unit Testing (Required for Phase 2.5+)
+```typescript
+// Every function must have unit tests
+describe('MathRenderer', () => {
+  it('should render LaTeX correctly', () => {
+    const result = renderMath('x^2 + 5x + 6');
+    expect(result).toContain('x²');
+    expect(result).not.toContain('any errors');
+  });
+
+  it('should handle invalid input gracefully', () => {
+    const result = renderMath('\\invalid{LaTeX}');
+    expect(result).toContain('error');
+    expect(result).not.toThrow();
+  });
+});
+```
+
+### 2. Integration Testing (Critical for Voice Flow)
+```typescript
+// Test service interactions
+describe('VoiceSession Integration', () => {
+  it('should connect Gemini -> LiveKit -> Display', async () => {
+    const session = await startVoiceSession();
+    const audio = await simulateAudioInput();
+    const transcription = await waitForTranscription();
+    expect(transcription).toBeDefined();
+    expect(transcription.math).toBeRendered();
+  });
+});
+```
+
+### 3. Protected Core Violation Testing (CRITICAL)
+```bash
+# Must run after EVERY change
+npm run test:protected-core
+# Checks:
+# - No modifications to src/protected-core/
+# - No direct imports bypassing contracts
+# - No type degradation to 'any'
+# - Singleton patterns maintained
+```
+
+### 4. Regression Testing (Prevent Breaking Previous Work)
+```typescript
+// Test that existing features still work
+describe('Regression Tests', () => {
+  it('should maintain WebSocket singleton', () => {
+    const ws1 = WebSocketManager.getInstance();
+    const ws2 = WebSocketManager.getInstance();
+    expect(ws1).toBe(ws2); // Same instance
+  });
+
+  it('should preserve math rendering accuracy', () => {
+    // Test known equations that worked before
+    KNOWN_GOOD_EQUATIONS.forEach(equation => {
+      expect(renderMath(equation.latex)).toBe(equation.expected);
+    });
+  });
+});
+```
+
+### 5. Plan-to-Implementation Compliance Testing
+```typescript
+// Verify implementation matches phase plan
+describe('Phase Compliance', () => {
+  it('should implement all required tasks', () => {
+    const phasePlan = readPhasePlan('phase-2');
+    const implementation = analyzeImplementation();
+
+    phasePlan.tasks.forEach(task => {
+      expect(implementation).toInclude(task.deliverable);
+    });
+  });
+});
+```
+
+### 6. Quality & Explainable Code Requirements
+```typescript
+// Every file must pass quality checks
+describe('Code Quality', () => {
+  it('should have TypeScript strict mode', () => {
+    expect(tsConfig.strict).toBe(true);
+    expect(tsErrors.length).toBe(0);
+  });
+
+  it('should have clear function documentation', () => {
+    const functions = extractFunctions(codebase);
+    functions.forEach(fn => {
+      expect(fn.documentation).toBeDefined();
+      expect(fn.documentation).toInclude('purpose');
+      expect(fn.documentation).toInclude('parameters');
+      expect(fn.documentation).toInclude('returns');
+    });
+  });
+
+  it('should follow naming conventions', () => {
+    expect(variableNames).toMatchConvention();
+    expect(functionNames).toBeDescriptive();
+    expect(componentNames).toBePascalCase();
+  });
+});
+```
+
+### Testing Workflow - MANDATORY
+
+#### Before EVERY commit:
+```bash
+# 1. Type checking (must be 0 errors)
+npm run typecheck
+
+# 2. Unit tests (must pass)
+npm test
+
+# 3. Integration tests (if implemented)
+npm run test:integration
+
+# 4. Protected core validation
+npm run test:protected-core
+
+# 5. Quality checks
+npm run lint
+npm run test:quality
+```
+
+#### After EVERY task:
+```bash
+# Document test results
+echo "Task [X.Y] Test Results:" >> test-results.md
+npm test 2>&1 | tee -a test-results.md
+git add test-results.md
+git commit -m "test: Document Task [X.Y] test results"
+```
+
+#### Before EVERY phase completion:
+```bash
+# Comprehensive test suite
+npm run test:all
+npm run test:regression
+npm run test:e2e
+npm run build  # Must succeed
+```
+
+### Test Coverage Requirements
+
+- **Unit Tests**: >80% coverage for new code
+- **Integration Tests**: All service interactions
+- **E2E Tests**: Complete user flows
+- **Protected Core**: 100% violation detection
+- **Regression**: All previous features
+
+### Test Documentation
+
+Every test file must include:
+```typescript
+/**
+ * Test Suite: [Component/Service Name]
+ * Purpose: [What this tests and why]
+ * Coverage: [What scenarios are covered]
+ * Dependencies: [What services/components this relies on]
+ * Last Updated: [Date]
+ */
+```
+
 ## 🔴 CRITICAL: Protected Core Architecture
 
 ### NEVER MODIFY These Directories
@@ -388,6 +558,136 @@ When you complete a task:
 3. Update MASTER-PLAN.md progress
 4. Commit with clear message
 5. Push to remote branch
+
+## 🧪 Testing Credentials
+
+For testing and integration verification:
+- **Email**: test@example.com
+- **Password**: TestPassword123!
+
+Use these credentials to access the classroom page and verify functionality during development and testing.
+
+## 🗂️ Database Context & Schema
+
+### Supabase PostgreSQL Database
+PingLearn uses Supabase with a comprehensive schema designed for educational content and voice interactions.
+
+**Database Files Location**:
+- Schema Documentation: `/Users/[username]/Projects/pinglearn/pinglearn-app/docs/database/schema.md`
+- Initial Migration: `/Users/[username]/Projects/pinglearn/pinglearn-app/supabase/migrations/001_initial_schema.sql`
+- Curriculum Data: `/Users/[username]/Projects/pinglearn/pinglearn-app/supabase/migrations/002_profiles_and_curriculum.sql`
+
+### Key Database Tables
+
+#### Core User & Session Tables:
+- **profiles**: User profile data (grade, subjects, preferences)
+- **learning_sessions**: Main learning session tracking
+- **voice_sessions**: LiveKit voice session data with room names
+- **transcripts**: All voice conversation transcripts (student/tutor)
+- **session_analytics**: Engagement and comprehension metrics
+
+#### Educational Content Tables:
+- **textbooks**: NCERT textbook metadata (Grades 9-12 pre-loaded)
+- **chapters**: Chapter organization within textbooks
+- **content_chunks**: Chunked content with embeddings for semantic search
+- **curriculum_data**: CBSE curriculum topics for Grades 9-12
+
+#### Progress Tracking:
+- **user_progress**: Overall subject progress and streaks
+- **topic_progress**: Individual topic mastery tracking
+
+### Pre-Loaded Educational Content
+
+**NCERT Mathematics Class X (Grade 10) Topics**:
+- Real Numbers, Polynomials, Quadratic Equations
+- Triangles, Coordinate Geometry, Trigonometry
+- Circles, Areas, Surface Areas and Volumes
+- Statistics, Probability
+
+**Other Subjects Available**:
+- Science, English, Social Science for Grades 9-12
+- All CBSE curriculum topics pre-loaded in `curriculum_data` table
+
+### Supabase MCP Usage
+
+**Available Operations via MCP**:
+```typescript
+// Query curriculum topics for a grade
+mcp__supabase__query_table(
+  table: 'curriculum_data',
+  filter: { grade: 10, subject: 'Mathematics' }
+)
+
+// Get user's learning sessions
+mcp__supabase__query_table(
+  table: 'learning_sessions',
+  filter: { user_id: userId }
+)
+
+// Insert new voice session
+mcp__supabase__insert_row(
+  table: 'voice_sessions',
+  data: { session_id, livekit_room_name, started_at }
+)
+
+// Search textbook content
+mcp__supabase__query_table(
+  table: 'content_chunks',
+  filter: { chapter_id: chapterId }
+)
+```
+
+### Row Level Security (RLS)
+All user data is protected with RLS policies:
+- Users can only access their own sessions and progress
+- Textbooks and curriculum data are publicly readable
+- Transcripts are linked to user sessions for privacy
+
+### Performance Optimizations
+- Vector embeddings for semantic content search
+- Indexes on user queries, session timestamps
+- Full-text search on textbook titles and content
+
+## 🚨 PRIMARY DEFENSE: PROTECTED CORE NEVER MODIFY
+
+### ⛔ CRITICAL: NEVER MODIFY THESE FILES
+```
+src/protected-core/*                     # ENTIRE PROTECTED CORE
+├── voice-engine/                        # Voice processing services
+├── transcription/                       # Text and math processing
+├── websocket/manager/singleton-manager.ts # CRITICAL: WebSocket singleton
+├── session/                            # Session orchestration
+└── contracts/                          # Service contracts
+```
+
+### 🔌 USE THESE APIS (DON'T RECREATE)
+```typescript
+// Session Management
+import { SessionOrchestrator } from '@/protected-core';
+const orchestrator = SessionOrchestrator.getInstance();
+
+// Voice Processing
+import { VoiceService } from '@/protected-core';
+await VoiceService.startSession(studentId, topic);
+
+// Transcription & Math
+import { TranscriptionService, getDisplayBuffer } from '@/protected-core';
+const processed = TranscriptionService.processTranscription(text);
+const mathHtml = TranscriptionService.renderMath(latex);
+
+// WebSocket (USE SINGLETON ONLY)
+import { WebSocketManager } from '@/protected-core';
+const wsManager = WebSocketManager.getInstance();
+```
+
+### 🚫 FORBIDDEN ACTIONS - WILL CAUSE FAILURE #8
+1. **NEVER** modify `src/protected-core/` files
+2. **NEVER** create new WebSocket connections
+3. **NEVER** bypass service contracts
+4. **NEVER** use `any` type in TypeScript
+5. **NEVER** skip mandatory tests
+
+**See `src/protected-core/claude.md` for complete protection details.**
 
 ## ⚠️ Final Warning
 
