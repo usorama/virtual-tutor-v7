@@ -8,6 +8,9 @@ import ConicGradientButton from "@/components/ConicGradientButton";
 export default function Home() {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   // Rotating words for the AI tutor description
   const words = ["empathetic", "adaptive", "personalized", "mindful"];
@@ -26,13 +29,58 @@ export default function Home() {
     { icon: "🌙", label: "24/7 availability" },
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email && email.includes("@")) {
-      console.log("Email submitted:", email);
+
+    // Reset states
+    setError("");
+    setSuccessMessage("");
+
+    // Validate email
+    if (!email || !email.includes("@")) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Handle specific error cases
+        if (response.status === 409) {
+          setError("You're already on the waitlist! We'll notify you soon.");
+        } else {
+          setError(data.error || "Something went wrong. Please try again.");
+        }
+        return;
+      }
+
+      // Success!
+      setSuccessMessage("Welcome to the future of learning!");
       setIsSubmitted(true);
       setEmail("");
-      setTimeout(() => setIsSubmitted(false), 5000);
+
+      // Reset after 7 seconds
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setSuccessMessage("");
+      }, 7000);
+
+    } catch (error) {
+      console.error("Submission error:", error);
+      setError("Network error. Please check your connection and try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -209,23 +257,54 @@ export default function Home() {
               className="max-w-md mx-auto mt-20"
             >
               {!isSubmitted ? (
-                <form onSubmit={handleSubmit} className="relative">
-                  <div className="relative rounded-full bg-white/[0.02] backdrop-blur-sm border border-white/10">
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter your email for early access"
-                      className="w-full px-6 py-4 pr-36 bg-transparent text-white placeholder-white/30 focus:outline-none rounded-full"
-                      required
-                    />
-                    <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                      <ConicGradientButton>
-                        Join Waitlist
-                      </ConicGradientButton>
+                <>
+                  <form onSubmit={handleSubmit} className="relative">
+                    <div className={`relative rounded-full bg-white/[0.02] backdrop-blur-sm border ${
+                      error ? 'border-red-500/50' : 'border-white/10'
+                    } transition-colors`}>
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          setError(""); // Clear error on typing
+                        }}
+                        placeholder="Enter your email for early access"
+                        className="w-full px-6 py-4 pr-36 bg-transparent text-white placeholder-white/30 focus:outline-none rounded-full"
+                        disabled={isLoading}
+                      />
+                      <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                        <ConicGradientButton>
+                          {isLoading ? (
+                            <span className="flex items-center">
+                              <motion.span
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                className="inline-block mr-2"
+                              >
+                                ⚡
+                              </motion.span>
+                              Processing...
+                            </span>
+                          ) : (
+                            "Join Waitlist"
+                          )}
+                        </ConicGradientButton>
+                      </div>
                     </div>
-                  </div>
-                </form>
+                  </form>
+
+                  {/* Error Message */}
+                  {error && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-red-400 text-sm text-center mt-3"
+                    >
+                      {error}
+                    </motion.p>
+                  )}
+                </>
               ) : (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -235,7 +314,7 @@ export default function Home() {
                     boxShadow: "0 0 40px rgba(6,182,212,0.15), inset 0 0 20px rgba(6,182,212,0.05)"
                   }}
                 >
-                  <p className="text-cyan-500">Welcome to the future of learning.</p>
+                  <p className="text-cyan-500">{successMessage || "Welcome to the future of learning."}</p>
                   <p className="text-white/60 text-sm mt-1">We'll reach out soon.</p>
                 </motion.div>
               )}
