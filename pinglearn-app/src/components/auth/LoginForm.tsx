@@ -7,6 +7,7 @@ import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, Car
 import { signIn } from '@/lib/auth/actions'
 import { validateLoginForm } from '@/lib/auth/validation'
 import { AUTH_CONSTANTS } from '@/lib/auth/constants'
+import { triggerAuthChange } from '@/lib/auth/auth-provider'
 import { Loader2, Mail, Lock } from 'lucide-react'
 
 export function LoginForm() {
@@ -38,8 +39,14 @@ export function LoginForm() {
       if (response.error) {
         setGeneralError(response.error.message)
       } else {
-        router.push(AUTH_CONSTANTS.LOGIN_REDIRECT)
-        router.refresh()
+        // Trigger auth change event for context update
+        triggerAuthChange()
+
+        // Small delay to allow auth context to update
+        setTimeout(() => {
+          router.push(AUTH_CONSTANTS.LOGIN_REDIRECT)
+          router.refresh()
+        }, 100)
       }
     } catch {
       setGeneralError(AUTH_CONSTANTS.ERRORS.NETWORK_ERROR)

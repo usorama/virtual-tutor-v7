@@ -54,7 +54,7 @@ export function SessionHistory({ studentId, limit = 5, onSessionClick }: Session
       setSessions(sessionsData || []);
       
       // Calculate total minutes
-      const total = (sessionsData || []).reduce((sum, session) => {
+      const total = (sessionsData || []).reduce((sum: number, session: Session) => {
         return sum + (session.duration_minutes || 0);
       }, 0);
       setTotalMinutes(total);

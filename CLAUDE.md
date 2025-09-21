@@ -483,8 +483,13 @@ git checkout main        # Abandon current branch
 ### How to Update Status
 After completing each task:
 1. Update this section with ✅ for completed items
-2. Commit with message: `docs: Update CLAUDE.md status for Task [number]`
-3. Keep MASTER-PLAN.md in sync
+2. **Update `/docs/new-arch-impl-planning/current-progress-status.md`** with:
+   - Task completion status
+   - Progress percentages
+   - Current date/timestamp
+   - Any blockers or risks identified
+3. Commit with message: `docs: Update status for Task [number]`
+4. Keep MASTER-PLAN.md in sync
 
 ## 🔄 Rollback Procedures
 

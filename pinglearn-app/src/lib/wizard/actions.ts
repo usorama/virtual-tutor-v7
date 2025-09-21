@@ -135,8 +135,8 @@ export async function getAvailableGrades(): Promise<{
     }
 
     // Extract unique grades and sort them
-    const uniqueGrades = Array.from(new Set(data?.map(item => item.grade) || []))
-      .sort((a, b) => a - b)
+    const grades: number[] = data?.map((item: { grade: number }) => item.grade) || []
+    const uniqueGrades: number[] = Array.from(new Set(grades)).sort((a, b) => a - b)
 
     return { data: uniqueGrades, error: null }
   } catch (error) {

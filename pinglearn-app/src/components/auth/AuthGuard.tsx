@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
+import { useAuth } from '@/lib/auth/auth-provider'
 
 interface AuthGuardProps {
   children: React.ReactNode
@@ -10,23 +11,24 @@ interface AuthGuardProps {
   redirectTo?: string
 }
 
-export function AuthGuard({ 
-  children, 
+export function AuthGuard({
+  children,
   requireAuth = true,
   redirectTo = '/login'
 }: AuthGuardProps) {
   const router = useRouter()
-  
-  // In a real implementation, this would check the auth state from context or store
-  // For now, we'll implement a basic version that can be enhanced later
-  const isAuthenticated = false // This would come from auth context
-  const loading = false // This would come from auth context
+  const { user, loading } = useAuth()
+
+  // User is authenticated if there's a valid user object
+  const isAuthenticated = !!user
   
   useEffect(() => {
     if (!loading) {
       if (requireAuth && !isAuthenticated) {
+        console.log('Redirecting to login - user not authenticated')
         router.push(redirectTo)
       } else if (!requireAuth && isAuthenticated) {
+        console.log('Redirecting to dashboard - user already authenticated')
         router.push('/dashboard')
       }
     }

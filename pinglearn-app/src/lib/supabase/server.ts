@@ -1,7 +1,39 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
+// Mock server client for development when Supabase is not available
+const createMockServerClient = () => {
+  const mockAuth = {
+    signInWithPassword: async () => ({ data: null, error: new Error('Mock mode - use server actions') }),
+    signUp: async () => ({ data: null, error: new Error('Mock mode - use server actions') }),
+    signOut: async () => ({ error: null }),
+    getSession: async () => ({ data: { session: null }, error: null }),
+    getUser: async () => ({ data: { user: null }, error: null }),
+    resetPasswordForEmail: async () => ({ error: null }),
+    updateUser: async () => ({ data: null, error: new Error('Mock mode - use server actions') })
+  }
+
+  return {
+    auth: mockAuth,
+    from: () => ({
+      select: () => ({ data: [], error: null }),
+      insert: () => ({ data: null, error: null }),
+      update: () => ({ data: null, error: null }),
+      delete: () => ({ data: null, error: null })
+    })
+  }
+}
+
 export async function createClient() {
+  // Check if we should use mock client
+  const useMock = process.env.NODE_ENV === 'development' &&
+                  process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('mock-project')
+
+  if (useMock) {
+    console.warn('Using mock Supabase server client for development')
+    return createMockServerClient() as any
+  }
+
   const cookieStore = await cookies()
 
   return createServerClient(

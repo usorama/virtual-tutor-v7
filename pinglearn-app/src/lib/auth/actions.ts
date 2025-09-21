@@ -5,6 +5,19 @@ import { validateLoginForm, validateRegisterForm, validateResetPasswordForm } fr
 import { AUTH_CONSTANTS } from './constants'
 import { AuthResponse, LoginCredentials, RegisterCredentials, ResetPasswordCredentials } from '@/types/auth'
 import { redirect } from 'next/navigation'
+import {
+  mockSignIn,
+  mockSignUp,
+  mockSignOut,
+  mockGetSession,
+  mockGetUser,
+  mockResetPassword,
+  mockUpdatePassword
+} from './mock-auth'
+
+// Enable mock authentication in development
+const USE_MOCK_AUTH = process.env.NODE_ENV === 'development' ||
+                      process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('mock-project')
 
 export async function signIn(credentials: LoginCredentials): Promise<AuthResponse> {
   const validation = validateLoginForm(credentials.email, credentials.password)
@@ -19,8 +32,13 @@ export async function signIn(credentials: LoginCredentials): Promise<AuthRespons
     }
   }
 
+  // Use mock authentication in development
+  if (USE_MOCK_AUTH) {
+    return await mockSignIn(credentials)
+  }
+
   const supabase = await createClient()
-  
+
   const { data, error } = await supabase.auth.signInWithPassword({
     email: credentials.email,
     password: credentials.password,
@@ -48,11 +66,11 @@ export async function signIn(credentials: LoginCredentials): Promise<AuthRespons
 
 export async function signUp(credentials: RegisterCredentials): Promise<AuthResponse> {
   const validation = validateRegisterForm(
-    credentials.email, 
-    credentials.password, 
+    credentials.email,
+    credentials.password,
     credentials.confirmPassword
   )
-  
+
   if (!validation.isValid) {
     return {
       data: null,
@@ -64,8 +82,13 @@ export async function signUp(credentials: RegisterCredentials): Promise<AuthResp
     }
   }
 
+  // Use mock authentication in development
+  if (USE_MOCK_AUTH) {
+    return await mockSignUp(credentials)
+  }
+
   const supabase = await createClient()
-  
+
   const { data, error } = await supabase.auth.signUp({
     email: credentials.email,
     password: credentials.password,
@@ -95,6 +118,13 @@ export async function signUp(credentials: RegisterCredentials): Promise<AuthResp
 }
 
 export async function signOut(): Promise<void> {
+  // Use mock authentication in development
+  if (USE_MOCK_AUTH) {
+    await mockSignOut()
+    redirect(AUTH_CONSTANTS.LOGOUT_REDIRECT)
+    return
+  }
+
   const supabase = await createClient()
   await supabase.auth.signOut()
   redirect(AUTH_CONSTANTS.LOGOUT_REDIRECT)
@@ -102,7 +132,7 @@ export async function signOut(): Promise<void> {
 
 export async function resetPassword(credentials: ResetPasswordCredentials): Promise<AuthResponse> {
   const validation = validateResetPasswordForm(credentials.email)
-  
+
   if (!validation.isValid) {
     return {
       data: null,
@@ -114,8 +144,13 @@ export async function resetPassword(credentials: ResetPasswordCredentials): Prom
     }
   }
 
+  // Use mock authentication in development
+  if (USE_MOCK_AUTH) {
+    return await mockResetPassword(credentials.email)
+  }
+
   const supabase = await createClient()
-  
+
   const { error } = await supabase.auth.resetPasswordForEmail(credentials.email, {
     redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/confirm?type=recovery`,
   })
@@ -138,8 +173,13 @@ export async function resetPassword(credentials: ResetPasswordCredentials): Prom
 }
 
 export async function updatePassword(password: string): Promise<AuthResponse> {
+  // Use mock authentication in development
+  if (USE_MOCK_AUTH) {
+    return await mockUpdatePassword(password)
+  }
+
   const supabase = await createClient()
-  
+
   const { data, error } = await supabase.auth.updateUser({
     password: password
   })
@@ -162,12 +202,22 @@ export async function updatePassword(password: string): Promise<AuthResponse> {
 }
 
 export async function getSession() {
+  // Use mock authentication in development
+  if (USE_MOCK_AUTH) {
+    return await mockGetSession()
+  }
+
   const supabase = await createClient()
   const { data: { session } } = await supabase.auth.getSession()
   return session
 }
 
 export async function getUser() {
+  // Use mock authentication in development
+  if (USE_MOCK_AUTH) {
+    return await mockGetUser()
+  }
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   return user
