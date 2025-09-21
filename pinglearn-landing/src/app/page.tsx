@@ -144,7 +144,7 @@ export default function Home() {
             className="flex items-center"
           >
             <img
-              src="/logos/logo-transparent.png"
+              src="/logos/logo-transparent.svg"
               alt="PingLearn Logo"
               className="h-32 md:h-40 lg:h-48 w-auto"
             />
