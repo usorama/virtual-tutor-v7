@@ -42,7 +42,7 @@ const PingLearnLogoPro: React.FC<PingLearnLogoProProps> = ({
       pathLength: 1,
       opacity: 1,
       transition: {
-        pathLength: { duration: 2, ease: "easeInOut" },
+        pathLength: { duration: 2, ease: "easeInOut" as const },
         opacity: { duration: 0.5 }
       }
     }
@@ -55,7 +55,7 @@ const PingLearnLogoPro: React.FC<PingLearnLogoProProps> = ({
       transition: {
         duration: 2,
         repeat: Infinity,
-        ease: "easeInOut"
+        ease: "easeInOut" as const
       }
     }
   }

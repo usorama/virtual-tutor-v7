@@ -17,7 +17,7 @@ Building on the revolutionary audio-to-audio foundation from Phase 3, Phase 4 ad
 **🚨 MANDATORY BEFORE IMPLEMENTATION:**
 1. **Read Research Document:** [Phase 4 Multi-Modal Whiteboard Research](../research/phase-4-multi-modal-whiteboard-research.md)
 2. **Follow Implementation Guide:** [Phase 4 Implementation Prompt](./phase-4-implementation-prompt.md)
-3. **Use Context7 for Package Documentation:** Verify current tldraw, KaTeX, Deepgram APIs
+3. **Use Context7 for Package Documentation:** Verify current tldraw, KaTeX APIs
 4. **Web Search Current Best Practices:** Search for September 2025 implementations
 
 ### 4.1 Visual Content Integration (1.5 SP)
@@ -33,7 +33,7 @@ Building on the revolutionary audio-to-audio foundation from Phase 3, Phase 4 ad
 - Create shared whiteboard for problem solving using **tldraw SDK** (production-ready)
 - Implement real-time collaborative drawing via **Supabase real-time**
 - Add mathematical notation support with **KaTeX rendering**
-- Enable voice-directed drawing commands via **Deepgram API**
+- Enable manual drawing controls with toolbar
 - Test collaborative problem solving with multi-user sessions
 
 **📋 Research Foundation:** [Phase 4 Multi-Modal Whiteboard Research](../research/phase-4-multi-modal-whiteboard-research.md)
@@ -42,7 +42,7 @@ Building on the revolutionary audio-to-audio foundation from Phase 3, Phase 4 ad
 #### 4.1.3: Textbook Page Display (0.5 SP)
 - Show relevant textbook pages during conversation
 - Implement synchronized page navigation
-- Add voice-controlled page turning
+- Add navigation controls for page turning
 - Setup visual reference highlighting
 - Test textbook visual integration
 
@@ -265,7 +265,7 @@ const enhancedAIConfig = {
     screenSharing: true,
     emotionalIntelligence: true,
     adaptiveTeaching: true,
-    voiceControlledDrawing: true  // NEW: Voice commands trigger drawings
+    manualDrawingControls: true  // NEW: Manual controls for drawings
   },
   conversationStyle: {
     personality: "encouraging_teacher",
@@ -283,8 +283,7 @@ const enhancedAIConfig = {
   },
   whiteboard: {
     library: "tldraw",
-    mathNotation: "katex", 
-    voiceAPI: "deepgram",
+    mathNotation: "katex",
     collaboration: "supabase-realtime"
   }
 }

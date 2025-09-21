@@ -255,6 +255,9 @@ body {
 
 /* Liquid Glass Button Variant */
 .liquid-glass-button {
+  /* CRITICAL: Ensure text is always visible */
+  color: var(--foreground) !important;
+
   /* Inherit all liquid-glass properties */
   transform-style: preserve-3d;
   perspective: 1000px;
@@ -308,6 +311,9 @@ body {
 
 /* Liquid Glass Navigation */
 .liquid-glass-nav {
+  /* CRITICAL: Ensure text is always visible */
+  color: var(--foreground) !important;
+
   /* Inherit all liquid-glass properties */
   transform-style: preserve-3d;
   perspective: 1000px;

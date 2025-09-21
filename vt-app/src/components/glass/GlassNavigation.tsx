@@ -11,6 +11,7 @@ interface NavigationItem {
   onClick?: () => void
   variant?: 'liquid-glass' | 'liquid-primary' | 'liquid-secondary'
   size?: 'default' | 'sm' | 'lg'
+  external?: boolean
 }
 
 interface LiquidGlassNavigationProps {

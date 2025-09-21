@@ -78,7 +78,7 @@ const VoiceDemoPro: React.FC<VoiceDemoProProps> = ({ className }) => {
       transition: {
         duration: 1.5,
         repeat: Infinity,
-        ease: "easeInOut"
+        ease: "easeInOut" as const
       }
     }
   }

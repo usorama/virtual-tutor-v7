@@ -4,7 +4,6 @@ import { useState, useCallback, useEffect } from 'react';
 import { Room } from 'livekit-client';
 import { useEnsureRoom } from '@livekit/components-react';
 import { Tldraw, Editor, createTLStore, defaultShapeUtils } from '@tldraw/tldraw';
-import { VoiceCommandProcessor } from './VoiceCommandProcessor';
 import { MathNotationOverlay } from './MathNotationOverlay';
 import { CollaborationIndicator } from './CollaborationIndicator';
 import { Button } from '@/components/ui/button';
@@ -41,15 +40,6 @@ interface MultiModalClassroomProps {
   connectionQuality: 'excellent' | 'good' | 'fair' | 'poor';
 }
 
-interface DrawingCommand {
-  action: 'draw' | 'move' | 'select' | 'erase' | 'text' | 'math';
-  shape?: 'circle' | 'rectangle' | 'line' | 'arrow' | 'triangle';
-  direction?: 'up' | 'down' | 'left' | 'right';
-  distance?: number;
-  text?: string;
-  mathExpression?: string;
-  position?: { x: number; y: number };
-}
 
 export function MultiModalClassroom({
   sessionId,
@@ -65,8 +55,6 @@ export function MultiModalClassroom({
   const liveKitRoom = useEnsureRoom();
 
   // UI State
-  const [isListeningForCommands, setIsListeningForCommands] = useState(false);
-  const [lastVoiceCommand, setLastVoiceCommand] = useState<DrawingCommand | null>(null);
   const [mathMode, setMathMode] = useState(false);
   const [collaborators, setCollaborators] = useState<string[]>([]);
   const [transcript, setTranscript] = useState<string[]>([]);
@@ -81,144 +69,10 @@ export function MultiModalClassroom({
     return store;
   });
 
-  /**
-   * Handle voice command execution
-   */
-  const executeDrawingCommand = useCallback((command: DrawingCommand) => {
-    if (!editor) return;
 
-    setLastVoiceCommand(command);
 
-    try {
-      switch (command.action) {
-        case 'draw':
-          if (command.shape) {
-            createShape(command.shape, command.position);
-          }
-          break;
-        case 'move':
-          if (command.direction && command.distance) {
-            moveSelection(command.direction, command.distance);
-          }
-          break;
-        case 'erase':
-          editor.deleteShapes(editor.getSelectedShapeIds());
-          break;
-        case 'text':
-          if (command.text) {
-            createTextShape(command.text, command.position);
-          }
-          break;
-        case 'math':
-          if (command.mathExpression) {
-            createMathExpression(command.mathExpression, command.position);
-          }
-          break;
-      }
 
-      // Add to transcript
-      addToTranscript('Voice Command', `${command.action} ${command.shape || ''}`);
-    } catch (error) {
-      console.error('Error executing drawing command:', error);
-    }
-  }, [editor]);
 
-  /**
-   * Create a shape on the whiteboard
-   */
-  const createShape = useCallback((shapeType: string, position?: { x: number; y: number }) => {
-    if (!editor) return;
-
-    const center = position || editor.getViewportScreenBounds().center;
-
-    const shapeProps = {
-      type: shapeType === 'circle' ? 'geo' : shapeType === 'rectangle' ? 'geo' : 'arrow',
-      x: center.x - 50,
-      y: center.y - 50,
-      props: shapeType === 'circle' ? {
-        geo: 'ellipse',
-        w: 100,
-        h: 100,
-      } : shapeType === 'rectangle' ? {
-        geo: 'rectangle',
-        w: 100,
-        h: 100,
-      } : {}
-    };
-
-    editor.createShapes([shapeProps]);
-  }, [editor]);
-
-  /**
-   * Move selected shapes
-   */
-  const moveSelection = useCallback((direction: string, distance: number) => {
-    if (!editor) return;
-
-    const selectedIds = editor.getSelectedShapeIds();
-    if (selectedIds.length === 0) return;
-
-    const offset = {
-      x: direction === 'left' ? -distance : direction === 'right' ? distance : 0,
-      y: direction === 'up' ? -distance : direction === 'down' ? distance : 0
-    };
-
-    selectedIds.forEach(id => {
-      const shape = editor.getShape(id);
-      if (shape) {
-        editor.updateShape({
-          ...shape,
-          x: shape.x + offset.x,
-          y: shape.y + offset.y
-        });
-      }
-    });
-  }, [editor]);
-
-  /**
-   * Create text shape
-   */
-  const createTextShape = useCallback((text: string, position?: { x: number; y: number }) => {
-    if (!editor) return;
-
-    const center = position || editor.getViewportScreenBounds().center;
-
-    const textProps = {
-      type: 'text' as const,
-      x: center.x,
-      y: center.y,
-      props: {
-        text: text,
-        size: 'm',
-        color: 'black'
-      }
-    };
-
-    editor.createShapes([textProps]);
-  }, [editor]);
-
-  /**
-   * Create mathematical expression
-   */
-  const createMathExpression = useCallback((expression: string, position?: { x: number; y: number }) => {
-    if (!editor) return;
-
-    // For now, create as text - will enhance with KaTeX rendering
-    const center = position || editor.getViewportScreenBounds().center;
-
-    const mathProps = {
-      type: 'text' as const,
-      x: center.x,
-      y: center.y,
-      props: {
-        text: `Math: ${expression}`,
-        size: 'l',
-        color: 'green'
-      }
-    };
-
-    editor.createShapes([mathProps]);
-  }, [editor]);
 
   /**
    * Handle whiteboard mount
@@ -228,12 +82,6 @@ export function MultiModalClassroom({
     console.log('Whiteboard mounted with editor:', editorInstance);
   }, []);
 
-  /**
-   * Toggle voice command listening
-   */
-  const toggleVoiceCommands = useCallback(() => {
-    setIsListeningForCommands(!isListeningForCommands);
-  }, [isListeningForCommands]);
 
   /**
    * Add message to transcript
@@ -307,15 +155,6 @@ export function MultiModalClassroom({
                   {sessionDuration}
                 </div>
 
-                <Button
-                  variant={isListeningForCommands ? "default" : "outline"}
-                  size="sm"
-                  onClick={toggleVoiceCommands}
-                  className="rounded-full gap-2"
-                >
-                  <Palette className="h-3 w-3" />
-                  Voice Drawing
-                </Button>
 
                 <Button
                   variant="destructive"
@@ -328,18 +167,6 @@ export function MultiModalClassroom({
               </div>
             </div>
 
-            {/* Voice Command Processor - Fixed Position when Active */}
-            {isListeningForCommands && (
-              <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-20">
-                <div className="bg-background/95 backdrop-blur-sm rounded-lg p-3 border shadow-lg max-w-sm">
-                  <VoiceCommandProcessor
-                    onCommand={executeDrawingCommand}
-                    isActive={isListeningForCommands}
-                    lastCommand={lastVoiceCommand}
-                  />
-                </div>
-              </div>
-            )}
           </div>
         </Panel>
 

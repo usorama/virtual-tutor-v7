@@ -25,7 +25,9 @@ interface SessionData {
 export default function ClassroomPage() {
   const router = useRouter();
   const supabase = createClient();
-  
+
+  console.log('🎯 ClassroomPage: Component mounting');
+
   // Session state
   const [sessionData, setSessionData] = useState<SessionData | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -46,9 +48,11 @@ export default function ClassroomPage() {
   
   // Connection state
   const [connectionState, setConnectionState] = useState<ConnectionState>(ConnectionState.Disconnected);
+  const [hasConnectedSuccessfully, setHasConnectedSuccessfully] = useState(false);
   
   // Check authentication and load user data
   useEffect(() => {
+    console.log('🔐 ClassroomPage: useEffect triggered - calling checkAuth');
     checkAuth();
   }, []);
   
@@ -68,24 +72,40 @@ export default function ClassroomPage() {
    * Check if user is authenticated
    */
   async function checkAuth() {
-    const { data: { user }, error } = await supabase.auth.getUser();
-    
-    if (error || !user) {
-      router.push('/login?redirect=/classroom');
-      return;
-    }
-    
-    setUserId(user.id);
-    
-    // Load user profile for topic preference
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('grade, preferred_subjects, selected_topics')
-      .eq('id', user.id)
-      .single();
-    
-    if (profile?.preferred_subjects && profile.preferred_subjects.length > 0) {
-      setCurrentTopic(`Grade ${profile.grade} ${profile.preferred_subjects[0]}`);
+    console.log('🔐 checkAuth: Starting authentication check');
+
+    try {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      console.log('🔐 checkAuth: Auth result', { user: user?.id, error: error?.message });
+
+      if (error || !user) {
+        console.log('🔐 checkAuth: No user or error, redirecting to login');
+        router.push('/login?redirect=/classroom');
+        return;
+      }
+
+      console.log('🔐 checkAuth: Setting userId:', user.id);
+      setUserId(user.id);
+
+      // Load user profile for topic preference
+      console.log('🔐 checkAuth: Loading user profile');
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('grade, preferred_subjects, selected_topics')
+        .eq('id', user.id)
+        .single();
+
+      console.log('🔐 checkAuth: Profile result', { profile, profileError: profileError?.message });
+
+      if (profile?.preferred_subjects && profile.preferred_subjects.length > 0) {
+        const topic = `Grade ${profile.grade} ${profile.preferred_subjects[0]}`;
+        console.log('🔐 checkAuth: Setting current topic:', topic);
+        setCurrentTopic(topic);
+      }
+
+      console.log('🔐 checkAuth: Authentication check completed successfully');
+    } catch (err) {
+      console.error('🔐 checkAuth: Unexpected error during auth check:', err);
     }
   }
   
@@ -132,6 +152,7 @@ export default function ClassroomPage() {
     
     setIsConnecting(true);
     setError(null);
+    setHasConnectedSuccessfully(false); // Reset connection flag for new session
     
     try {
       // Get the session for auth
@@ -184,13 +205,22 @@ export default function ClassroomPage() {
    * End the current session
    */
   async function endSession() {
-    if (!sessionData) return;
-    
+    console.log('🔚 endSession: Function called');
+    console.trace('🔚 endSession: Call stack trace');
+
+    if (!sessionData) {
+      console.log('🔚 endSession: No session data, returning early');
+      return;
+    }
+
+    console.log('🔚 endSession: Processing session end for session:', sessionData.sessionId);
+
     try {
       // Get the session for auth
       const { data: { session } } = await supabase.auth.getSession();
-      
+
       // End session in backend
+      console.log('🔚 endSession: Calling backend to end session');
       await fetch('/api/livekit', {
         method: 'POST',
         headers: {
@@ -202,22 +232,26 @@ export default function ClassroomPage() {
           sessionId: sessionData.sessionId,
         }),
       });
-      
+
       // Clean up audio manager
       if (audioManager) {
+        console.log('🔚 endSession: Cleaning up audio manager');
         audioManager.cleanup();
       }
-      
+
       // Reset state
+      console.log('🔚 endSession: Resetting state');
       setSessionData(null);
       setSessionStartTime(null);
       setSessionDuration(0);
       setConnectionState(ConnectionState.Disconnected);
-      
+      setHasConnectedSuccessfully(false);
+
       // Redirect to dashboard
+      console.log('🔚 endSession: Redirecting to dashboard');
       router.push('/dashboard');
     } catch (err) {
-      console.error('Error ending session:', err);
+      console.error('🔚 endSession: Error ending session:', err);
     }
   }
   
@@ -235,13 +269,16 @@ export default function ClassroomPage() {
    * Handle room connection
    */
   function handleRoomConnected() {
-    console.log('Room connected successfully');
+    console.log('🟢 handleRoomConnected: Room connected successfully');
     setConnectionState(ConnectionState.Connected);
     setIsConnecting(false);
+    setHasConnectedSuccessfully(true); // Track successful connection
+    setError(null); // Clear any previous errors
     // Note: Room instance can be accessed via useRoom hook inside the LiveKitRoom context
 
     // Initialize audio manager
     if (audioManager) {
+      console.log('🟢 handleRoomConnected: Initializing audio manager');
       // Note: Will initialize audio when room reference is available
     }
   }
@@ -250,12 +287,32 @@ export default function ClassroomPage() {
    * Handle room disconnection
    */
   function handleRoomDisconnected() {
+    console.log('🔴 handleRoomDisconnected: Room disconnected');
+    console.trace('🔴 handleRoomDisconnected: Call stack trace');
+
     setConnectionState(ConnectionState.Disconnected);
-    console.log('Room disconnected - cleaning up session');
-    // Only end session if we actually had a successful connection
-    // Don't auto-redirect on connection failures
-    if (sessionData && sessionStartTime) {
+    setIsConnecting(false);
+    console.log('🔴 handleRoomDisconnected: Room disconnected - cleaning up session');
+
+    // Only auto-redirect if we had a successful connection first
+    // This prevents redirect on immediate connection failures (invalid credentials)
+    if (hasConnectedSuccessfully && sessionData && sessionStartTime) {
+      console.log('🔴 handleRoomDisconnected: Had successful connection - calling endSession due to disconnection');
       endSession();
+    } else {
+      console.log('🔴 handleRoomDisconnected: No successful connection yet - showing error instead of redirecting');
+      setError('Failed to connect to voice session. Please check your internet connection and try again. If the problem persists, the LiveKit service may be temporarily unavailable.');
+
+      // Reset session data but don't redirect
+      setSessionData(null);
+      setSessionStartTime(null);
+      setSessionDuration(0);
+
+      // Clean up audio manager
+      if (audioManager) {
+        audioManager.cleanup();
+        setAudioManager(null);
+      }
     }
   }
   
@@ -283,6 +340,7 @@ export default function ClassroomPage() {
   
   // If we have a session, show the LiveKit room
   if (sessionData) {
+    console.log('🎬 ClassroomPage: Rendering LiveKit room interface');
     return (
       <div className="min-h-screen bg-gradient-to-b from-background to-muted p-4">
         <LiveKitRoom
@@ -316,6 +374,7 @@ export default function ClassroomPage() {
   }
   
   // Show start session interface
+  console.log('🎬 ClassroomPage: Rendering start session interface');
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
