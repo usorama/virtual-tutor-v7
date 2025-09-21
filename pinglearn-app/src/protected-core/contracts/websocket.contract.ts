@@ -5,6 +5,8 @@
  * Defines the interface for WebSocket connections
  */
 
+import { WebSocketSendData } from '../../types/websocket';
+
 export interface WebSocketConfig {
   url: string;
   protocols?: string[];
@@ -32,7 +34,7 @@ export interface WebSocketContract {
   /**
    * Send data through WebSocket
    */
-  send(data: any): void;
+  send(data: WebSocketSendData): void;
 
   /**
    * Register message handler

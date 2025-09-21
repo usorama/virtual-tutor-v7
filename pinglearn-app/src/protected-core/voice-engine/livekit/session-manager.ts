@@ -5,7 +5,7 @@
  * Manages session lifecycle, participant tracking, recording, and metrics
  */
 
-import { Room, Participant, RemoteParticipant, LocalParticipant, Track, RoomEvent } from 'livekit-client';
+import { Room, Participant, RemoteParticipant, LocalParticipant, Track, RoomEvent, ConnectionQuality, DisconnectReason } from 'livekit-client';
 import { VoiceSession } from '../../contracts/voice.contract';
 
 export interface SessionMetrics {
@@ -273,7 +273,7 @@ export class LiveKitSessionManager {
   /**
    * Handle connection quality changes
    */
-  private handleConnectionQualityChange(quality: any, participant?: Participant): void {
+  private handleConnectionQualityChange(quality: ConnectionQuality, participant?: Participant): void {
     if (participant) {
       const participantInfo = this.participants.get(participant.identity);
       if (participantInfo) {
@@ -285,7 +285,7 @@ export class LiveKitSessionManager {
   /**
    * Handle disconnection
    */
-  private handleDisconnection(reason?: any): void {
+  private handleDisconnection(reason?: DisconnectReason): void {
     this.addError('connection', `Room disconnected: ${reason}`, 'high', false);
 
     // End current speaking turn

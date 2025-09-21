@@ -4,6 +4,7 @@
  */
 
 import { Room, RoomEvent, Track, LocalAudioTrack, RemoteAudioTrack, ConnectionQuality } from 'livekit-client';
+import { AudioStats } from '../../../types/livekit';
 
 export interface AudioConfig {
   echoCancellation?: boolean;
@@ -202,7 +203,7 @@ export class AudioStreamManager {
   /**
    * Process WebRTC audio statistics
    */
-  private processAudioStats(stats: any[]): void {
+  private processAudioStats(stats: AudioStats[]): void {
     stats.forEach((report) => {
       if (report.type === 'outbound-rtp' && report.kind === 'audio') {
         // Calculate packet loss
