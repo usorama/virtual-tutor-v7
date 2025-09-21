@@ -15,9 +15,8 @@ import {
   mockUpdatePassword
 } from './mock-auth'
 
-// Enable mock authentication in development
-const USE_MOCK_AUTH = process.env.NODE_ENV === 'development' ||
-                      process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('mock-project')
+// Enable mock authentication only for truly mock projects
+const USE_MOCK_AUTH = process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('mock-project')
 
 export async function signIn(credentials: LoginCredentials): Promise<AuthResponse> {
   const validation = validateLoginForm(credentials.email, credentials.password)

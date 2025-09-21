@@ -4,9 +4,8 @@ import { validateLoginForm } from '@/lib/auth/validation'
 import { AUTH_CONSTANTS } from '@/lib/auth/constants'
 import { mockSignIn } from '@/lib/auth/mock-auth'
 
-// Enable mock authentication in development
-const USE_MOCK_AUTH = process.env.NODE_ENV === 'development' ||
-                      process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('mock-project')
+// Enable mock authentication only for truly mock projects
+const USE_MOCK_AUTH = process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('mock-project')
 
 export async function POST(request: NextRequest) {
   try {

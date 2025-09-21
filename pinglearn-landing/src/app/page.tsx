@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import TypewriterText from "@/components/TypewriterText";
 import ConicGradientButton from "@/components/ConicGradientButton";
+import { supabase } from "@/lib/supabase";
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -45,40 +46,40 @@ export default function Home() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
+      // Save directly to Supabase from client
+      const { error: dbError } = await supabase
+        .from('waitlist_signups')
+        .insert([
+          {
+            email: email.toLowerCase().trim(),
+            source: 'landing_page',
+            referrer: typeof window !== 'undefined' ? window.location.href : '',
+            created_at: new Date().toISOString()
+          }
+        ]);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        // Handle specific error cases
-        if (response.status === 409) {
-          setError("You're already on the waitlist! We'll notify you soon.");
+      if (dbError) {
+        // Check for duplicate email
+        if (dbError.code === '23505') {
+          setError("You're already on the waitlist!");
         } else {
-          setError(data.error || "Something went wrong. Please try again.");
+          console.error('Supabase error:', dbError);
+          setError("Something went wrong. Please try again.");
         }
-        return;
+      } else {
+        setSuccessMessage("Thank you! We'll be in touch soon.");
+        setIsSubmitted(true);
+        setEmail("");
+
+        // Reset after 7 seconds
+        setTimeout(() => {
+          setIsSubmitted(false);
+          setSuccessMessage("");
+        }, 7000);
       }
-
-      // Success!
-      setSuccessMessage("Welcome to the future of learning!");
-      setIsSubmitted(true);
-      setEmail("");
-
-      // Reset after 7 seconds
-      setTimeout(() => {
-        setIsSubmitted(false);
-        setSuccessMessage("");
-      }, 7000);
-
     } catch (error) {
-      console.error("Submission error:", error);
-      setError("Network error. Please check your connection and try again.");
+      console.error("Email submission error:", error);
+      setError("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
     }

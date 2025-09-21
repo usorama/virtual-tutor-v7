@@ -26,8 +26,7 @@ const createMockServerClient = () => {
 
 export async function createClient() {
   // Check if we should use mock client
-  const useMock = process.env.NODE_ENV === 'development' &&
-                  process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('mock-project')
+  const useMock = process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('mock-project')
 
   if (useMock) {
     console.warn('Using mock Supabase server client for development')
@@ -36,9 +35,16 @@ export async function createClient() {
 
   const cookieStore = await cookies()
 
+  // Use new Publishable Key (2025 standard) - fallback to legacy anon key if needed
+  const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!publishableKey) {
+    throw new Error('Missing Supabase Publishable Key - Please set NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY')
+  }
+
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    publishableKey,
     {
       cookies: {
         getAll() {
