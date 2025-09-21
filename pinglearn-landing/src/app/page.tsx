@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import TypewriterText from "@/components/TypewriterText";
 import ConicGradientButton from "@/components/ConicGradientButton";
-import LiquidMetalLogo from "@/components/LiquidMetalLogo";
+import LiquidMetalP from "@/components/LiquidMetalP";
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -144,7 +144,7 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             className="flex items-center gap-3"
           >
-            <LiquidMetalLogo size={36} />
+            <LiquidMetalP size={36} />
             <div className="text-2xl font-bold">
               <span className="text-white">Ping</span>
               <span className="text-cyan-500">Learn</span>
