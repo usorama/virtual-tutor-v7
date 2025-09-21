@@ -153,7 +153,10 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             className="text-sm text-white/60"
           >
-            October 4, 2025
+            <TypewriterText
+              words={["coming soon...", "October 4, 2025", "join the waitlist", "future of learning"]}
+              className="text-white/60"
+            />
           </motion.div>
         </header>
 
