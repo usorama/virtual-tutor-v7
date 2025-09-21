@@ -142,13 +142,15 @@ export default function Home() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="flex items-center gap-3"
+            className="text-3xl tracking-tight"
+            style={{
+              fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+              fontWeight: 500,
+              letterSpacing: "-0.02em"
+            }}
           >
-            <LiquidMetalP size={36} />
-            <div className="text-2xl font-bold">
-              <span className="text-white">Ping</span>
-              <span className="text-cyan-500">Learn</span>
-            </div>
+            <span className="text-white">ping</span>
+            <span className="text-cyan-500">learn</span>
           </motion.div>
 
           <motion.div
