@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { VoiceSessionManager, type VoiceSessionMetrics, type TranscriptEntry } from '@/features/voice/VoiceSessionManager';
+import { VoiceSession } from '@/types/session';
 
 export interface LiveMetrics {
   duration: number; // Current session duration in seconds
@@ -94,13 +95,13 @@ export function useSessionMetrics(): UseSessionMetricsReturn {
       startMetricsTracking();
     };
 
-    const handleSessionEnded = ({ metrics }: { session: any; metrics: VoiceSessionMetrics }) => {
+    const handleSessionEnded = ({ metrics }: { session: VoiceSession; metrics: VoiceSessionMetrics }) => {
       setCurrentMetrics(metrics);
       stopMetricsTracking();
       addToMetricsHistory(metrics);
     };
 
-    const handleTranscriptAdded = ({ transcript }: { transcript: any }) => {
+    const handleTranscriptAdded = ({ transcript }: { transcript: TranscriptEntry }) => {
       const newTranscript: TranscriptEntry = {
         id: transcript.id,
         voiceSessionId: transcript.voice_session_id,

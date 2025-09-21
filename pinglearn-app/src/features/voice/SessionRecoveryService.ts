@@ -44,7 +44,7 @@ export interface SessionSnapshot {
   startedAt: string;
   totalInteractions: number;
   lastActivity: string;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }
 
 /**
@@ -391,7 +391,7 @@ export class SessionRecoveryService {
     // Monitor connection quality and stability
     this.connectionMonitor = setInterval(() => {
       this.checkConnectionHealth();
-    }, 5000) as any; // Check every 5 seconds
+    }, 5000); // Check every 5 seconds
   }
 
   private checkConnectionHealth(): void {
@@ -532,7 +532,7 @@ export class SessionRecoveryService {
     this.recoveryState.lastError = null;
   }
 
-  private emit(event: string, data?: any): void {
+  private emit(event: string, data?: unknown): void {
     const listeners = this.eventListeners.get(event);
     if (listeners) {
       listeners.forEach(callback => {

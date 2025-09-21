@@ -166,7 +166,7 @@ class MemoryManager {
    */
   getMemoryMetrics(): MemoryMetrics {
     if (typeof window !== 'undefined' && 'performance' in window && 'memory' in performance) {
-      const memory = (performance as any).memory;
+      const memory = (performance as unknown as { memory: { usedJSHeapSize: number; totalJSHeapSize: number } }).memory;
       return {
         heapUsed: Math.round(memory.usedJSHeapSize / 1024 / 1024 * 100) / 100,
         heapTotal: Math.round(memory.totalJSHeapSize / 1024 / 1024 * 100) / 100,
@@ -303,7 +303,7 @@ class MemoryManager {
             // Keep only recent 25 items instead of 50
             const entries = Array.from(cache.entries());
             cache.clear();
-            entries.slice(-25).forEach((entry: any) => {
+            entries.slice(-25).forEach((entry: [string, unknown]) => {
               const [key, value] = entry;
               cache.set(key, value);
             });

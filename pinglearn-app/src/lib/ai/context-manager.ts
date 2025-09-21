@@ -4,6 +4,7 @@
  */
 
 import { createClient } from '@/lib/supabase/server';
+import { CurriculumTopic, AIPersonalizationData } from '@/types/ai-context';
 
 export interface ContentChunk {
   id: string;
@@ -13,7 +14,7 @@ export interface ContentChunk {
   sequence_number: number;
   topics?: string[];
   title?: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
   created_at: string;
 }
 
@@ -379,7 +380,7 @@ export class ContentContextManager {
   /**
    * Get recommended focus areas based on student profile
    */
-  private static getRecommendedFocus(profile: any, curriculum: any[]): string[] {
+  private static getRecommendedFocus(profile: AIPersonalizationData, curriculum: CurriculumTopic[]): string[] {
     const recommendations: string[] = [];
     
     // Find topics not yet mastered

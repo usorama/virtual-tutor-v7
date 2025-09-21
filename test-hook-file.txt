@@ -1,3 +1,0 @@
-This is a test file to verify auto-commit hook functionality.
-Created at: 2025-09-21
-Purpose: Testing hook execution
