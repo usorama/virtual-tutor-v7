@@ -19,7 +19,7 @@ from livekit.agents import (
     cli,
     AutoSubscribe
 )
-from livekit.rtc import DataPacket_pb2
+# Removed DataPacket_pb2 import - not needed
 from livekit.plugins import google, silero
 from livekit.plugins.turn_detector.english import EnglishModel
 from dotenv import load_dotenv
