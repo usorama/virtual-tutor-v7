@@ -10,6 +10,7 @@ import { LiveKitVoiceService } from '../voice-engine/livekit/service';
 import { GeminiVoiceService } from '../voice-engine/gemini/service';
 import { getDisplayBuffer } from '../transcription/display/buffer';
 import { FeatureFlagService } from '../../shared/services/feature-flags';
+import type { VoiceConfig } from '../contracts/voice.contract';
 // Import types for future use
 // import type { DisplayItem } from '../transcription/display/buffer';
 // import type { ProcessedText } from '../contracts/transcription.contract';
@@ -122,13 +123,21 @@ export class SessionOrchestrator {
         this.errorCount++;
       }
 
-      // Start voice service based on feature flags and config
+      // Initialize and start LiveKit session
       if (config.voiceEnabled && this.livekitService) {
         try {
+          // CRITICAL FIX: Initialize service before use
+          const voiceConfig: VoiceConfig = {
+            serverUrl: process.env.NEXT_PUBLIC_LIVEKIT_URL!,
+            roomName: `session_${sessionId}`,
+            participantName: config.studentId
+          };
+
+          await this.livekitService.initialize(voiceConfig);
           await this.livekitService.startSession(config.studentId, config.topic);
           this.currentSession.voiceConnectionStatus = 'connected';
         } catch (error) {
-          console.warn('LiveKit session start failed:', error);
+          console.error('LiveKit session start failed:', error);
           this.currentSession.voiceConnectionStatus = 'error';
           this.errorCount++;
         }

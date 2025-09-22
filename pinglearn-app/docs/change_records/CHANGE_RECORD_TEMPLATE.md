@@ -280,10 +280,36 @@ curl -X POST http://localhost:3006/api/endpoint
 ```markdown
 ## Implementation Plan
 
+### CRITICAL: Pre-Implementation Safety Checkpoint
+**🚨 MANDATORY**: Before making ANY changes to protected core, create a git checkpoint commit
+
+#### Checkpoint Requirements
+1. **Stage All Current Changes**: `git add .`
+2. **Create Checkpoint Commit**:
+   ```bash
+   git commit -m "checkpoint: Pre-implementation checkpoint before PC-XXX
+
+   CHECKPOINT: Creating safety rollback point before implementing PC-XXX
+   - [Brief description of change being implemented]
+   - All current changes staged and committed
+   - Ready for protected core change implementation
+   - Can rollback to this point if PC-XXX implementation fails
+
+   🚨 This commit serves as the rollback point for PC-XXX implementation"
+   ```
+3. **Record Checkpoint Hash**: [commit hash for quick rollback]
+4. **Update Change Record**: Document checkpoint creation in Section 13
+
+#### Rollback Command (If Needed)
+```bash
+git reset --hard [checkpoint-hash]
+```
+
 ### Phase 1: Preparation ([X] minutes)
-1. [Specific preparatory task]
-2. [Environment setup task]
-3. [Dependency verification task]
+1. ✅ Create safety checkpoint commit (COMPLETED ABOVE)
+2. [Specific preparatory task]
+3. [Environment setup task]
+4. [Dependency verification task]
 
 ### Phase 2: Core Implementation ([X] minutes)
 1. [Implementation step 1]
@@ -301,6 +327,7 @@ curl -X POST http://localhost:3006/api/endpoint
 3. [Performance validation]
 
 ### Total Estimated Time: [X] hours
+**Note**: Checkpoint creation adds ~2 minutes to total time but provides critical safety net
 ```
 
 ## Section 11: Rollback & Contingency
@@ -356,6 +383,12 @@ curl -X POST http://localhost:3006/api/endpoint
 ```markdown
 ## Implementation Results
 
+### Safety Checkpoint Information
+- **Checkpoint Commit Hash**: [commit hash]
+- **Checkpoint Created**: [YYYY-MM-DD HH:MM]
+- **Rollback Command**: `git reset --hard [checkpoint-hash]`
+- **Checkpoint Status**: ✅ Available for rollback if needed
+
 ### Changes Implemented
 - [✅/❌] [Change description]
 - [✅/❌] [Integration point]
@@ -370,6 +403,12 @@ curl -X POST http://localhost:3006/api/endpoint
 ### Issues Discovered
 - **Issue 1**: [Description] → **Resolution**: [Solution]
 - **Issue 2**: [Description] → **Status**: [Pending/Resolved]
+
+### Rollback Actions Taken (If Any)
+- [ ] No rollback needed - implementation successful
+- [ ] Partial rollback to checkpoint: [reason]
+- [ ] Full rollback to checkpoint: [reason]
+- [ ] Alternative solution implemented: [description]
 
 ### Follow-up Actions Required
 - [ ] [Action item 1]
