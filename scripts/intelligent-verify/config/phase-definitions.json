@@ -1,0 +1,67 @@
+{
+  "phases": [
+    {
+      "id": "phase-0",
+      "name": "Foundation",
+      "description": "Protected Core establishment and TypeScript fixes",
+      "evidence": {
+        "branchPatterns": ["phase-0-*", "*foundation*"],
+        "completionMarkers": ["PC-001", "PC-002"],
+        "requiredFiles": [
+          "src/protected-core/claude.md",
+          "src/protected-core/websocket/manager/singleton-manager.ts"
+        ],
+        "codeSignals": ["WebSocketManager.getInstance", "protected-core"]
+      }
+    },
+    {
+      "id": "phase-1",
+      "name": "Core Services",
+      "description": "WebSocket singleton, LiveKit service, Gemini service skeleton",
+      "evidence": {
+        "branchPatterns": ["phase-1-*", "*core-services*"],
+        "completionMarkers": ["PC-003", "PC-004"],
+        "requiredFiles": [
+          "src/protected-core/voice-engine/livekit/service.ts",
+          "src/protected-core/transcription/display/buffer.ts"
+        ],
+        "codeSignals": ["LiveKitVoiceService", "DisplayBuffer"]
+      }
+    },
+    {
+      "id": "phase-2",
+      "name": "Gemini Integration",
+      "description": "Gemini Live API connection and transcription pipeline",
+      "evidence": {
+        "branchPatterns": ["phase-2-*", "*gemini*"],
+        "completionMarkers": ["PC-005", "PC-006", "PC-007"],
+        "requiredFiles": [
+          "livekit-agent/agent.py",
+          "src/protected-core/voice-engine/gemini/service.ts"
+        ],
+        "codeSignals": ["google.beta.realtime", "gemini-2.0-flash"]
+      }
+    },
+    {
+      "id": "phase-3",
+      "name": "Stabilization & UAT",
+      "description": "Critical testing, UAT rounds, and deployment prep",
+      "evidence": {
+        "branchPatterns": ["phase-3-*", "*stabilization*", "*uat*"],
+        "completionMarkers": ["UAT-Round-1", "UAT-Round-2"],
+        "requiredFiles": [
+          "e2e/critical-path.spec.ts",
+          "docs/new-arch-impl-planning/phase-3-stabilization.md"
+        ],
+        "codeSignals": ["critical-path", "uat-checklist"]
+      }
+    }
+  ],
+  "evidence_weights": {
+    "git_branch": 0.90,
+    "change_records": 0.85,
+    "required_files": 0.70,
+    "code_signals": 0.60,
+    "commit_patterns": 0.75
+  }
+}

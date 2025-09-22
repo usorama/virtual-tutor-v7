@@ -129,6 +129,20 @@
     animation: text-slide 8s ease-in-out infinite;
   }
 
+  /* Seamless infinite carousel */
+  @keyframes infinite-scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  .infinite-scroll {
+    animation: infinite-scroll 10s linear infinite;
+  }
+
   /* Curved text path effect */
   .curved-text-path {
     width: 100%;

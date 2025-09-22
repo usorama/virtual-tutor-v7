@@ -91,7 +91,7 @@ export default function Home() {
       {/* Animated Background with grid and particles */}
       <AnimatedBackground />
 
-      <div className="relative z-10 container mx-auto px-4 min-h-screen flex flex-col justify-between pt-0 pb-8">
+      <div className="relative z-10 container mx-auto px-4 h-screen flex flex-col justify-between py-4">
 
         {/* Header */}
         <header className="flex justify-between items-center">
@@ -122,14 +122,14 @@ export default function Home() {
         </header>
 
         {/* Main Content */}
-        <div className="flex-1 flex items-center justify-center py-12">
+        <div className="flex-1 flex items-center justify-center py-4">
           <div className="max-w-5xl w-full">
             {/* Curved Text Animation - Centered */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1 }}
-              className="text-center mb-12"
+              className="text-center mb-6"
             >
               <p className="text-white/40 text-sm tracking-[0.3em] uppercase">
                 The future of learning is personal
@@ -141,9 +141,9 @@ export default function Home() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.2 }}
-              className="text-center mb-8"
+              className="text-center mb-4"
             >
-              <h1 className="text-5xl md:text-7xl font-normal mb-6 leading-tight">
+              <h1 className="text-4xl md:text-6xl font-normal mb-4 leading-tight">
                 An AI tutor that is
                 <br />
                 <TypewriterText
@@ -167,25 +167,13 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 0.4 }}
-              className="mt-16 w-full overflow-hidden"
+              className="mt-8 w-full overflow-hidden"
             >
               <div className="relative">
                 <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
                 <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
 
-                <motion.div
-                  animate={{
-                    x: ["0%", "-50%"],
-                  }}
-                  transition={{
-                    x: {
-                      duration: 10,
-                      repeat: Infinity,
-                      ease: "linear",
-                    },
-                  }}
-                  className="flex space-x-12"
-                >
+                <div className="flex space-x-12 infinite-scroll">
                   {/* First set of features */}
                   {features.map((feature, index) => (
                     <div key={`set1-${index}`} className="flex-shrink-0 text-center">
@@ -209,7 +197,7 @@ export default function Home() {
                       </p>
                     </div>
                   ))}
-                </motion.div>
+                </div>
               </div>
             </motion.div>
 
@@ -218,7 +206,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.6 }}
-              className="max-w-md mx-auto mt-20"
+              className="max-w-md mx-auto mt-8"
             >
               {!isSubmitted ? (
                 <>
