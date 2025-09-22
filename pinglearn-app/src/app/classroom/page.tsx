@@ -342,111 +342,173 @@ export default function ClassroomPage() {
     );
   }
 
-  // If we have an active session, show the transcription interface
+  // Enhanced dual-pane learning interface
   if (session && (isActive || isPaused)) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-muted p-4">
-        <div className="max-w-6xl mx-auto space-y-4">
-          {/* Session Header */}
-          <Card>
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <CardTitle>AI Learning Session</CardTitle>
-                    <Badge variant={getStatusBadgeVariant(sessionState.status)}>
-                      {getDetailedStatus()}
-                    </Badge>
-                    {voiceConnected && (
-                      <Badge variant="outline" className="text-green-600">
-                        <Mic className="h-3 w-3 mr-1" />
-                        Connected
+      <div className="min-h-screen bg-gradient-to-b from-background to-muted">
+        {/* Fixed Header */}
+        <div className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b">
+          <div className="max-w-7xl mx-auto p-4">
+            <Card>
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <CardTitle>AI Learning Session</CardTitle>
+                      <Badge variant={getStatusBadgeVariant(sessionState.status)}>
+                        {getDetailedStatus()}
                       </Badge>
-                    )}
-                  </div>
-                  <CardDescription className="flex items-center space-x-4">
-                    <span>{currentTopic}</span>
-                    <span>•</span>
-                    <span>Duration: {formatDuration(liveMetrics.duration)}</span>
-                    <span>•</span>
-                    <span>Quality: {qualityScore}%</span>
-                  </CardDescription>
+                      {voiceConnected && (
+                        <Badge variant="outline" className="text-green-600">
+                          <Mic className="h-3 w-3 mr-1" />
+                          Connected
+                        </Badge>
+                      )}
+                    </div>
+                    <CardDescription className="flex items-center space-x-4">
+                      <span>{currentTopic}</span>
+                      <span>•</span>
+                      <span>Duration: {formatDuration(liveMetrics.duration)}</span>
+                      <span>•</span>
+                      <span>Quality: {qualityScore}%</span>
+                    </CardDescription>
 
-                  {/* Real-time metrics */}
-                  <div className="flex items-center space-x-4 text-xs text-muted-foreground">
-                    <div className="flex items-center space-x-1">
-                      <Activity className="h-3 w-3" />
-                      <span>{liveMetrics.messagesExchanged} messages</span>
+                    {/* Real-time metrics */}
+                    <div className="flex items-center space-x-4 text-xs text-muted-foreground">
+                      <div className="flex items-center space-x-1">
+                        <Activity className="h-3 w-3" />
+                        <span>{liveMetrics.messagesExchanged} messages</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <BarChart3 className="h-3 w-3" />
+                        <span>Engagement: {engagementTrend}</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <Zap className="h-3 w-3" />
+                        <span>{liveMetrics.mathEquationsCount} equations</span>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-1">
-                      <BarChart3 className="h-3 w-3" />
-                      <span>Engagement: {engagementTrend}</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <Zap className="h-3 w-3" />
-                      <span>{liveMetrics.mathEquationsCount} equations</span>
-                    </div>
+                  </div>
+
+                  {/* Session Controls */}
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant={audioControls.isMuted ? "destructive" : "secondary"}
+                      size="icon"
+                      onClick={toggleMute}
+                      disabled={isConnecting || isLoading}
+                    >
+                      {audioControls.isMuted ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                    </Button>
+
+                    <Button
+                      variant="secondary"
+                      size="icon"
+                      onClick={togglePause}
+                      disabled={isConnecting || isLoading}
+                    >
+                      {isPaused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
+                    </Button>
+
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      onClick={endVoiceSession}
+                      disabled={isConnecting || isLoading}
+                    >
+                      {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Square className="h-4 w-4" />}
+                    </Button>
                   </div>
                 </div>
+              </CardHeader>
+            </Card>
+          </div>
+        </div>
 
-                {/* Session Controls */}
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant={audioControls.isMuted ? "destructive" : "secondary"}
-                    size="icon"
-                    onClick={toggleMute}
-                    disabled={isConnecting || isLoading}
-                  >
-                    {audioControls.isMuted ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-                  </Button>
+        {/* Dual-Pane Content Area */}
+        <div className="max-w-7xl mx-auto p-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[calc(100vh-200px)]">
 
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    onClick={togglePause}
-                    disabled={isConnecting || isLoading}
-                  >
-                    {isPaused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
-                  </Button>
-
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    onClick={endVoiceSession}
-                    disabled={isConnecting || isLoading}
-                  >
-                    {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Square className="h-4 w-4" />}
-                  </Button>
+            {/* Left Pane: Lesson Content */}
+            <Card className="flex flex-col h-full">
+              <CardHeader className="border-b">
+                <CardTitle>Lesson: {currentTopic}</CardTitle>
+                <CardDescription>Interactive learning content</CardDescription>
+              </CardHeader>
+              <CardContent className="flex-1 overflow-auto p-6">
+                {/* Placeholder for lesson content */}
+                <div className="prose prose-sm max-w-none">
+                  <h3>Today&apos;s Topic</h3>
+                  <p className="text-muted-foreground">
+                    Lesson materials and interactive content will appear here.
+                  </p>
+                  <div className="mt-4 p-4 bg-muted rounded-lg">
+                    <p className="text-sm font-medium mb-2">Upcoming Features:</p>
+                    <ul className="text-sm text-muted-foreground space-y-1">
+                      <li>• Interactive whiteboard</li>
+                      <li>• Practice problems</li>
+                      <li>• Visual demonstrations</li>
+                      <li>• Step-by-step solutions</li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            </CardHeader>
-          </Card>
+              </CardContent>
+            </Card>
 
-          {/* Main Transcription Display */}
-          <TranscriptionDisplay
-            sessionId={sessionId || undefined}
-            className="min-h-[600px]"
-          />
+            {/* Right Pane: Transcription with Tabs */}
+            <Card className="flex flex-col h-full">
+              <CardHeader className="border-b">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>AI Teacher</CardTitle>
+                    <CardDescription>Real-time transcription with math</CardDescription>
+                  </div>
+                  {/* Tab switcher (future functionality) */}
+                  <div className="flex space-x-1 bg-muted p-1 rounded-md">
+                    <button
+                      className="px-3 py-1 rounded bg-background text-sm font-medium"
+                    >
+                      Transcript
+                    </button>
+                    <button
+                      className="px-3 py-1 rounded text-sm text-muted-foreground hover:bg-background/50"
+                      disabled
+                    >
+                      Notes
+                    </button>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="flex-1 p-0 overflow-hidden">
+                <TranscriptionDisplay
+                  sessionId={sessionId || undefined}
+                  className="h-full"
+                />
+              </CardContent>
+            </Card>
+          </div>
 
-          {/* LiveKit Voice Connection */}
+          {/* LiveKit Voice Connection (Hidden) */}
           {roomName && userId && isActive && (
-            <LiveKitRoom
-              roomName={roomName}
-              participantId={userId}
-              participantName={`Student-${userId.slice(0, 8)}`}
-              onConnected={() => {
-                setVoiceConnected(true);
-                console.log('LiveKit voice connected');
-              }}
-              onDisconnected={() => {
-                setVoiceConnected(false);
-                console.log('LiveKit voice disconnected');
-              }}
-              onError={(error) => {
-                console.error('LiveKit error:', error);
-                setErrorBoundary({ hasError: true, error });
-              }}
-            />
+            <div className="hidden">
+              <LiveKitRoom
+                roomName={roomName}
+                participantId={userId}
+                participantName={`Student-${userId.slice(0, 8)}`}
+                onConnected={() => {
+                  setVoiceConnected(true);
+                  console.log('LiveKit voice connected');
+                }}
+                onDisconnected={() => {
+                  setVoiceConnected(false);
+                  console.log('LiveKit voice disconnected');
+                }}
+                onError={(error) => {
+                  console.error('LiveKit error:', error);
+                  setErrorBoundary({ hasError: true, error });
+                }}
+              />
+            </div>
           )}
 
           {/* Status Alerts */}

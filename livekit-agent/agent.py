@@ -19,9 +19,12 @@ from livekit.agents import (
     cli,
     AutoSubscribe
 )
+from livekit.rtc import DataPacket_pb2
 from livekit.plugins import google, silero
 from livekit.plugins.turn_detector.english import EnglishModel
 from dotenv import load_dotenv
+import json
+import re
 
 # Load environment variables
 load_dotenv()  # Load local .env first
@@ -73,8 +76,83 @@ You have access to the complete NCERT Class X Mathematics textbook content inclu
 Remember to make learning enjoyable and build the student's confidence!
 """
 
-# Transcription webhook functionality will be handled by VoiceAssistant's built-in transcription
-# The VoiceAssistant automatically manages transcription publishing to the room
+# Transcription publishing functionality
+async def publish_transcript(room: rtc.Room, speaker: str, text: str):
+    """Publish transcript data to all participants via data channel"""
+    try:
+        # Detect math patterns in text
+        math_segments = detect_math_patterns(text)
+
+        # Create data packet
+        data = {
+            "type": "transcript",
+            "speaker": speaker,
+            "segments": math_segments,
+            "timestamp": datetime.now().isoformat()
+        }
+
+        # Publish to all participants
+        packet = json.dumps(data).encode('utf-8')
+        await room.local_participant.publish_data(
+            packet,
+            reliable=True
+        )
+        logger.info(f"Published transcript from {speaker}: {text[:50]}...")
+    except Exception as e:
+        logger.error(f"Error publishing transcript: {e}")
+
+def detect_math_patterns(text: str):
+    """Detect and mark mathematical expressions in text"""
+    segments = []
+
+    # Common math patterns to detect
+    math_indicators = [
+        r'x\^2|x squared',
+        r'\d+x\s*[+-]\s*\d+',
+        r'equals?\s+\d+|=\s*\d+',
+        r'square root',
+        r'fraction|over|divided by',
+        r'quadratic',
+        r'equation'
+    ]
+
+    # Check if text contains math
+    has_math = any(re.search(pattern, text, re.IGNORECASE) for pattern in math_indicators)
+
+    if has_math:
+        # For now, mark the entire text as potentially containing math
+        segments.append({
+            "type": "math",
+            "content": text,
+            "latex": convert_to_latex(text)
+        })
+    else:
+        segments.append({
+            "type": "text",
+            "content": text
+        })
+
+    return segments
+
+def convert_to_latex(text: str) -> str:
+    """Convert spoken math to LaTeX notation"""
+    latex = text
+
+    # Basic conversions
+    replacements = [
+        (r'x squared', 'x^2'),
+        (r'x cubed', 'x^3'),
+        (r'(\d+)x\s*\+\s*(\d+)', r'\1x + \2'),
+        (r'(\d+)x\s*-\s*(\d+)', r'\1x - \2'),
+        (r'equals\s*(\d+)', r'= \1'),
+        (r'square root of (\d+)', r'\\sqrt{\1}'),
+        (r'(\d+) over (\d+)', r'\\frac{\1}{\2}'),
+    ]
+
+    for pattern, replacement in replacements:
+        latex = re.sub(pattern, replacement, latex, flags=re.IGNORECASE)
+
+    return latex
 
 async def entrypoint(ctx: JobContext):
     """Main entry point for the LiveKit agent"""
@@ -125,6 +203,10 @@ async def entrypoint(ctx: JobContext):
     await session.generate_reply(instructions=greeting_instructions)
 
     logger.info("Sent proactive greeting to student")
+
+    # Publish the greeting transcript
+    greeting_text = "Hello! Welcome to today's mathematics session. I'm your AI mathematics teacher. What specific topic from your Class 10 Mathematics curriculum would you like to explore today?"
+    await publish_transcript(ctx.room, "teacher", greeting_text)
 
     # Keep the session alive
     try:

@@ -113,11 +113,43 @@ export function LiveKitRoom({
       console.log('Connection quality:', quality);
     };
 
+    // Handle data packets (transcriptions)
+    const handleDataReceived = (payload: Uint8Array) => {
+      try {
+        const decoder = new TextDecoder();
+        const data = JSON.parse(decoder.decode(payload));
+
+        if (data.type === 'transcript') {
+          // Import DisplayBuffer and add transcript
+          import('@/protected-core').then(({ getDisplayBuffer }) => {
+            const buffer = getDisplayBuffer();
+
+            // Process each segment from the transcript
+            data.segments.forEach((segment: any) => {
+              buffer.addItem({
+                type: segment.type as 'text' | 'math',
+                content: segment.content,
+                speaker: data.speaker === 'teacher' ? 'ai' : data.speaker as 'student' | 'ai',
+                rendered: segment.latex
+              });
+            });
+
+            console.log('Added transcript to display buffer:', data.segments.length, 'segments');
+          }).catch(err => {
+            console.error('Failed to access DisplayBuffer:', err);
+          });
+        }
+      } catch (error) {
+        console.error('Error processing data packet:', error);
+      }
+    };
+
     room.on(RoomEvent.TrackSubscribed, handleTrackSubscribed);
     room.on(RoomEvent.TrackUnsubscribed, handleTrackUnsubscribed);
     room.on(RoomEvent.Connected, handleConnected);
     room.on(RoomEvent.Disconnected, handleDisconnected);
     room.on(RoomEvent.ConnectionQualityChanged, handleConnectionQualityChanged);
+    room.on(RoomEvent.DataReceived, handleDataReceived);
 
     return () => {
       room.off(RoomEvent.TrackSubscribed, handleTrackSubscribed);
@@ -125,6 +157,7 @@ export function LiveKitRoom({
       room.off(RoomEvent.Connected, handleConnected);
       room.off(RoomEvent.Disconnected, handleDisconnected);
       room.off(RoomEvent.ConnectionQualityChanged, handleConnectionQualityChanged);
+      room.off(RoomEvent.DataReceived, handleDataReceived);
     };
   }, [room, onConnected, onDisconnected]);
 
