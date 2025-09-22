@@ -62,7 +62,7 @@ export interface VoiceSessionConfig {
 }
 
 export interface SessionControls {
-  start: () => Promise<void>;
+  start: () => Promise<{sessionId: string; roomName: string}>;
   stop: () => Promise<void>;
   pause: () => Promise<void>;
   resume: () => Promise<void>;
@@ -185,9 +185,12 @@ export class VoiceSessionManager {
   }
 
   /**
-   * Start voice session
+   * Start voice session - Enhanced for PC-006 WebRTC integration
    */
-  public async startSession(): Promise<void> {
+  public async startSession(): Promise<{
+    sessionId: string;
+    roomName: string;
+  }> {
     if (!this.currentSession) {
       throw new Error('No session created. Call createSession first.');
     }
@@ -230,10 +233,36 @@ export class VoiceSessionManager {
       });
 
       this.emit('sessionStarted', this.currentSession);
+
+      // Return session data for WebRTC connection (PC-006 enhancement)
+      return {
+        sessionId: this.currentSession.sessionId,
+        roomName: this.currentSession.livekitRoomName
+      };
     } catch (error) {
       await this.handleSessionError(error as Error);
       throw error;
     }
+  }
+
+  /**
+   * Start voice session (convenience method for PC-006 WebRTC integration)
+   * Creates and starts a session in one call
+   */
+  public async startVoiceSession(studentId: string, topic: string): Promise<{
+    sessionId: string;
+    roomName: string;
+  }> {
+    const config: VoiceSessionConfig = {
+      studentId,
+      topic,
+      voiceEnabled: true,
+      mathTranscriptionEnabled: true,
+      recordingEnabled: true
+    };
+
+    await this.createSession(config);
+    return await this.startSession();
   }
 
   /**

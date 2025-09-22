@@ -10,6 +10,7 @@ import { useVoiceSession } from '@/hooks/useVoiceSession';
 import { useSessionState } from '@/hooks/useSessionState';
 import { useSessionMetrics } from '@/hooks/useSessionMetrics';
 import { SessionRecoveryService } from './SessionRecoveryService';
+import { LiveKitRoom } from '@/components/voice/LiveKitRoom';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -83,6 +84,8 @@ export function VoiceSessionControls({
   const [volume, setVolume] = useState(80);
   const [isMuted, setIsMuted] = useState(false);
   const [recoveryService] = useState(() => SessionRecoveryService.getInstance());
+  const [roomData, setRoomData] = useState<{sessionId: string, roomName: string} | null>(null);
+  const [voiceConnected, setVoiceConnected] = useState(false);
 
   // Handle errors
   useEffect(() => {
@@ -106,7 +109,9 @@ export function VoiceSessionControls({
         });
       }
 
-      await controls.start();
+      // Start session and get room data for WebRTC connection (PC-006 enhancement)
+      const sessionData = await controls.start();
+      setRoomData(sessionData);
       onSessionStart?.();
     } catch (err) {
       console.error('Failed to start session:', err);
@@ -117,6 +122,8 @@ export function VoiceSessionControls({
     try {
       clearError();
       const finalMetrics = await endSession();
+      setRoomData(null); // Clear WebRTC room data
+      setVoiceConnected(false);
       onSessionEnd?.();
       console.log('Session ended with metrics:', finalMetrics);
     } catch (err) {
@@ -296,6 +303,20 @@ export function VoiceSessionControls({
                 <CheckCircle className="h-4 w-4 text-muted-foreground" />
                 <span>{qualityScore}% quality</span>
               </div>
+            </div>
+          )}
+
+          {/* WebRTC Voice Connection - PC-006 Integration */}
+          {roomData && (
+            <div className="mt-4 pt-4 border-t">
+              <LiveKitRoom
+                roomName={roomData.roomName}
+                participantId={studentId}
+                participantName={`Student_${studentId}`}
+                onConnected={() => setVoiceConnected(true)}
+                onDisconnected={() => setVoiceConnected(false)}
+                onError={(error) => console.error('LiveKit connection error:', error)}
+              />
             </div>
           )}
         </CardContent>

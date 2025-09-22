@@ -225,7 +225,7 @@ export function useVoiceSession(): UseVoiceSessionReturn {
 
   // Get session controls
   const controls = managerRef.current?.getSessionControls() || {
-    start: async () => {},
+    start: async () => ({ sessionId: '', roomName: '' }),
     stop: async () => {},
     pause: async () => {},
     resume: async () => {},

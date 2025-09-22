@@ -663,6 +663,14 @@ All user data is protected with RLS policies:
 - **Change Process**: Create change record in `docs/change_records/protected_core_changes/`
 - **Approval Required**: Explicit stakeholder approval before ANY protected-core changes
 
+### 📋 MANDATORY CHANGE IMPLEMENTATION PROCESS
+**ALL Protected Core changes MUST follow these processes to prevent incomplete implementations:**
+- **Implementation Workflow**: @docs/change_records/CHANGE_IMPLEMENTATION_WORKFLOW.md
+- **Change Record Template**: @docs/change_records/CHANGE_RECORD_TEMPLATE.md
+- **Mandatory Usage**: NEVER implement changes without following the complete template
+- **Quality Gate**: Template Section 5 (Assumption Validation) is BLOCKING - cannot proceed without validating ALL assumptions
+- **Completeness Requirement**: Must identify ALL related change records needed for complete functionality
+
 ### ⛔ CRITICAL: NEVER MODIFY THESE FILES
 ```
 src/protected-core/*                     # ENTIRE PROTECTED CORE
