@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Mic, MicOff, Loader2, AlertCircle, Play, Pause, Square, Activity, BarChart3, Zap } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { TranscriptionDisplay } from '@/components/transcription/TranscriptionDisplay';
+import { LiveKitRoom } from '@/components/voice/LiveKitRoom';
 import { useVoiceSession } from '@/hooks/useVoiceSession';
 import { useSessionState } from '@/hooks/useSessionState';
 import { useSessionMetrics } from '@/hooks/useSessionMetrics';
@@ -46,6 +47,7 @@ export default function ClassroomPage() {
   const {
     state: sessionState,
     sessionId,
+    roomName,
     getDetailedStatus
   } = useSessionState();
 
@@ -64,6 +66,7 @@ export default function ClassroomPage() {
   const [userId, setUserId] = useState<string | null>(null);
   const [currentTopic, setCurrentTopic] = useState<string>('General Mathematics');
   const [errorBoundary, setErrorBoundary] = useState<ErrorBoundaryState>({ hasError: false });
+  const [voiceConnected, setVoiceConnected] = useState(false);
 
   // Check authentication and load user data
   useEffect(() => {
@@ -354,6 +357,12 @@ export default function ClassroomPage() {
                     <Badge variant={getStatusBadgeVariant(sessionState.status)}>
                       {getDetailedStatus()}
                     </Badge>
+                    {voiceConnected && (
+                      <Badge variant="outline" className="text-green-600">
+                        <Mic className="h-3 w-3 mr-1" />
+                        Connected
+                      </Badge>
+                    )}
                   </div>
                   <CardDescription className="flex items-center space-x-4">
                     <span>{currentTopic}</span>
@@ -418,6 +427,27 @@ export default function ClassroomPage() {
             sessionId={sessionId || undefined}
             className="min-h-[600px]"
           />
+
+          {/* LiveKit Voice Connection */}
+          {roomName && userId && isActive && (
+            <LiveKitRoom
+              roomName={roomName}
+              participantId={userId}
+              participantName={`Student-${userId.slice(0, 8)}`}
+              onConnected={() => {
+                setVoiceConnected(true);
+                console.log('LiveKit voice connected');
+              }}
+              onDisconnected={() => {
+                setVoiceConnected(false);
+                console.log('LiveKit voice disconnected');
+              }}
+              onError={(error) => {
+                console.error('LiveKit error:', error);
+                setErrorBoundary({ hasError: true, error });
+              }}
+            />
+          )}
 
           {/* Status Alerts */}
           {isPaused && (

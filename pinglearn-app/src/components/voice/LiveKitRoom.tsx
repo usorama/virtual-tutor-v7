@@ -31,6 +31,14 @@ export function LiveKitRoom({
     };
   }, [room]);
 
+  // Auto-connect when component mounts
+  useEffect(() => {
+    if (!isConnected && !isConnecting) {
+      connectToRoom();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount
+
   const connectToRoom = async () => {
     try {
       setIsConnecting(true);

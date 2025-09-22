@@ -178,3 +178,5 @@ tests/features/   # ✅ Feature tests
 ---
 
 **This is attempt #8 after 7 failures. Respect boundaries. Follow rules. Maintain stability.**
+- always start main pinglearn app on port 3006, and livekit python agent service for the app to work
+- Python Livekit service runs in venv and is available at the root folder @livekit-agent/   pinglearn app is available @pinglearn-app/
