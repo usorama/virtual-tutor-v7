@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import TypewriterText from "@/components/TypewriterText";
 import ConicGradientButton from "@/components/ConicGradientButton";
+import AnimatedBackground from "@/components/AnimatedBackground";
 import { supabase } from "@/lib/supabase";
 
 export default function Home() {
@@ -87,52 +88,8 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-black text-white overflow-hidden noise-bg">
-      {/* Wavy Mesh Background Effect */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <svg
-          className="absolute inset-0 w-full h-full"
-          preserveAspectRatio="none"
-          viewBox="0 0 1440 800"
-        >
-          <defs>
-            <linearGradient id="wavyGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="rgba(6,182,212,0.05)" />
-              <stop offset="50%" stopColor="rgba(6,182,212,0.02)" />
-              <stop offset="100%" stopColor="transparent" />
-            </linearGradient>
-            <linearGradient id="wavyGradient2" x1="100%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="rgba(6,182,212,0.03)" />
-              <stop offset="50%" stopColor="rgba(59,130,246,0.01)" />
-              <stop offset="100%" stopColor="transparent" />
-            </linearGradient>
-          </defs>
-
-          <path
-            d="M0,300 C300,250 600,350 900,300 C1200,250 1440,320 1440,320 L1440,0 L0,0 Z"
-            fill="url(#wavyGradient1)"
-            opacity="0.5"
-          />
-
-          <path
-            d="M0,500 C400,450 800,550 1200,500 C1440,470 1440,500 1440,500 L1440,800 L0,800 Z"
-            fill="url(#wavyGradient2)"
-            opacity="0.5"
-          />
-        </svg>
-
-        {/* Subtle aurora overlay for depth */}
-        <motion.div
-          animate={{
-            opacity: [0.02, 0.04, 0.02],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-blue-500/5"
-        />
-      </div>
+      {/* Animated Background with grid and particles */}
+      <AnimatedBackground />
 
       <div className="relative z-10 container mx-auto px-4 min-h-screen flex flex-col justify-between pt-0 pb-8">
 
@@ -186,7 +143,7 @@ export default function Home() {
               transition={{ duration: 1, delay: 0.2 }}
               className="text-center mb-8"
             >
-              <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+              <h1 className="text-5xl md:text-7xl font-normal mb-6 leading-tight">
                 An AI tutor that is
                 <br />
                 <TypewriterText
@@ -222,7 +179,7 @@ export default function Home() {
                   }}
                   transition={{
                     x: {
-                      duration: 30,
+                      duration: 15,
                       repeat: Infinity,
                       ease: "linear",
                     },
@@ -232,10 +189,10 @@ export default function Home() {
                   {/* First set of features */}
                   {features.map((feature, index) => (
                     <div key={`set1-${index}`} className="flex-shrink-0 text-center">
-                      <div className="text-cyan-500/50 text-3xl mb-2 font-light">
+                      <div className="text-cyan-500/80 text-3xl mb-2 font-light">
                         {feature.icon}
                       </div>
-                      <p className="text-white/40 text-sm whitespace-nowrap">
+                      <p className="text-white/70 text-sm whitespace-nowrap">
                         {feature.label}
                       </p>
                     </div>
@@ -244,10 +201,10 @@ export default function Home() {
                   {/* Duplicate set for seamless loop */}
                   {features.map((feature, index) => (
                     <div key={`set2-${index}`} className="flex-shrink-0 text-center">
-                      <div className="text-cyan-500/50 text-3xl mb-2 font-light">
+                      <div className="text-cyan-500/80 text-3xl mb-2 font-light">
                         {feature.icon}
                       </div>
-                      <p className="text-white/40 text-sm whitespace-nowrap">
+                      <p className="text-white/70 text-sm whitespace-nowrap">
                         {feature.label}
                       </p>
                     </div>

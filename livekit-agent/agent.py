@@ -13,7 +13,7 @@ import json
 from livekit import agents
 from livekit.agents import AutoSubscribe, JobContext, WorkerOptions, cli, llm
 from livekit.agents import voice
-from livekit.plugins import gemini
+from livekit.plugins import google
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
@@ -214,6 +214,57 @@ class VirtualTutorAgent:
         except Exception as e:
             logger.error(f"Error ending session: {e}")
 
+async def send_transcription_to_frontend(
+    text: str,
+    session_id: str,
+    speaker: str = "tutor",
+    has_math: bool = False
+):
+    """Send transcription data to Next.js frontend via webhook"""
+    import aiohttp
+
+    webhook_url = os.getenv("FRONTEND_WEBHOOK_URL", "http://localhost:3006/api/transcription")
+
+    payload = {
+        "sessionId": session_id,
+        "speaker": speaker,
+        "text": text,
+        "hasMath": has_math,
+        "timestamp": datetime.now().isoformat()
+    }
+
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                webhook_url,
+                json=payload,
+                headers={'Content-Type': 'application/json'}
+            ) as response:
+                if response.status != 200:
+                    logger.error(f"Failed to send transcription: {response.status}")
+                else:
+                    logger.info(f"Transcription sent for session {session_id}")
+    except Exception as e:
+        logger.error(f"Error sending transcription: {e}")
+
+async def send_session_metrics(
+    session_id: str,
+    metrics: Dict[str, Any]
+):
+    """Send session metrics to frontend"""
+    webhook_url = os.getenv("METRICS_WEBHOOK_URL", "http://localhost:3006/api/session/metrics")
+
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                webhook_url,
+                json={"sessionId": session_id, "metrics": metrics},
+                headers={'Content-Type': 'application/json'}
+            ) as response:
+                logger.info(f"Metrics sent: {response.status}")
+    except Exception as e:
+        logger.error(f"Error sending metrics: {e}")
+
 async def entrypoint(ctx: JobContext):
     """Main entry point for the LiveKit agent"""
     
@@ -249,10 +300,10 @@ async def entrypoint(ctx: JobContext):
     )
     
     # Create the voice assistant with Gemini
-    assistant = VoiceAssistant(
+    assistant = voice.Agent(
         vad=agents.vad.silero.VAD.load(),  # Voice Activity Detection
         stt=None,  # Not needed for audio-to-audio
-        llm=gemini.LLM(
+        llm=google.LLM(
             api_key=GOOGLE_API_KEY,
             model="models/gemini-2.0-flash-exp",  # Using the audio-capable model
         ),
@@ -281,12 +332,27 @@ async def entrypoint(ctx: JobContext):
         """Handle when user speech is recognized"""
         logger.info(f"User said: {text}")
         await tutor.log_session_event("student_question", text)
-    
+        # Send to frontend for display
+        await send_transcription_to_frontend(
+            text=text,
+            session_id=tutor.session_id or ctx.room.name,
+            speaker="student"
+        )
+
     @assistant.on("agent_speech_committed")
     async def on_agent_speech(text: str):
         """Handle when agent speaks"""
         logger.info(f"Agent said: {text}")
         await tutor.log_session_event("tutor_response", text)
+        # Detect math content
+        has_math = "$" in text or any(term in text.lower() for term in ['equation', 'formula'])
+        # Send to frontend for display
+        await send_transcription_to_frontend(
+            text=text,
+            session_id=tutor.session_id or ctx.room.name,
+            speaker="tutor",
+            has_math=has_math
+        )
     
     # Wait for the session to end
     await assistant.wait_for_completion()

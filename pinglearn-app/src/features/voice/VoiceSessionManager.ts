@@ -216,6 +216,19 @@ export class VoiceSessionManager {
       this.currentSession.orchestratorSessionId = orchestratorSessionId;
 
       await this.updateSessionStatus('active');
+
+      // Notify Python agent about new session via webhook
+      await fetch('/api/session/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId: this.currentSession.sessionId,
+          roomName: this.currentSession.livekitRoomName,
+          studentId: this.currentConfig.studentId,
+          topic: this.currentConfig.topic
+        })
+      });
+
       this.emit('sessionStarted', this.currentSession);
     } catch (error) {
       await this.handleSessionError(error as Error);

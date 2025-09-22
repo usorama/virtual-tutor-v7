@@ -57,7 +57,7 @@ I am your complete technical team. I will autonomously handle ALL technical aspe
 
 ### Testing Requirements for ALL AI Agents
 
-Every implementation must include comprehensive testing to prevent the failures of attempts 1-7. Testing is NOT optional - it's a core requirement for Phase 2.5+.
+Every implementation must include comprehensive testing to prevent the failures of attempts 1-7. Testing is NOT optional - it's a core requirement for Phase 2.5+.  **Frontend must run on port 3006**
 
 ### 1. Unit Testing (Required for Phase 2.5+)
 ```typescript

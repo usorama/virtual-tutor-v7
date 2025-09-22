@@ -41,14 +41,20 @@ export default function ConicGradientButton({
         />
       </motion.div>
 
-      {/* Button background */}
-      <div className="absolute inset-[2px] rounded-full bg-black/90 backdrop-blur-sm" />
+      {/* Button background - darker cyan color */}
+      <div
+        className="absolute inset-[2px] rounded-full backdrop-blur-sm"
+        style={{
+          background: "linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.25) 100%)",
+          backgroundColor: "rgba(3, 91, 106, 0.6)",
+        }}
+      />
 
       {/* Glow effect on hover */}
       <motion.div
         className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         style={{
-          background: "radial-gradient(circle at center, rgba(6,182,212,0.2) 0%, transparent 70%)",
+          background: "radial-gradient(circle at center, rgba(6,182,212,0.3) 0%, transparent 70%)",
         }}
       />
 
