@@ -9,6 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import { Mic, MicOff, Loader2, AlertCircle, Play, Pause, Square, Activity, BarChart3, Zap } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { TranscriptionDisplay } from '@/components/transcription/TranscriptionDisplay';
+import { TeachingBoard } from '@/components/classroom/TeachingBoard';
+import { NotesPanel } from '@/components/classroom/NotesPanel';
 import { LiveKitRoom } from '@/components/voice/LiveKitRoom';
 import { useVoiceSession } from '@/hooks/useVoiceSession';
 import { useSessionState } from '@/hooks/useSessionState';
@@ -67,6 +69,7 @@ export default function ClassroomPage() {
   const [currentTopic, setCurrentTopic] = useState<string>('General Mathematics');
   const [errorBoundary, setErrorBoundary] = useState<ErrorBoundaryState>({ hasError: false });
   const [voiceConnected, setVoiceConnected] = useState(false);
+  const [activeTab, setActiveTab] = useState<'transcript' | 'notes'>('transcript');
 
   // Check authentication and load user data
   useEffect(() => {
@@ -425,67 +428,69 @@ export default function ClassroomPage() {
           </div>
         </div>
 
-        {/* Dual-Pane Content Area */}
+        {/* New 80/20 Layout */}
         <div className="max-w-7xl mx-auto p-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[calc(100vh-200px)]">
+          <div className="flex gap-6 h-[calc(100vh-200px)]">
 
-            {/* Left Pane: Lesson Content */}
-            <Card className="flex flex-col h-full">
-              <CardHeader className="border-b">
-                <CardTitle>Lesson: {currentTopic}</CardTitle>
-                <CardDescription>Interactive learning content</CardDescription>
-              </CardHeader>
-              <CardContent className="flex-1 overflow-auto p-6">
-                {/* Placeholder for lesson content */}
-                <div className="prose prose-sm max-w-none">
-                  <h3>Today&apos;s Topic</h3>
-                  <p className="text-muted-foreground">
-                    Lesson materials and interactive content will appear here.
-                  </p>
-                  <div className="mt-4 p-4 bg-muted rounded-lg">
-                    <p className="text-sm font-medium mb-2">Upcoming Features:</p>
-                    <ul className="text-sm text-muted-foreground space-y-1">
-                      <li>• Interactive whiteboard</li>
-                      <li>• Practice problems</li>
-                      <li>• Visual demonstrations</li>
-                      <li>• Step-by-step solutions</li>
-                    </ul>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            {/* Left Pane: Teaching Board (80%) */}
+            <div className="flex-[4]">
+              <TeachingBoard
+                sessionId={sessionId || undefined}
+                topic={currentTopic}
+                className="h-full"
+              />
+            </div>
 
-            {/* Right Pane: Transcription with Tabs */}
-            <Card className="flex flex-col h-full">
-              <CardHeader className="border-b">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle>AI Teacher</CardTitle>
-                    <CardDescription>Real-time transcription with math</CardDescription>
+            {/* Right Pane: Tabbed Panel (20%) */}
+            <div className="flex-[1] min-w-[300px]">
+              <Card className="flex flex-col h-full">
+                <CardHeader className="border-b pb-2">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-lg">AI Teacher</CardTitle>
+                      <CardDescription className="text-xs">Real-time transcription with math</CardDescription>
+                    </div>
                   </div>
-                  {/* Tab switcher (future functionality) */}
-                  <div className="flex space-x-1 bg-muted p-1 rounded-md">
+                  {/* Tab Switcher */}
+                  <div className="flex space-x-1 bg-muted p-1 rounded-md mt-2">
                     <button
-                      className="px-3 py-1 rounded bg-background text-sm font-medium"
+                      onClick={() => setActiveTab('transcript')}
+                      className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+                        activeTab === 'transcript'
+                          ? 'bg-background text-foreground shadow-sm'
+                          : 'text-muted-foreground hover:bg-background/50'
+                      }`}
                     >
-                      Transcript
+                      📝 Transcript
                     </button>
                     <button
-                      className="px-3 py-1 rounded text-sm text-muted-foreground hover:bg-background/50"
-                      disabled
+                      onClick={() => setActiveTab('notes')}
+                      className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+                        activeTab === 'notes'
+                          ? 'bg-background text-foreground shadow-sm'
+                          : 'text-muted-foreground hover:bg-background/50'
+                      }`}
                     >
-                      Notes
+                      📔 Notes
                     </button>
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent className="flex-1 p-0 overflow-hidden">
-                <TranscriptionDisplay
-                  sessionId={sessionId || undefined}
-                  className="h-full"
-                />
-              </CardContent>
-            </Card>
+                </CardHeader>
+                <CardContent className="flex-1 p-0 overflow-hidden">
+                  {activeTab === 'transcript' ? (
+                    <TranscriptionDisplay
+                      sessionId={sessionId || undefined}
+                      className="h-full"
+                    />
+                  ) : (
+                    <NotesPanel
+                      sessionId={sessionId || undefined}
+                      topic={currentTopic}
+                      className="h-full"
+                    />
+                  )}
+                </CardContent>
+              </Card>
+            </div>
           </div>
 
           {/* LiveKit Voice Connection (Hidden) */}
