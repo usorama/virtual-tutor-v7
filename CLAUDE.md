@@ -133,7 +133,7 @@ tests/features/   # ✅ Feature tests
 ### Project Navigation
 - **Master Plan**: `/docs/new-arch-impl-planning/MASTER-PLAN.md`
 - **Phase Docs**: `/docs/new-arch-impl-planning/03-phases/`
-- **Change Records**: `/docs/change_records/protected_core_changes/`
+- **Change Records**: `/docs/change_records/protected_core_changes/` **If user asks for a change record, never implement without user approval documented inside change record.**
 
 ---
 
