@@ -31,6 +31,8 @@ CHECKPOINT: Safety rollback point before implementing [CHANGE-ID]
 
 **MUST contain**: Complete identification and classification information for tracking and compliance.
 
+⚠️ **IMPORTANT**: Use the EXACT structure below. Do NOT simplify or consolidate the metadata into a single list.
+
 ### 1.1 Basic Information
 - **Change ID**: [PREFIX-XXX] (e.g., PC-009, FEAT-001, FIX-123)
 - **Date**: [YYYY-MM-DD]
@@ -55,6 +57,45 @@ CHECKPOINT: Safety rollback point before implementing [CHANGE-ID]
 - **Context Provided**: [Summary of context given to agent]
 - **Temperature/Settings**: [Any relevant AI parameters]
 - **Prompt Strategy**: [How the agent was instructed]
+
+**⚠️ EXAMPLE OF CORRECT STRUCTURE:**
+```markdown
+## Section 1: Change Metadata
+
+### 1.1 Basic Information
+- **Change ID**: PC-012
+- **Date**: 2025-09-23
+- **Time**: 10:00 UTC
+- **Severity**: CRITICAL
+- **Type**: Bug Fix
+- **Affected Component**: LiveKit Service
+- **Related Change Records**: PC-011, PC-010
+
+### 1.2 Approval Status
+- **Approval Status**: PENDING
+- **Approval Timestamp**: [To be filled on approval]
+- **Approved By**: [To be filled on approval]
+- **Review Comments**: [To be filled during review]
+
+### 1.3 AI Agent Information
+- **Primary Agent**: Claude 3.5 Sonnet
+- **Agent Version/Model**: claude-opus-4-1-20250805
+- **Agent Capabilities**: Code analysis, debugging
+- **Context Provided**: Full codebase access
+- **Temperature/Settings**: Default
+- **Prompt Strategy**: Root cause analysis
+```
+
+**❌ INCORRECT (DO NOT DO THIS):**
+```markdown
+## Section 1: Change Metadata
+
+## Change Metadata  <-- DUPLICATED HEADER
+- **Change ID**: PC-012
+- **Date**: 2025-09-23
+- **Severity**: CRITICAL
+... all fields in one list ...
+```
 
 ---
 
@@ -432,6 +473,12 @@ CHECKPOINT: Safety rollback point before implementing [CHANGE-ID]
 
 ## Template Usage Notes
 
+⚠️ **CRITICAL FORMATTING REQUIREMENTS**:
+- **NEVER** duplicate section headers (e.g., don't have "## Section 1" and then "## Change Metadata")
+- **ALWAYS** use the three-part metadata structure (1.1, 1.2, 1.3)
+- **NEVER** simplify metadata into a single bulleted list
+- **COPY** the template structure exactly - don't improvise
+
 ### When to Use This Template
 - Any change to protected/critical code
 - Changes requiring stakeholder approval
@@ -441,11 +488,15 @@ CHECKPOINT: Safety rollback point before implementing [CHANGE-ID]
 - Compliance-critical modifications
 
 ### How to Fill Out
-1. **Start with Sections 1-3** before any implementation
-2. **Complete Sections 4-11** during planning
-3. **Get approval** via Section 15
-4. **Fill Section 12** during implementation
-5. **Complete Sections 16-17** after implementation
+1. **COPY this template exactly** - Do NOT modify the structure
+2. **Start with Sections 1-3** before any implementation
+   - Section 1: Use ALL three subsections (1.1, 1.2, 1.3)
+   - Do NOT consolidate metadata into a simple list
+   - Do NOT duplicate section headers
+3. **Complete Sections 4-11** during planning
+4. **Get approval** via Section 15
+5. **Fill Section 12** during implementation
+6. **Complete Sections 16-17** after implementation
 
 ### Required vs. Optional Sections
 - **Required for All Changes**: Sections 1-3, 6, 8, 12, 15, 16

@@ -199,7 +199,19 @@ For any external services (LiveKit, Gemini, etc.):
 
 ## Phase 6: Change Record Creation (20 minutes)
 
-Use the comprehensive template (see CHANGE_RECORD_TEMPLATE.md) and include:
+### ⚠️ CRITICAL: Use EXACT Template Structure
+
+**MANDATORY REQUIREMENTS**:
+1. **COPY the template exactly** from CHANGE_RECORD_TEMPLATE.md
+2. **MAINTAIN the three-part metadata structure**:
+   - Section 1.1: Basic Information
+   - Section 1.2: Approval Status
+   - Section 1.3: AI Agent Information
+3. **DO NOT** simplify metadata into a single list
+4. **DO NOT** duplicate section headers
+5. **DO NOT** skip subsections even if empty
+
+### Content to Include:
 - All research findings
 - Complete dependency analysis
 - Risk assessments
@@ -266,6 +278,14 @@ E --> F[User Feedback]
 ## Mandatory Review Points
 
 Before submitting any change record:
+
+### Metadata Structure Verification
+- [ ] Section 1 has ALL three subsections (1.1, 1.2, 1.3)
+- [ ] No duplicated headers (e.g., "## Change Metadata" appearing twice)
+- [ ] Metadata follows template structure exactly
+- [ ] All required fields are populated or marked as "[To be filled]"
+
+### Content Completeness:
 
 1. **End-to-End Verification**: "Can a user complete the full intended journey after this change?"
 2. **Integration Completeness**: "Are all integration points addressed?"
