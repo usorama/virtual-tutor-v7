@@ -252,8 +252,10 @@ export function TeachingBoard({ sessionId, topic, className = '' }: TeachingBoar
     }
 
     return () => {
-      if (updateTimeoutRef.current) {
-        clearTimeout(updateTimeoutRef.current);
+      // Capture ref value to avoid stale closure issue
+      const timeoutId = updateTimeoutRef.current;
+      if (timeoutId) {
+        clearTimeout(timeoutId);
       }
     };
   }, [sessionId, checkForUpdates]);
