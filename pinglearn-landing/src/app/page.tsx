@@ -122,7 +122,7 @@ export default function Home() {
         </header>
 
         {/* Main Content */}
-        <div className="flex-1 flex items-center justify-center py-20">
+        <div className="flex-1 flex items-center justify-center py-12">
           <div className="max-w-5xl w-full">
             {/* Curved Text Animation - Centered */}
             <motion.div
@@ -148,7 +148,7 @@ export default function Home() {
                 <br />
                 <TypewriterText
                   words={words}
-                  className="text-cyan-500 text-glow-cyan"
+                  className="text-cyan-500 text-glow-cyan font-bold"
                 />
                 <br />
                 to you
@@ -157,7 +157,7 @@ export default function Home() {
               <p className="text-xl text-white/60 max-w-2xl mx-auto mb-2">
                 Beyond answers. Beyond grades.
               </p>
-              <p className="text-lg text-white/40 max-w-2xl mx-auto">
+              <p className="text-lg text-white max-w-2xl mx-auto">
                 A learning companion that understands your mind, adapts to your pace, and cares about your wellbeing.
               </p>
             </motion.div>
@@ -179,7 +179,7 @@ export default function Home() {
                   }}
                   transition={{
                     x: {
-                      duration: 15,
+                      duration: 10,
                       repeat: Infinity,
                       ease: "linear",
                     },
