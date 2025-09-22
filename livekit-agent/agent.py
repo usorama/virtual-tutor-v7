@@ -10,8 +10,17 @@ import asyncio
 from typing import Optional, Dict, Any
 from datetime import datetime
 
-from livekit.agents import Agent, AgentSession, JobContext, WorkerOptions, cli, function_tool, RunContext
-from livekit.plugins import google
+from livekit import agents, rtc
+from livekit.agents import (
+    Agent,
+    AgentSession,
+    JobContext,
+    WorkerOptions,
+    cli,
+    AutoSubscribe
+)
+from livekit.plugins import google, silero
+from livekit.plugins.turn_detector.english import EnglishModel
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -64,80 +73,55 @@ You have access to the complete NCERT Class X Mathematics textbook content inclu
 Remember to make learning enjoyable and build the student's confidence!
 """
 
-@function_tool
-async def send_transcription_to_frontend(
-    context: RunContext,
-    text: str,
-    speaker: str = "tutor",
-    has_math: bool = False
-):
-    """Send transcription data to Next.js frontend via webhook"""
-    import aiohttp
-
-    webhook_url = os.getenv("FRONTEND_WEBHOOK_URL", "http://localhost:3006/api/transcription")
-    session_id = context.room.name  # Use room name as session ID
-
-    payload = {
-        "sessionId": session_id,
-        "speaker": speaker,
-        "text": text,
-        "hasMath": has_math,
-        "timestamp": datetime.now().isoformat()
-    }
-
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.post(
-                webhook_url,
-                json=payload,
-                headers={'Content-Type': 'application/json'}
-            ) as response:
-                if response.status != 200:
-                    logger.error(f"Failed to send transcription: {response.status}")
-                else:
-                    logger.info(f"Transcription sent for session {session_id}")
-    except Exception as e:
-        logger.error(f"Error sending transcription: {e}")
-
-    return {"status": "sent", "session_id": session_id}
+# Transcription webhook functionality will be handled by VoiceAssistant's built-in transcription
+# The VoiceAssistant automatically manages transcription publishing to the room
 
 async def entrypoint(ctx: JobContext):
     """Main entry point for the LiveKit agent"""
 
-    await ctx.connect()
-
     logger.info(f"Agent started for room: {ctx.room.name}")
 
-    # Create agent with instructions and tools
+    # Create agent with system instructions
     agent = Agent(
         instructions=TUTOR_SYSTEM_PROMPT,
-        tools=[send_transcription_to_frontend],
     )
 
-    # Create session with Gemini Live API (audio-to-audio, 2025 solution)
+    # Configure the session with Gemini Live API (audio-to-audio)
     session = AgentSession(
         llm=google.beta.realtime.RealtimeModel(
             model="gemini-2.0-flash-exp",
             voice="Puck",
             temperature=0.8,
             instructions=TUTOR_SYSTEM_PROMPT
-        )
+        ),
+        # Voice Activity Detection
+        vad=silero.VAD.load(),
+        # Turn detection for natural conversation
+        turn_detection=EnglishModel(),
+        # Smooth conversation settings
+        min_endpointing_delay=0.5,
+        max_endpointing_delay=3.0,
     )
 
-    # Set up room event handlers for session cleanup
-    def on_participant_disconnected(participant):
-        logger.info(f"Participant disconnected: {participant.identity}")
-        # Note: Cleanup logic would go here if needed
+    # CRITICAL: Enable audio subscription for proper track handling
+    await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
 
-    ctx.room.on("participant_disconnected", on_participant_disconnected)
+    # Wait for participant to ensure connection
+    participant = await ctx.wait_for_participant()
+    logger.info(f"Participant connected: {participant.identity}")
 
-    # Start the session
+    # Start the session - this publishes audio tracks
     await session.start(agent=agent, room=ctx.room)
 
-    # Generate initial greeting
-    await session.generate_reply(
-        instructions="Greet the student warmly as their AI mathematics tutor. Ask them what math topic they'd like to work on today. Keep it friendly and encouraging."
-    )
+    # Keep the session alive
+    try:
+        # The session handles the conversation automatically
+        while ctx.room.connection_state == rtc.ConnectionState.CONN_CONNECTED:
+            await asyncio.sleep(1)
+    except asyncio.CancelledError:
+        logger.info("Agent session cancelled")
+    finally:
+        logger.info("Agent session ended")
 
 if __name__ == "__main__":
     # Run the agent

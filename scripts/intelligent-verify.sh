@@ -17,11 +17,18 @@ NC='\033[0m' # No Color
 # Project root detection
 PROJECT_ROOT="${1:-$(pwd)}"
 
-# Ensure we're in the right directory
-if [[ ! -f "$PROJECT_ROOT/package.json" ]] || [[ ! -d "$PROJECT_ROOT/src" ]]; then
+# Check if we're in pinglearn root or need to use pinglearn-app
+if [[ -d "$PROJECT_ROOT/pinglearn-app" ]]; then
+    # We're in the parent directory, use pinglearn-app
+    APP_ROOT="$PROJECT_ROOT/pinglearn-app"
+elif [[ -f "$PROJECT_ROOT/package.json" ]] && [[ -d "$PROJECT_ROOT/src" ]]; then
+    # We're directly in the app directory
+    APP_ROOT="$PROJECT_ROOT"
+else
     echo -e "${RED}Error: Not a valid PingLearn project directory${NC}"
     echo "Usage: $0 [project_root]"
     echo "Example: $0 /Users/username/Projects/pinglearn"
+    echo "   or: $0 /Users/username/Projects/pinglearn/pinglearn-app"
     exit 1
 fi
 
@@ -31,6 +38,7 @@ echo -e "${BLUE}║           Evidence-Based Self-Correcting Analysis           
 echo -e "${BLUE}╚══════════════════════════════════════════════════════════════╝${NC}"
 echo
 echo -e "${CYAN}Project Root: ${BLUE}$PROJECT_ROOT${NC}"
+echo -e "${CYAN}App Root: ${BLUE}$APP_ROOT${NC}"
 echo -e "${CYAN}Timestamp: ${BLUE}$(date '+%Y-%m-%d %H:%M:%S')${NC}"
 echo
 
@@ -43,7 +51,7 @@ fi
 # Install tsx if not available
 if ! npx tsx --version &> /dev/null; then
     echo -e "${YELLOW}Installing tsx for TypeScript execution...${NC}"
-    cd "$PROJECT_ROOT"
+    cd "$APP_ROOT"
     npm install -g tsx 2>/dev/null || npm install tsx
 fi
 
@@ -74,7 +82,7 @@ fi
 echo -e "${PURPLE}🔍 Starting Evidence Collection & Analysis...${NC}"
 echo
 
-cd "$PROJECT_ROOT"
+cd "$APP_ROOT"
 
 # Try to run the TypeScript version
 if [[ -f "$PROJECT_ROOT/scripts/intelligent-verify/main.ts" ]]; then
