@@ -1,6 +1,10 @@
 # PingLearn AI Development Guidelines
-**Version**: 2.0 - OPTIMIZED FOR AI AGENTS
+**Version**: 2.1 - ENHANCED WITH LEARNING MODE
 **Status**: ACTIVE - AI AGENT OPTIMIZED
+
+## User Configuration & Preferences
+@pinglearn-app/docs/claude-config/user-preferences.md
+@pinglearn-app/docs/claude-config/role-definitions.md
 
 ## 🚨 CRITICAL: This is attempt #8 after 7 failures
 
@@ -43,8 +47,8 @@ src/protected-core/*                     # ENTIRE PROTECTED CORE
 
 ## 👥 ROLES & RESPONSIBILITIES
 
-**Human**: Non-technical stakeholder providing requirements, testing functionality, approving decisions.
-**Claude**: Complete technical team handling architecture, development, testing, deployment autonomously.
+**See detailed role definitions in imported files above**
+**Summary**: Human as product designer learning to code, Claude as teacher & technical team.
 
 ---
 
