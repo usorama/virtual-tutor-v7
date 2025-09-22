@@ -90,7 +90,7 @@ async def entrypoint(ctx: JobContext):
     session = AgentSession(
         llm=google.beta.realtime.RealtimeModel(
             model="gemini-2.0-flash-exp",
-            voice="Puck",
+            voice="Kore",  # Female English voice
             temperature=0.8,
             instructions=TUTOR_SYSTEM_PROMPT
         ),
@@ -112,6 +112,19 @@ async def entrypoint(ctx: JobContext):
 
     # Start the session - this publishes audio tracks
     await session.start(agent=agent, room=ctx.room)
+
+    # Send proactive greeting after session starts
+    await asyncio.sleep(1.5)  # Brief pause to ensure connection is stable
+
+    # Generate proactive greeting using the session
+    greeting_instructions = """Greet the student warmly and welcome them to today's mathematics session.
+    Introduce yourself as their AI mathematics teacher.
+    Ask them what specific topic from their Class 10 Mathematics curriculum they'd like to explore today.
+    Be encouraging and enthusiastic about learning together."""
+
+    await session.generate_reply(instructions=greeting_instructions)
+
+    logger.info("Sent proactive greeting to student")
 
     # Keep the session alive
     try:
