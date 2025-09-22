@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { Mic, MicOff, Loader2, AlertCircle, Play, Pause, Square, Activity, BarChart3, Zap } from 'lucide-react';
+import { Mic, MicOff, Loader2, AlertCircle, Play, Pause, Square, Activity, BarChart3, Zap, Home } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { TranscriptionDisplay } from '@/components/transcription/TranscriptionDisplay';
 import { TeachingBoard } from '@/components/classroom/TeachingBoard';
@@ -15,6 +15,7 @@ import { LiveKitRoom } from '@/components/voice/LiveKitRoom';
 import { useVoiceSession } from '@/hooks/useVoiceSession';
 import { useSessionState } from '@/hooks/useSessionState';
 import { useSessionMetrics } from '@/hooks/useSessionMetrics';
+import { SessionOrchestrator } from '@/protected-core';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -70,6 +71,8 @@ export default function ClassroomPage() {
   const [errorBoundary, setErrorBoundary] = useState<ErrorBoundaryState>({ hasError: false });
   const [voiceConnected, setVoiceConnected] = useState(false);
   const [activeTab, setActiveTab] = useState<'transcript' | 'notes'>('transcript');
+  const [sessionControlState, setSessionControlState] = useState<'active' | 'paused' | 'ended'>('active');
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Check authentication and load user data
   useEffect(() => {
@@ -201,30 +204,47 @@ export default function ClassroomPage() {
   }
 
   /**
-   * Pause/Resume the session
+   * Enhanced pause/resume using SessionOrchestrator
    */
-  async function togglePause() {
+  async function handlePauseResume() {
+    setIsTransitioning(true);
     try {
-      if (isPaused) {
-        await controls.resume();
-      } else {
+      const orchestrator = SessionOrchestrator.getInstance();
+
+      if (sessionControlState === 'active') {
         await controls.pause();
+        orchestrator.pauseSession();
+        setSessionControlState('paused');
+      } else if (sessionControlState === 'paused') {
+        await controls.resume();
+        orchestrator.resumeSession();
+        setSessionControlState('active');
       }
     } catch (err) {
-      console.error('Error toggling pause:', err);
+      console.error('Session control error:', err);
       setErrorBoundary({
         hasError: true,
-        error: err instanceof Error ? err : new Error('Failed to pause/resume session')
+        error: err instanceof Error ? err : new Error('Failed to control session')
       });
     }
+    setIsTransitioning(false);
   }
 
   /**
-   * End the current session
+   * Enhanced session ending with SessionOrchestrator
    */
-  async function endVoiceSession() {
+  async function handleEndSession() {
+    setIsTransitioning(true);
     try {
+      const orchestrator = SessionOrchestrator.getInstance();
       const finalMetrics = await endSession();
+
+      // End session through orchestrator
+      if (sessionId) {
+        await orchestrator.endSession(sessionId);
+      }
+
+      setSessionControlState('ended');
 
       // Save session to Supabase with metrics
       if (userId && finalMetrics) {
@@ -238,17 +258,18 @@ export default function ClassroomPage() {
         });
       }
 
-      // Show success message briefly then redirect
+      // Redirect to dashboard after ending
       setTimeout(() => {
         router.push('/dashboard');
       }, 2000);
     } catch (err) {
-      console.error('Error ending session:', err);
+      console.error('End session error:', err);
       setErrorBoundary({
         hasError: true,
         error: err instanceof Error ? err : new Error('Failed to end session properly')
       });
     }
+    setIsTransitioning(false);
   }
 
   /**
@@ -373,6 +394,11 @@ export default function ClassroomPage() {
                       <span>•</span>
                       <span>Duration: {formatDuration(liveMetrics.duration)}</span>
                       <span>•</span>
+                      <span>Status: {
+                        sessionControlState === 'ended' ? 'Session Ended' :
+                        sessionControlState === 'paused' ? 'Paused' : 'Active'
+                      }</span>
+                      <span>•</span>
                       <span>Quality: {qualityScore}%</span>
                     </CardDescription>
 
@@ -393,34 +419,83 @@ export default function ClassroomPage() {
                     </div>
                   </div>
 
-                  {/* Session Controls */}
+                  {/* Enhanced Session Controls */}
                   <div className="flex items-center space-x-2">
-                    <Button
-                      variant={audioControls.isMuted ? "destructive" : "secondary"}
-                      size="icon"
-                      onClick={toggleMute}
-                      disabled={isConnecting || isLoading}
-                    >
-                      {audioControls.isMuted ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-                    </Button>
+                    {sessionControlState === 'ended' ? (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => router.push('/dashboard')}
+                        className="h-8"
+                      >
+                        <Home className="w-3 h-3 mr-1" />
+                        Back to Dashboard
+                      </Button>
+                    ) : (
+                      <>
+                        {/* Microphone Control */}
+                        <Button
+                          variant={audioControls.isMuted ? "destructive" : "secondary"}
+                          size="sm"
+                          onClick={toggleMute}
+                          disabled={isConnecting || isLoading || isTransitioning}
+                          className="h-8"
+                        >
+                          {audioControls.isMuted ? (
+                            <>
+                              <MicOff className="w-3 h-3 mr-1" />
+                              Muted
+                            </>
+                          ) : (
+                            <>
+                              <Mic className="w-3 h-3 mr-1" />
+                              Mic
+                            </>
+                          )}
+                        </Button>
 
-                    <Button
-                      variant="secondary"
-                      size="icon"
-                      onClick={togglePause}
-                      disabled={isConnecting || isLoading}
-                    >
-                      {isPaused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
-                    </Button>
+                        {/* Pause/Resume Control */}
+                        <Button
+                          variant={sessionControlState === 'paused' ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={handlePauseResume}
+                          disabled={isConnecting || isLoading || isTransitioning}
+                          className="h-8"
+                        >
+                          {isTransitioning ? (
+                            <Loader2 className="w-3 h-3 animate-spin" />
+                          ) : sessionControlState === 'paused' ? (
+                            <>
+                              <Play className="w-3 h-3 mr-1" />
+                              Resume
+                            </>
+                          ) : (
+                            <>
+                              <Pause className="w-3 h-3 mr-1" />
+                              Pause
+                            </>
+                          )}
+                        </Button>
 
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      onClick={endVoiceSession}
-                      disabled={isConnecting || isLoading}
-                    >
-                      {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Square className="h-4 w-4" />}
-                    </Button>
+                        {/* End Session Control */}
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={handleEndSession}
+                          disabled={isConnecting || isLoading || isTransitioning}
+                          className="h-8"
+                        >
+                          {isTransitioning ? (
+                            <Loader2 className="w-3 h-3 animate-spin" />
+                          ) : (
+                            <>
+                              <Square className="w-3 h-3 mr-1" />
+                              End Session
+                            </>
+                          )}
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </div>
               </CardHeader>
