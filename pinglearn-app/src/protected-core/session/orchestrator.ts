@@ -373,6 +373,32 @@ export class SessionOrchestrator {
         this.currentSession.voiceConnectionStatus = 'disconnected';
       }
     });
+
+    // PC-010 FIX: LiveKit transcription data handler for data channel events
+    if (this.livekitService) {
+      console.log('[PC-010] Setting up LiveKit transcription listener');
+
+      (this.livekitService as any).on('transcriptionReceived', (data: any) => {
+        console.log('[PC-010] SessionOrchestrator received transcription:', {
+          type: data.type,
+          speaker: data.speaker,
+          contentLength: data.content?.length
+        });
+
+        // Add to display buffer via existing method
+        this.addTranscriptionItem(
+          data.content,
+          data.speaker as 'student' | 'teacher' | 'ai',
+          data.type as 'text' | 'math' | 'code' | 'diagram' | 'image',
+          data.confidence
+        );
+
+        // Handle math rendering if this is a math segment
+        if (data.type === 'math' && data.latex) {
+          console.log('[PC-010] Math equation received:', data.latex);
+        }
+      });
+    }
   }
 
   /**

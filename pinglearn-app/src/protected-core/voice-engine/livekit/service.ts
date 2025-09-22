@@ -8,13 +8,18 @@
 import { Room, RoomEvent, Track, ConnectionState, LocalAudioTrack, RemoteAudioTrack } from 'livekit-client';
 import { VoiceServiceContract, VoiceConfig, VoiceSession } from '../../contracts/voice.contract';
 import { AudioStreamManager, AudioConfig } from './audio-manager';
+import { EventEmitter } from 'events';
 
-export class LiveKitVoiceService implements VoiceServiceContract {
+export class LiveKitVoiceService extends EventEmitter implements VoiceServiceContract {
   private room: Room | null = null;
   private currentSession: VoiceSession | null = null;
   private audioManager: AudioStreamManager | null = null;
   private config: VoiceConfig | null = null;
   private isInitialized = false;
+
+  constructor() {
+    super();
+  }
 
   /**
    * Initialize the LiveKit service with configuration
@@ -309,6 +314,40 @@ export class LiveKitVoiceService implements VoiceServiceContract {
 
     this.room.on(RoomEvent.ParticipantDisconnected, (participant) => {
       console.log('Participant disconnected:', participant.identity);
+    });
+
+    // CRITICAL FIX PC-010: Add missing data channel handler for transcriptions
+    this.room.on(RoomEvent.DataReceived, (payload, participant, kind) => {
+      try {
+        // Decode the data packet from Python agent
+        const decoder = new TextDecoder();
+        const jsonStr = decoder.decode(payload);
+        const data = JSON.parse(jsonStr);
+
+        // Forward transcript data to SessionOrchestrator
+        if (data.type === 'transcript' && data.segments) {
+          console.log('[PC-010] Received transcript data from:', participant?.identity || 'unknown');
+          console.log('[PC-010] Processing', data.segments.length, 'segments');
+
+          // Process each segment from the Python agent
+          data.segments.forEach((segment: any) => {
+            // Emit a custom event that SessionOrchestrator can listen to
+            // This maintains separation of concerns and follows existing patterns
+            this.emit('transcriptionReceived', {
+              type: segment.type || 'text', // 'text' or 'math'
+              content: segment.content,
+              speaker: data.speaker || 'teacher',
+              timestamp: Date.now(),
+              confidence: segment.confidence || 0.95,
+              latex: segment.latex // For math segments
+            });
+          });
+        } else {
+          console.log('[PC-010] Received non-transcript data:', data.type);
+        }
+      } catch (error) {
+        console.error('[PC-010] Error processing LiveKit data packet:', error);
+      }
     });
   }
 
