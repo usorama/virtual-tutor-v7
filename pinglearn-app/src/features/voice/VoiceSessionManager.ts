@@ -204,19 +204,30 @@ export class VoiceSessionManager {
         throw new Error('No session config available. Call createSession first.');
       }
 
+      // PC-011: Create consistent session ID
       const sessionConfig: SessionConfig = {
         studentId: this.currentConfig.studentId,
         topic: this.currentConfig.topic,
+        sessionId: `voice_${this.currentSession.id}`, // Use voice session ID as base
         voiceEnabled: this.currentConfig.voiceEnabled ?? true,
         mathTranscriptionEnabled: this.currentConfig.mathTranscriptionEnabled ?? true,
         recordingEnabled: this.currentConfig.recordingEnabled ?? true
       };
 
-      // CRITICAL FIX: Capture orchestrator session ID for proper session end functionality
+      // Pass our ID to orchestrator
       const orchestratorSessionId = await this.sessionOrchestrator.startSession(sessionConfig);
 
-      // Store the orchestrator session ID in our current session
+      // Verify it was accepted
+      if (!orchestratorSessionId.includes(this.currentSession.id)) {
+        console.warn('[PC-011] Session ID mismatch detected, orchestrator created:', orchestratorSessionId);
+      }
+
+      // Store the actual ID used by orchestrator
       this.currentSession.orchestratorSessionId = orchestratorSessionId;
+      console.log('[PC-011] Session IDs synchronized:', {
+        voiceSessionId: this.currentSession.id,
+        orchestratorId: orchestratorSessionId
+      });
 
       await this.updateSessionStatus('active');
 

@@ -91,6 +91,39 @@ export default function ClassroomPage() {
     }
   }, [voiceError, clearError]);
 
+  // PC-011: Sync session state with orchestrator
+  useEffect(() => {
+    if (!session || !isActive) return;
+
+    const syncInterval = setInterval(() => {
+      try {
+        const orchestrator = SessionOrchestrator.getInstance();
+        const orchestratorState = orchestrator.getSessionState();
+
+        if (orchestratorState) {
+          // Sync pause/resume state
+          const actualStatus = orchestratorState.status;
+          const currentUIState = sessionControlState;
+
+          if (actualStatus === 'paused' && currentUIState !== 'paused') {
+            console.log('[PC-011] Syncing UI to paused state');
+            setSessionControlState('paused');
+          } else if (actualStatus === 'active' && currentUIState !== 'active') {
+            console.log('[PC-011] Syncing UI to active state');
+            setSessionControlState('active');
+          } else if (actualStatus === 'ended' && currentUIState !== 'ended') {
+            console.log('[PC-011] Syncing UI to ended state');
+            setSessionControlState('ended');
+          }
+        }
+      } catch (error) {
+        console.warn('[PC-011] State sync error:', error);
+      }
+    }, 500); // Check twice per second for responsive UI
+
+    return () => clearInterval(syncInterval);
+  }, [session, isActive, sessionControlState]);
+
   // Error boundary effect
   useEffect(() => {
     const handleError = (error: ErrorEvent) => {
@@ -204,30 +237,44 @@ export default function ClassroomPage() {
   }
 
   /**
-   * Enhanced pause/resume using SessionOrchestrator
+   * PC-011: Enhanced pause/resume using SessionOrchestrator with real state
    */
   async function handlePauseResume() {
     setIsTransitioning(true);
     try {
       const orchestrator = SessionOrchestrator.getInstance();
+      const currentState = orchestrator.getSessionState();
 
-      if (sessionControlState === 'active') {
+      if (!currentState) {
+        throw new Error('No active session in orchestrator');
+      }
+
+      console.log('[PC-011] Current orchestrator state:', currentState.status);
+
+      if (currentState.status === 'active') {
+        // Pause the session
         await controls.pause();
         orchestrator.pauseSession();
         setSessionControlState('paused');
-      } else if (sessionControlState === 'paused') {
+        console.log('[PC-011] Session paused');
+      } else if (currentState.status === 'paused') {
+        // Resume the session
         await controls.resume();
         orchestrator.resumeSession();
         setSessionControlState('active');
+        console.log('[PC-011] Session resumed');
+      } else {
+        console.warn('[PC-011] Invalid state for pause/resume:', currentState.status);
       }
     } catch (err) {
-      console.error('Session control error:', err);
+      console.error('[PC-011] Session control error:', err);
       setErrorBoundary({
         hasError: true,
         error: err instanceof Error ? err : new Error('Failed to control session')
       });
+    } finally {
+      setIsTransitioning(false);
     }
-    setIsTransitioning(false);
   }
 
   /**
@@ -366,233 +413,166 @@ export default function ClassroomPage() {
     );
   }
 
-  // Enhanced dual-pane learning interface
+  // Minimal clean learning interface
   if (session && (isActive || isPaused)) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-background to-muted">
-        {/* Fixed Header */}
-        <div className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b">
-          <div className="max-w-7xl mx-auto p-4">
-            <Card>
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <CardTitle>AI Learning Session</CardTitle>
-                      <Badge variant={getStatusBadgeVariant(sessionState.status)}>
-                        {getDetailedStatus()}
-                      </Badge>
-                      {voiceConnected && (
-                        <Badge variant="outline" className="text-green-600">
-                          <Mic className="h-3 w-3 mr-1" />
-                          Connected
-                        </Badge>
+        {/* Minimal Header */}
+        <div className="border-b bg-background/95 backdrop-blur">
+          <div className="max-w-full px-6 py-3">
+            <div className="flex items-center justify-between">
+              {/* Left: Session info */}
+              <div className="flex items-center space-x-4">
+                <h1 className="text-lg font-semibold">{currentTopic}</h1>
+                <Badge variant={getStatusBadgeVariant(sessionState.status)}>
+                  {getDetailedStatus()}
+                </Badge>
+                {voiceConnected && (
+                  <Badge variant="outline" className="text-green-600">
+                    <Mic className="h-3 w-3 mr-1" />
+                    Connected
+                  </Badge>
+                )}
+              </div>
+
+              {/* Right: Controls */}
+              <div className="flex items-center space-x-2">
+                {sessionControlState === 'ended' ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => router.push('/dashboard')}
+                  >
+                    Back to Dashboard
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      variant={audioControls.isMuted ? "destructive" : "secondary"}
+                      size="sm"
+                      onClick={toggleMute}
+                      disabled={isConnecting || isLoading || isTransitioning}
+                    >
+                      {audioControls.isMuted ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                    </Button>
+
+                    <Button
+                      variant={sessionControlState === 'paused' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={handlePauseResume}
+                      disabled={isConnecting || isLoading || isTransitioning}
+                    >
+                      {isTransitioning ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : sessionControlState === 'paused' ? (
+                        <Play className="w-4 h-4" />
+                      ) : (
+                        <Pause className="w-4 h-4" />
                       )}
-                    </div>
-                    <CardDescription className="flex items-center space-x-4">
-                      <span>{currentTopic}</span>
-                      <span>•</span>
-                      <span>Duration: {formatDuration(liveMetrics.duration)}</span>
-                      <span>•</span>
-                      <span>Status: {
-                        sessionControlState === 'ended' ? 'Session Ended' :
-                        sessionControlState === 'paused' ? 'Paused' : 'Active'
-                      }</span>
-                      <span>•</span>
-                      <span>Quality: {qualityScore}%</span>
-                    </CardDescription>
+                    </Button>
 
-                    {/* Real-time metrics */}
-                    <div className="flex items-center space-x-4 text-xs text-muted-foreground">
-                      <div className="flex items-center space-x-1">
-                        <Activity className="h-3 w-3" />
-                        <span>{liveMetrics.messagesExchanged} messages</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <BarChart3 className="h-3 w-3" />
-                        <span>Engagement: {engagementTrend}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <Zap className="h-3 w-3" />
-                        <span>{liveMetrics.mathEquationsCount} equations</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Enhanced Session Controls */}
-                  <div className="flex items-center space-x-2">
-                    {sessionControlState === 'ended' ? (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => router.push('/dashboard')}
-                        className="h-8"
-                      >
-                        <Home className="w-3 h-3 mr-1" />
-                        Back to Dashboard
-                      </Button>
-                    ) : (
-                      <>
-                        {/* Microphone Control */}
-                        <Button
-                          variant={audioControls.isMuted ? "destructive" : "secondary"}
-                          size="sm"
-                          onClick={toggleMute}
-                          disabled={isConnecting || isLoading || isTransitioning}
-                          className="h-8"
-                        >
-                          {audioControls.isMuted ? (
-                            <>
-                              <MicOff className="w-3 h-3 mr-1" />
-                              Muted
-                            </>
-                          ) : (
-                            <>
-                              <Mic className="w-3 h-3 mr-1" />
-                              Mic
-                            </>
-                          )}
-                        </Button>
-
-                        {/* Pause/Resume Control */}
-                        <Button
-                          variant={sessionControlState === 'paused' ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={handlePauseResume}
-                          disabled={isConnecting || isLoading || isTransitioning}
-                          className="h-8"
-                        >
-                          {isTransitioning ? (
-                            <Loader2 className="w-3 h-3 animate-spin" />
-                          ) : sessionControlState === 'paused' ? (
-                            <>
-                              <Play className="w-3 h-3 mr-1" />
-                              Resume
-                            </>
-                          ) : (
-                            <>
-                              <Pause className="w-3 h-3 mr-1" />
-                              Pause
-                            </>
-                          )}
-                        </Button>
-
-                        {/* End Session Control */}
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={handleEndSession}
-                          disabled={isConnecting || isLoading || isTransitioning}
-                          className="h-8"
-                        >
-                          {isTransitioning ? (
-                            <Loader2 className="w-3 h-3 animate-spin" />
-                          ) : (
-                            <>
-                              <Square className="w-3 h-3 mr-1" />
-                              End Session
-                            </>
-                          )}
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </CardHeader>
-            </Card>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={handleEndSession}
+                      disabled={isConnecting || isLoading || isTransitioning}
+                    >
+                      {isTransitioning ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Square className="w-4 h-4" />
+                      )}
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* New 80/20 Layout */}
-        <div className="max-w-7xl mx-auto p-4">
-          <div className="flex gap-6 h-[calc(100vh-200px)]">
-
-            {/* Left Pane: Teaching Board (80%) */}
-            <div className="flex-[4]">
-              <TeachingBoard
-                sessionId={sessionId || undefined}
-                topic={currentTopic}
-                className="h-full"
-              />
-            </div>
-
-            {/* Right Pane: Tabbed Panel (20%) */}
-            <div className="flex-[1] min-w-[300px]">
-              <Card className="flex flex-col h-full">
-                <CardHeader className="border-b pb-2">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle className="text-lg">AI Teacher</CardTitle>
-                      <CardDescription className="text-xs">Real-time transcription with math</CardDescription>
-                    </div>
-                  </div>
-                  {/* Tab Switcher */}
-                  <div className="flex space-x-1 bg-muted p-1 rounded-md mt-2">
-                    <button
-                      onClick={() => setActiveTab('transcript')}
-                      className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-                        activeTab === 'transcript'
-                          ? 'bg-background text-foreground shadow-sm'
-                          : 'text-muted-foreground hover:bg-background/50'
-                      }`}
-                    >
-                      📝 Transcript
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('notes')}
-                      className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-                        activeTab === 'notes'
-                          ? 'bg-background text-foreground shadow-sm'
-                          : 'text-muted-foreground hover:bg-background/50'
-                      }`}
-                    >
-                      📔 Notes
-                    </button>
-                  </div>
-                </CardHeader>
-                <CardContent className="flex-1 p-0 overflow-hidden">
-                  {activeTab === 'transcript' ? (
-                    <TranscriptionDisplay
-                      sessionId={sessionId || undefined}
-                      className="h-full"
-                    />
-                  ) : (
-                    <NotesPanel
-                      sessionId={sessionId || undefined}
-                      topic={currentTopic}
-                      className="h-full"
-                    />
-                  )}
-                </CardContent>
-              </Card>
-            </div>
+        {/* Clean 80/20 Layout */}
+        <div className="flex h-[calc(100vh-60px)]">
+          {/* Left: Teaching Board (80%) */}
+          <div className="flex-[4] p-4">
+            <TeachingBoard
+              sessionId={sessionId || undefined}
+              topic={currentTopic}
+              className="h-full rounded-lg shadow-lg"
+            />
           </div>
 
-          {/* LiveKit Voice Connection (Hidden) */}
-          {roomName && userId && isActive && (
-            <div className="hidden">
-              <LiveKitRoom
-                roomName={roomName}
-                participantId={userId}
-                participantName={`Student-${userId.slice(0, 8)}`}
-                onConnected={() => {
-                  setVoiceConnected(true);
-                  console.log('LiveKit voice connected');
-                }}
-                onDisconnected={() => {
-                  setVoiceConnected(false);
-                  console.log('LiveKit voice disconnected');
-                }}
-                onError={(error) => {
-                  console.error('LiveKit error:', error);
-                  setErrorBoundary({ hasError: true, error });
-                }}
-              />
+          {/* Right: Transcript/Notes (20%) */}
+          <div className="flex-[1] border-l bg-background p-4">
+            <div className="flex flex-col h-full">
+              {/* Tab Switcher */}
+              <div className="flex space-x-1 bg-muted p-1 rounded-md mb-3">
+                <button
+                  onClick={() => setActiveTab('transcript')}
+                  className={`px-3 py-1.5 rounded text-sm font-medium transition-colors flex-1 ${
+                    activeTab === 'transcript'
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:bg-background/50'
+                  }`}
+                >
+                  Transcript
+                </button>
+                <button
+                  onClick={() => setActiveTab('notes')}
+                  className={`px-3 py-1.5 rounded text-sm font-medium transition-colors flex-1 ${
+                    activeTab === 'notes'
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:bg-background/50'
+                  }`}
+                >
+                  Notes
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 overflow-hidden">
+                {activeTab === 'transcript' ? (
+                  <TranscriptionDisplay
+                    sessionId={sessionId || undefined}
+                    className="h-full"
+                  />
+                ) : (
+                  <NotesPanel
+                    sessionId={sessionId || undefined}
+                    topic={currentTopic}
+                    className="h-full"
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* LiveKit Voice Connection (Hidden) */}
+        {roomName && userId && isActive && (
+          <div className="hidden">
+            <LiveKitRoom
+              roomName={roomName}
+              participantId={userId}
+              participantName={`Student-${userId.slice(0, 8)}`}
+              onConnected={() => {
+                setVoiceConnected(true);
+                console.log('LiveKit voice connected');
+              }}
+              onDisconnected={() => {
+                setVoiceConnected(false);
+                console.log('LiveKit voice disconnected');
+              }}
+              onError={(error) => {
+                console.error('LiveKit error:', error);
+                setErrorBoundary({ hasError: true, error });
+              }}
+            />
             </div>
           )}
 
-          {/* Status Alerts */}
-          {isPaused && (
+        {/* Status Messages */}
+        <div className="fixed bottom-4 right-4 space-y-2 max-w-md">
+          {sessionControlState === 'paused' && (
             <Alert>
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>

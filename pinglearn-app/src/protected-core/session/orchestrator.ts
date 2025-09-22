@@ -18,6 +18,7 @@ import type { VoiceConfig } from '../contracts/voice.contract';
 export interface SessionConfig {
   studentId: string;
   topic: string;
+  sessionId?: string;  // PC-011: Optional external session ID
   voiceEnabled?: boolean;
   mathTranscriptionEnabled?: boolean;
   recordingEnabled?: boolean;
@@ -93,7 +94,9 @@ export class SessionOrchestrator {
 
   async startSession(config: SessionConfig): Promise<string> {
     try {
-      const sessionId = `session_${Date.now()}_${config.studentId}`;
+      // PC-011: Accept external session ID if provided, otherwise generate
+      const sessionId = config.sessionId || `session_${Date.now()}_${config.studentId}`;
+      console.log('[PC-011] Using session ID:', sessionId);
       this.sessionStartTime = Date.now();
       this.messageCount = 0;
       this.mathEquationCount = 0;
@@ -136,6 +139,9 @@ export class SessionOrchestrator {
           await this.livekitService.initialize(voiceConfig);
           await this.livekitService.startSession(config.studentId, config.topic);
           this.currentSession.voiceConnectionStatus = 'connected';
+
+          // CRITICAL FIX PC-011: Setup LiveKit listener AFTER connection
+          this.setupLiveKitTranscriptionListener();
         } catch (error) {
           console.error('LiveKit session start failed:', error);
           this.currentSession.voiceConnectionStatus = 'error';
@@ -374,31 +380,46 @@ export class SessionOrchestrator {
       }
     });
 
-    // PC-010 FIX: LiveKit transcription data handler for data channel events
-    if (this.livekitService) {
-      console.log('[PC-010] Setting up LiveKit transcription listener');
+    // PC-011: LiveKit handler moved to setupLiveKitTranscriptionListener()
+    // This is now called AFTER LiveKit connection is established
+  }
 
-      (this.livekitService as any).on('transcriptionReceived', (data: any) => {
-        console.log('[PC-010] SessionOrchestrator received transcription:', {
-          type: data.type,
-          speaker: data.speaker,
-          contentLength: data.content?.length
-        });
-
-        // Add to display buffer via existing method
-        this.addTranscriptionItem(
-          data.content,
-          data.speaker as 'student' | 'teacher' | 'ai',
-          data.type as 'text' | 'math' | 'code' | 'diagram' | 'image',
-          data.confidence
-        );
-
-        // Handle math rendering if this is a math segment
-        if (data.type === 'math' && data.latex) {
-          console.log('[PC-010] Math equation received:', data.latex);
-        }
-      });
+  /**
+   * PC-011: Setup LiveKit transcription listener AFTER connection established
+   * This method is called from startSession() after successful LiveKit initialization
+   */
+  private setupLiveKitTranscriptionListener(): void {
+    if (!this.livekitService) {
+      console.warn('[PC-011] No LiveKit service available');
+      return;
     }
+
+    console.log('[PC-011] Setting up LiveKit transcription listener (post-connection)');
+
+    // Now we know the service is connected
+    (this.livekitService as any).on('transcriptionReceived', (data: any) => {
+      console.log('[PC-011] Transcription received:', {
+        type: data.type,
+        speaker: data.speaker,
+        contentLength: data.content?.length,
+        timestamp: new Date().toISOString()
+      });
+
+      // Add to display buffer
+      this.addTranscriptionItem(
+        data.content,
+        data.speaker as 'student' | 'teacher' | 'ai',
+        data.type as 'text' | 'math' | 'code' | 'diagram' | 'image',
+        data.confidence
+      );
+
+      // Log math equations for debugging
+      if (data.type === 'math' && data.latex) {
+        console.log('[PC-011] Math equation:', data.latex);
+      }
+    });
+
+    console.log('[PC-011] LiveKit listener attached successfully');
   }
 
   /**
