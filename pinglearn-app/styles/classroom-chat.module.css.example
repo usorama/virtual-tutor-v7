@@ -1,0 +1,365 @@
+/* Classroom Chat UI Styles - Example for FC-002 */
+
+/* Container Layout */
+.classroomContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.98);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.topic {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.statusBadge {
+  font-size: 0.75rem;
+}
+
+.headerRight {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Main Content Area */
+.mainContent {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.chatFullWidth {
+  width: 100%;
+}
+
+.chatWithNotes {
+  flex: 1;
+}
+
+.notesPanel {
+  width: 320px;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+/* Chat Interface */
+.chatInterface {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #f7f8fc;
+}
+
+.scrollArea {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.messagesContainer {
+  padding: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Welcome Message */
+.welcomeMessage {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6b7280;
+}
+
+.welcomeMessage h2 {
+  font-size: 1.5rem;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+/* Message Bubbles */
+.messageBubble {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.messageBubble.teacher {
+  flex-direction: row;
+}
+
+.messageBubble.student {
+  flex-direction: row-reverse;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.messageBubble.teacher .avatar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.messageBubble.student .avatar {
+  background: #e5e7eb;
+  color: #6b7280;
+}
+
+/* Bubble Content */
+.bubbleContent {
+  max-width: 70%;
+  min-width: 200px;
+}
+
+.bubbleHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.senderName {
+  font-weight: 500;
+}
+
+.timestamp {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.streamingDot {
+  animation: pulse 1.5s infinite;
+  color: #10b981;
+  margin-left: 0.25rem;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Message Body */
+.bubbleBody {
+  background: white;
+  border-radius: 18px;
+  padding: 0.875rem 1.125rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.messageBubble.teacher .bubbleBody {
+  border-top-left-radius: 4px;
+}
+
+.messageBubble.student .bubbleBody {
+  background: #667eea;
+  color: white;
+  border-top-right-radius: 4px;
+}
+
+.messageContent {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: #1f2937;
+}
+
+.messageBubble.student .messageContent {
+  color: white;
+}
+
+/* Math Content */
+.mathContent {
+  margin: 0.75rem 0;
+  text-align: center;
+  font-size: 1.125rem;
+}
+
+.mathContent .katex-display {
+  margin: 0.5rem 0;
+}
+
+/* Streaming Message */
+.messageBubble.streaming .bubbleBody {
+  background: linear-gradient(270deg, #ffffff, #f3f4f6, #ffffff);
+  background-size: 200% 200%;
+  animation: shimmer 2s ease infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Word Highlighting (PC-013 Ready) */
+.wordHighlight {
+  background: linear-gradient(90deg, #ffd700 0%, #ffed4e 100%);
+  padding: 0.125rem 0.25rem;
+  border-radius: 4px;
+  font-weight: 600;
+  animation: highlightPulse 0.5s ease;
+}
+
+@keyframes highlightPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Scroll Anchor */
+.scrollAnchor {
+  height: 1px;
+  width: 100%;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .messagesContainer {
+    padding: 1rem;
+  }
+
+  .bubbleContent {
+    max-width: 85%;
+  }
+
+  .notesPanel {
+    position: fixed;
+    top: 60px;
+    right: 0;
+    bottom: 0;
+    width: 80%;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 20;
+  }
+
+  .notesPanel.open {
+    transform: translateX(0);
+  }
+
+  .header {
+    padding: 0.5rem 1rem;
+  }
+
+  .topic {
+    font-size: 1rem;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .classroomContainer {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  }
+
+  .chatInterface {
+    background: #0f172a;
+  }
+
+  .header {
+    background: rgba(15, 23, 42, 0.98);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .topic {
+    color: #f1f5f9;
+  }
+
+  .welcomeMessage {
+    color: #94a3b8;
+  }
+
+  .welcomeMessage h2 {
+    color: #f1f5f9;
+  }
+
+  .bubbleBody {
+    background: #1e293b;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .messageContent {
+    color: #e2e8f0;
+  }
+
+  .messageBubble.student .bubbleBody {
+    background: #667eea;
+  }
+
+  .messageBubble.streaming .bubbleBody {
+    background: linear-gradient(270deg, #1e293b, #334155, #1e293b);
+    background-size: 200% 200%;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus States */
+button:focus-visible,
+.messageBubble:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+  .header {
+    position: relative;
+    page-break-after: avoid;
+  }
+
+  .messageBubble {
+    page-break-inside: avoid;
+  }
+
+  .notesPanel {
+    display: none;
+  }
+}
