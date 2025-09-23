@@ -253,6 +253,11 @@ src/components/
 - Create component-specific CSS modules for complex animations
 - Implement CSS variables for theme consistency
 - Use Framer Motion for advanced animations
+- Port animation components from landing page:
+  - ConicGradientButton for primary CTAs
+  - TypewriterText for dynamic content
+  - FadeInSection for scroll reveals
+  - AnimatedBackground for premium feel
 
 ### 3. Performance Considerations
 - Lazy load heavy components
@@ -290,16 +295,21 @@ src/components/
 
 ## 🔄 Migration Strategy
 
-### Step 1: Parallel Development
+### Step 1: Component Migration
+- Copy animated components from landing page
+- Adapt them to work with app's TypeScript setup
+- Test animations in isolation
+
+### Step 2: Parallel Development
 - Create new components alongside existing ones
 - Use feature flags to toggle between old/new UI
 
-### Step 2: Gradual Rollout
+### Step 3: Gradual Rollout
 - Start with navigation and dashboard
 - Progress through pages systematically
 - Maintain backward compatibility
 
-### Step 3: Cleanup
+### Step 4: Cleanup
 - Remove old components after verification
 - Update documentation
 - Consolidate styles and utilities
@@ -313,8 +323,18 @@ src/components/
   "tailwindcss": "^3.4.0",
   "@radix-ui/react-*": "latest",
   "katex": "^0.16.0",
-  "react-intersection-observer": "^9.0.0"
+  "react-intersection-observer": "^9.0.0",
+  "lucide-react": "latest"
 }
+```
+
+### Animation Components to Copy
+```bash
+# Copy these components from landing page:
+cp ../pinglearn-landing/src/components/ConicGradientButton.tsx src/components/ui/
+cp ../pinglearn-landing/src/components/TypewriterText.tsx src/components/ui/
+cp ../pinglearn-landing/src/components/AnimatedBackground.tsx src/components/shared/
+cp ../pinglearn-landing/src/components/animations/FadeInSection.tsx src/components/animations/
 ```
 
 ### Browser Support

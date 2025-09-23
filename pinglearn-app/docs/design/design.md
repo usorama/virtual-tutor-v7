@@ -471,35 +471,235 @@ The design system is optimized for dark mode only. Light mode is not supported t
 
 ## 📚 Component Library
 
-### Available Components
-1. `AnimatedBackground` - Grid + particle system
-2. `ConicGradientButton` - Animated border button
-3. `TypewriterText` - Rotating text animation
-4. `MetallicLogo` - 3D metallic logo effect
-5. `LiquidMetalLogo` - Liquid metal animation
-6. `FadeInSection` - Scroll-triggered fade
+### Core Animated Components
 
-### Usage Examples
+#### 1. `ConicGradientButton` - Premium Animated Button
+**The signature button with rotating conic gradient border**
 
-#### AnimatedBackground
+```jsx
+import ConicGradientButton from '@/components/ConicGradientButton';
+
+<ConicGradientButton onClick={handleAction}>
+  Start Learning
+</ConicGradientButton>
+```
+
+**Features:**
+- 360° rotating conic gradient border (6s loop)
+- Blur effect on gradient for glow
+- Dark cyan fill with gradient overlay
+- Radial glow on hover
+- Fully accessible with keyboard support
+
+**Implementation Details:**
+```jsx
+// Key animation
+animate={{ rotate: 360 }}
+transition={{
+  duration: 6,
+  ease: "linear",
+  repeat: Infinity,
+}}
+
+// Gradient definition
+background: "conic-gradient(
+  from 0deg at 50% 50%,
+  transparent 0deg,
+  #06b6d4 60deg,
+  #0891b2 120deg,
+  transparent 180deg
+)"
+```
+
+#### 2. `TypewriterText` - Dynamic Text Animation
+**Auto-typing and deleting text effect with cursor**
+
+```jsx
+import TypewriterText from '@/components/TypewriterText';
+
+const words = ["empathetic", "adaptive", "personalized", "mindful"];
+
+<TypewriterText words={words} className="text-cyan-500" />
+```
+
+**Features:**
+- Smooth typing animation (120ms per character)
+- Faster deletion (50ms per character)
+- Blinking cursor with cyan color
+- 1.5s pause between words
+- Infinite loop through word array
+
+#### 3. `AnimatedBackground` - Interactive Particle System
+**Grid + floating particles with connections**
+
 ```jsx
 import AnimatedBackground from '@/components/AnimatedBackground';
 
 <main className="relative">
   <AnimatedBackground />
   <div className="relative z-10">
-    {/* Content goes here */}
+    {/* Content */}
   </div>
 </main>
 ```
 
-#### ConicGradientButton
-```jsx
-import ConicGradientButton from '@/components/ConicGradientButton';
+**Features:**
+- 50px grid with 3% opacity cyan lines
+- 60 floating particles with varying sizes
+- Dynamic connection lines (150px proximity)
+- Gradient orbs for depth
+- GPU-accelerated animations
 
-<ConicGradientButton onClick={handleClick}>
-  Join Waitlist
-</ConicGradientButton>
+#### 4. `FadeInSection` - Scroll-Triggered Animation
+**Content that fades in when scrolled into view**
+
+```jsx
+import FadeInSection from '@/components/FadeInSection';
+
+<FadeInSection delay={0.2} duration={0.6}>
+  <Card>Content to animate</Card>
+</FadeInSection>
+```
+
+**Features:**
+- Triggers once when in viewport
+- Configurable delay and duration
+- Y-axis movement (50px) with fade
+- Custom easing curve
+- -100px margin for early trigger
+
+#### 5. `MetallicLogo` - 3D Metallic Effect
+**Logo with metallic gradient and depth**
+
+```jsx
+import MetallicLogo from '@/components/MetallicLogo';
+
+<MetallicLogo className="h-24" />
+```
+
+#### 6. `LiquidMetalLogo` - Liquid Animation
+**Logo with liquid metal morphing effect**
+
+```jsx
+import LiquidMetalLogo from '@/components/LiquidMetalLogo';
+
+<LiquidMetalLogo animated={true} />
+```
+
+### Text Animation Patterns
+
+#### Gradient Text Effect
+```css
+.gradient-text {
+  background: linear-gradient(135deg, #FFFFFF 0%, #06B6D4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+```
+
+#### Glowing Text
+```css
+.text-glow {
+  text-shadow:
+    0 0 40px rgba(6, 182, 212, 0.8),
+    0 0 80px rgba(6, 182, 212, 0.5);
+}
+```
+
+#### Pulsing Text
+```css
+@keyframes pulse-text {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.pulse-text {
+  animation: pulse-text 2s ease-in-out infinite;
+}
+```
+
+### Interactive Hover Effects
+
+#### Card Hover Lift
+```jsx
+const cardVariants = {
+  rest: { scale: 1, y: 0 },
+  hover: {
+    scale: 1.02,
+    y: -5,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 10
+    }
+  }
+};
+```
+
+#### Button Press Effect
+```css
+.button:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+```
+
+### Loading & Transition Animations
+
+#### Stagger Children Animation
+```jsx
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.3
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: { opacity: 1, x: 0 }
+};
+```
+
+#### Page Transition
+```jsx
+const pageVariants = {
+  initial: { opacity: 0, x: -200 },
+  in: { opacity: 1, x: 0 },
+  out: { opacity: 0, x: 200 }
+};
+
+const pageTransition = {
+  type: "tween",
+  ease: "anticipate",
+  duration: 0.5
+};
+```
+
+### Motion Presets
+
+```jsx
+// Spring animations
+const springConfig = {
+  type: "spring",
+  stiffness: 260,
+  damping: 20
+};
+
+// Smooth ease
+const smoothEase = [0.43, 0.13, 0.23, 0.96];
+
+// Bounce effect
+const bounceConfig = {
+  type: "spring",
+  stiffness: 600,
+  damping: 15
+};
 ```
 
 ## 🎯 Design Tokens Export

@@ -386,12 +386,34 @@
       "rotation": {
         "value": "6000ms",
         "type": "duration",
-        "description": "Border rotation animation"
+        "description": "ConicGradientButton border rotation"
+      },
+      "typewriter": {
+        "typing": {
+          "value": "120ms",
+          "type": "duration",
+          "description": "Per character typing speed"
+        },
+        "deleting": {
+          "value": "50ms",
+          "type": "duration",
+          "description": "Per character deletion speed"
+        },
+        "pause": {
+          "value": "1500ms",
+          "type": "duration",
+          "description": "Pause between words"
+        }
       },
       "carousel": {
         "value": "15000ms",
         "type": "duration",
-        "description": "Features carousel scroll speed (doubled from 30s)"
+        "description": "Features carousel scroll speed"
+      },
+      "fadeIn": {
+        "value": "600ms",
+        "type": "duration",
+        "description": "FadeInSection default duration"
       }
     },
 
@@ -891,6 +913,56 @@
       "illustrationOpacity": {
         "value": "0.6",
         "type": "opacity"
+      }
+    },
+
+    "animatedComponents": {
+      "conicButton": {
+        "borderWidth": {
+          "value": "2px",
+          "type": "size"
+        },
+        "paddingHorizontal": {
+          "value": "32px",
+          "type": "spacing"
+        },
+        "paddingVertical": {
+          "value": "12px",
+          "type": "spacing"
+        },
+        "glowBlur": {
+          "value": "blur(12px)",
+          "type": "effect"
+        }
+      },
+      "typewriter": {
+        "cursorWidth": {
+          "value": "3px",
+          "type": "size"
+        },
+        "cursorHeight": {
+          "value": "1.2em",
+          "type": "size"
+        },
+        "cursorColor": {
+          "value": "#06B6D4",
+          "type": "color"
+        },
+        "cursorMargin": {
+          "value": "2px",
+          "type": "spacing"
+        }
+      },
+      "fadeInSection": {
+        "yOffset": {
+          "value": "50px",
+          "type": "size"
+        },
+        "viewportMargin": {
+          "value": "-100px",
+          "type": "spacing",
+          "description": "Trigger margin for scroll"
+        }
       }
     },
 

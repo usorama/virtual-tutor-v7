@@ -3,7 +3,7 @@ import { AccessToken } from 'livekit-server-sdk';
 
 export async function POST(request: NextRequest) {
   try {
-    const { participantId, roomName, participantName } = await request.json();
+    const { participantId, sessionId, roomName, participantName } = await request.json();
 
     if (!participantId || !roomName) {
       return NextResponse.json(
@@ -37,7 +37,10 @@ export async function POST(request: NextRequest) {
     // Generate JWT token
     const token = await at.toJwt();
 
-    return NextResponse.json({ token });
+    // Get LiveKit URL from environment
+    const url = process.env.LIVEKIT_URL || 'wss://ai-tutor-prototype-ny9l58vd.livekit.cloud';
+
+    return NextResponse.json({ token, url });
   } catch (error) {
     console.error('Token generation error:', error);
     return NextResponse.json(
