@@ -126,8 +126,6 @@ export function WizardProvider({ children }: WizardProviderProps) {
     switch (state.currentStep) {
       case WIZARD_STEPS.GRADE_SELECTION:
         return state.grade !== null
-      case WIZARD_STEPS.PURPOSE_SELECTION:
-        return state.purpose !== null
       case WIZARD_STEPS.SUBJECT_SELECTION:
         return state.subjects.length > 0
       case WIZARD_STEPS.TOPIC_SELECTION:
@@ -135,6 +133,8 @@ export function WizardProvider({ children }: WizardProviderProps) {
         return state.subjects.every(subject =>
           state.topics[subject] && state.topics[subject].length > 0
         )
+      case WIZARD_STEPS.PURPOSE_SELECTION:
+        return state.purpose !== null
       case WIZARD_STEPS.SUMMARY:
         return true
       default:

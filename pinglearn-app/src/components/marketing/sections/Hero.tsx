@@ -5,6 +5,7 @@ import { Play, Users, Star, Award } from "lucide-react";
 import TypewriterText from "../ui/TypewriterText";
 import ConicGradientButton from "../ui/ConicGradientButton";
 import Navigation from "./Navigation";
+import { Marquee } from "@/components/ui/marquee";
 
 // Import the shape background component
 import { cn } from "@/lib/utils";
@@ -59,7 +60,7 @@ function ElegantShape({
             transition={{
                 duration: 2.4,
                 delay,
-                ease: [0.23, 0.86, 0.39, 0.96],
+                ease: "easeOut",
                 opacity: { duration: 1.2 },
             }}
             className={cn("absolute", className)}
@@ -102,15 +103,7 @@ export default function Hero() {
 
   const fadeUpVariants = {
     hidden: { opacity: 0, y: 30 },
-    visible: (i: number) => ({
-        opacity: 1,
-        y: 0,
-        transition: {
-            duration: 1,
-            delay: 0.5 + i * 0.2,
-            ease: [0.25, 0.4, 0.25, 1],
-        },
-    }),
+    visible: { opacity: 1, y: 0 },
   };
 
   return (
@@ -217,10 +210,10 @@ export default function Hero() {
           <div className="max-w-6xl mx-auto text-center">
             {/* Badge */}
             <motion.div
-                custom={0}
                 variants={fadeUpVariants}
                 initial="hidden"
                 animate="visible"
+                transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
                 className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/[0.08] mb-8 md:mb-12"
             >
                 <Circle className="h-2 w-2 fill-cyan-500/80" />
@@ -231,10 +224,10 @@ export default function Hero() {
 
             {/* Main headline */}
             <motion.div
-                custom={1}
                 variants={fadeUpVariants}
                 initial="hidden"
                 animate="visible"
+                transition={{ duration: 1, delay: 0.7, ease: "easeOut" }}
             >
                 <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold mb-6 md:mb-8 tracking-tight">
                     <span className="bg-clip-text text-transparent bg-gradient-to-b from-white to-white/80">
@@ -242,7 +235,7 @@ export default function Hero() {
                     </span>
                     <br />
                     <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-white/90 to-blue-300">
-                        <TypewriterText words={rotatingWords} typingSpeed={100} />
+                        <TypewriterText words={rotatingWords} />
                     </span>
                     <br />
                     <span className="bg-clip-text text-transparent bg-gradient-to-b from-white to-white/80">
@@ -253,10 +246,10 @@ export default function Hero() {
 
             {/* Subtitle */}
             <motion.div
-                custom={2}
                 variants={fadeUpVariants}
                 initial="hidden"
                 animate="visible"
+                transition={{ duration: 1, delay: 0.9, ease: "easeOut" }}
             >
                 <p className="text-base sm:text-lg md:text-xl text-white/40 mb-8 leading-relaxed font-light tracking-wide max-w-3xl mx-auto px-4">
                   <span className="text-white/50 block mb-2">
@@ -304,22 +297,24 @@ export default function Hero() {
               ))}
             </motion.div>
 
-            {/* Feature Grid (Bottom) */}
+            {/* Feature Marquee (Bottom) */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.4 }}
-              className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto"
+              className="max-w-6xl mx-auto"
             >
-              {features.map((feature, index) => (
-                <div
-                  key={feature.label}
-                  className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-3 flex items-center space-x-3"
-                >
-                  <span className="text-2xl">{feature.icon}</span>
-                  <span className="text-white/70 text-sm">{feature.label}</span>
-                </div>
-              ))}
+              <Marquee pauseOnHover={true} speed={50} className="py-4">
+                {features.map((feature, index) => (
+                  <div
+                    key={feature.label}
+                    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-3 flex items-center space-x-3 mx-2 min-w-fit"
+                  >
+                    <span className="text-2xl">{feature.icon}</span>
+                    <span className="text-white/70 text-sm whitespace-nowrap">{feature.label}</span>
+                  </div>
+                ))}
+              </Marquee>
             </motion.div>
           </div>
         </div>

@@ -6,6 +6,7 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import ConicGradientButton from "../ui/ConicGradientButton";
+import { useAuth } from "@/lib/auth/auth-provider";
 
 interface NavigationProps {
   transparent?: boolean;
@@ -62,6 +63,12 @@ const menuItems = [
 export default function Navigation({ transparent = false }: NavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const { user, loading } = useAuth();
+
+  // Don't render navigation if user is signed in (hide marketing navigation after signin)
+  if (!loading && user) {
+    return null;
+  }
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 

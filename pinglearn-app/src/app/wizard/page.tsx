@@ -192,18 +192,6 @@ export default function WizardPage() {
                 />
               )}
 
-              {state.currentStep === WIZARD_STEPS.PURPOSE_SELECTION && (
-                <div>
-                  <h2 className="text-2xl font-bold mb-6">
-                    How would you like to learn today?
-                  </h2>
-                  <PurposeSelector
-                    selected={state.purpose}
-                    onSelect={updatePurpose}
-                  />
-                </div>
-              )}
-
               {state.currentStep === WIZARD_STEPS.SUBJECT_SELECTION && (
                 <SubjectSelector
                   availableSubjects={availableSubjects}
@@ -219,6 +207,18 @@ export default function WizardPage() {
                   selectedTopics={state.topics}
                   onTopicsChange={updateTopics}
                 />
+              )}
+
+              {state.currentStep === WIZARD_STEPS.PURPOSE_SELECTION && (
+                <div>
+                  <h2 className="text-2xl font-bold mb-6">
+                    How would you like to approach these topics?
+                  </h2>
+                  <PurposeSelector
+                    selected={state.purpose}
+                    onSelect={updatePurpose}
+                  />
+                </div>
               )}
 
               {state.currentStep === WIZARD_STEPS.SUMMARY && (

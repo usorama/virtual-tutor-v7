@@ -1,5 +1,5 @@
 import Hero from '@/components/marketing/sections/Hero';
-import ProblemSolutionRedesigned from '@/components/marketing/sections/ProblemSolutionRedesigned';
+import { PingLearnFeaturesModern } from '@/components/marketing/sections/PingLearnFeaturesModern';
 import StudentComparison from '@/components/marketing/sections/StudentComparison';
 import HowItWorks from '@/components/marketing/sections/HowItWorks';
 import ContactRedesigned from '@/components/marketing/sections/ContactRedesigned';
@@ -9,7 +9,7 @@ export default function MarketingHome() {
   return (
     <div className="relative">
       <Hero />
-      <ProblemSolutionRedesigned />
+      <PingLearnFeaturesModern />
       <StudentComparison />
       <HowItWorks />
       <ContactRedesigned />

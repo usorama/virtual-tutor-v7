@@ -32,17 +32,17 @@ export interface WizardContextType {
 
 export const WIZARD_STEPS = {
   GRADE_SELECTION: 0,
-  PURPOSE_SELECTION: 1,
-  SUBJECT_SELECTION: 2,
-  TOPIC_SELECTION: 3,
+  SUBJECT_SELECTION: 1,
+  TOPIC_SELECTION: 2,
+  PURPOSE_SELECTION: 3,
   SUMMARY: 4,
 } as const
 
 export const WIZARD_STEP_NAMES = [
   'Grade Selection',
-  'Learning Purpose',
   'Subject Selection',
   'Topic Selection',
+  'Learning Purpose',
   'Summary & Confirmation',
 ] as const
 
