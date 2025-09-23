@@ -579,25 +579,79 @@
 
   "effects": {
     "backdropBlur": {
-      "sm": {
+      "xs": {
         "value": "blur(4px)",
-        "type": "effect"
+        "type": "effect",
+        "description": "Minimal blur for performance"
+      },
+      "sm": {
+        "value": "blur(8px)",
+        "type": "effect",
+        "description": "Subtle glass effect"
       },
       "base": {
-        "value": "blur(10px)",
-        "type": "effect"
+        "value": "blur(12px)",
+        "type": "effect",
+        "description": "Standard glass blur - mobile optimized"
       },
       "md": {
-        "value": "blur(12px)",
-        "type": "effect"
+        "value": "blur(16px)",
+        "type": "effect",
+        "description": "Standard glass blur - desktop"
       },
       "lg": {
-        "value": "blur(16px)",
-        "type": "effect"
+        "value": "blur(20px)",
+        "type": "effect",
+        "description": "Prominent glass blur"
       },
       "xl": {
         "value": "blur(24px)",
-        "type": "effect"
+        "type": "effect",
+        "description": "Heavy glass blur - navigation/modals"
+      },
+      "xxl": {
+        "value": "blur(32px)",
+        "type": "effect",
+        "description": "Maximum blur - use sparingly"
+      }
+    },
+
+    "glassmorphism": {
+      "saturation": {
+        "low": {
+          "value": "saturate(120%)",
+          "type": "effect"
+        },
+        "medium": {
+          "value": "saturate(150%)",
+          "type": "effect"
+        },
+        "high": {
+          "value": "saturate(180%)",
+          "type": "effect"
+        },
+        "max": {
+          "value": "saturate(200%)",
+          "type": "effect"
+        }
+      },
+      "brightness": {
+        "subtle": {
+          "value": "brightness(1.05)",
+          "type": "effect"
+        },
+        "medium": {
+          "value": "brightness(1.1)",
+          "type": "effect"
+        },
+        "high": {
+          "value": "brightness(1.15)",
+          "type": "effect"
+        },
+        "max": {
+          "value": "brightness(1.2)",
+          "type": "effect"
+        }
       }
     },
 
@@ -786,6 +840,42 @@
       "formFieldSpacing": {
         "value": "24px",
         "type": "spacing"
+      },
+      "purposeCard": {
+        "minHeight": {
+          "value": "180px",
+          "type": "size"
+        },
+        "iconSize": {
+          "value": "48px",
+          "type": "size"
+        },
+        "iconBackgroundSize": {
+          "value": "80px",
+          "type": "size"
+        },
+        "padding": {
+          "value": "24px",
+          "type": "spacing"
+        },
+        "borderRadius": {
+          "value": "20px",
+          "type": "borderRadius"
+        },
+        "gap": {
+          "value": "24px",
+          "type": "spacing",
+          "description": "Gap between purpose cards"
+        },
+        "hoverLift": {
+          "value": "-4px",
+          "type": "spacing",
+          "description": "Y-axis lift on hover"
+        },
+        "hoverScale": {
+          "value": "1.05",
+          "type": "scale"
+        }
       }
     },
 
@@ -999,8 +1089,171 @@
         "type": "spacing"
       },
       "backdropOpacity": {
-        "value": "0.8",
-        "type": "opacity"
+        "value": "0.4",
+        "type": "opacity",
+        "description": "Reduced for glassmorphism"
+      }
+    },
+
+    "liquidGlass": {
+      "backgrounds": {
+        "subtle": {
+          "value": "rgba(255, 255, 255, 0.02)",
+          "type": "color",
+          "description": "Very subtle glass"
+        },
+        "light": {
+          "value": "rgba(255, 255, 255, 0.05)",
+          "type": "color",
+          "description": "Light glass tint"
+        },
+        "standard": {
+          "value": "rgba(255, 255, 255, 0.07)",
+          "type": "color",
+          "description": "Standard glass"
+        },
+        "prominent": {
+          "value": "rgba(17, 17, 17, 0.7)",
+          "type": "color",
+          "description": "Dark prominent glass"
+        },
+        "heavy": {
+          "value": "rgba(17, 17, 17, 0.85)",
+          "type": "color",
+          "description": "Heavy glass for modals"
+        },
+        "navigation": {
+          "value": "rgba(0, 0, 0, 0.4)",
+          "type": "color",
+          "description": "Navigation bar glass"
+        },
+        "cyan": {
+          "value": "linear-gradient(135deg, rgba(6, 182, 212, 0.05) 0%, rgba(6, 182, 212, 0.1) 100%)",
+          "type": "gradient",
+          "description": "Cyan-tinted glass"
+        }
+      },
+      "borders": {
+        "subtle": {
+          "value": "rgba(255, 255, 255, 0.05)",
+          "type": "color"
+        },
+        "light": {
+          "value": "rgba(255, 255, 255, 0.08)",
+          "type": "color"
+        },
+        "standard": {
+          "value": "rgba(255, 255, 255, 0.1)",
+          "type": "color"
+        },
+        "prominent": {
+          "value": "rgba(255, 255, 255, 0.12)",
+          "type": "color"
+        },
+        "cyan": {
+          "value": "rgba(6, 182, 212, 0.15)",
+          "type": "color"
+        },
+        "hover": {
+          "value": "rgba(6, 182, 212, 0.2)",
+          "type": "color"
+        },
+        "active": {
+          "value": "rgba(6, 182, 212, 0.3)",
+          "type": "color"
+        }
+      },
+      "shadows": {
+        "insetTop": {
+          "value": "inset 0 1px 0 0 rgba(255, 255, 255, 0.1)",
+          "type": "shadow",
+          "description": "Top edge highlight"
+        },
+        "insetTopStrong": {
+          "value": "inset 0 2px 0 0 rgba(255, 255, 255, 0.15)",
+          "type": "shadow",
+          "description": "Strong top edge highlight"
+        },
+        "insetBottom": {
+          "value": "inset 0 -1px 0 0 rgba(255, 255, 255, 0.05)",
+          "type": "shadow",
+          "description": "Bottom edge shadow"
+        },
+        "glassSmall": {
+          "value": "0 4px 16px rgba(0, 0, 0, 0.1)",
+          "type": "shadow"
+        },
+        "glassMedium": {
+          "value": "0 4px 24px rgba(0, 0, 0, 0.15)",
+          "type": "shadow"
+        },
+        "glassLarge": {
+          "value": "0 8px 32px rgba(0, 0, 0, 0.2)",
+          "type": "shadow"
+        },
+        "glassXLarge": {
+          "value": "0 16px 64px rgba(0, 0, 0, 0.3)",
+          "type": "shadow"
+        },
+        "glassModal": {
+          "value": "0 24px 80px rgba(0, 0, 0, 0.4)",
+          "type": "shadow"
+        },
+        "cyanGlow": {
+          "value": "0 0 40px rgba(6, 182, 212, 0.1)",
+          "type": "shadow"
+        },
+        "cyanGlowStrong": {
+          "value": "0 8px 48px rgba(6, 182, 212, 0.3)",
+          "type": "shadow"
+        }
+      },
+      "borderRadius": {
+        "glass": {
+          "value": "20px",
+          "type": "size",
+          "description": "Standard glass border radius"
+        },
+        "glassSmall": {
+          "value": "16px",
+          "type": "size"
+        },
+        "glassLarge": {
+          "value": "24px",
+          "type": "size"
+        }
+      },
+      "performance": {
+        "maxBlurMobile": {
+          "value": "12px",
+          "type": "size",
+          "description": "Maximum blur for mobile devices"
+        },
+        "maxBlurTablet": {
+          "value": "20px",
+          "type": "size",
+          "description": "Maximum blur for tablets"
+        },
+        "maxBlurDesktop": {
+          "value": "30px",
+          "type": "size",
+          "description": "Maximum blur for desktop"
+        },
+        "maxElementsMobile": {
+          "value": "3",
+          "type": "number",
+          "description": "Max glass elements on mobile"
+        },
+        "maxElementsTablet": {
+          "value": "5",
+          "type": "number",
+          "description": "Max glass elements on tablet"
+        },
+        "maxElementsDesktop": {
+          "value": "8",
+          "type": "number",
+          "description": "Max glass elements on desktop"
+        }
       }
     }
   }

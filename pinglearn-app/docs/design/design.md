@@ -5,14 +5,16 @@ Version 1.0 | September 2025
 
 ### Core Principles
 1. **Minimalist Dark Interface**: Pure black (#000000) canvas with selective cyan accents
-2. **Depth Through Animation**: Movement and transitions create spatial hierarchy
-3. **Subtle Sophistication**: Less is more - every element has purpose
-4. **Responsive Fluidity**: Seamless experience across all devices
-5. **Performance First**: Optimized animations that don't sacrifice speed
+2. **Liquid Glass Depth**: Apple-inspired glassmorphism with real-time refraction
+3. **Depth Through Animation**: Movement and transitions create spatial hierarchy
+4. **Subtle Sophistication**: Less is more - every element has purpose
+5. **Responsive Fluidity**: Seamless experience across all devices
+6. **Performance First**: Optimized animations that don't sacrifice speed
 
 ### Visual Identity
 - **Dark-First**: Designed primarily for dark environments
 - **Cyan Accent**: Single accent color for maximum impact
+- **Liquid Glass**: Translucent layers with specular highlights
 - **Geometric Precision**: Clean lines, perfect circles, mathematical grids
 - **Living Interface**: Subtle animations that breathe life into static elements
 
@@ -106,6 +108,233 @@ font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-seri
 --cyan-30: rgba(6, 182, 212, 0.30);
 --cyan-50: rgba(6, 182, 212, 0.50);
 --cyan-80: rgba(6, 182, 212, 0.80);
+```
+
+## 🌊 Liquid Glass & Glassmorphism System
+
+### Apple-Inspired Liquid Glass (2025)
+Inspired by Apple's revolutionary Liquid Glass design language unveiled at WWDC 2025, our implementation brings translucent materials that dynamically reflect and refract their surroundings.
+
+#### Core Glass Properties
+```css
+/* Base Liquid Glass Effect */
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.2);
+  transform: translate3d(0, 0, 0); /* GPU acceleration */
+}
+
+/* Dark Mode Liquid Glass */
+.liquid-glass-dark {
+  background: rgba(17, 17, 17, 0.6);
+  backdrop-filter: blur(24px) saturate(200%) brightness(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(200%) brightness(1.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Cyan-tinted Glass */
+.liquid-glass-cyan {
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.05) 0%,
+    rgba(6, 182, 212, 0.1) 100%
+  );
+  backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(6, 182, 212, 0.15);
+}
+```
+
+#### Advanced SVG Liquid Glass Effect
+```html
+<!-- SVG Filter for Liquid Distortion -->
+<svg style="position: absolute; width: 0; height: 0;">
+  <defs>
+    <filter id="liquid-glass-distortion">
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.01"
+        numOctaves="2"
+        result="turbulence"/>
+      <feDisplacementMap
+        in="SourceGraphic"
+        in2="turbulence"
+        scale="5"
+        xChannelSelector="R"
+        yChannelSelector="G"/>
+      <feSpecularLighting
+        result="specularLighting"
+        surfaceScale="5"
+        specularConstant="0.75"
+        specularExponent="20"
+        lighting-color="white">
+        <fePointLight x="-50" y="60" z="200"/>
+      </feSpecularLighting>
+      <feComposite
+        in="specularLighting"
+        in2="SourceAlpha"
+        operator="in"
+        result="specularLightingInner"/>
+      <feComposite
+        in="specularLightingInner"
+        in2="SourceGraphic"
+        operator="arithmetic"
+        k1="0" k2="1" k3="1" k4="0"/>
+    </filter>
+  </defs>
+</svg>
+```
+
+#### Glassmorphism Hierarchy
+
+##### Level 1: Subtle Glass (Background Elements)
+```css
+.glass-subtle {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+```
+
+##### Level 2: Standard Glass (Cards, Containers)
+```css
+.glass-standard {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+    0 4px 24px rgba(0, 0, 0, 0.15);
+}
+```
+
+##### Level 3: Prominent Glass (Modals, Overlays)
+```css
+.glass-prominent {
+  background: rgba(17, 17, 17, 0.7);
+  backdrop-filter: blur(24px) saturate(180%) brightness(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 2px 0 0 rgba(255, 255, 255, 0.15),
+    0 12px 48px rgba(0, 0, 0, 0.3);
+}
+```
+
+##### Level 4: Liquid Glass (Interactive Elements)
+```css
+.glass-liquid {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
+  backdrop-filter: blur(20px) saturate(200%) brightness(1.15);
+  filter: url(#liquid-glass-distortion);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow:
+    inset 0 2px 4px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -2px 4px 0 rgba(0, 0, 0, 0.2),
+    0 16px 64px rgba(0, 0, 0, 0.25);
+}
+```
+
+### Performance Optimization
+
+#### GPU Acceleration
+```css
+.glass-optimized {
+  will-change: transform, opacity; /* Use sparingly */
+  transform: translate3d(0, 0, 0); /* Force GPU layer */
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+```
+
+#### Performance Thresholds
+- **Mobile**: Max blur 12px, limit to 2-3 glass elements
+- **Tablet**: Max blur 20px, limit to 4-5 glass elements
+- **Desktop**: Max blur 30px, limit to 6-8 glass elements
+- **Animation**: Never animate backdrop-filter directly
+
+#### Fallback Strategies
+```css
+/* Fallback for browsers without backdrop-filter support */
+@supports not (backdrop-filter: blur(10px)) {
+  .liquid-glass {
+    background: rgba(17, 17, 17, 0.85);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+      0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+}
+```
+
+### Interactive States
+
+#### Hover Effect
+```css
+.glass-interactive:hover {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(24px) saturate(200%);
+  border-color: rgba(6, 182, 212, 0.3);
+  transform: translateY(-2px) translate3d(0, 0, 0);
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+```
+
+#### Active State
+```css
+.glass-interactive:active {
+  background: rgba(255, 255, 255, 0.03);
+  transform: translateY(0) translate3d(0, 0, 0);
+}
+```
+
+#### Focus State
+```css
+.glass-interactive:focus-visible {
+  outline: 2px solid rgba(6, 182, 212, 0.5);
+  outline-offset: 2px;
+  backdrop-filter: blur(28px) saturate(220%);
+}
+```
+
+### Accessibility Considerations
+
+#### High Contrast Mode
+```css
+@media (prefers-contrast: high) {
+  .liquid-glass {
+    background: rgba(17, 17, 17, 0.9);
+    backdrop-filter: blur(8px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+  }
+}
+```
+
+#### Reduced Transparency
+```css
+@media (prefers-reduced-transparency: reduce) {
+  .liquid-glass {
+    background: rgba(17, 17, 17, 0.95);
+    backdrop-filter: blur(4px);
+  }
+}
+```
+
+#### Motion Preferences
+```css
+@media (prefers-reduced-motion: reduce) {
+  .liquid-glass {
+    filter: none;
+    transition: none;
+  }
+}
 ```
 
 ## ✨ Visual Effects
@@ -327,15 +556,30 @@ box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
 
 ### Card Components
 ```css
-/* Glass Morphism Card */
-background: rgba(255, 255, 255, 0.02);
-backdrop-filter: blur(10px);
-border: 1px solid rgba(255, 255, 255, 0.1);
-border-radius: 16px;
+/* Standard Glass Card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+    0 4px 24px rgba(0, 0, 0, 0.15);
+  transform: translate3d(0, 0, 0);
+}
 
 /* Hover State */
-border-color: rgba(6, 182, 212, 0.3);
-box-shadow: 0 0 30px rgba(6, 182, 212, 0.1);
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-color: rgba(6, 182, 212, 0.2);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    0 0 40px rgba(6, 182, 212, 0.1);
+  transform: translateY(-2px) translate3d(0, 0, 0);
+}
 ```
 
 ## 📏 Spacing System
@@ -710,21 +954,60 @@ See `design-tokens.json` for machine-readable design tokens that can be imported
 
 ### Navigation Bar (Top Bar)
 - **Height**: 64px (fixed)
-- **Background**: `rgba(0, 0, 0, 0.8)` with `backdrop-filter: blur(12px)`
-- **Border Bottom**: `1px solid rgba(6, 182, 212, 0.1)`
+- **Background**: Liquid glass with heavy blur
+- **Implementation**:
+```css
+.nav-bar {
+  height: 64px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(24px) saturate(180%) brightness(1.1);
+  -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(1.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
+    0 1px 3px rgba(0, 0, 0, 0.4);
+  z-index: 100;
+}
+
+.nav-item:hover {
+  color: #06B6D4;
+  text-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+}
+
+.nav-item.active {
+  border-bottom: 2px solid #06B6D4;
+  box-shadow: 0 2px 8px rgba(6, 182, 212, 0.3);
+}
+```
 - **Logo Position**: Left side with h-10 (40px)
 - **Menu Items**: Right-aligned with 24px spacing
-- **Active State**: Cyan underline (2px) with text-cyan-500
-- **Hover State**: `text-cyan-400` with 150ms transition
-- **Mobile**: Hamburger menu with slide-out drawer
+- **Mobile**: Hamburger menu with slide-out glass drawer
 
 ### Dashboard Components
 
 #### Stats Cards
-- **Background**: `rgba(255, 255, 255, 0.02)` with `backdrop-filter: blur(10px)`
-- **Border**: `1px solid rgba(255, 255, 255, 0.05)`
-- **Hover Border**: `rgba(6, 182, 212, 0.2)`
-- **Padding**: 24px
+```css
+.stats-card {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.stats-card:hover {
+  backdrop-filter: blur(20px) saturate(160%);
+  border-color: rgba(6, 182, 212, 0.2);
+  transform: translateY(-2px) scale(1.01);
+}
+```
 - **Grid Layout**: 1-2-3-4 columns (mobile to 2xl)
 
 #### Progress Rings
@@ -748,6 +1031,25 @@ See `design-tokens.json` for machine-readable design tokens that can be imported
 - **Active Progress**: Cyan gradient animated
 - **Step Indicators**: 32px circles with numbers
 - **Completed State**: Checkmark with cyan fill
+
+#### Purpose Selector (New Step)
+- **Grid Layout**: 2x2 on desktop, 1 column on mobile
+- **Card Size**: min-height 180px
+- **Card Background**: Glass-standard with hover to glass-prominent
+- **Selected State**: Cyan border glow + gradient overlay
+- **Icons**: 48px centered with glass circle background
+- **Typography**:
+  - Title: 20px semi-bold
+  - Description: 14px with 60% opacity
+- **Animation**: Scale 1.05 on hover, y: -4px lift
+- **Disabled State**: 40% opacity with cursor-not-allowed
+- **Coming Soon Badge**: Yellow-500 with 20% opacity background
+
+##### Purpose Options:
+1. **New Class** (BookOpen icon) - Regular tutoring mode
+2. **Revision** (RefreshCw icon) - Quick review mode
+3. **Exam Prep** (GraduationCap icon) - Intensive practice
+4. **Memory Test** (Brain icon) - Assessment mode (feature-flagged)
 
 #### Form Fields
 - **Input Height**: 48px
@@ -805,19 +1107,54 @@ See `design-tokens.json` for machine-readable design tokens that can be imported
 ### Help Chat Widget
 
 #### Floating Button
-- **Size**: 56px diameter
+```css
+.chat-floating-button {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%);
+  backdrop-filter: blur(12px);
+  border-radius: 50%;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
+    0 8px 32px rgba(6, 182, 212, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.2);
+  animation: pulse-glow 5s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 8px 32px rgba(6, 182, 212, 0.3); }
+  50% { box-shadow: 0 8px 48px rgba(6, 182, 212, 0.5); }
+}
+```
 - **Position**: Bottom-right, 24px offset
-- **Background**: Cyan-600 with gradient
 - **Icon**: 24px help outline
-- **Animation**: Pulse every 5s when closed
 - **Badge**: Red dot for unread messages
 
 #### Chat Window
-- **Width**: 380px
-- **Height**: 600px max
+```css
+.chat-window {
+  width: 380px;
+  max-height: 600px;
+  background: rgba(17, 17, 17, 0.85);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+    0 16px 64px rgba(0, 0, 0, 0.3);
+}
+
+.chat-header {
+  height: 56px;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px 20px 0 0;
+}
+```
 - **Position**: Above floating button
 - **Animation**: Slide up with fade
-- **Header**: 56px with minimize/close buttons
 - **Input Area**: Bottom-fixed with attachment button
 
 ### Loading States
@@ -858,11 +1195,28 @@ See `design-tokens.json` for machine-readable design tokens that can be imported
 
 ### Modal Overlays
 
-- **Backdrop**: `rgba(0, 0, 0, 0.8)` with blur
+```css
+.modal-backdrop {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.modal-content {
+  background: rgba(17, 17, 17, 0.8);
+  backdrop-filter: blur(32px) saturate(200%) brightness(1.1);
+  -webkit-backdrop-filter: blur(32px) saturate(200%) brightness(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  box-shadow:
+    inset 0 2px 0 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.05),
+    0 24px 80px rgba(0, 0, 0, 0.4);
+}
+```
 - **Content Max Width**: 600px (default), 900px (large)
 - **Animation**: Fade backdrop, scale content
 - **Close Button**: Top-right, 16px offset
-- **Border**: 1px solid white/10
 
 ---
 

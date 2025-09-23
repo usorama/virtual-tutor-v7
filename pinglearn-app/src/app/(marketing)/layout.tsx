@@ -1,15 +1,9 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import "../styles/katex.css";
-import "../styles/marketing.css";
-import { AuthProvider } from '@/lib/auth/auth-provider';
+import { Inter } from 'next/font/google';
 import Navigation from '@/components/marketing/sections/Navigation';
+import { Metadata } from 'next';
+import '@/styles/marketing.css';
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'PingLearn - AI Math Tutor for CBSE Students | Voice-Powered Learning',
@@ -76,23 +70,17 @@ export const metadata: Metadata = {
   manifest: '/site.webmanifest',
 };
 
-export default function RootLayout({
+export default function MarketingLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${inter.variable} font-sans antialiased min-h-screen bg-black text-white`}
-      >
-        <AuthProvider>
-          <Navigation />
-          <main className="pt-20">
-            {children}
-          </main>
-        </AuthProvider>
-      </body>
-    </html>
+    <div className={`${inter.className} min-h-screen bg-black text-white`}>
+      <Navigation />
+      <main className="pt-20">
+        {children}
+      </main>
+    </div>
   );
 }

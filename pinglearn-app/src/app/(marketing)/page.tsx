@@ -1,18 +1,20 @@
 import Hero from '@/components/marketing/sections/Hero';
-import ProblemSolutionRedesigned from '@/components/marketing/sections/ProblemSolutionRedesigned';
-import StudentComparison from '@/components/marketing/sections/StudentComparison';
+import ProblemSolution from '@/components/marketing/sections/ProblemSolution';
+import Features from '@/components/marketing/sections/Features';
 import HowItWorks from '@/components/marketing/sections/HowItWorks';
-import ContactRedesigned from '@/components/marketing/sections/ContactRedesigned';
+import Pricing from '@/components/marketing/sections/Pricing';
+import Contact from '@/components/marketing/sections/Contact';
 import Footer from '@/components/marketing/sections/Footer';
 
 export default function MarketingHome() {
   return (
     <div className="relative">
       <Hero />
-      <ProblemSolutionRedesigned />
-      <StudentComparison />
+      <ProblemSolution />
+      <Features />
       <HowItWorks />
-      <ContactRedesigned />
+      <Pricing />
+      <Contact />
       <Footer />
 
       {/* Future sections to be added */}

@@ -10,29 +10,43 @@ This document serves as the comprehensive execution guide for redesigning the Pi
 ## 🎯 Redesign Objectives
 
 1. **Visual Consistency**: Align app UI with landing page design system
-2. **Modern Dark Theme**: Implement sophisticated dark interface with cyan accents
-3. **Enhanced UX**: Improve navigation, information hierarchy, and user flow
-4. **Component Unification**: Create reusable component library
-5. **Performance**: Maintain fast load times with optimized animations
+2. **Liquid Glass Design**: Implement Apple-inspired glassmorphism throughout
+3. **Modern Dark Theme**: Sophisticated dark interface with cyan accents
+4. **Enhanced UX**: Improve navigation, information hierarchy, and user flow
+5. **Component Unification**: Create reusable component library
+6. **Performance**: Maintain fast load times with optimized glass effects
 
 ## 🗺️ Implementation Phases
 
 ### Phase 1: Foundation & Navigation (Day 1)
-- [ ] Create shared layout component with persistent navigation
-- [ ] Implement top navigation bar with logo and menu items
-- [ ] Set up dark theme globals and CSS variables
+- [ ] Implement Liquid Glass system
+  - [ ] Create base glass utility classes
+  - [ ] Set up SVG filters for liquid distortion
+  - [ ] Configure backdrop-filter with fallbacks
+  - [ ] Test performance on various devices
+- [ ] Create shared layout component with glass navigation
+- [ ] Implement top navigation bar with heavy blur effect
+- [ ] Set up dark theme globals and glass CSS variables
 - [ ] Create AnimatedBackground component for app
-- [ ] Implement responsive mobile navigation drawer
+- [ ] Implement responsive mobile glass drawer
 
 ### Phase 2: Dashboard Redesign (Day 2)
-- [ ] Design and implement stats cards with glass morphism
-- [ ] Create progress ring components with animations
-- [ ] Build activity timeline with cyan accent lines
+- [ ] Implement glass stats cards with proper hierarchy
+  - [ ] Level 1: Subtle glass for backgrounds
+  - [ ] Level 2: Standard glass for cards
+  - [ ] Level 3: Prominent glass for featured items
+- [ ] Create progress rings with glass containers
+- [ ] Build activity timeline with glass elements
 - [ ] Implement quick action buttons with hover states
 - [ ] Add skeleton loading states for all components
 
 ### Phase 3: Wizard & Onboarding (Day 3)
-- [ ] Create step progress bar component
+- [ ] Create step progress bar component (5 steps total)
+- [ ] Design Purpose selector with glass cards
+  - [ ] New Class option with BookOpen icon
+  - [ ] Revision option with RefreshCw icon
+  - [ ] Exam Prep option with GraduationCap icon
+  - [ ] Memory Test option with Brain icon (feature-flagged)
 - [ ] Design form fields with floating labels
 - [ ] Implement smooth step transitions
 - [ ] Add validation states and error messaging
@@ -292,6 +306,190 @@ src/components/
 - [ ] Animations run at 60fps
 - [ ] Bundle size < 500KB
 - [ ] Lighthouse score > 90
+
+## 🌊 Liquid Glass Implementation Guide
+
+### Glass Hierarchy System
+```css
+/* Level 1: Subtle Glass (Backgrounds) */
+.glass-subtle {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Level 2: Standard Glass (Cards, Containers) */
+.glass-standard {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Level 3: Prominent Glass (Modals, Overlays) */
+.glass-prominent {
+  background: rgba(17, 17, 17, 0.7);
+  backdrop-filter: blur(20px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Level 4: Liquid Glass (Special Elements) */
+.glass-liquid {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.02)
+  );
+  backdrop-filter: blur(30px) saturate(200%) brightness(1.1);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  filter: url('#liquid-distortion');
+}
+```
+
+### SVG Filters for Liquid Effect
+```svg
+<svg style="position: absolute; width: 0; height: 0;">
+  <defs>
+    <filter id="liquid-distortion">
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.01"
+        numOctaves="2"
+        result="turbulence"/>
+      <feDisplacementMap
+        in="SourceGraphic"
+        in2="turbulence"
+        scale="2"
+        xChannelSelector="R"
+        yChannelSelector="G"/>
+      <feGaussianBlur stdDeviation="0.5"/>
+      <feSpecularLighting
+        result="specOut"
+        specularExponent="20"
+        lighting-color="#06B6D4">
+        <fePointLight x="50" y="60" z="200"/>
+      </feSpecularLighting>
+      <feComposite
+        in="specOut"
+        in2="SourceAlpha"
+        operator="in"
+        result="specOut2"/>
+      <feComposite
+        in="specOut2"
+        in2="SourceGraphic"
+        operator="arithmetic"
+        k1="0" k2="1" k3="1" k4="0"/>
+    </filter>
+  </defs>
+</svg>
+```
+
+### Performance Optimizations
+```css
+/* GPU Acceleration */
+.glass-optimized {
+  transform: translate3d(0, 0, 0);
+  will-change: transform, opacity;
+  contain: layout style paint;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .glass-liquid {
+    filter: none;
+    backdrop-filter: blur(12px);
+  }
+}
+
+/* Performance Limits */
+@media (max-width: 768px) {
+  /* Mobile: Limit blur to 12px */
+  .glass-prominent,
+  .glass-liquid {
+    backdrop-filter: blur(12px) saturate(150%);
+  }
+}
+```
+
+### Browser Fallbacks
+```css
+/* Fallback for browsers without backdrop-filter */
+@supports not (backdrop-filter: blur(10px)) {
+  .glass-standard {
+    background: rgba(0, 0, 0, 0.85);
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05);
+  }
+}
+```
+
+### Implementation Examples
+
+#### Navigation Bar
+```jsx
+const NavigationBar = () => (
+  <nav className="
+    fixed top-0 left-0 right-0 z-50
+    glass-standard glass-optimized
+    border-b border-white/10
+    transition-all duration-300
+  ">
+    {/* Content */}
+  </nav>
+);
+```
+
+#### Dashboard Card
+```jsx
+const StatsCard = () => (
+  <div className="
+    glass-subtle glass-optimized
+    rounded-2xl p-6
+    hover:glass-standard
+    transition-all duration-300
+    group
+  ">
+    <div className="
+      opacity-0 group-hover:opacity-100
+      absolute inset-0 rounded-2xl
+      bg-gradient-to-r from-cyan-500/10 to-blue-500/10
+      transition-opacity duration-500
+    "/>
+    {/* Content */}
+  </div>
+);
+```
+
+#### Modal Overlay
+```jsx
+const Modal = () => (
+  <div className="
+    glass-prominent glass-liquid
+    rounded-3xl p-8
+    shadow-2xl shadow-cyan-500/20
+    animate-slideUp
+  ">
+    {/* Content */}
+  </div>
+);
+```
+
+### Accessibility Considerations
+```css
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .glass-standard {
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+  }
+}
+
+/* Reduced Transparency */
+@media (prefers-reduced-transparency: reduce) {
+  .glass-standard {
+    background: #111111;
+    backdrop-filter: none;
+  }
+}
+```
 
 ## 🔄 Migration Strategy
 

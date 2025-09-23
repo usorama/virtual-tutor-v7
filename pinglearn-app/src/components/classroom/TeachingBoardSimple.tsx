@@ -36,8 +36,6 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
   const [error, setError] = useState<string | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const displayBufferRef = useRef<DisplayBuffer | null>(null);
-  const lastItemCountRef = useRef<number>(0);
-  const lastUpdateTimeRef = useRef<number>(0);
   const [highlightTrigger, setHighlightTrigger] = useState(0);
 
   // Smart math detection
@@ -84,9 +82,9 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
       const content = item.content.trim();
       if (/^(Step \d+|\d+\.|\d+\))/i.test(content)) {
         contentType = 'step';
-      } else if (content.length < 60 && /^[A-Z]/.test(content) && !/[.!?]$/.test(content)) {
-        contentType = 'heading';
       }
+      // Removed heading detection - everything else is just text
+      // This prevents broken chunks from being misclassified as headings
     }
 
     return {
@@ -98,79 +96,170 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
     };
   }, [isValidMathContent]);
 
-  // Check for updates
-  const checkForUpdates = useCallback(() => {
-    try {
-      if (!displayBufferRef.current) {
-        setError('Display buffer not initialized');
-        return;
-      }
+  // Process and update content from buffer - FIXED: Aggregate chunks into paragraphs
+  const processBufferItems = useCallback((items: LiveDisplayItem[]) => {
+    console.log('[TeachingBoardSimple] Processing buffer update:', items.length, 'items');
 
-      const items = displayBufferRef.current.getItems() as LiveDisplayItem[];
-      const currentItemCount = items.length;
+    // Group items by speaker and aggregate text chunks into complete paragraphs
+    const aggregatedContent: TeachingContent[] = [];
 
-      if (currentItemCount !== lastItemCountRef.current ||
-          (items.length > 0 && items[items.length - 1].timestamp > lastUpdateTimeRef.current)) {
+    // Filter for teacher/AI content only
+    const teacherItems = items.filter(item =>
+      item.speaker === 'teacher' || item.speaker === 'ai'
+    );
 
-        const teachingContent: TeachingContent[] = [];
-        items.forEach(item => {
-          const converted = convertToTeachingContent(item);
-          if (converted) {
-            teachingContent.push(converted);
-          }
-        });
-
-        setContent(teachingContent);
-        lastItemCountRef.current = currentItemCount;
-        lastUpdateTimeRef.current = Date.now();
-        setError(null);
-        setIsLoading(false);
-
-        // Auto scroll
-        if (scrollAreaRef.current && teachingContent.length > 0) {
-          const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
-          if (scrollContainer) {
-            setTimeout(() => {
-              scrollContainer.scrollTo({
-                top: scrollContainer.scrollHeight,
-                behavior: 'smooth'
-              });
-            }, 100);
-          }
-        }
-      }
-    } catch (err) {
-      console.error('Error updating teaching board:', err);
-      setError('Failed to update teaching board');
+    if (teacherItems.length === 0) {
+      setContent([]);
+      setError(null);
       setIsLoading(false);
+      return;
+    }
+
+    // Group consecutive text chunks by speaker to form complete paragraphs
+    let currentParagraph = '';
+    let currentSpeaker = '';
+    let paragraphTimestamp = 0;
+    let lastChunkTimestamp = 0;
+    let paragraphType: TeachingContent['type'] = 'text';
+
+    teacherItems.forEach((item, index) => {
+      const itemContent = item.content.trim();
+
+      // Detect significant time gaps indicating new teacher responses
+      const timeSinceLastChunk = item.timestamp - lastChunkTimestamp;
+      const isSignificantGap = lastChunkTimestamp > 0 && timeSinceLastChunk > 5000; // 5+ second gap
+
+      if (isSignificantGap) {
+        console.log('[TeachingBoardSimple] Time gap detected:', timeSinceLastChunk, 'ms - starting new paragraph');
+      }
+
+      // Start new paragraph if speaker changes, significant time gap, or special content
+      const isNewSpeaker = currentSpeaker !== item.speaker;
+      const isMathContent = item.type === 'math' && isValidMathContent(itemContent);
+      const isStepContent = /^(Step \d+|\d+\.|\d+\))/i.test(itemContent);
+      const isNewResponse = isSignificantGap;
+
+      if (isNewSpeaker || isMathContent || isStepContent || isNewResponse) {
+        // Save previous paragraph if it exists
+        if (currentParagraph.trim()) {
+          aggregatedContent.push({
+            id: `paragraph_${paragraphTimestamp}`,
+            type: paragraphType,
+            content: currentParagraph.trim(),
+            timestamp: paragraphTimestamp,
+            highlight: Date.now() - paragraphTimestamp < 5000
+          });
+        }
+
+        // Start new paragraph
+        currentParagraph = itemContent;
+        currentSpeaker = item.speaker || 'teacher';
+        paragraphTimestamp = item.timestamp;
+
+        if (isMathContent) {
+          paragraphType = 'math';
+        } else if (isStepContent) {
+          paragraphType = 'step';
+        } else {
+          paragraphType = 'text';
+        }
+      } else {
+        // Append to current paragraph with proper spacing
+        const needsSpace = currentParagraph && !currentParagraph.endsWith(' ');
+        currentParagraph += (needsSpace ? ' ' : '') + itemContent;
+      }
+
+      // Update timestamp tracker
+      lastChunkTimestamp = item.timestamp;
+
+      // If this is the last item, save the current paragraph
+      if (index === teacherItems.length - 1 && currentParagraph.trim()) {
+        aggregatedContent.push({
+          id: `paragraph_${paragraphTimestamp}`,
+          type: paragraphType,
+          content: currentParagraph.trim(),
+          timestamp: paragraphTimestamp,
+          highlight: Date.now() - paragraphTimestamp < 5000
+        });
+      }
+    });
+
+    console.log('[TeachingBoardSimple] Aggregated', teacherItems.length, 'chunks into', aggregatedContent.length, 'paragraphs');
+
+    setContent(aggregatedContent);
+    setError(null);
+    setIsLoading(false);
+
+    // Auto scroll to latest content
+    if (scrollAreaRef.current && aggregatedContent.length > 0) {
+      const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (scrollContainer) {
+        setTimeout(() => {
+          scrollContainer.scrollTo({
+            top: scrollContainer.scrollHeight,
+            behavior: 'smooth'
+          });
+        }, 100);
+      }
     }
   }, [convertToTeachingContent]);
 
-  // Initialize display buffer
+  // Initialize display buffer with reactive subscription
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsLoading(true);
-      import('@/protected-core').then(({ getDisplayBuffer }) => {
+    if (typeof window === 'undefined') return;
+
+    let unsubscribe: (() => void) | null = null;
+    let highlightInterval: NodeJS.Timeout | null = null;
+
+    setIsLoading(true);
+    console.log('[TeachingBoardSimple] Initializing display buffer subscription');
+
+    import('@/protected-core')
+      .then(({ getDisplayBuffer }) => {
         try {
-          displayBufferRef.current = getDisplayBuffer();
-          checkForUpdates();
-          const updateInterval = setInterval(checkForUpdates, 250);
-          const highlightInterval = setInterval(() => {
+          const displayBuffer = getDisplayBuffer();
+          displayBufferRef.current = displayBuffer;
+
+          // Get initial items
+          const initialItems = displayBuffer.getItems() as LiveDisplayItem[];
+          console.log('[TeachingBoardSimple] Initial items:', initialItems.length);
+          processBufferItems(initialItems);
+
+          // Subscribe to future updates - this is reactive!
+          unsubscribe = displayBuffer.subscribe((items) => {
+            console.log('[TeachingBoardSimple] Buffer update received:', items.length, 'items');
+            processBufferItems(items as LiveDisplayItem[]);
+          });
+
+          // Highlight trigger for time-based highlighting
+          highlightInterval = setInterval(() => {
             setHighlightTrigger(prev => prev + 1);
           }, 1000);
 
-          return () => {
-            clearInterval(updateInterval);
-            clearInterval(highlightInterval);
-          };
+          console.log('[TeachingBoardSimple] Successfully subscribed to display buffer');
         } catch (err) {
-          console.error('Failed to initialize display buffer:', err);
+          console.error('[TeachingBoardSimple] Failed to initialize display buffer:', err);
           setError('Failed to initialize teaching board');
           setIsLoading(false);
         }
+      })
+      .catch(err => {
+        console.error('[TeachingBoardSimple] Failed to import protected-core:', err);
+        setError('Failed to load teaching board module');
+        setIsLoading(false);
       });
-    }
-  }, [sessionId, checkForUpdates]);
+
+    // Cleanup function - properly returned from useEffect
+    return () => {
+      console.log('[TeachingBoardSimple] Cleaning up subscription');
+      if (unsubscribe) {
+        unsubscribe();
+      }
+      if (highlightInterval) {
+        clearInterval(highlightInterval);
+      }
+    };
+  }, [processBufferItems, sessionId]);
 
   // Render math with KaTeX
   const renderMath = (latex: string) => {
