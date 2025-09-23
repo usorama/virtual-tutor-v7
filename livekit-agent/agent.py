@@ -25,6 +25,7 @@ from livekit.plugins.turn_detector.english import EnglishModel
 from dotenv import load_dotenv
 import json
 import re
+from typing import List
 
 # Load environment variables
 load_dotenv()  # Load local .env first
@@ -76,6 +77,71 @@ You have access to the complete NCERT Class X Mathematics textbook content inclu
 Remember to make learning enjoyable and build the student's confidence!
 """
 
+# PC-013: Word-level timing estimation
+class TimingEstimator:
+    """Estimates word-level timing for text segments"""
+
+    def __init__(self, words_per_minute: int = 150):
+        self.wpm = words_per_minute
+        self.ms_per_word = 60000 / words_per_minute
+
+    def estimate_word_timings(self, text: str, audio_duration: float = None) -> List[Dict]:
+        """Generate word timing estimates"""
+        words = text.split()
+
+        # Adjust timing based on actual audio if available
+        if audio_duration:
+            self.ms_per_word = (audio_duration * 1000) / len(words) if words else 200
+
+        timings = []
+        current_time = 0
+
+        for word in words:
+            # Math content gets extra time
+            duration = self.ms_per_word * 1.5 if self._is_math(word) else self.ms_per_word
+
+            timings.append({
+                "word": word,
+                "startTime": int(current_time),
+                "endTime": int(current_time + duration),
+                "confidence": 0.8 if audio_duration else 0.6,
+                "isMath": self._is_math(word)
+            })
+            current_time += duration
+
+        return timings
+
+    def _is_math(self, word: str) -> bool:
+        """Check if word contains mathematical symbols"""
+        return bool(re.search(r'[\d\+\-\*\/\=\^\(\)]', word))
+
+    def parse_math_fragments(self, latex: str) -> Dict:
+        """Parse LaTeX into progressive fragments for reveal"""
+        # Simple fragment parsing for basic equations
+        fragments = []
+        timings = []
+        current_time = 0
+
+        # Split on operators while keeping them
+        parts = re.split(r'(\s*[\+\-\*\/\=]\s*)', latex)
+        parts = [p for p in parts if p.strip()]  # Remove empty parts
+
+        for part in parts:
+            fragments.append(part)
+            timings.append(int(current_time))
+            # Operators get less time, terms get more
+            duration = 200 if re.match(r'^[\+\-\*\/\=]$', part.strip()) else 400
+            current_time += duration
+
+        return {
+            "fragments": fragments,
+            "timings": timings,
+            "fullLatex": latex
+        }
+
+# Create global timing estimator instance
+timing_estimator = TimingEstimator()
+
 # Transcription publishing functionality
 async def publish_transcript(room: rtc.Room, speaker: str, text: str):
     """Publish transcript data to all participants via data channel"""
@@ -83,12 +149,31 @@ async def publish_transcript(room: rtc.Room, speaker: str, text: str):
         # Detect math patterns in text
         math_segments = detect_math_patterns(text)
 
-        # Create data packet
+        # PC-013: Generate word timing estimates
+        word_timings = None
+        math_fragments = None
+
+        # Only generate timing for AI teacher messages
+        if speaker == "teacher" or speaker == "ai":
+            # Generate word timings for all text
+            full_text = " ".join([seg.get("text", "") for seg in math_segments])
+            word_timings = timing_estimator.estimate_word_timings(full_text)
+
+            # Check for math content and generate fragments
+            for seg in math_segments:
+                if seg.get("type") == "math" and seg.get("latex"):
+                    math_fragments = timing_estimator.parse_math_fragments(seg.get("latex"))
+                    break  # Use first math equation for now
+
+        # Create data packet with PC-013 timing fields
         data = {
             "type": "transcript",
             "speaker": speaker,
             "segments": math_segments,
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
+            # PC-013: Optional timing fields
+            "wordTimings": word_timings,
+            "mathFragments": math_fragments
         }
 
         # Publish to all participants

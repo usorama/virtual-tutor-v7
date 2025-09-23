@@ -19,12 +19,20 @@ export const MessageBubble = React.memo(function MessageBubble({
   const isStudent = message.speaker === 'student';
 
   const renderContent = useMemo(() => {
-    // If word timing is available and enabled (PC-013 integration)
-    // For now, this is a stub - WordHighlighter would be implemented in PC-013
-    if (enableWordTiming && message.wordTimings) {
-      // TODO: Implement WordHighlighter when PC-013 is active
-      // return <WordHighlighter item={message} />;
-      console.log('Word timing data available for message:', message.id);
+    // PC-013: If word timing is available and enabled
+    if (enableWordTiming && message.wordTimings && message.wordTimings.length > 0) {
+      return <WordHighlighter item={message} />;
+    }
+
+    // PC-013: Progressive math rendering if fragments available
+    if (message.mathFragments) {
+      return (
+        <ProgressiveMath
+          fragments={message.mathFragments}
+          fullLatex={message.content}
+          timingOffset={message.audioSyncOffset}
+        />
+      );
     }
 
     // Math content - check both type field and content patterns
