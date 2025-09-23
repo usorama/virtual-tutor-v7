@@ -18,6 +18,8 @@ export type {
   TextSegment,
   MathSegment,
   DisplayItem,
+  WordTiming,
+  MathFragmentData,
   TranscriptionContract
 } from './contracts/transcription.contract';
 
