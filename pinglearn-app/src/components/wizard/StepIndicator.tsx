@@ -35,7 +35,7 @@ export function StepIndicator({ currentStep, className }: StepIndicatorProps) {
                 {/* Circle */}
                 <div
                   className={cn(
-                    'relative z-10 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white transition-colors',
+                    'relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 bg-white transition-colors',
                     {
                       'border-blue-600 bg-blue-600': isActive || isCompleted,
                       'border-gray-300': !isActive && !isCompleted,
@@ -43,7 +43,7 @@ export function StepIndicator({ currentStep, className }: StepIndicatorProps) {
                   )}
                 >
                   {isCompleted ? (
-                    <Check className="h-5 w-5 text-white" />
+                    <Check className="h-4 w-4 text-white" />
                   ) : (
                     <span 
                       className={cn('text-sm font-semibold', {
@@ -57,9 +57,9 @@ export function StepIndicator({ currentStep, className }: StepIndicatorProps) {
                 </div>
                 
                 {/* Label */}
-                <span 
+                <span
                   className={cn(
-                    'mt-2 text-xs font-medium text-center max-w-[100px]',
+                    'mt-1 text-xs font-medium text-center max-w-[100px]',
                     {
                       'text-blue-600': isActive,
                       'text-gray-900': isCompleted,

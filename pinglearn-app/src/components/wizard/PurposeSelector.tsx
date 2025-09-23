@@ -50,10 +50,10 @@ export function PurposeSelector({ selected, onSelect }: PurposeSelectorProps) {
             )}
             onClick={() => onSelect(purpose.id)}
           >
-            <CardContent className="p-6 text-center">
-              <Icon className={cn("h-12 w-12 mx-auto mb-3", purpose.color)} />
-              <h3 className="font-semibold text-lg mb-2">{purpose.label}</h3>
-              <p className="text-sm text-muted-foreground">
+            <CardContent className="p-4 text-center">
+              <Icon className={cn("h-10 w-10 mx-auto mb-2", purpose.color)} />
+              <h3 className="font-semibold text-base mb-1">{purpose.label}</h3>
+              <p className="text-xs text-muted-foreground">
                 {purpose.description}
               </p>
             </CardContent>

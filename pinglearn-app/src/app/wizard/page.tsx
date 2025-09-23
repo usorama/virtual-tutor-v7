@@ -159,14 +159,14 @@ export default function WizardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
-      <div className="max-w-6xl mx-auto space-y-8 p-6">
+    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 flex flex-col">
+      <div className="max-w-6xl mx-auto space-y-4 p-4 flex-1 flex flex-col justify-center">
         {/* Header */}
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+        <div className="text-center space-y-1">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
             Welcome to Virtual Tutor
           </h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground">
             Let&apos;s personalize your learning journey
           </p>
         </div>
@@ -177,7 +177,7 @@ export default function WizardPage() {
       {/* Apple-Style Wizard Container */}
       <div className="relative">
         {/* Main Content Card */}
-        <Card className="mx-16 p-8 min-h-[500px] relative">
+        <Card className="mx-16 p-6 min-h-[400px] relative flex-1">
           {isLoading ? (
             <div className="flex items-center justify-center py-12">
               <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
@@ -211,7 +211,7 @@ export default function WizardPage() {
 
               {state.currentStep === WIZARD_STEPS.PURPOSE_SELECTION && (
                 <div>
-                  <h2 className="text-2xl font-bold mb-6">
+                  <h2 className="text-xl font-bold mb-4">
                     How would you like to approach these topics?
                   </h2>
                   <PurposeSelector
