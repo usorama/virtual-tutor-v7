@@ -45,6 +45,12 @@ src/protected-core/*                     # ENTIRE PROTECTED CORE
 
 ---
 
+## 🎯 PINGLEARN VISION
+
+PingLearn revolutionizes mathematics learning through AI-powered simultaneous audio-visual instruction, where students see mathematical concepts and equations appear on screen 400ms before the AI teacher speaks about them (SHOW-then-TELL), enabling optimal comprehension through dual-channel processing. Using LiveKit voice agents with Gemini Live API, the platform delivers real-time, conversational math tutoring with beautifully rendered KaTeX equations, synchronized highlighting of spoken content, and smart math detection that distinguishes genuine mathematical expressions from regular text, all presented in a dual-panel classroom interface optimized for young learners' typography needs—eliminating note-taking stress while students focus purely on understanding concepts as their AI teacher guides them through problems step-by-step with perfect audio-visual synchronization.
+
+---
+
 ## 👥 ROLES & RESPONSIBILITIES
 
 **See detailed role definitions in imported files above**

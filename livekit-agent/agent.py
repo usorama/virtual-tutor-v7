@@ -101,30 +101,177 @@ async def publish_transcript(room: rtc.Room, speaker: str, text: str):
     except Exception as e:
         logger.error(f"Error publishing transcript: {e}")
 
-def detect_math_patterns(text: str):
-    """Detect and mark mathematical expressions in text"""
+def process_mixed_content(text: str):
+    """Enhanced processing for mixed text and math content"""
+    if not text or not text.strip():
+        return [{"type": "text", "content": text}]
+
     segments = []
 
-    # Common math patterns to detect
+    # Enhanced regex to find LaTeX math ($ ... $ or $$ ... $$) and LaTeX commands
+    latex_pattern = r'\$\$?(.*?)\$\$?'
+    last_end = 0
+
+    for match in re.finditer(latex_pattern, text):
+        # Add text before math
+        if match.start() > last_end:
+            text_before = text[last_end:match.start()].strip()
+            if text_before:
+                # Check if the text contains mathematical language
+                math_segments = detect_math_patterns(text_before)
+                segments.extend(math_segments)
+
+        # Add LaTeX math segment with high confidence
+        latex_content = match.group(1)
+        segments.append({
+            "type": "math",
+            "content": f"${latex_content}$",
+            "latex": latex_content,
+            "confidence": 0.98,  # Very high confidence for LaTeX
+            "source": "latex_delimited"
+        })
+        last_end = match.end()
+
+    # Process remaining text
+    if last_end < len(text):
+        remaining_text = text[last_end:].strip()
+        if remaining_text:
+            math_segments = detect_math_patterns(remaining_text)
+            segments.extend(math_segments)
+
+    # If no segments were created, treat as regular text
+    if not segments:
+        segments = detect_math_patterns(text)
+
+    # Filter out empty segments
+    segments = [seg for seg in segments if seg.get("content", "").strip()]
+
+    return segments if segments else [{"type": "text", "content": text}]
+
+async def publish_segment(room: rtc.Room, speaker: str, segment: dict):
+    """Publish a single segment with proper type"""
+    data = {
+        "type": "transcript",
+        "speaker": speaker,
+        "segments": [segment],
+        "timestamp": datetime.now().isoformat()
+    }
+
+    packet = json.dumps(data).encode('utf-8')
+    await room.local_participant.publish_data(packet, reliable=True)
+
+    # Extra logging for math
+    if segment.get("type") == "math":
+        logger.info(f"[FC-001][MATH] Published equation: {segment.get('latex')}")
+
+async def stream_teacher_response_progressively(room: rtc.Room, full_response: str):
+    """INNOVATIVE: Stream teacher response in real-time chunks for show-and-tell experience"""
+    try:
+        # Progressive chunking strategy for natural speech simulation
+        words = full_response.split()
+        chunk_size = 3  # Start with 3-word chunks for natural flow
+        chunk_delay = 0.08  # 80ms delay between chunks (natural speaking pace)
+
+        current_chunk = ""
+        chunks_sent = 0
+
+        logger.info(f"[REALTIME] Starting progressive stream: {len(words)} words")
+
+        for i, word in enumerate(words):
+            current_chunk += (" " if current_chunk else "") + word
+
+            # Adaptive chunk sizing based on content
+            should_send_chunk = False
+
+            # Send chunk if we've reached the chunk size
+            if len(current_chunk.split()) >= chunk_size:
+                should_send_chunk = True
+
+            # Send chunk at natural breaks (punctuation)
+            elif word.endswith(('.', '!', '?', ',', ';', ':')):
+                should_send_chunk = True
+                chunk_delay = 0.15  # Longer pause after punctuation
+
+            # Send chunk if we detect math content
+            elif any(indicator in word.lower() for indicator in ['equation', 'formula', 'equals', 'x²', 'sqrt']):
+                should_send_chunk = True
+
+            # Always send the last chunk
+            elif i == len(words) - 1:
+                should_send_chunk = True
+
+            if should_send_chunk and current_chunk.strip():
+                # Process chunk for math detection
+                segments = process_mixed_content(current_chunk.strip())
+
+                for segment in segments:
+                    # Add streaming metadata
+                    segment['streaming'] = True
+                    segment['chunk_index'] = chunks_sent
+                    segment['total_estimated'] = len(words) // chunk_size
+
+                    await publish_segment(room, "teacher", segment)
+                    chunks_sent += 1
+
+                logger.info(f"[REALTIME] Streamed chunk {chunks_sent}: {current_chunk[:50]}...")
+
+                # Natural delay to simulate speaking pace
+                await asyncio.sleep(chunk_delay)
+
+                # Reset for next chunk
+                current_chunk = ""
+                chunk_delay = 0.08  # Reset to normal pace
+
+        logger.info(f"[REALTIME] Progressive streaming complete: {chunks_sent} chunks sent")
+
+        # Send completion marker
+        completion_data = {
+            "type": "transcript_complete",
+            "speaker": "teacher",
+            "total_chunks": chunks_sent,
+            "timestamp": datetime.now().isoformat()
+        }
+        packet = json.dumps(completion_data).encode('utf-8')
+        await room.local_participant.publish_data(packet, reliable=True)
+
+    except Exception as e:
+        logger.error(f"[REALTIME] Progressive streaming error: {e}")
+
+def detect_math_patterns(text: str):
+    """Enhanced math detection with LaTeX pattern recognition"""
+    segments = []
+
+    # Enhanced math patterns including LaTeX and natural language
     math_indicators = [
-        r'x\^2|x squared',
+        r'x\^2|x squared|x²',
+        r'\\frac\{[^}]+\}\{[^}]+\}',  # LaTeX fractions
+        r'\\sqrt\{[^}]+\}',  # LaTeX square roots
         r'\d+x\s*[+-]\s*\d+',
         r'equals?\s+\d+|=\s*\d+',
-        r'square root',
+        r'square root|sqrt',
         r'fraction|over|divided by',
-        r'quadratic',
-        r'equation'
+        r'quadratic|polynomial',
+        r'equation|formula',
+        r'\$[^$]+\$',  # LaTeX math delimiters
+        r'\\[a-zA-Z]+\{',  # LaTeX commands
+        r'\b[a-z]\s*=\s*[^\s]+',  # Variable assignments
+        r'\([^)]*[+\-*/=][^)]*\)',  # Math in parentheses
     ]
 
     # Check if text contains math
     has_math = any(re.search(pattern, text, re.IGNORECASE) for pattern in math_indicators)
 
     if has_math:
-        # For now, mark the entire text as potentially containing math
+        # Enhanced LaTeX conversion with confidence scoring
+        latex_content = convert_to_latex(text)
+        confidence = calculate_math_confidence(text)
+
         segments.append({
             "type": "math",
             "content": text,
-            "latex": convert_to_latex(text)
+            "latex": latex_content,
+            "confidence": confidence,
+            "enhanced": True
         })
     else:
         segments.append({
@@ -134,25 +281,76 @@ def detect_math_patterns(text: str):
 
     return segments
 
+def calculate_math_confidence(text: str) -> float:
+    """Calculate confidence score for math detection"""
+    math_indicators = [
+        (r'\\frac|\\sqrt|\\sum', 0.95),  # LaTeX commands = very high confidence
+        (r'x\^2|x²|squared', 0.9),        # Clear math expressions
+        (r'equation|formula', 0.8),        # Math keywords
+        (r'=\s*\d+', 0.85),               # Equals with numbers
+        (r'\$[^$]+\$', 0.95),             # LaTeX delimiters
+    ]
+
+    max_confidence = 0.5  # Base confidence
+
+    for pattern, confidence in math_indicators:
+        if re.search(pattern, text, re.IGNORECASE):
+            max_confidence = max(max_confidence, confidence)
+
+    return max_confidence
+
 def convert_to_latex(text: str) -> str:
-    """Convert spoken math to LaTeX notation"""
+    """Enhanced conversion of spoken math to LaTeX notation"""
     latex = text
 
-    # Basic conversions
+    # Enhanced conversions with more comprehensive patterns
     replacements = [
+        # Powers and exponents
         (r'x squared', 'x^2'),
         (r'x cubed', 'x^3'),
+        (r'(\w+) squared', r'\1^2'),
+        (r'(\w+) cubed', r'\1^3'),
+        (r'(\w+) to the power of (\d+)', r'\1^{\2}'),
+
+        # Algebraic expressions
         (r'(\d+)x\s*\+\s*(\d+)', r'\1x + \2'),
         (r'(\d+)x\s*-\s*(\d+)', r'\1x - \2'),
-        (r'equals\s*(\d+)', r'= \1'),
-        (r'square root of (\d+)', r'\\sqrt{\1}'),
+        (r'(\d+)x\s*equals?\s*(\d+)', r'\1x = \2'),
+
+        # Equations and equality
+        (r'equals?\s*(\d+)', r'= \1'),
+        (r'is equal to\s*(\d+)', r'= \1'),
+
+        # Roots and radicals
+        (r'square root of ([^\s,]+)', r'\\sqrt{\1}'),
+        (r'sqrt\s*\(([^)]+)\)', r'\\sqrt{\1}'),
+
+        # Fractions
         (r'(\d+) over (\d+)', r'\\frac{\1}{\2}'),
+        (r'([^\s]+) over ([^\s]+)', r'\\frac{\1}{\2}'),
+        (r'fraction ([^\s]+) over ([^\s]+)', r'\\frac{\1}{\2}'),
+
+        # Common functions
+        (r'sine of ([^\s,]+)', r'\\sin(\1)'),
+        (r'cosine of ([^\s,]+)', r'\\cos(\1)'),
+        (r'tangent of ([^\s,]+)', r'\\tan(\1)'),
+
+        # Greek letters (common in math)
+        (r'\balpha\b', r'\\alpha'),
+        (r'\bbeta\b', r'\\beta'),
+        (r'\bgamma\b', r'\\gamma'),
+        (r'\bdelta\b', r'\\delta'),
+        (r'\btheta\b', r'\\theta'),
+        (r'\bpi\b', r'\\pi'),
+
+        # Cleanup and formatting
+        (r'\s+', ' '),  # Normalize whitespace
     ]
 
     for pattern, replacement in replacements:
         latex = re.sub(pattern, replacement, latex, flags=re.IGNORECASE)
 
-    return latex
+    return latex.strip()
 
 async def entrypoint(ctx: JobContext):
     """Main entry point for the LiveKit agent"""
@@ -164,21 +362,22 @@ async def entrypoint(ctx: JobContext):
         instructions=TUTOR_SYSTEM_PROMPT,
     )
 
-    # Configure the session with Gemini Live API (audio-to-audio)
+    # Configure the session with Gemini Live API (using dual-stream processing)
     session = AgentSession(
         llm=google.beta.realtime.RealtimeModel(
             model="gemini-2.0-flash-exp",
             voice="Kore",  # Female English voice
             temperature=0.8,
-            instructions=TUTOR_SYSTEM_PROMPT
+            instructions=TUTOR_SYSTEM_PROMPT,
+            # Note: Real-time output transcription will use dual-stream processing
         ),
         # Voice Activity Detection
         vad=silero.VAD.load(),
         # Turn detection for natural conversation
         turn_detection=EnglishModel(),
-        # Smooth conversation settings
-        min_endpointing_delay=0.5,
-        max_endpointing_delay=3.0,
+        # Smooth conversation settings for real-time experience
+        min_endpointing_delay=0.3,  # Reduced for faster response
+        max_endpointing_delay=2.0,  # Reduced for faster response
     )
 
     # CRITICAL: Enable audio subscription for proper track handling
@@ -190,6 +389,102 @@ async def entrypoint(ctx: JobContext):
 
     # Start the session - this publishes audio tracks
     await session.start(agent=agent, room=ctx.room)
+
+    # CRITICAL: Real-time output transcription events (December 2024 Gemini 2.0 feature)
+    @session.on("output_audio_transcribed")
+    def on_output_transcribed(event):
+        """Capture AI teacher's speech in real-time AS IT SPEAKS"""
+        logger.info(f"[REALTIME] AI speaking: {event.transcript[:100]}...")
+
+        async def _publish_realtime():
+            # Process for math segments immediately
+            segments = process_mixed_content(event.transcript)
+            for segment in segments:
+                await publish_segment(ctx.room, "teacher", segment)
+
+        asyncio.create_task(_publish_realtime())
+
+    @session.on("output_audio_transcription_delta")
+    def on_output_delta(event):
+        """Capture partial transcription updates for ultra-responsive experience"""
+        if hasattr(event, 'delta') and event.delta:
+            logger.info(f"[DELTA] AI partial: {event.delta[:50]}...")
+
+            async def _publish_delta():
+                # Publish incremental updates for show-and-tell
+                data = {
+                    "type": "transcript_delta",
+                    "speaker": "teacher",
+                    "delta": event.delta,
+                    "timestamp": datetime.now().isoformat()
+                }
+                packet = json.dumps(data).encode('utf-8')
+                await ctx.room.local_participant.publish_data(packet, reliable=True)
+
+            asyncio.create_task(_publish_delta())
+
+    # DUAL-STREAM PROCESSING ARCHITECTURE
+    # Track ongoing streaming for real-time experience
+    streaming_state = {
+        "active_response": None,
+        "chunks_sent": 0,
+        "last_chunk_time": 0
+    }
+
+    # Hook into session events to capture transcripts
+    @session.on("user_input_transcribed")
+    def on_user_transcribed(event):
+        """Capture user's transcribed speech"""
+        logger.info(f"[FC-001] User said: {event.transcript[:100]}...")
+
+        async def _publish():
+            await publish_transcript(ctx.room, "student", event.transcript)
+
+        asyncio.create_task(_publish())
+
+    @session.on("conversation_item_added")
+    def on_conversation_item(event):
+        """Enhanced conversation processing with real-time streaming"""
+        try:
+            # Determine speaker based on role
+            role = getattr(event.item, 'role', None)
+            text_content = getattr(event.item, 'text_content', None) or getattr(event.item, 'content', '')
+
+            if not text_content:
+                return
+
+            # Map role to speaker
+            speaker = "teacher" if role == "assistant" else "student" if role == "user" else "unknown"
+
+            logger.info(f"[FC-001] Conversation item from {speaker}: {text_content[:100]}...")
+
+            async def _process_and_publish():
+                if speaker == "teacher":
+                    # INNOVATIVE: Progressive streaming for show-and-tell experience
+                    await stream_teacher_response_progressively(ctx.room, text_content)
+                else:
+                    await publish_transcript(ctx.room, speaker, text_content)
+
+            asyncio.create_task(_process_and_publish())
+        except Exception as e:
+            logger.error(f"[FC-001] Error handling conversation item: {e}")
+
+    # INNOVATIVE: Audio output stream monitoring for real-time capture
+    async def monitor_audio_output():
+        """Monitor audio output for real-time transcript generation"""
+        try:
+            # Get the session's audio output stream
+            if hasattr(session, '_llm') and hasattr(session._llm, '_session'):
+                gemini_session = session._llm._session
+                if hasattr(gemini_session, '_ws'):
+                    logger.info("[REALTIME] Setting up audio output monitoring")
+                    # This will be enhanced to intercept WebSocket messages
+                    # For now, we rely on the progressive streaming approach
+        except Exception as e:
+            logger.error(f"[REALTIME] Audio monitoring setup error: {e}")
+
+    # Start audio output monitoring
+    asyncio.create_task(monitor_audio_output())
 
     # Send proactive greeting after session starts
     await asyncio.sleep(1.5)  # Brief pause to ensure connection is stable
@@ -204,9 +499,7 @@ async def entrypoint(ctx: JobContext):
 
     logger.info("Sent proactive greeting to student")
 
-    # Publish the greeting transcript
-    greeting_text = "Hello! Welcome to today's mathematics session. I'm your AI mathematics teacher. What specific topic from your Class 10 Mathematics curriculum would you like to explore today?"
-    await publish_transcript(ctx.room, "teacher", greeting_text)
+    # NOTE: Removed duplicate greeting publish - the actual speech will be captured by event handlers
 
     # Keep the session alive
     try:

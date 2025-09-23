@@ -8,14 +8,15 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Mic, MicOff, Loader2, AlertCircle, Play, Pause, Square, Activity, BarChart3, Zap, Home } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
-import { TranscriptionDisplay } from '@/components/transcription/TranscriptionDisplay';
-import { TeachingBoard } from '@/components/classroom/TeachingBoard';
+import { TranscriptSimple } from '@/components/classroom/TranscriptSimple';
+import { TeachingBoardSimple } from '@/components/classroom/TeachingBoardSimple';
 import { NotesPanel } from '@/components/classroom/NotesPanel';
 import { LiveKitRoom } from '@/components/voice/LiveKitRoom';
 import { useVoiceSession } from '@/hooks/useVoiceSession';
 import { useSessionState } from '@/hooks/useSessionState';
 import { useSessionMetrics } from '@/hooks/useSessionMetrics';
 import { SessionOrchestrator } from '@/protected-core';
+import { ResizableSplit } from '@/components/ui/resizable-split';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -70,7 +71,6 @@ export default function ClassroomPage() {
   const [currentTopic, setCurrentTopic] = useState<string>('General Mathematics');
   const [errorBoundary, setErrorBoundary] = useState<ErrorBoundaryState>({ hasError: false });
   const [voiceConnected, setVoiceConnected] = useState(false);
-  const [activeTab, setActiveTab] = useState<'transcript' | 'notes'>('transcript');
   const [sessionControlState, setSessionControlState] = useState<'active' | 'paused' | 'ended'>('active');
   const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -287,7 +287,13 @@ export default function ClassroomPage() {
       const finalMetrics = await endSession();
 
       // End session through orchestrator
-      if (sessionId) {
+      const orchestratorState = orchestrator.getSessionState();
+      if (orchestratorState?.id) {
+        await orchestrator.endSession(orchestratorState.id);
+        console.log('[FC-001] Ended session with orchestrator ID:', orchestratorState.id);
+      } else if (sessionId) {
+        // Fallback to voice session ID
+        console.log('[FC-001] Using fallback voice session ID:', sessionId);
         await orchestrator.endSession(sessionId);
       }
 
@@ -490,62 +496,28 @@ export default function ClassroomPage() {
           </div>
         </div>
 
-        {/* Clean 80/20 Layout */}
-        <div className="flex h-[calc(100vh-60px)]">
+        {/* Simple Layout - 80% Teaching, 20% Transcript */}
+        <ResizableSplit
+          defaultSplit={80}
+          minSplit={60}
+          maxSplit={90}
+          className="h-[calc(100vh-60px)]"
+        >
           {/* Left: Teaching Board (80%) */}
-          <div className="flex-[4] p-4">
-            <TeachingBoard
+          <TeachingBoardSimple
+            sessionId={sessionId || undefined}
+            topic={currentTopic}
+            className="h-full"
+          />
+
+          {/* Right: Transcript (20%) */}
+          <div className="h-full border-l">
+            <TranscriptSimple
               sessionId={sessionId || undefined}
-              topic={currentTopic}
-              className="h-full rounded-lg shadow-lg"
+              className="h-full"
             />
           </div>
-
-          {/* Right: Transcript/Notes (20%) */}
-          <div className="flex-[1] border-l bg-background p-4">
-            <div className="flex flex-col h-full">
-              {/* Tab Switcher */}
-              <div className="flex space-x-1 bg-muted p-1 rounded-md mb-3">
-                <button
-                  onClick={() => setActiveTab('transcript')}
-                  className={`px-3 py-1.5 rounded text-sm font-medium transition-colors flex-1 ${
-                    activeTab === 'transcript'
-                      ? 'bg-background text-foreground shadow-sm'
-                      : 'text-muted-foreground hover:bg-background/50'
-                  }`}
-                >
-                  Transcript
-                </button>
-                <button
-                  onClick={() => setActiveTab('notes')}
-                  className={`px-3 py-1.5 rounded text-sm font-medium transition-colors flex-1 ${
-                    activeTab === 'notes'
-                      ? 'bg-background text-foreground shadow-sm'
-                      : 'text-muted-foreground hover:bg-background/50'
-                  }`}
-                >
-                  Notes
-                </button>
-              </div>
-
-              {/* Content */}
-              <div className="flex-1 overflow-hidden">
-                {activeTab === 'transcript' ? (
-                  <TranscriptionDisplay
-                    sessionId={sessionId || undefined}
-                    className="h-full"
-                  />
-                ) : (
-                  <NotesPanel
-                    sessionId={sessionId || undefined}
-                    topic={currentTopic}
-                    className="h-full"
-                  />
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+        </ResizableSplit>
 
         {/* LiveKit Voice Connection (Hidden) */}
         {roomName && userId && isActive && (

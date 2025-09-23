@@ -91,6 +91,89 @@ export function TeachingBoard({ sessionId, topic, className = '' }: TeachingBoar
     };
   }, []);
 
+  // Improved math detection - reject false positives
+  const isValidMathContent = useCallback((content: string): boolean => {
+    const cleanContent = content.trim();
+
+    // Reject if it's just concatenated words without math symbols
+    if (/^[a-zA-Z]+$/.test(cleanContent) && cleanContent.length > 3) {
+      return false;
+    }
+
+    // Reject if it looks like rushed speech transcription
+    if (/^[a-z]+[A-Z][a-z]+/.test(cleanContent)) { // like "whatapolynomial"
+      return false;
+    }
+
+    // Must contain actual math symbols or LaTeX syntax to be considered math
+    const mathPatterns = [
+      /[\+\-\*\/\=\(\)\[\]\{\}]/,  // Basic math symbols
+      /[₀-₉⁰-⁹]/,                  // Superscripts/subscripts
+      /\\[a-zA-Z]+/,               // LaTeX commands
+      /\$.*\$/,                    // LaTeX delimited
+      /[∑∏∫∂∇√∞≠≤≥±×÷]/,           // Mathematical symbols
+      /^\d+[\+\-\*\/\=]/,          // Starts with number and operator
+      /[a-z]\s*[\+\-\*\/\=]\s*[a-z0-9]/ // Variables with operators
+    ];
+
+    return mathPatterns.some(pattern => pattern.test(cleanContent));
+  }, []);
+
+  // Generate teaching visualizations from content
+  const generateTeachingVisualization = useCallback((items: LiveDisplayItem[]): TeachingContent[] => {
+    const teachingContent: TeachingContent[] = [];
+
+    items.forEach((item) => {
+      // Only process teacher/AI content
+      if (item.speaker !== 'teacher' && item.speaker !== 'ai') return;
+
+      // Smart math detection - validate before treating as math
+      const shouldRenderAsMath = item.type === 'math' && isValidMathContent(item.content);
+
+      if (shouldRenderAsMath) {
+        // Add heading if this is the first math in a sequence
+        if (teachingContent.length === 0 || teachingContent[teachingContent.length - 1].type !== 'math') {
+          teachingContent.push({
+            id: `heading-${item.id}`,
+            type: 'heading',
+            content: 'Mathematical Expression:',
+            timestamp: item.timestamp
+          });
+        }
+
+        // Add the math with KaTeX rendering
+        teachingContent.push({
+          id: item.id,
+          type: 'math',
+          content: item.content,
+          timestamp: item.timestamp,
+          highlight: true
+        });
+
+        // Add explanation if confidence is low
+        if (item.confidence && item.confidence < 0.8) {
+          teachingContent.push({
+            id: `note-${item.id}`,
+            type: 'text',
+            content: '(AI confidence: moderate - please verify)',
+            timestamp: item.timestamp
+          });
+        }
+      } else {
+        // Process as text content (including false-positive "math")
+        const converted = convertDisplayItemToTeachingContent({
+          ...item,
+          type: 'text' // Force to text if math validation failed
+        });
+        if (converted) {
+          teachingContent.push(converted);
+        }
+      }
+    });
+
+    return teachingContent;
+  }, [convertDisplayItemToTeachingContent, isValidMathContent]);
+
   // Smooth scroll to bottom
   const scrollToBottom = useCallback(() => {
     if (!autoScroll || userScrollingRef.current) return;
@@ -112,7 +195,15 @@ export function TeachingBoard({ sessionId, topic, className = '' }: TeachingBoar
     }
   }, [autoScroll]);
 
-  // Smart update function with error handling (following TranscriptionDisplay pattern)
+  // State for show-before-tell buffering
+  const [pendingContent, setPendingContent] = useState<TeachingContent[]>([]);
+  const pendingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // State for synchronized highlighting updates
+  const [highlightTrigger, setHighlightTrigger] = useState(0);
+  const highlightIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Enhanced update function with show-before-tell buffering
   const checkForUpdates = useCallback(() => {
     try {
       if (!displayBufferRef.current) {
@@ -130,28 +221,55 @@ export function TeachingBoard({ sessionId, topic, className = '' }: TeachingBoar
         (items.length > 0 && items[items.length - 1].timestamp > lastUpdateTimeRef.current);
 
       if (shouldUpdate) {
-        // Convert and filter LiveDisplayItems to TeachingContent
-        const teachingContent = items
-          .map(convertDisplayItemToTeachingContent)
-          .filter((item): item is TeachingContent => item !== null);
+        const newItems = items.slice(lastItemCountRef.current);
 
-        setContent(teachingContent);
+        if (newItems.length > 0) {
+          // Generate teaching visualizations for new items
+          const newTeachingContent = generateTeachingVisualization(newItems);
+
+          if (newTeachingContent.length > 0) {
+            // SHOW-THEN-TELL: Buffer new content for 400ms before displaying
+            // This gives visual lead time before audio plays
+            setPendingContent(prev => [...prev, ...newTeachingContent]);
+
+            // Clear any existing timeout
+            if (pendingTimeoutRef.current) {
+              clearTimeout(pendingTimeoutRef.current);
+            }
+
+            // Display buffered content after 400ms delay
+            pendingTimeoutRef.current = setTimeout(() => {
+              setPendingContent(buffered => {
+                if (buffered.length > 0) {
+                  const allNewContent = generateTeachingVisualization(items);
+                  setContent(allNewContent);
+
+                  // Only scroll if auto-scroll is enabled
+                  if (allNewContent.length > 0) {
+                    scrollToBottom();
+                  }
+                }
+                return []; // Clear pending content
+              });
+            }, 400); // 400ms visual lead time
+          }
+        } else {
+          // No new items, just update existing content
+          const teachingContent = generateTeachingVisualization(items);
+          setContent(teachingContent);
+        }
+
         lastItemCountRef.current = currentItemCount;
         lastUpdateTimeRef.current = Date.now();
         setError(null); // Clear any previous errors
         setIsLoading(false);
-
-        // Only scroll if new content was added and auto-scroll is enabled
-        if (teachingContent.length > 0) {
-          scrollToBottom();
-        }
       }
     } catch (err) {
       console.error('Error updating teaching board:', err);
       setError('Failed to update teaching board');
       setIsLoading(false);
     }
-  }, [convertDisplayItemToTeachingContent, scrollToBottom]);
+  }, [generateTeachingVisualization, scrollToBottom]);
 
   // Handle user scrolling
   const handleScroll = useCallback(() => {
@@ -186,10 +304,21 @@ export function TeachingBoard({ sessionId, topic, className = '' }: TeachingBoar
           // Smart polling: 250ms interval (same as TranscriptionDisplay)
           const updateInterval = setInterval(checkForUpdates, 250);
 
+          // Synchronized highlighting: Update every 1 second for smooth highlighting transitions
+          highlightIntervalRef.current = setInterval(() => {
+            setHighlightTrigger(prev => prev + 1);
+          }, 1000);
+
           return () => {
             clearInterval(updateInterval);
             if (updateTimeoutRef.current) {
               clearTimeout(updateTimeoutRef.current);
+            }
+            if (pendingTimeoutRef.current) {
+              clearTimeout(pendingTimeoutRef.current);
+            }
+            if (highlightIntervalRef.current) {
+              clearInterval(highlightIntervalRef.current);
             }
           };
         } catch (err) {
@@ -287,51 +416,98 @@ export function TeachingBoard({ sessionId, topic, className = '' }: TeachingBoar
     }
   };
 
+  // Enhanced content rendering with synchronized highlighting and young learner typography
   const renderContent = (item: TeachingContent) => {
+    const now = Date.now();
+    const timeSinceCreation = now - item.timestamp;
+
+    // Use highlightTrigger to ensure re-renders for time-based highlighting
+    const _ = highlightTrigger;
+
+    // Synchronized highlighting: highlight content within 5 seconds of creation
+    const isCurrentlySpoken = timeSinceCreation < 5000;
+    const isRecentlySpoken = timeSinceCreation < 10000;
+
+    // Progressive reveal animation
+    const revealClass = timeSinceCreation < 1000 ? 'animate-in fade-in-0 slide-in-from-left-2 duration-500' : '';
+
     switch (item.type) {
       case 'heading':
         return (
-          <h2 className="text-2xl font-bold mb-4 text-primary">{item.content}</h2>
+          <h2 className={`text-3xl font-bold mb-6 text-primary leading-tight ${revealClass} ${
+            isCurrentlySpoken ? 'ring-2 ring-blue-400 bg-blue-50 dark:bg-blue-950 p-4 rounded-lg shadow-sm' : ''
+          }`}>
+            {item.content}
+          </h2>
         );
 
       case 'text':
         return (
-          <p className="text-base leading-relaxed mb-3">{item.content}</p>
+          <p className={`text-lg leading-relaxed mb-4 tracking-wide font-medium ${revealClass} ${
+            isCurrentlySpoken
+              ? 'ring-2 ring-blue-400 bg-blue-50 dark:bg-blue-950 p-4 rounded-lg shadow-sm transform scale-105 transition-all duration-300'
+              : isRecentlySpoken
+                ? 'bg-slate-50 dark:bg-slate-800 p-3 rounded-lg transition-all duration-500'
+                : ''
+          }`}>
+            {item.content}
+          </p>
         );
 
       case 'math':
         return (
           <div
-            className={`my-4 p-4 rounded-lg bg-slate-50 dark:bg-slate-900 overflow-x-auto ${
-              item.highlight ? 'ring-2 ring-blue-400 bg-blue-50 dark:bg-blue-950' : ''
+            className={`my-6 p-6 rounded-xl border-2 overflow-x-auto transition-all duration-500 ${revealClass} ${
+              isCurrentlySpoken
+                ? 'ring-4 ring-blue-500 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 border-blue-300 shadow-lg transform scale-105'
+                : item.highlight || isRecentlySpoken
+                  ? 'ring-2 ring-blue-300 bg-blue-50 dark:bg-blue-950 border-blue-200 shadow-md'
+                  : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700'
             }`}
           >
             <div
-              className="katex-display text-center"
+              className="katex-display text-center text-xl"
               dangerouslySetInnerHTML={{ __html: renderMath(item.content) }}
             />
+            {isCurrentlySpoken && (
+              <div className="mt-3 text-center">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                  🔊 Currently Explaining
+                </span>
+              </div>
+            )}
           </div>
         );
 
       case 'step':
         return (
-          <div className="flex items-start space-x-3 mb-3 p-3 bg-green-50 dark:bg-green-950 rounded-lg">
-            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-green-500 text-white text-xs flex items-center justify-center font-bold">
+          <div className={`flex items-start space-x-4 mb-4 p-4 bg-green-50 dark:bg-green-950 rounded-xl border-l-4 border-green-400 ${revealClass} ${
+            isCurrentlySpoken ? 'ring-2 ring-green-400 shadow-lg transform scale-105 transition-all duration-300' : ''
+          }`}>
+            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-500 text-white text-sm flex items-center justify-center font-bold">
               ✓
             </div>
-            <p className="text-base">{item.content}</p>
+            <p className="text-lg font-medium leading-relaxed">{item.content}</p>
           </div>
         );
 
       case 'diagram':
         return (
-          <div className="my-4 p-8 bg-gray-100 dark:bg-gray-800 rounded-lg text-center">
-            <p className="text-gray-500">[Diagram: {item.content}]</p>
+          <div className={`my-6 p-8 bg-gray-100 dark:bg-gray-800 rounded-xl text-center border-2 border-dashed border-gray-300 ${revealClass} ${
+            isCurrentlySpoken ? 'ring-2 ring-blue-400 bg-blue-50 dark:bg-blue-950' : ''
+          }`}>
+            <p className="text-gray-500 text-lg font-medium">[Diagram: {item.content}]</p>
           </div>
         );
 
       default:
-        return <div>{item.content}</div>;
+        return (
+          <div className={`text-lg ${revealClass} ${
+            isCurrentlySpoken ? 'ring-2 ring-blue-400 bg-blue-50 dark:bg-blue-950 p-4 rounded-lg' : ''
+          }`}>
+            {item.content}
+          </div>
+        );
     }
   };
 
