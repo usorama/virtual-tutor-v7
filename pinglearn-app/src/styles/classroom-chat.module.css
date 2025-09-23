@@ -1,0 +1,668 @@
+/* ====================================
+   PingLearn Classroom Chat UI - FC-002
+   Modern ChatGPT-style Interface
+   ==================================== */
+
+/* Classroom Chat Interface Styles - CSS Module Compatible */
+
+/* ==================
+   MAIN LAYOUT
+   ================== */
+
+.classroomContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  color: hsl(var(--foreground));
+  transition: all 0.3s ease;
+}
+
+/* ==================
+   HEADER SECTION
+   ================== */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.875rem 1.5rem;
+  background: hsl(var(--background) / 0.95);
+  border-bottom: 1px solid hsl(var(--border));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 10;
+  min-height: 64px;
+  transition: all 0.3s ease;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.topic {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-primary);
+  letter-spacing: -0.025em;
+}
+
+.statusBadge {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  background: var(--success-color);
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.headerRight {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* ==================
+   MAIN CONTENT
+   ================== */
+
+.mainContent {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.chatFullWidth {
+  width: 100%;
+}
+
+.chatWithNotes {
+  flex: 1;
+}
+
+.notesPanel {
+  width: 320px;
+  border-left: 1px solid var(--border-primary);
+  background: var(--backdrop-blur);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+/* ==================
+   CHAT INTERFACE
+   ================== */
+
+.chatInterface {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  transition: background-color 0.3s ease;
+}
+
+.scrollArea {
+  flex: 1;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-muted) transparent;
+}
+
+/* Webkit Scrollbar Styling */
+.scrollArea::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollArea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollArea::-webkit-scrollbar-thumb {
+  background-color: var(--text-muted);
+  border-radius: 3px;
+  opacity: 0.5;
+}
+
+.scrollArea::-webkit-scrollbar-thumb:hover {
+  opacity: 0.8;
+}
+
+.messagesContainer {
+  padding: 2rem 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==================
+   WELCOME MESSAGE
+   ================== */
+
+.welcomeMessage {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--text-secondary);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.welcomeMessage h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.025em;
+}
+
+.welcomeMessage p {
+  font-size: 1.125rem;
+  max-width: 500px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ==================
+   MESSAGE BUBBLES
+   ================== */
+
+.messageBubble {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  animation: slideInUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.messageBubble.teacher {
+  flex-direction: row;
+}
+
+.messageBubble.student {
+  flex-direction: row-reverse;
+}
+
+/* ==================
+   AVATARS
+   ================== */
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 600;
+  flex-shrink: 0;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.avatar::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.messageBubble.teacher .avatar {
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  color: white;
+  box-shadow: var(--shadow-medium);
+}
+
+.messageBubble.student .avatar {
+  background: var(--text-muted);
+  color: white;
+  box-shadow: var(--shadow-light);
+}
+
+.messageBubble:hover .avatar::after {
+  opacity: 1;
+}
+
+/* ==================
+   BUBBLE CONTENT
+   ================== */
+
+.bubbleContent {
+  max-width: 70%;
+  min-width: 200px;
+  flex: 1;
+}
+
+.bubbleHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.375rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.senderName {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.timestamp {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  font-variant-numeric: tabular-nums;
+}
+
+.streamingDot {
+  animation: pulseGlow 1.5s infinite;
+  color: var(--success-color);
+  margin-left: 0.375rem;
+  font-size: 1rem;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.1);
+  }
+}
+
+/* ==================
+   MESSAGE BODY
+   ================== */
+
+.bubbleBody {
+  background: var(--bg-secondary);
+  border-radius: 20px;
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow-medium);
+  position: relative;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.bubbleBody:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.messageBubble.teacher .bubbleBody {
+  border-top-left-radius: 6px;
+  background: var(--bg-secondary);
+}
+
+.messageBubble.student .bubbleBody {
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  color: white;
+  border-top-right-radius: 6px;
+}
+
+.messageContent {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+.messageBubble.student .messageContent {
+  color: white;
+}
+
+/* ==================
+   MATH CONTENT
+   ================== */
+
+.mathContent {
+  margin: 1rem 0;
+  text-align: center;
+  font-size: 1.125rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.mathContent .katex-display {
+  margin: 0.75rem 0;
+  font-size: 1.2em;
+}
+
+/* ==================
+   STREAMING EFFECTS
+   ================== */
+
+.messageBubble.streaming .bubbleBody {
+  background: linear-gradient(270deg,
+    var(--bg-secondary),
+    rgba(102, 126, 234, 0.1),
+    var(--bg-secondary)
+  );
+  background-size: 200% 200%;
+  animation: shimmerFlow 2.5s ease-in-out infinite;
+  border-color: rgba(102, 126, 234, 0.2);
+}
+
+@keyframes shimmerFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ==================
+   WORD HIGHLIGHTING (PC-013)
+   ================== */
+
+.wordHighlight {
+  background: linear-gradient(90deg, var(--highlight-gold) 0%, #ffed4e 100%);
+  padding: 0.125rem 0.375rem;
+  border-radius: 6px;
+  font-weight: 600;
+  color: #1a1a1a;
+  animation: highlightScale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+  position: relative;
+  z-index: 1;
+}
+
+.wordHighlight::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(90deg, var(--highlight-gold), #ffed4e);
+  border-radius: 8px;
+  z-index: -1;
+  opacity: 0.3;
+  animation: highlightGlow 0.6s ease;
+}
+
+@keyframes highlightScale {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes highlightGlow {
+  0% { opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { opacity: 0.3; }
+}
+
+.wordCompleted {
+  background: var(--highlight-gold-bg);
+  padding: 0.125rem 0.25rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+/* ==================
+   SCROLL UTILITIES
+   ================== */
+
+.scrollAnchor {
+  height: 1px;
+  width: 100%;
+  margin-top: auto;
+}
+
+/* ==================
+   RESPONSIVE DESIGN
+   ================== */
+
+@media (max-width: 768px) {
+  .classroomContainer {
+    height: 100dvh; /* Better mobile viewport */
+  }
+
+  .header {
+    padding: 0.75rem 1rem;
+    min-height: 56px;
+  }
+
+  .topic {
+    font-size: 1rem;
+  }
+
+  .messagesContainer {
+    padding: 1rem;
+  }
+
+  .messageBubble {
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .bubbleContent {
+    max-width: 85%;
+    min-width: 150px;
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 0.875rem;
+  }
+
+  .bubbleBody {
+    padding: 0.875rem 1rem;
+    border-radius: 16px;
+  }
+
+  .messageBubble.teacher .bubbleBody {
+    border-top-left-radius: 4px;
+  }
+
+  .messageBubble.student .bubbleBody {
+    border-top-right-radius: 4px;
+  }
+
+  .messageContent {
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  .notesPanel {
+    position: fixed;
+    top: 56px;
+    right: 0;
+    bottom: 0;
+    width: 85%;
+    max-width: 320px;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 20;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .notesPanel.open {
+    transform: translateX(0);
+  }
+
+  .welcomeMessage {
+    padding: 2rem 1rem;
+  }
+
+  .welcomeMessage h2 {
+    font-size: 1.5rem;
+  }
+
+  .welcomeMessage p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .bubbleContent {
+    max-width: 90%;
+  }
+
+  .bubbleBody {
+    padding: 0.75rem 0.875rem;
+  }
+
+  .messageContent {
+    font-size: 0.8125rem;
+  }
+}
+
+/* ==================
+   ACCESSIBILITY
+   ================== */
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .messageBubble,
+  .bubbleBody,
+  .avatar {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .scrollArea {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .bubbleBody {
+    border: 2px solid var(--text-primary);
+  }
+
+  .wordHighlight {
+    background: yellow;
+    color: black;
+    border: 1px solid black;
+  }
+}
+
+/* Focus States */
+.messageBubble:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--bg-gradient-start);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Keyboard Navigation */
+.messageBubble[tabindex] {
+  cursor: pointer;
+}
+
+.messageBubble[tabindex]:hover {
+  background: rgba(102, 126, 234, 0.02);
+  border-radius: 8px;
+  margin: -4px;
+  padding: 4px;
+}
+
+/* ==================
+   PRINT STYLES
+   ================== */
+
+@media print {
+  .classroomContainer {
+    background: white !important;
+    color: black !important;
+  }
+
+  .header {
+    position: relative;
+    page-break-after: avoid;
+    background: white !important;
+    border-bottom: 1px solid #ccc !important;
+  }
+
+  .messageBubble {
+    page-break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+
+  .bubbleBody {
+    background: white !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+
+  .messageBubble.student .bubbleBody {
+    background: #f5f5f5 !important;
+    color: black !important;
+  }
+
+  .notesPanel {
+    display: none;
+  }
+
+  .wordHighlight {
+    background: yellow !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+}
+
+/* ==================
+   PERFORMANCE OPTIMIZATIONS
+   ================== */
+
+/* GPU Acceleration for Smooth Animations */
+.messageBubble,
+.bubbleBody,
+.avatar {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Contain Layout Shifts */
+.messagesContainer {
+  contain: layout style;
+}
+
+/* Optimize Scrolling */
+.scrollArea {
+  contain: strict;
+  content-visibility: auto;
+}

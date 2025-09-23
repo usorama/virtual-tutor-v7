@@ -12,6 +12,14 @@ export interface VoiceConfig {
   participantName?: string;
   region?: string;
   model?: string;
+
+  // PC-013: Optional timing configuration
+  timingConfig?: {
+    enableWordTiming?: boolean;
+    enableProgressiveMath?: boolean;
+    wordTimingMethod?: 'estimate' | 'speechApi' | 'hybrid';
+    mathRevealSpeed?: 'slow' | 'normal' | 'fast';
+  };
 }
 
 export interface VoiceSession {

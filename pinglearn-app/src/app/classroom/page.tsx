@@ -6,17 +6,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { Mic, MicOff, Loader2, AlertCircle, Play, Pause, Square, Activity, BarChart3, Zap, Home } from 'lucide-react';
+import { Mic, MicOff, Loader2, AlertCircle, Play, Pause, Square, Home } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
-import { TranscriptSimple } from '@/components/classroom/TranscriptSimple';
-import { TeachingBoardSimple } from '@/components/classroom/TeachingBoardSimple';
+import { ChatInterface } from '@/components/classroom/ChatInterface';
 import { NotesPanel } from '@/components/classroom/NotesPanel';
 import { LiveKitRoom } from '@/components/voice/LiveKitRoom';
 import { useVoiceSession } from '@/hooks/useVoiceSession';
 import { useSessionState } from '@/hooks/useSessionState';
 import { useSessionMetrics } from '@/hooks/useSessionMetrics';
 import { SessionOrchestrator } from '@/protected-core';
-import { ResizableSplit } from '@/components/ui/resizable-split';
+import styles from '@/styles/classroom-chat.module.css';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -55,11 +54,8 @@ export default function ClassroomPage() {
     getDetailedStatus
   } = useSessionState();
 
-  const {
-    liveMetrics,
-    qualityScore,
-    engagementTrend
-  } = useSessionMetrics();
+  // Metrics available but not used in chat interface
+  // const { liveMetrics, qualityScore, engagementTrend } = useSessionMetrics();
 
   // Local UI state
   const [audioControls, setAudioControls] = useState<AudioControlState>({
@@ -73,6 +69,8 @@ export default function ClassroomPage() {
   const [voiceConnected, setVoiceConnected] = useState(false);
   const [sessionControlState, setSessionControlState] = useState<'active' | 'paused' | 'ended'>('active');
   const [isTransitioning, setIsTransitioning] = useState(false);
+  // Notes panel not implemented yet
+  // const [showNotes, setShowNotes] = useState(false);
 
   // Check authentication and load user data
   useEffect(() => {
@@ -347,19 +345,7 @@ export default function ClassroomPage() {
 
   // Note: Volume control available through setAudioControls state
 
-  /**
-   * Format duration for display
-   */
-  function formatDuration(seconds: number): string {
-    const hours = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-
-    if (hours > 0) {
-      return `${hours}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    }
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  }
+  // Removed formatDuration as it's not used in chat interface
 
   /**
    * Get status badge variant based on session state
@@ -419,105 +405,100 @@ export default function ClassroomPage() {
     );
   }
 
-  // Minimal clean learning interface
+  // Chat-based learning interface
   if (session && (isActive || isPaused)) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-muted">
+      <div className={styles.classroomContainer}>
         {/* Minimal Header */}
-        <div className="border-b bg-background/95 backdrop-blur">
-          <div className="max-w-full px-6 py-3">
-            <div className="flex items-center justify-between">
-              {/* Left: Session info */}
-              <div className="flex items-center space-x-4">
-                <h1 className="text-lg font-semibold">{currentTopic}</h1>
-                <Badge variant={getStatusBadgeVariant(sessionState.status)}>
-                  {getDetailedStatus()}
+        <header className={styles.header}>
+          <div className={styles.headerContent}>
+            {/* Left: Session info */}
+            <div className={styles.headerLeft}>
+              <h1 className={styles.topic}>{currentTopic}</h1>
+              <Badge variant={getStatusBadgeVariant(sessionState.status)}>
+                {getDetailedStatus()}
+              </Badge>
+              {voiceConnected && (
+                <Badge variant="outline" className="text-green-600">
+                  <Mic className="h-3 w-3 mr-1" />
+                  Connected
                 </Badge>
-                {voiceConnected && (
-                  <Badge variant="outline" className="text-green-600">
-                    <Mic className="h-3 w-3 mr-1" />
-                    Connected
-                  </Badge>
-                )}
-              </div>
+              )}
+            </div>
 
-              {/* Right: Controls */}
-              <div className="flex items-center space-x-2">
-                {sessionControlState === 'ended' ? (
+            {/* Right: Controls */}
+            <div className={styles.headerRight}>
+              {sessionControlState === 'ended' ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => router.push('/dashboard')}
+                >
+                  <Home className="w-4 h-4 mr-2" />
+                  Dashboard
+                </Button>
+              ) : (
+                <>
                   <Button
-                    variant="outline"
+                    variant={audioControls.isMuted ? "destructive" : "secondary"}
                     size="sm"
-                    onClick={() => router.push('/dashboard')}
+                    onClick={toggleMute}
+                    disabled={isConnecting || isLoading || isTransitioning}
                   >
-                    Back to Dashboard
+                    {audioControls.isMuted ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
                   </Button>
-                ) : (
-                  <>
-                    <Button
-                      variant={audioControls.isMuted ? "destructive" : "secondary"}
-                      size="sm"
-                      onClick={toggleMute}
-                      disabled={isConnecting || isLoading || isTransitioning}
-                    >
-                      {audioControls.isMuted ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-                    </Button>
 
-                    <Button
-                      variant={sessionControlState === 'paused' ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={handlePauseResume}
-                      disabled={isConnecting || isLoading || isTransitioning}
-                    >
-                      {isTransitioning ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : sessionControlState === 'paused' ? (
-                        <Play className="w-4 h-4" />
-                      ) : (
-                        <Pause className="w-4 h-4" />
-                      )}
-                    </Button>
+                  <Button
+                    variant={sessionControlState === 'paused' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={handlePauseResume}
+                    disabled={isConnecting || isLoading || isTransitioning}
+                  >
+                    {isTransitioning ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : sessionControlState === 'paused' ? (
+                      <Play className="w-4 h-4" />
+                    ) : (
+                      <Pause className="w-4 h-4" />
+                    )}
+                  </Button>
 
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={handleEndSession}
-                      disabled={isConnecting || isLoading || isTransitioning}
-                    >
-                      {isTransitioning ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <Square className="w-4 h-4" />
-                      )}
-                    </Button>
-                  </>
-                )}
-              </div>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={handleEndSession}
+                    disabled={isConnecting || isLoading || isTransitioning}
+                  >
+                    {isTransitioning ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Square className="w-4 h-4" />
+                    )}
+                  </Button>
+                </>
+              )}
             </div>
           </div>
-        </div>
+        </header>
 
-        {/* Simple Layout - 80% Teaching, 20% Transcript */}
-        <ResizableSplit
-          defaultSplit={80}
-          minSplit={60}
-          maxSplit={90}
-          className="h-[calc(100vh-60px)]"
-        >
-          {/* Left: Teaching Board (80%) */}
-          <TeachingBoardSimple
+        {/* Main Content - Chat Interface */}
+        <main className={styles.mainContent}>
+          <ChatInterface
             sessionId={sessionId || undefined}
-            topic={currentTopic}
-            className="h-full"
+            className={styles.chatFullWidth}
           />
 
-          {/* Right: Transcript (20%) */}
-          <div className="h-full border-l">
-            <TranscriptSimple
-              sessionId={sessionId || undefined}
-              className="h-full"
-            />
-          </div>
-        </ResizableSplit>
+          {/* Notes Panel disabled for now
+          {showNotes && (
+            <div className={styles.notesPanel}>
+              <NotesPanel
+                sessionId={sessionId || undefined}
+                topic={currentTopic}
+              />
+            </div>
+          )}
+          */}
+        </main>
 
         {/* LiveKit Voice Connection (Hidden) */}
         {roomName && userId && isActive && (
@@ -539,8 +520,8 @@ export default function ClassroomPage() {
                 setErrorBoundary({ hasError: true, error });
               }}
             />
-            </div>
-          )}
+          </div>
+        )}
 
         {/* Status Messages */}
         <div className="fixed bottom-4 right-4 space-y-2 max-w-md">
