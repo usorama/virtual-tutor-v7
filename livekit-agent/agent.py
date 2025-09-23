@@ -36,7 +36,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Gemini API configuration
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "AIzaSyBcUGgObt--HCjBlXygu8iYMuI6PnPbeIY")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "AIzaSyAdkzyMQTYBbf5dPkW7UOxXHb9rnTLxWoY")
 
 # System prompt for the AI Tutor
 TUTOR_SYSTEM_PROMPT = """

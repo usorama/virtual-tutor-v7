@@ -251,7 +251,7 @@ class AudioResponseManager:
         return emphasis
 
 # Create global instances
-gemini_config = GeminiConfig(api_key=os.getenv("GOOGLE_API_KEY", "AIzaSyBcUGgObt--HCjBlXygu8iYMuI6PnPbeIY"))
+gemini_config = GeminiConfig(api_key=os.getenv("GOOGLE_API_KEY", "AIzaSyAdkzyMQTYBbf5dPkW7UOxXHb9rnTLxWoY"))
 content_manager = ContentContextManager()
 audio_manager = AudioResponseManager()
 

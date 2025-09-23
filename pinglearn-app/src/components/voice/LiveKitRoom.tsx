@@ -120,24 +120,13 @@ export function LiveKitRoom({
         const data = JSON.parse(decoder.decode(payload));
 
         if (data.type === 'transcript') {
-          // Import DisplayBuffer and add transcript
-          import('@/protected-core').then(({ getDisplayBuffer }) => {
-            const buffer = getDisplayBuffer();
+          // DISABLED: SessionOrchestrator handles transcripts to prevent duplicates
+          // The SessionOrchestrator listens to LiveKit transcription events
+          // and adds them to DisplayBuffer as the single source of truth
+          console.log('[LiveKitRoom] Transcript received (handled by SessionOrchestrator):', data.segments.length, 'segments');
 
-            // Process each segment from the transcript
-            data.segments.forEach((segment: any) => {
-              buffer.addItem({
-                type: segment.type as 'text' | 'math',
-                content: segment.content,
-                speaker: data.speaker === 'teacher' ? 'ai' : data.speaker as 'student' | 'ai',
-                rendered: segment.latex
-              });
-            });
-
-            console.log('Added transcript to display buffer:', data.segments.length, 'segments');
-          }).catch(err => {
-            console.error('Failed to access DisplayBuffer:', err);
-          });
+          // Previously this component was adding to DisplayBuffer directly,
+          // causing duplicate entries. Now SessionOrchestrator manages all transcripts.
         }
       } catch (error) {
         console.error('Error processing data packet:', error);

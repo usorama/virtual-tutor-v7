@@ -1,0 +1,935 @@
+{
+  "$schema": "https://design-tokens.io/draft-07/schema",
+  "name": "PingLearn Design Tokens",
+  "version": "1.0.0",
+  "description": "Design tokens for the PingLearn educational platform",
+  "lastUpdated": "2025-09-22",
+
+  "colors": {
+    "base": {
+      "black": {
+        "value": "#000000",
+        "type": "color",
+        "description": "Pure black background"
+      },
+      "white": {
+        "value": "#FFFFFF",
+        "type": "color",
+        "description": "Pure white for primary text"
+      }
+    },
+
+    "cyan": {
+      "50": {
+        "value": "#ECFEFF",
+        "type": "color"
+      },
+      "100": {
+        "value": "#CFFAFE",
+        "type": "color"
+      },
+      "200": {
+        "value": "#A5F3FC",
+        "type": "color"
+      },
+      "300": {
+        "value": "#67E8F9",
+        "type": "color"
+      },
+      "400": {
+        "value": "#22D3EE",
+        "type": "color"
+      },
+      "500": {
+        "value": "#06B6D4",
+        "type": "color",
+        "description": "Primary accent color"
+      },
+      "600": {
+        "value": "#0891B2",
+        "type": "color"
+      },
+      "700": {
+        "value": "#0E7490",
+        "type": "color"
+      },
+      "800": {
+        "value": "#155E75",
+        "type": "color"
+      },
+      "900": {
+        "value": "#164E63",
+        "type": "color"
+      },
+      "dark": {
+        "value": "#035B6A",
+        "type": "color",
+        "description": "Dark cyan for button fills"
+      }
+    },
+
+    "opacity": {
+      "white": {
+        "5": {
+          "value": "rgba(255, 255, 255, 0.05)",
+          "type": "color"
+        },
+        "10": {
+          "value": "rgba(255, 255, 255, 0.10)",
+          "type": "color"
+        },
+        "20": {
+          "value": "rgba(255, 255, 255, 0.20)",
+          "type": "color"
+        },
+        "30": {
+          "value": "rgba(255, 255, 255, 0.30)",
+          "type": "color"
+        },
+        "40": {
+          "value": "rgba(255, 255, 255, 0.40)",
+          "type": "color"
+        },
+        "60": {
+          "value": "rgba(255, 255, 255, 0.60)",
+          "type": "color"
+        },
+        "70": {
+          "value": "rgba(255, 255, 255, 0.70)",
+          "type": "color",
+          "description": "Used for carousel text"
+        }
+      },
+      "cyan": {
+        "5": {
+          "value": "rgba(6, 182, 212, 0.05)",
+          "type": "color"
+        },
+        "10": {
+          "value": "rgba(6, 182, 212, 0.10)",
+          "type": "color"
+        },
+        "15": {
+          "value": "rgba(6, 182, 212, 0.15)",
+          "type": "color"
+        },
+        "20": {
+          "value": "rgba(6, 182, 212, 0.20)",
+          "type": "color"
+        },
+        "30": {
+          "value": "rgba(6, 182, 212, 0.30)",
+          "type": "color"
+        },
+        "50": {
+          "value": "rgba(6, 182, 212, 0.50)",
+          "type": "color"
+        },
+        "80": {
+          "value": "rgba(6, 182, 212, 0.80)",
+          "type": "color",
+          "description": "Used for carousel icons"
+        }
+      }
+    }
+  },
+
+  "typography": {
+    "fontFamily": {
+      "primary": {
+        "value": "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        "type": "font-family"
+      }
+    },
+
+    "fontSize": {
+      "xs": {
+        "value": "12px",
+        "type": "font-size"
+      },
+      "sm": {
+        "value": "14px",
+        "type": "font-size"
+      },
+      "base": {
+        "value": "16px",
+        "type": "font-size"
+      },
+      "lg": {
+        "value": "18px",
+        "type": "font-size"
+      },
+      "xl": {
+        "value": "20px",
+        "type": "font-size"
+      },
+      "2xl": {
+        "value": "24px",
+        "type": "font-size"
+      },
+      "3xl": {
+        "value": "30px",
+        "type": "font-size"
+      },
+      "4xl": {
+        "value": "36px",
+        "type": "font-size"
+      },
+      "5xl": {
+        "value": "48px",
+        "type": "font-size"
+      },
+      "6xl": {
+        "value": "60px",
+        "type": "font-size"
+      },
+      "7xl": {
+        "value": "72px",
+        "type": "font-size"
+      }
+    },
+
+    "fontWeight": {
+      "normal": {
+        "value": "400",
+        "type": "font-weight"
+      },
+      "medium": {
+        "value": "500",
+        "type": "font-weight"
+      },
+      "semibold": {
+        "value": "600",
+        "type": "font-weight"
+      },
+      "bold": {
+        "value": "700",
+        "type": "font-weight"
+      }
+    },
+
+    "lineHeight": {
+      "tight": {
+        "value": "1.25",
+        "type": "line-height"
+      },
+      "normal": {
+        "value": "1.5",
+        "type": "line-height"
+      },
+      "relaxed": {
+        "value": "1.625",
+        "type": "line-height"
+      },
+      "loose": {
+        "value": "2",
+        "type": "line-height"
+      }
+    },
+
+    "letterSpacing": {
+      "tighter": {
+        "value": "-0.05em",
+        "type": "letter-spacing"
+      },
+      "tight": {
+        "value": "-0.025em",
+        "type": "letter-spacing"
+      },
+      "normal": {
+        "value": "0",
+        "type": "letter-spacing"
+      },
+      "wide": {
+        "value": "0.025em",
+        "type": "letter-spacing"
+      },
+      "wider": {
+        "value": "0.05em",
+        "type": "letter-spacing"
+      },
+      "widest": {
+        "value": "0.1em",
+        "type": "letter-spacing"
+      },
+      "ultra": {
+        "value": "0.3em",
+        "type": "letter-spacing"
+      }
+    }
+  },
+
+  "spacing": {
+    "0": {
+      "value": "0px",
+      "type": "spacing"
+    },
+    "1": {
+      "value": "4px",
+      "type": "spacing"
+    },
+    "2": {
+      "value": "8px",
+      "type": "spacing"
+    },
+    "3": {
+      "value": "12px",
+      "type": "spacing"
+    },
+    "4": {
+      "value": "16px",
+      "type": "spacing"
+    },
+    "5": {
+      "value": "20px",
+      "type": "spacing"
+    },
+    "6": {
+      "value": "24px",
+      "type": "spacing"
+    },
+    "8": {
+      "value": "32px",
+      "type": "spacing"
+    },
+    "10": {
+      "value": "40px",
+      "type": "spacing"
+    },
+    "12": {
+      "value": "48px",
+      "type": "spacing"
+    },
+    "16": {
+      "value": "64px",
+      "type": "spacing"
+    },
+    "20": {
+      "value": "80px",
+      "type": "spacing"
+    },
+    "24": {
+      "value": "96px",
+      "type": "spacing"
+    },
+    "32": {
+      "value": "128px",
+      "type": "spacing"
+    }
+  },
+
+  "borderRadius": {
+    "none": {
+      "value": "0px",
+      "type": "border-radius"
+    },
+    "sm": {
+      "value": "2px",
+      "type": "border-radius"
+    },
+    "base": {
+      "value": "4px",
+      "type": "border-radius"
+    },
+    "md": {
+      "value": "6px",
+      "type": "border-radius"
+    },
+    "lg": {
+      "value": "8px",
+      "type": "border-radius"
+    },
+    "xl": {
+      "value": "12px",
+      "type": "border-radius"
+    },
+    "2xl": {
+      "value": "16px",
+      "type": "border-radius"
+    },
+    "3xl": {
+      "value": "24px",
+      "type": "border-radius"
+    },
+    "full": {
+      "value": "9999px",
+      "type": "border-radius"
+    }
+  },
+
+  "animation": {
+    "duration": {
+      "instant": {
+        "value": "0ms",
+        "type": "duration"
+      },
+      "fast": {
+        "value": "150ms",
+        "type": "duration"
+      },
+      "normal": {
+        "value": "300ms",
+        "type": "duration"
+      },
+      "slow": {
+        "value": "500ms",
+        "type": "duration"
+      },
+      "slower": {
+        "value": "1000ms",
+        "type": "duration"
+      },
+      "slowest": {
+        "value": "2000ms",
+        "type": "duration"
+      },
+      "rotation": {
+        "value": "6000ms",
+        "type": "duration",
+        "description": "Border rotation animation"
+      },
+      "carousel": {
+        "value": "15000ms",
+        "type": "duration",
+        "description": "Features carousel scroll speed (doubled from 30s)"
+      }
+    },
+
+    "easing": {
+      "linear": {
+        "value": "linear",
+        "type": "easing"
+      },
+      "ease": {
+        "value": "ease",
+        "type": "easing"
+      },
+      "easeIn": {
+        "value": "ease-in",
+        "type": "easing"
+      },
+      "easeOut": {
+        "value": "ease-out",
+        "type": "easing"
+      },
+      "easeInOut": {
+        "value": "ease-in-out",
+        "type": "easing"
+      },
+      "smooth": {
+        "value": "cubic-bezier(0.4, 0.0, 0.2, 1)",
+        "type": "easing"
+      },
+      "bounce": {
+        "value": "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+        "type": "easing"
+      }
+    }
+  },
+
+  "shadows": {
+    "textGlow": {
+      "cyan": {
+        "value": "0 0 40px rgba(6, 182, 212, 0.8), 0 0 80px rgba(6, 182, 212, 0.5)",
+        "type": "shadow",
+        "description": "Cyan text glow effect"
+      }
+    },
+
+    "boxGlow": {
+      "cyan": {
+        "value": "0 0 50px rgba(6, 182, 212, 0.4), 0 0 100px rgba(6, 182, 212, 0.2)",
+        "type": "shadow",
+        "description": "Cyan box glow effect"
+      },
+      "cyanInset": {
+        "value": "inset 0 0 30px rgba(6, 182, 212, 0.1), 0 0 30px rgba(6, 182, 212, 0.1)",
+        "type": "shadow",
+        "description": "Cyan inset glow"
+      }
+    },
+
+    "elevation": {
+      "sm": {
+        "value": "0 1px 2px rgba(0, 0, 0, 0.05)",
+        "type": "shadow"
+      },
+      "md": {
+        "value": "0 4px 6px rgba(0, 0, 0, 0.1)",
+        "type": "shadow"
+      },
+      "lg": {
+        "value": "0 10px 15px rgba(0, 0, 0, 0.1)",
+        "type": "shadow"
+      },
+      "xl": {
+        "value": "0 20px 25px rgba(0, 0, 0, 0.1)",
+        "type": "shadow"
+      }
+    }
+  },
+
+  "gradients": {
+    "linear": {
+      "cyanText": {
+        "value": "linear-gradient(135deg, #FFFFFF 0%, #06B6D4 100%)",
+        "type": "gradient"
+      },
+      "darkCyan": {
+        "value": "linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.25) 100%)",
+        "type": "gradient"
+      }
+    },
+
+    "radial": {
+      "cyanGlow": {
+        "value": "radial-gradient(circle, rgba(6, 182, 212, 0.2) 0%, transparent 70%)",
+        "type": "gradient"
+      },
+      "cyanGlowHover": {
+        "value": "radial-gradient(circle at center, rgba(6, 182, 212, 0.3) 0%, transparent 70%)",
+        "type": "gradient"
+      }
+    },
+
+    "conic": {
+      "animatedBorder": {
+        "value": "conic-gradient(from 0deg at 50% 50%, transparent 0deg, #06B6D4 60deg, #0891B2 120deg, transparent 180deg, transparent 360deg)",
+        "type": "gradient"
+      }
+    }
+  },
+
+  "breakpoints": {
+    "sm": {
+      "value": "640px",
+      "type": "breakpoint",
+      "description": "Small tablets"
+    },
+    "md": {
+      "value": "768px",
+      "type": "breakpoint",
+      "description": "Tablets"
+    },
+    "lg": {
+      "value": "1024px",
+      "type": "breakpoint",
+      "description": "Desktop"
+    },
+    "xl": {
+      "value": "1280px",
+      "type": "breakpoint",
+      "description": "Large desktop"
+    },
+    "2xl": {
+      "value": "1536px",
+      "type": "breakpoint",
+      "description": "Extra large"
+    }
+  },
+
+  "containers": {
+    "sm": {
+      "value": "640px",
+      "type": "size"
+    },
+    "md": {
+      "value": "768px",
+      "type": "size"
+    },
+    "lg": {
+      "value": "1024px",
+      "type": "size"
+    },
+    "xl": {
+      "value": "1280px",
+      "type": "size"
+    },
+    "2xl": {
+      "value": "1536px",
+      "type": "size"
+    },
+    "max": {
+      "value": "1920px",
+      "type": "size"
+    }
+  },
+
+  "effects": {
+    "backdropBlur": {
+      "sm": {
+        "value": "blur(4px)",
+        "type": "effect"
+      },
+      "base": {
+        "value": "blur(10px)",
+        "type": "effect"
+      },
+      "md": {
+        "value": "blur(12px)",
+        "type": "effect"
+      },
+      "lg": {
+        "value": "blur(16px)",
+        "type": "effect"
+      },
+      "xl": {
+        "value": "blur(24px)",
+        "type": "effect"
+      }
+    },
+
+    "noise": {
+      "opacity": {
+        "value": "0.02",
+        "type": "opacity",
+        "description": "Noise texture overlay opacity"
+      }
+    }
+  },
+
+  "background": {
+    "carousel": {
+      "iconOpacity": {
+        "value": "0.8",
+        "type": "opacity",
+        "description": "Feature carousel icon visibility"
+      },
+      "textOpacity": {
+        "value": "0.7",
+        "type": "opacity",
+        "description": "Feature carousel text visibility"
+      },
+      "scrollDuration": {
+        "value": "15s",
+        "type": "duration",
+        "description": "Carousel scroll animation duration"
+      }
+    },
+
+    "grid": {
+      "size": {
+        "value": "50px",
+        "type": "size",
+        "description": "Grid cell size"
+      },
+      "opacity": {
+        "value": "0.03",
+        "type": "opacity",
+        "description": "Grid line opacity"
+      },
+      "color": {
+        "value": "rgba(6, 182, 212, 0.03)",
+        "type": "color",
+        "description": "Grid line color"
+      }
+    },
+
+    "particles": {
+      "count": {
+        "value": 60,
+        "type": "number",
+        "description": "Number of animated particles"
+      },
+      "sizeMin": {
+        "value": "0.5px",
+        "type": "size"
+      },
+      "sizeMax": {
+        "value": "2.5px",
+        "type": "size"
+      },
+      "opacityMin": {
+        "value": "0.2",
+        "type": "opacity"
+      },
+      "opacityMax": {
+        "value": "0.7",
+        "type": "opacity"
+      },
+      "speed": {
+        "value": "0.5",
+        "type": "number",
+        "description": "Particle velocity multiplier"
+      },
+      "connectionDistance": {
+        "value": "150px",
+        "type": "size",
+        "description": "Distance for particle connections"
+      }
+    }
+  },
+
+  "zIndex": {
+    "background": {
+      "value": "0",
+      "type": "z-index"
+    },
+    "particles": {
+      "value": "1",
+      "type": "z-index"
+    },
+    "content": {
+      "value": "10",
+      "type": "z-index"
+    },
+    "overlay": {
+      "value": "20",
+      "type": "z-index"
+    },
+    "modal": {
+      "value": "30",
+      "type": "z-index"
+    },
+    "tooltip": {
+      "value": "40",
+      "type": "z-index"
+    },
+    "notification": {
+      "value": "50",
+      "type": "z-index"
+    },
+    "navigation": {
+      "value": "100",
+      "type": "z-index",
+      "description": "Top navigation bar"
+    },
+    "chatWidget": {
+      "value": "90",
+      "type": "z-index",
+      "description": "Floating help chat widget"
+    }
+  },
+
+  "appSpecific": {
+    "navigation": {
+      "height": {
+        "value": "64px",
+        "type": "size",
+        "description": "Fixed navigation bar height"
+      },
+      "logoHeight": {
+        "value": "40px",
+        "type": "size",
+        "description": "Logo height in navigation"
+      },
+      "itemSpacing": {
+        "value": "24px",
+        "type": "spacing",
+        "description": "Space between nav items"
+      },
+      "activeUnderline": {
+        "value": "2px",
+        "type": "size",
+        "description": "Active state underline thickness"
+      }
+    },
+
+    "dashboard": {
+      "cardPadding": {
+        "value": "24px",
+        "type": "spacing"
+      },
+      "progressRingSize": {
+        "value": "120px",
+        "type": "size"
+      },
+      "progressRingStroke": {
+        "value": "8px",
+        "type": "size"
+      },
+      "timelineDotSize": {
+        "value": "12px",
+        "type": "size"
+      },
+      "cardGap": {
+        "value": "16px",
+        "type": "spacing"
+      }
+    },
+
+    "wizard": {
+      "progressBarHeight": {
+        "value": "4px",
+        "type": "size"
+      },
+      "stepIndicatorSize": {
+        "value": "32px",
+        "type": "size"
+      },
+      "inputHeight": {
+        "value": "48px",
+        "type": "size"
+      },
+      "formFieldSpacing": {
+        "value": "24px",
+        "type": "spacing"
+      }
+    },
+
+    "classroom": {
+      "leftPanelWidth": {
+        "value": "40%",
+        "type": "size",
+        "description": "Chat panel width"
+      },
+      "rightPanelWidth": {
+        "value": "60%",
+        "type": "size",
+        "description": "Content panel width"
+      },
+      "minPanelWidth": {
+        "value": "400px",
+        "type": "size"
+      },
+      "messageBubbleMaxWidth": {
+        "value": "80%",
+        "type": "size"
+      },
+      "avatarSize": {
+        "value": "32px",
+        "type": "size"
+      },
+      "mathAreaMinHeight": {
+        "value": "200px",
+        "type": "size"
+      },
+      "messagePadding": {
+        "horizontal": {
+          "value": "16px",
+          "type": "spacing"
+        },
+        "vertical": {
+          "value": "12px",
+          "type": "spacing"
+        }
+      }
+    },
+
+    "notes": {
+      "editorMinHeight": {
+        "value": "400px",
+        "type": "size"
+      },
+      "cardMaxHeight": {
+        "value": "400px",
+        "type": "size"
+      },
+      "gridMinWidth": {
+        "value": "300px",
+        "type": "size"
+      },
+      "lineHeight": {
+        "value": "1.8",
+        "type": "line-height"
+      }
+    },
+
+    "helpChat": {
+      "buttonSize": {
+        "value": "56px",
+        "type": "size",
+        "description": "Floating button diameter"
+      },
+      "buttonOffset": {
+        "value": "24px",
+        "type": "spacing",
+        "description": "Distance from viewport edge"
+      },
+      "windowWidth": {
+        "value": "380px",
+        "type": "size"
+      },
+      "windowMaxHeight": {
+        "value": "600px",
+        "type": "size"
+      },
+      "headerHeight": {
+        "value": "56px",
+        "type": "size"
+      },
+      "iconSize": {
+        "value": "24px",
+        "type": "size"
+      }
+    },
+
+    "loading": {
+      "spinnerSizes": {
+        "sm": {
+          "value": "16px",
+          "type": "size"
+        },
+        "md": {
+          "value": "24px",
+          "type": "size"
+        },
+        "lg": {
+          "value": "32px",
+          "type": "size"
+        },
+        "xl": {
+          "value": "48px",
+          "type": "size"
+        }
+      },
+      "skeletonAnimationDuration": {
+        "value": "1500ms",
+        "type": "duration"
+      },
+      "spinnerAnimationDuration": {
+        "value": "750ms",
+        "type": "duration"
+      }
+    },
+
+    "emptyState": {
+      "illustrationHeight": {
+        "value": "200px",
+        "type": "size"
+      },
+      "illustrationOpacity": {
+        "value": "0.6",
+        "type": "opacity"
+      }
+    },
+
+    "toast": {
+      "maxWidth": {
+        "value": "360px",
+        "type": "size"
+      },
+      "padding": {
+        "value": "16px",
+        "type": "spacing"
+      },
+      "offset": {
+        "value": "24px",
+        "type": "spacing"
+      },
+      "autoDismiss": {
+        "value": "5000ms",
+        "type": "duration"
+      }
+    },
+
+    "modal": {
+      "defaultMaxWidth": {
+        "value": "600px",
+        "type": "size"
+      },
+      "largeMaxWidth": {
+        "value": "900px",
+        "type": "size"
+      },
+      "closeButtonOffset": {
+        "value": "16px",
+        "type": "spacing"
+      },
+      "backdropOpacity": {
+        "value": "0.8",
+        "type": "opacity"
+      }
+    }
+  }
+}
