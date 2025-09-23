@@ -6,6 +6,7 @@ import { useWizard } from '@/contexts/WizardContext'
 import { StepIndicator } from '@/components/wizard/StepIndicator'
 import { NavigationButtons } from '@/components/wizard/NavigationButtons'
 import { GradeSelector } from '@/components/wizard/GradeSelector'
+import { PurposeSelector } from '@/components/wizard/PurposeSelector'
 import { SubjectSelector } from '@/components/wizard/SubjectSelector'
 import { TopicSelector } from '@/components/wizard/TopicSelector'
 import { WizardSummary } from '@/components/wizard/WizardSummary'
@@ -25,6 +26,7 @@ export default function WizardPage() {
   const {
     state,
     updateGrade,
+    updatePurpose,
     updateSubjects,
     updateTopics,
     nextStep,
@@ -46,6 +48,9 @@ export default function WizardPage() {
         if (data && data.grade) {
           // User has existing preferences - populate the wizard with current data
           updateGrade(data.grade)
+          if (data.learning_purpose) {
+            updatePurpose(data.learning_purpose as any) // Type assertion needed since DB returns string
+          }
           if (data.preferred_subjects && data.preferred_subjects.length > 0) {
             updateSubjects(data.preferred_subjects)
           }
@@ -117,13 +122,13 @@ export default function WizardPage() {
 
   function handleCancel() {
     // Show confirmation if user has made changes
-    if (state.grade || state.subjects.length > 0) {
+    if (state.grade || state.purpose || state.subjects.length > 0) {
       const confirmed = window.confirm(
         'Are you sure you want to cancel? Any unsaved changes will be lost.'
       )
       if (!confirmed) return
     }
-    
+
     // Return to dashboard
     router.push('/dashboard')
   }
@@ -187,6 +192,18 @@ export default function WizardPage() {
                 />
               )}
 
+              {state.currentStep === WIZARD_STEPS.PURPOSE_SELECTION && (
+                <div>
+                  <h2 className="text-2xl font-bold mb-6">
+                    How would you like to learn today?
+                  </h2>
+                  <PurposeSelector
+                    selected={state.purpose}
+                    onSelect={updatePurpose}
+                  />
+                </div>
+              )}
+
               {state.currentStep === WIZARD_STEPS.SUBJECT_SELECTION && (
                 <SubjectSelector
                   availableSubjects={availableSubjects}
@@ -207,6 +224,7 @@ export default function WizardPage() {
               {state.currentStep === WIZARD_STEPS.SUMMARY && (
                 <WizardSummary
                   grade={state.grade}
+                  purpose={state.purpose}
                   subjects={state.subjects}
                   topics={state.topics}
                 />

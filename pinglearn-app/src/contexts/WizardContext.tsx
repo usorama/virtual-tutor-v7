@@ -1,13 +1,14 @@
 'use client'
 
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react'
-import { WizardState, WizardContextType, WIZARD_STEPS } from '@/types/wizard'
+import { WizardState, WizardContextType, WIZARD_STEPS, LearningPurpose } from '@/types/wizard'
 
 const STORAGE_KEY = 'vt_wizard_state'
 
 const initialState: WizardState = {
   currentStep: WIZARD_STEPS.GRADE_SELECTION,
   grade: null,
+  purpose: null,
   subjects: [],
   topics: {},
   isComplete: false,
@@ -57,9 +58,14 @@ export function WizardProvider({ children }: WizardProviderProps) {
       ...prev,
       grade,
       // Reset subsequent selections when grade changes
+      purpose: null,
       subjects: [],
       topics: {},
     }))
+  }, [])
+
+  const updatePurpose = useCallback((purpose: LearningPurpose) => {
+    setState(prev => ({ ...prev, purpose }))
   }, [])
 
   const updateSubjects = useCallback((subjects: string[]) => {
@@ -120,11 +126,13 @@ export function WizardProvider({ children }: WizardProviderProps) {
     switch (state.currentStep) {
       case WIZARD_STEPS.GRADE_SELECTION:
         return state.grade !== null
+      case WIZARD_STEPS.PURPOSE_SELECTION:
+        return state.purpose !== null
       case WIZARD_STEPS.SUBJECT_SELECTION:
         return state.subjects.length > 0
       case WIZARD_STEPS.TOPIC_SELECTION:
         // Ensure all selected subjects have topics selected
-        return state.subjects.every(subject => 
+        return state.subjects.every(subject =>
           state.topics[subject] && state.topics[subject].length > 0
         )
       case WIZARD_STEPS.SUMMARY:
@@ -141,6 +149,7 @@ export function WizardProvider({ children }: WizardProviderProps) {
   const value: WizardContextType = {
     state,
     updateGrade,
+    updatePurpose,
     updateSubjects,
     updateTopics,
     nextStep,

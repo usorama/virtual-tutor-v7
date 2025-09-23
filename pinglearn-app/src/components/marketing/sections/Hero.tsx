@@ -66,10 +66,12 @@ function ElegantShape({
         >
             <motion.div
                 animate={{
-                    y: [0, 15, 0],
+                    y: [0, 30, 0],
+                    rotate: [0, 5, 0],
+                    scale: [1, 1.05, 1],
                 }}
                 transition={{
-                    duration: 12,
+                    duration: 8,
                     repeat: Number.POSITIVE_INFINITY,
                     ease: "easeInOut",
                 }}
@@ -163,6 +165,50 @@ export default function Hero() {
                 rotate={-25}
                 gradient="from-cyan-500/[0.15]"
                 className="left-[20%] md:left-[25%] top-[5%] md:top-[10%]"
+            />
+
+            {/* Additional floating particles */}
+            <motion.div
+                className="absolute top-[30%] left-[70%] w-4 h-4 bg-cyan-400/20 rounded-full"
+                animate={{
+                    y: [0, -20, 0],
+                    opacity: [0.2, 0.8, 0.2],
+                }}
+                transition={{
+                    duration: 4,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "easeInOut",
+                }}
+            />
+
+            <motion.div
+                className="absolute top-[60%] left-[30%] w-3 h-3 bg-blue-400/20 rounded-full"
+                animate={{
+                    y: [0, -15, 0],
+                    x: [0, 10, 0],
+                    opacity: [0.3, 1, 0.3],
+                }}
+                transition={{
+                    duration: 6,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "easeInOut",
+                    delay: 1,
+                }}
+            />
+
+            <motion.div
+                className="absolute top-[40%] right-[10%] w-2 h-2 bg-cyan-300/30 rounded-full"
+                animate={{
+                    y: [0, -25, 0],
+                    x: [0, -5, 0],
+                    scale: [1, 1.5, 1],
+                }}
+                transition={{
+                    duration: 5,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "easeInOut",
+                    delay: 2,
+                }}
             />
         </div>
 

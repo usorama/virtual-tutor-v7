@@ -60,6 +60,7 @@ export async function saveWizardSelections(selections: WizardState): Promise<{
         id: user.id,
         email: user.email!,
         grade: selections.grade,
+        learning_purpose: selections.purpose,
         preferred_subjects: selections.subjects,
         selected_topics: selections.topics,
         updated_at: new Date().toISOString(),
@@ -82,6 +83,7 @@ export async function saveWizardSelections(selections: WizardState): Promise<{
 export async function getUserProfile(): Promise<{
   data: {
     grade: number | null
+    learning_purpose: string | null
     preferred_subjects: string[] | null
     selected_topics: Record<string, string[]> | null
   } | null
@@ -98,7 +100,7 @@ export async function getUserProfile(): Promise<{
     
     const { data, error } = await supabase
       .from('profiles')
-      .select('grade, preferred_subjects, selected_topics')
+      .select('grade, learning_purpose, preferred_subjects, selected_topics')
       .eq('id', user.id)
       .single()
 

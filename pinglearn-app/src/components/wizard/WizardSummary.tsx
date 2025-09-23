@@ -3,21 +3,29 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import { GRADE_LABELS } from '@/types/wizard'
-import { CheckCircle2, GraduationCap, BookOpen, Target } from 'lucide-react'
+import { GRADE_LABELS, LearningPurpose } from '@/types/wizard'
+import { CheckCircle2, GraduationCap, BookOpen, Target, Zap } from 'lucide-react'
 
 interface WizardSummaryProps {
   grade: number | null
+  purpose: LearningPurpose | null
   subjects: string[]
   topics: Record<string, string[]>
   className?: string
 }
 
-export function WizardSummary({ 
-  grade, 
-  subjects, 
+const PURPOSE_LABELS: Record<LearningPurpose, string> = {
+  new_class: 'New Class - Learn new topics at your own pace',
+  revision: 'Revision - Quick review of topics you know',
+  exam_prep: 'Exam Prep - Intensive practice with key concepts'
+}
+
+export function WizardSummary({
+  grade,
+  purpose,
+  subjects,
   topics,
-  className 
+  className
 }: WizardSummaryProps) {
   const totalTopics = Object.values(topics).reduce((sum, topicList) => sum + topicList.length, 0)
 
@@ -43,6 +51,21 @@ export function WizardSummary({
           <CardContent>
             <Badge variant="secondary" className="text-lg py-1 px-3">
               {grade ? GRADE_LABELS[grade] : 'Not selected'}
+            </Badge>
+          </CardContent>
+        </Card>
+
+        {/* Purpose Summary */}
+        <Card>
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-2">
+              <Zap className="h-5 w-5 text-orange-600" />
+              <CardTitle className="text-lg">Learning Purpose</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <Badge variant="outline" className="text-sm py-1 px-3">
+              {purpose ? PURPOSE_LABELS[purpose] : 'Not selected'}
             </Badge>
           </CardContent>
         </Card>
