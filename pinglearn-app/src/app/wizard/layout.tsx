@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { getUser } from '@/lib/auth/actions'
 import { WizardProvider } from '@/contexts/WizardContext'
+import { SharedThemeProvider } from '@/providers/SharedThemeProvider'
 import '../globals.css'
 
 export default async function WizardLayout({
@@ -16,12 +17,14 @@ export default async function WizardLayout({
   }
 
   return (
-    <WizardProvider>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-        <div className="container mx-auto px-4 py-8">
-          {children}
+    <SharedThemeProvider>
+      <WizardProvider>
+        <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
+          <div className="container mx-auto px-4 py-8">
+            {children}
+          </div>
         </div>
-      </div>
-    </WizardProvider>
+      </WizardProvider>
+    </SharedThemeProvider>
   )
 }

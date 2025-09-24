@@ -3,6 +3,7 @@ import Navigation from '@/components/marketing/sections/Navigation';
 import { Metadata } from 'next';
 import '@/styles/marketing.css';
 import '../globals.css';
+import { SharedThemeProvider } from '@/providers/SharedThemeProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -77,11 +78,13 @@ export default function MarketingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`${inter.className} min-h-screen bg-black text-white`}>
-      <Navigation />
-      <main className="pt-20">
-        {children}
-      </main>
-    </div>
+    <SharedThemeProvider>
+      <div className={`${inter.className} min-h-screen bg-background text-foreground`}>
+        <Navigation />
+        <main className="pt-20">
+          {children}
+        </main>
+      </div>
+    </SharedThemeProvider>
   );
 }

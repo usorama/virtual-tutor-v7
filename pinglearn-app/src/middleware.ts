@@ -2,6 +2,41 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+// Theme types for server-side detection
+type Theme = 'light' | 'dark' | 'system'
+
+// Theme detection utilities
+function getThemeFromCookie(request: NextRequest): Theme {
+  return (request.cookies.get('theme')?.value as Theme) || 'system'
+}
+
+function resolveSystemTheme(request: NextRequest): 'light' | 'dark' {
+  const userAgent = request.headers.get('user-agent') || ''
+  const acceptHeader = request.headers.get('accept') || ''
+
+  // Basic heuristic for system theme (browsers send preference hints)
+  // This is a simplified approach - full detection requires client-side JS
+  return 'light' // Default to light for SSR, will be corrected on client
+}
+
+function setThemeCookie(response: NextResponse, theme: Theme) {
+  response.cookies.set('theme', theme, {
+    maxAge: 365 * 24 * 60 * 60, // 1 year
+    httpOnly: false, // Allow client-side access
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax'
+  })
+}
+
+function setResolvedThemeCookie(response: NextResponse, resolvedTheme: 'light' | 'dark') {
+  response.cookies.set('resolved-theme', resolvedTheme, {
+    maxAge: 365 * 24 * 60 * 60, // 1 year
+    httpOnly: false, // Allow client-side access
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax'
+  })
+}
+
 // Define auth routes and protected routes
 const AUTH_ROUTES = ['/login', '/register', '/forgot-password', '/auth/signin', '/auth/signup', '/auth/reset-password']
 const PROTECTED_ROUTES = ['/dashboard', '/wizard', '/classroom', '/textbooks', '/profile']
@@ -15,6 +50,24 @@ export async function middleware(request: NextRequest) {
   })
 
   const pathname = request.nextUrl.pathname
+
+  // Theme Management - Handle theme detection and cookie management
+  const currentTheme = getThemeFromCookie(request)
+  let resolvedTheme: 'light' | 'dark' = 'light'
+
+  if (currentTheme === 'system') {
+    resolvedTheme = resolveSystemTheme(request)
+  } else {
+    resolvedTheme = currentTheme
+  }
+
+  // Set theme cookies for server-side rendering
+  setThemeCookie(response, currentTheme)
+  setResolvedThemeCookie(response, resolvedTheme)
+
+  // Add theme headers for server components
+  response.headers.set('x-theme', currentTheme)
+  response.headers.set('x-resolved-theme', resolvedTheme)
 
   // Skip Supabase auth if credentials are not configured
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL

@@ -1,11 +1,12 @@
 # Change Record: Persistent Navigation Bar
 
-**Template Version**: 3.0
+**Template Version**: 3.1
 **Change ID**: FC-004-C
 **Related**: Split from original FC-004
 **Status**: READY FOR IMPLEMENTATION
 **Risk Level**: LOW ✅
 **Value**: HIGH 🎯
+**Last Updated**: 2025-09-24
 
 ---
 
@@ -17,9 +18,10 @@ git add .
 git commit -m "checkpoint: Before FC-004-C - Persistent Navigation
 
 CHECKPOINT: Safety point before adding navigation bar
-- Adding persistent top navigation
+- Adding persistent top navigation (excluding wizard)
 - Mobile responsive with hamburger menu
-- Works with light or dark theme
+- Works with SharedThemeProvider already in place
+- Creating missing pages: sessions, notes, help
 - Can rollback to this point if needed"
 ```
 
@@ -28,19 +30,30 @@ CHECKPOINT: Safety point before adding navigation bar
 ## Section 1: Executive Summary
 
 ### What We're Building
-A **persistent navigation bar** that appears on all authenticated pages, providing consistent navigation throughout the PingLearn app. Currently users must use browser back button or remember URLs.
+A **persistent navigation bar** that appears on authenticated pages (dashboard, classroom, sessions, notes, help), providing consistent navigation throughout the PingLearn app. Currently users must use browser back button or remember URLs.
+
+**EXCLUSION**: Wizard page maintains its dialog-like appearance without navigation.
+
+### Current State Analysis
+- **Marketing Navigation exists**: `/src/components/marketing/sections/Navigation.tsx` (lines 1-257)
+- **SharedThemeProvider working**: All route groups have theme support via `/src/providers/SharedThemeProvider.tsx`
+- **Pages that exist**: dashboard, classroom, textbooks, wizard
+- **Pages missing**: sessions, notes, help (need creation)
 
 ### Implementation Strategy
 - **Simple component** - No complex state management
 - **Mobile responsive** - Hamburger menu on small screens
-- **Theme aware** - Works with both light and dark themes
+- **Theme aware** - Uses existing SharedThemeProvider (no new setup needed)
 - **Auth protected** - Only shows for logged-in users
+- **Selective application** - Not on wizard to maintain dialog appearance
 
 ### Success Criteria
-✅ Navigation visible on all pages (except auth)
+✅ Navigation visible on dashboard, classroom, sessions, notes, help
+✅ NOT visible on wizard page (intentional)
 ✅ Active page highlighted
 ✅ Mobile hamburger menu works
-✅ User avatar displayed
+✅ User avatar displayed with initials
+✅ Theme toggle works (SharedThemeProvider already in place)
 ✅ Smooth transitions
 
 ---
@@ -48,7 +61,8 @@ A **persistent navigation bar** that appears on all authenticated pages, providi
 ## Section 2: Technical Scope
 
 ### Navigation Component
-**File**: `/src/components/layout/TopNavigation.tsx` (NEW)
+**File**: `/src/components/layout/TopNavigation.tsx` (NEW - CREATE THIS FILE)
+**Location**: Create new directory `/src/components/layout/` if it doesn't exist
 
 ```tsx
 'use client';
@@ -64,17 +78,16 @@ import {
   FileText,
   HelpCircle,
   Menu,
-  X,
-  User
+  X
 } from 'lucide-react';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'; // Line 1-49 exists
+import { Button } from '@/components/ui/button'; // Exists in ui/
+import { cn } from '@/lib/utils'; // Exists
+import { ThemeToggle } from '@/components/ui/theme-toggle'; // Lines 1-50 exists
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: Home },
-  { href: '/wizard', label: 'Setup', icon: BookOpen },
+  { href: '/wizard', label: 'Setup', icon: BookOpen }, // Links to wizard but no nav there
   { href: '/classroom', label: 'Classroom', icon: Mic },
   { href: '/sessions', label: 'Past Lessons', icon: Clock },
   { href: '/notes', label: 'Notes', icon: FileText },
@@ -226,70 +239,200 @@ export function TopNavigation({ user }: TopNavigationProps) {
 ```
 
 ### Layout Wrapper Component
-**File**: `/src/components/layout/AuthenticatedLayout.tsx` (NEW)
+**File**: `/src/components/layout/AuthenticatedLayout.tsx` (NEW - CREATE THIS FILE)
 
 ```tsx
 import { TopNavigation } from '@/components/layout/TopNavigation';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { getUser } from '@/lib/auth/actions'; // Uses existing auth (lines 1-145 in actions.ts)
+import { createClient } from '@/lib/supabase/server'; // Existing supabase client
 
 export async function AuthenticatedLayout({
   children
 }: {
   children: React.ReactNode
 }) {
-  const supabase = createServerComponentClient({ cookies });
+  // Use existing auth action instead of direct supabase
+  const user = await getUser();
 
-  // Get current user
-  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return <>{children}</>;
+  }
 
-  // Get profile for display name
-  const { data: profile } = user ? await supabase
+  // Get profile for display name using existing pattern
+  const supabase = await createClient();
+  const { data: profile } = await supabase
     .from('profiles')
     .select('name')
     .eq('id', user.id)
-    .single() : { data: null };
+    .single();
 
-  const userData = user ? {
-    email: user.email,
-    name: profile?.name
-  } : undefined;
+  const userData = {
+    email: user.email || undefined,
+    name: profile?.name || undefined
+  };
 
   return (
     <>
-      {user && <TopNavigation user={userData} />}
+      <TopNavigation user={userData} />
       {children}
     </>
   );
 }
 ```
 
-### Update App Pages
-**File**: `/src/app/dashboard/page.tsx` (and all other authenticated pages)
+### Update Existing Pages
 
-Wrap existing content with AuthenticatedLayout:
+#### Dashboard Page Update
+**File**: `/src/app/dashboard/page.tsx` (EXISTING - Lines 1-225)
+**Changes**:
+- Line 1: Add import for AuthenticatedLayout
+- Lines 29-223: Wrap entire return statement content
+
 ```tsx
+// Add at line 1 (before other imports):
 import { AuthenticatedLayout } from '@/components/layout/AuthenticatedLayout';
 
-export default function DashboardPage() {
+// Modify return statement (lines 29-224):
+return (
+  <AuthenticatedLayout>
+    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
+      {/* ... rest of existing content from lines 31-223 ... */}
+    </div>
+  </AuthenticatedLayout>
+)
+```
+
+#### Classroom Page Update
+**File**: `/src/app/classroom/page.tsx` (EXISTING - Lines 1-679)
+**Changes**:
+- Line 2: Add import after 'use client'
+- Lines 409, 585, 677: Wrap the three return statements
+
+```tsx
+// Add at line 2 (after 'use client'):
+import { AuthenticatedLayout } from '@/components/layout/AuthenticatedLayout';
+
+// Wrap return at line 409-581 (active session UI):
+return (
+  <AuthenticatedLayout>
+    <div className="h-screen flex flex-col bg-background relative">
+      {/* ... existing content ... */}
+    </div>
+  </AuthenticatedLayout>
+);
+
+// Wrap return at line 585-677 (start session UI):
+return (
+  <AuthenticatedLayout>
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted flex items-center justify-center p-4">
+      {/* ... existing content ... */}
+    </div>
+  </AuthenticatedLayout>
+);
+```
+
+**Pages NOT to update** (wizard excluded):
+- ❌ `/src/app/wizard/page.tsx` - Keep dialog-like appearance
+
+### Create New Pages (Currently Missing)
+
+#### Sessions Page (Past Lessons)
+**File**: `/src/app/sessions/page.tsx` (NEW - CREATE THIS FILE)
+
+```tsx
+import { AuthenticatedLayout } from '@/components/layout/AuthenticatedLayout';
+import { redirect } from 'next/navigation';
+import { getUser } from '@/lib/auth/actions';
+import { SessionHistory } from '@/components/session/SessionHistory';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
+export default async function SessionsPage() {
+  const user = await getUser();
+
+  if (!user) {
+    redirect('/login');
+  }
+
   return (
     <AuthenticatedLayout>
-      {/* Existing page content */}
+      <div className="container mx-auto p-6 max-w-6xl">
+        <h1 className="text-3xl font-bold mb-6">Past Learning Sessions</h1>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Your Learning History</CardTitle>
+            <CardDescription>
+              Review your past sessions and track your progress
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <SessionHistory
+              studentId={user.id}
+              limit={20}
+            />
+          </CardContent>
+        </Card>
+      </div>
     </AuthenticatedLayout>
   );
 }
 ```
 
-**Pages to update**:
-- `/src/app/dashboard/page.tsx`
-- `/src/app/wizard/page.tsx`
-- `/src/app/classroom/page.tsx`
-- `/src/app/sessions/page.tsx`
-- `/src/app/notes/page.tsx`
-- `/src/app/help/page.tsx`
+#### Notes Page
+**File**: `/src/app/notes/page.tsx` (NEW - CREATE THIS FILE)
 
-### Add Help Page (Currently Missing)
-**File**: `/src/app/help/page.tsx` (NEW)
+```tsx
+import { AuthenticatedLayout } from '@/components/layout/AuthenticatedLayout';
+import { redirect } from 'next/navigation';
+import { getUser } from '@/lib/auth/actions';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { FileText, Plus, Search } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+export default async function NotesPage() {
+  const user = await getUser();
+
+  if (!user) {
+    redirect('/login');
+  }
+
+  return (
+    <AuthenticatedLayout>
+      <div className="container mx-auto p-6 max-w-6xl">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold">My Notes</h1>
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            New Note
+          </Button>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Notes Collection
+              </CardTitle>
+              <CardDescription>
+                Your saved notes will appear here
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                No notes yet. Start a learning session to create notes!
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </AuthenticatedLayout>
+  );
+}
+```
+
+#### Help Page
+**File**: `/src/app/help/page.tsx` (NEW - CREATE THIS FILE)
 
 ```tsx
 import { AuthenticatedLayout } from '@/components/layout/AuthenticatedLayout';
@@ -402,52 +545,52 @@ export default function HelpPage() {
 
 ## Section 3: Testing & Verification
 
+### Pre-Implementation Verification
+```bash
+# Verify current state
+npm run typecheck  # Must show 0 errors
+npm run lint       # Should pass
+
+# Check existing components
+ls src/components/ui/avatar.tsx      # Exists (lines 1-49)
+ls src/components/ui/theme-toggle.tsx # Exists (lines 1-50)
+ls src/lib/auth/actions.ts           # Exists (getUser function)
+
+# Verify SharedThemeProvider is working
+grep -n "SharedThemeProvider" src/app/\(auth\)/layout.tsx    # Lines 2, 10, 24
+grep -n "SharedThemeProvider" src/app/wizard/layout.tsx      # Lines 4, 20, 28
+```
+
 ### Navigation Testing
 ```bash
 # 1. Start the app
-npm run dev
+npm run dev  # Port 3006
 
 # 2. Test desktop navigation
-# - Login to app
-# - Verify nav bar appears
-# - Click each nav item
-# - Verify active state highlights
+# - Login with test@example.com / TestPassword123!
+# - Navigate to /dashboard - nav bar should appear
+# - Navigate to /classroom - nav bar should appear
+# - Navigate to /sessions - nav bar should appear
+# - Navigate to /notes - nav bar should appear
+# - Navigate to /help - nav bar should appear
+# - Navigate to /wizard - NO nav bar (intentional)
+# - Verify active state highlights current page
 # - Check theme toggle works
 
-# 3. Test mobile navigation
-# - Resize browser < 768px
-# - Click hamburger menu
-# - Verify dropdown appears
-# - Click nav items
-# - Verify menu closes after click
+# 3. Test mobile navigation (< 768px)
+# - Click hamburger menu button
+# - Verify dropdown appears with all nav items
+# - Click any nav item
+# - Verify navigation occurs and menu closes
+# - Test user avatar shows initials
 ```
 
-### Visual Testing with Playwright
+### TypeScript Verification
 ```bash
-# Desktop navigation
-mcp__playwright__browser_navigate "http://localhost:3006/dashboard"
-mcp__playwright__browser_take_screenshot "desktop-navigation.png"
-
-# Mobile navigation
-mcp__playwright__browser_resize 375 667
-mcp__playwright__browser_take_screenshot "mobile-navigation-closed.png"
-
-# Open mobile menu
-mcp__playwright__browser_click "hamburger menu button"
-mcp__playwright__browser_take_screenshot "mobile-navigation-open.png"
-
-# Test navigation
-mcp__playwright__browser_click "Classroom link"
-mcp__playwright__browser_wait_for 2
-# Should navigate and close menu
-```
-
-### Edge Cases
-```bash
-# Test without user data
-# Test with long email/name
-# Test rapid navigation clicks
-# Test theme toggle in nav
+# After implementation, MUST pass:
+npm run typecheck  # 0 errors required
+npm run lint       # Should pass
+npm run build      # Should succeed
 ```
 
 ---
@@ -473,35 +616,46 @@ rm src/components/layout/AuthenticatedLayout.tsx
 
 ### Pre-Implementation
 - [ ] Create git checkpoint
-- [ ] List all pages needing navigation
-- [ ] Test current navigation methods
+- [ ] Verify TypeScript 0 errors: `npm run typecheck`
+- [ ] Verify SharedThemeProvider exists and works
+- [ ] Note: Wizard page excluded from navigation (intentional)
 
-### Implementation
-- [ ] Create TopNavigation component
-- [ ] Create AuthenticatedLayout wrapper
-- [ ] Update dashboard page
-- [ ] Update wizard page
-- [ ] Update classroom page
-- [ ] Update sessions page
-- [ ] Update notes page
-- [ ] Create help page
-- [ ] Test desktop layout
-- [ ] Test mobile layout
+### Implementation Order
+1. **Create Missing Pages First**
+   - [ ] Create `/src/app/sessions/page.tsx`
+   - [ ] Create `/src/app/notes/page.tsx`
+   - [ ] Create `/src/app/help/page.tsx`
+
+2. **Create Navigation Components**
+   - [ ] Create `/src/components/layout/` directory
+   - [ ] Create `/src/components/layout/TopNavigation.tsx`
+   - [ ] Create `/src/components/layout/AuthenticatedLayout.tsx`
+
+3. **Update Existing Pages**
+   - [ ] Update dashboard page (add import line 1, wrap return lines 29-224)
+   - [ ] Update classroom page (add import line 2, wrap 3 return statements)
+   - [ ] DO NOT update wizard page (keep dialog appearance)
 
 ### Verification
-- [ ] TypeScript: `npm run typecheck` (0 errors)
-- [ ] All pages show navigation
-- [ ] Active states work
-- [ ] Mobile menu works
-- [ ] Theme toggle visible
-- [ ] User avatar shows
-- [ ] No layout shifts
+- [ ] TypeScript: `npm run typecheck` (MUST show 0 errors)
+- [ ] Lint: `npm run lint` (should pass)
+- [ ] Dashboard shows navigation ✅
+- [ ] Classroom shows navigation ✅
+- [ ] Sessions shows navigation ✅
+- [ ] Notes shows navigation ✅
+- [ ] Help shows navigation ✅
+- [ ] Wizard does NOT show navigation ✅ (intentional)
+- [ ] Active page highlighting works
+- [ ] Mobile hamburger menu works
+- [ ] Theme toggle functional
+- [ ] User avatar shows initials
+- [ ] No layout shifts with fixed nav
 
 ### Post-Implementation
-- [ ] Commit changes
-- [ ] Test all navigation paths
-- [ ] Verify mobile responsiveness
-- [ ] Document in changelog
+- [ ] Commit with message: `feat: FC-004-C - Add persistent navigation bar`
+- [ ] Test all navigation paths manually
+- [ ] Verify mobile responsiveness at 375px width
+- [ ] Update changelog if needed
 
 ---
 
@@ -509,25 +663,44 @@ rm src/components/layout/AuthenticatedLayout.tsx
 
 | Risk | Probability | Impact | Mitigation |
 |------|------------|---------|------------|
-| Layout shift on page load | Low | Low | Fixed height spacer |
-| Mobile menu not closing | Low | Low | onClick handler |
-| Auth state not loaded | Low | Medium | Server component fetch |
-| Performance impact | Very Low | Low | Simple component |
-| Breaking existing layouts | Low | Medium | Wrapper approach |
+| Layout shift on page load | Low | Low | Fixed height spacer (line 222) |
+| Mobile menu not closing | Low | Low | onClick handlers (lines 192, 212, etc) |
+| Missing pages cause 404 | Medium | Medium | Create pages first in implementation |
+| Theme toggle breaks | Very Low | Low | SharedThemeProvider already working |
+| Wizard gets nav accidentally | Low | High | Explicit exclusion in docs |
+| TypeScript errors | Low | High | Use existing auth patterns |
 
 ---
 
 ## Why This is Low Risk
 
-1. **Additive only** - Wrapped around existing content
-2. **Simple component** - No complex state or logic
-3. **Server-side safe** - Auth check on server
-4. **Mobile tested** - Responsive from start
-5. **Easy rollback** - Just remove wrapper
+1. **SharedThemeProvider exists** - Theme support already working everywhere
+2. **Additive only** - Wrapped around existing content, no core changes
+3. **Uses existing auth** - `getUser` from `/lib/auth/actions.ts`
+4. **Wizard excluded** - Maintains dialog appearance as requested
+5. **Simple components** - No complex state management
+6. **Easy rollback** - Just remove wrapper components
 
 ---
 
-**APPROVAL STATUS**: Ready for implementation
-**ESTIMATED TIME**: 60-75 minutes
-**DEPENDENCIES**: Works with FC-004-B (dark theme)
+## Critical Implementation Notes
+
+### MUST DO:
+- Create missing pages FIRST (sessions, notes, help)
+- Use `getUser` from existing auth actions (NOT direct supabase)
+- Maintain TypeScript 0 errors throughout
+- Test wizard has NO navigation
+
+### MUST NOT DO:
+- Don't modify wizard page
+- Don't create duplicate auth logic
+- Don't skip TypeScript verification
+- Don't assume pages exist - create them
+
+---
+
+**APPROVAL STATUS**: Ready for implementation with precise scope
+**ESTIMATED TIME**: 45-60 minutes
+**DEPENDENCIES**: SharedThemeProvider (already working)
 **BREAKING CHANGES**: None
+**EXCLUDED**: Wizard page (intentional)
