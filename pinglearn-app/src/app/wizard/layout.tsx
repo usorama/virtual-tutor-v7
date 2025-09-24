@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { getUser } from '@/lib/auth/actions'
 import { WizardProvider } from '@/contexts/WizardContext'
+import '../globals.css'
 
 export default async function WizardLayout({
   children,

@@ -5,6 +5,8 @@ import "../styles/katex.css";
 import "../styles/marketing.css";
 import { AuthProvider } from '@/lib/auth/auth-provider';
 import Navigation from '@/components/marketing/sections/Navigation';
+import { ThemeProvider } from '@/contexts/ThemeContext';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -84,14 +86,22 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} font-sans antialiased min-h-screen bg-black text-white`}
+        className={`${inter.variable} font-sans antialiased min-h-screen bg-background text-foreground`}
       >
-        <AuthProvider>
-          <Navigation />
-          <main className="pt-20">
-            {children}
-          </main>
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <div className="min-h-screen bg-background text-foreground">
+              {/* Add theme toggle to header/nav area */}
+              <div className="fixed top-4 right-4 z-[60]">
+                <ThemeToggle />
+              </div>
+              <Navigation />
+              <main className="pt-20">
+                {children}
+              </main>
+            </div>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
