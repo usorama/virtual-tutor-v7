@@ -14,6 +14,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://pinglearn.app'),
   title: 'PingLearn - AI Math Tutor for CBSE Students | Voice-Powered Learning',
   description: 'Revolutionary AI tutor that helps students excel in Mathematics and Science through voice conversations. CBSE aligned, 24/7 available. Start free trial.',
   keywords: [

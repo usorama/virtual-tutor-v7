@@ -1,0 +1,524 @@
+/* PingLearn Glass Morphism Design System */
+/* Version 2.0 - September 2025 */
+
+@layer utilities {
+  /* ========== Color System ========== */
+  :root {
+    /* Core Colors - ONLY 3 COLORS */
+    --black-100: #000000;
+    --black-95: #0D0D0D;
+    --black-90: #1A1A1A;
+    --black-85: #262626;
+
+    /* White Opacity Scale */
+    --white-100: rgba(255, 255, 255, 1);
+    --white-70: rgba(255, 255, 255, 0.7);
+    --white-50: rgba(255, 255, 255, 0.5);
+    --white-30: rgba(255, 255, 255, 0.3);
+    --white-10: rgba(255, 255, 255, 0.1);
+    --white-5: rgba(255, 255, 255, 0.05);
+    --white-3: rgba(255, 255, 255, 0.03);
+    --white-2: rgba(255, 255, 255, 0.02);
+    --white-1: rgba(255, 255, 255, 0.01);
+
+    /* Accent Colors - ONLY CYAN */
+    --accent-cyan: #06B6D4;
+    --accent-cyan-glow: rgba(6, 182, 212, 0.5);
+    --accent-cyan-subtle: rgba(6, 182, 212, 0.1);
+    --accent-cyan-border: rgba(6, 182, 212, 0.2);
+
+    /* Pastel Indicators - For Metrics Only */
+    --indicator-success: #43F953; /* Pastel Green */
+    --indicator-warning: #D8EF4D; /* Pastel Yellow */
+    --indicator-error: #FF746C; /* Pastel Red */
+
+    /* Apple SF Pro Typography System with Inter */
+    --font-sf-pro: var(--font-inter, ui-sans-serif), -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-sf-pro-display: var(--font-inter, "SF Pro Display"), ui-sans-serif, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-sf-pro-text: var(--font-inter, "SF Pro Text"), ui-sans-serif, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-sf-pro-rounded: var(--font-inter, "SF Pro Rounded"), "SF Pro Display", ui-sans-serif, -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-sf-mono: "SF Mono", ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", monospace;
+
+    /* Apple Typography Scale (in pt, converted to rem) */
+    --text-largeTitle: 2.125rem;  /* 34pt */
+    --text-title1: 1.75rem;        /* 28pt */
+    --text-title2: 1.375rem;       /* 22pt */
+    --text-title3: 1.25rem;        /* 20pt */
+    --text-headline: 1.0625rem;    /* 17pt */
+    --text-body: 1.0625rem;        /* 17pt */
+    --text-callout: 1rem;          /* 16pt */
+    --text-subheadline: 0.9375rem; /* 15pt */
+    --text-footnote: 0.8125rem;    /* 13pt */
+    --text-caption1: 0.75rem;      /* 12pt */
+    --text-caption2: 0.6875rem;    /* 11pt */
+
+    /* Apple Font Weights */
+    --weight-ultralight: 100;
+    --weight-thin: 200;
+    --weight-light: 300;
+    --weight-regular: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+    --weight-heavy: 800;
+    --weight-black: 900;
+  }
+
+  /* ========== Base Glass Effects ========== */
+  .liquid-glass {
+    background: var(--white-1);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: none;
+    border-radius: 20px;
+    box-shadow:
+      0 0 40px rgba(6, 182, 212, 0.1),
+      0 8px 32px rgba(0, 0, 0, 0.6),
+      0 4px 16px rgba(0, 0, 0, 0.4);
+    transform: translate3d(0, 0, 0);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .liquid-glass:hover {
+    background: var(--white-2);
+    box-shadow:
+      0 0 60px rgba(6, 182, 212, 0.2),
+      0 12px 48px rgba(0, 0, 0, 0.7),
+      0 6px 24px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
+  }
+
+  /* ========== Glass Card Variants ========== */
+  .glass-card {
+    background: linear-gradient(
+      135deg,
+      var(--white-1) 0%,
+      rgba(255, 255, 255, 0.005) 100%
+    );
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border: none;
+    border-radius: 16px;
+    box-shadow:
+      0 0 30px rgba(6, 182, 212, 0.05),
+      0 4px 24px rgba(0, 0, 0, 0.5),
+      0 2px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .glass-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 0 50px rgba(6, 182, 212, 0.1),
+      0 8px 32px rgba(0, 0, 0, 0.6),
+      0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  /* ========== Glass Interactive Elements ========== */
+  .glass-interactive {
+    background: var(--white-1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: none;
+    border-radius: 12px;
+    box-shadow:
+      0 0 20px rgba(6, 182, 212, 0.03),
+      0 2px 12px rgba(0, 0, 0, 0.4);
+    transition: all 0.2s ease;
+  }
+
+  .glass-interactive:focus {
+    outline: none;
+    border-color: var(--accent-cyan-border);
+    box-shadow:
+      0 0 0 3px var(--accent-cyan-subtle),
+      0 2px 12px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  /* ========== Glass Buttons ========== */
+  .glass-button {
+    background: var(--accent-cyan);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: none;
+    border-radius: 50px;
+    color: var(--black-95);
+    font-weight: 600;
+    padding: 14px 32px;
+    box-shadow:
+      0 0 40px rgba(6, 182, 212, 0.4),
+      0 4px 16px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass-button:hover {
+    background: var(--accent-cyan);
+    box-shadow:
+      0 0 60px rgba(6, 182, 212, 0.6),
+      0 8px 24px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .glass-button:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .glass-button-secondary {
+    background: var(--white-1);
+    backdrop-filter: blur(8px);
+    border: none;
+    border-radius: 50px;
+    color: var(--white-100);
+    font-weight: 500;
+    padding: 14px 32px;
+    box-shadow:
+      0 0 20px rgba(255, 255, 255, 0.05),
+      0 2px 8px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-button-secondary:hover {
+    background: var(--white-2);
+    box-shadow:
+      0 0 30px rgba(255, 255, 255, 0.1),
+      0 4px 16px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+  }
+
+  /* ========== Hover Animations ========== */
+  .hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .hover-glow:hover {
+    box-shadow:
+      0 0 20px var(--accent-cyan-glow),
+      0 4px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  .hover-scale {
+    transition: transform 0.3s ease;
+  }
+
+  .hover-scale:hover {
+    transform: scale(1.02);
+  }
+
+  /* ========== Page Backgrounds ========== */
+  .bg-app {
+    background-color: var(--black-95);
+  }
+
+  .bg-glass-gradient {
+    background: linear-gradient(
+      180deg,
+      var(--black-95) 0%,
+      var(--black-90) 50%,
+      var(--black-95) 100%
+    );
+  }
+
+  /* ========== Text Utilities ========== */
+  .text-primary {
+    color: var(--white-100);
+  }
+
+  .text-secondary {
+    color: var(--white-70);
+  }
+
+  .text-tertiary {
+    color: var(--white-50);
+  }
+
+  .text-muted {
+    color: var(--white-30);
+  }
+
+  .text-accent {
+    color: var(--accent-cyan);
+  }
+
+  /* ========== Apple Typography System ========== */
+  /* Base font application */
+  body {
+    font-family: var(--font-sf-pro);
+    font-weight: var(--weight-regular);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "kern" 1;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* SF Pro Display - for large text (20pt and above) */
+  .font-sf-display {
+    font-family: var(--font-sf-pro-display);
+    letter-spacing: -0.022em;
+  }
+
+  /* SF Pro Text - for body text (below 20pt) */
+  .font-sf-text {
+    font-family: var(--font-sf-pro-text);
+    letter-spacing: -0.003em;
+  }
+
+  /* SF Pro Rounded - for softer, friendlier text */
+  .font-sf-rounded {
+    font-family: var(--font-sf-pro-rounded);
+  }
+
+  /* SF Mono - for code and monospace */
+  .font-sf-mono {
+    font-family: var(--font-sf-mono);
+  }
+
+  /* Apple Typography Scale */
+  .text-largeTitle {
+    font-size: var(--text-largeTitle);
+    font-weight: var(--weight-bold); /* Bold for Large Title */
+    line-height: 1.2;
+    letter-spacing: -0.022em;
+    font-family: var(--font-sf-pro-display);
+  }
+
+  .text-title1 {
+    font-size: var(--text-title1);
+    font-weight: var(--weight-heavy); /* Heavy for Title 1 */
+    line-height: 1.25;
+    letter-spacing: -0.021em;
+    font-family: var(--font-sf-pro-display);
+  }
+
+  .text-title2 {
+    font-size: var(--text-title2);
+    font-weight: var(--weight-bold); /* Bold for Title 2 */
+    line-height: 1.27;
+    letter-spacing: -0.019em;
+    font-family: var(--font-sf-pro-display);
+  }
+
+  .text-title3 {
+    font-size: var(--text-title3);
+    font-weight: var(--weight-regular);
+    line-height: 1.3;
+    letter-spacing: -0.016em;
+    font-family: var(--font-sf-pro-display);
+  }
+
+  .text-headline {
+    font-size: var(--text-headline);
+    font-weight: var(--weight-semibold);
+    line-height: 1.41;
+    letter-spacing: -0.011em;
+    font-family: var(--font-sf-pro-text);
+  }
+
+  .text-body {
+    font-size: var(--text-body);
+    font-weight: var(--weight-regular);
+    line-height: 1.47;
+    letter-spacing: -0.011em;
+    font-family: var(--font-sf-pro-text);
+  }
+
+  .text-callout {
+    font-size: var(--text-callout);
+    font-weight: var(--weight-regular);
+    line-height: 1.5;
+    letter-spacing: -0.008em;
+    font-family: var(--font-sf-pro-text);
+  }
+
+  .text-subheadline {
+    font-size: var(--text-subheadline);
+    font-weight: var(--weight-regular);
+    line-height: 1.47;
+    letter-spacing: -0.006em;
+    font-family: var(--font-sf-pro-text);
+  }
+
+  .text-footnote {
+    font-size: var(--text-footnote);
+    font-weight: var(--weight-regular);
+    line-height: 1.38;
+    letter-spacing: -0.003em;
+    font-family: var(--font-sf-pro-text);
+  }
+
+  .text-caption1 {
+    font-size: var(--text-caption1);
+    font-weight: var(--weight-regular);
+    line-height: 1.33;
+    font-family: var(--font-sf-pro-text);
+  }
+
+  .text-caption2 {
+    font-size: var(--text-caption2);
+    font-weight: var(--weight-regular);
+    line-height: 1.27;
+    letter-spacing: 0.004em;
+    font-family: var(--font-sf-pro-text);
+  }
+
+  /* Font Weight Utilities */
+  .font-ultralight { font-weight: var(--weight-ultralight); }
+  .font-thin { font-weight: var(--weight-thin); }
+  .font-light { font-weight: var(--weight-light); }
+  .font-regular { font-weight: var(--weight-regular); }
+  .font-medium { font-weight: var(--weight-medium); }
+  .font-semibold { font-weight: var(--weight-semibold); }
+  .font-bold { font-weight: var(--weight-bold); }
+  .font-heavy { font-weight: var(--weight-heavy); }
+  .font-black { font-weight: var(--weight-black); }
+
+  /* ========== Glow Effects ========== */
+  .glow-cyan {
+    box-shadow: 0 0 30px var(--accent-cyan-glow);
+  }
+
+  .text-glow-cyan {
+    text-shadow: 0 0 20px var(--accent-cyan-glow);
+  }
+
+  /* ========== Loading Animation ========== */
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow:
+        0 0 40px rgba(6, 182, 212, 0.4),
+        0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+    50% {
+      box-shadow:
+        0 0 80px rgba(6, 182, 212, 0.6),
+        0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  .pulse-glow {
+    animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Primary button with pulse */
+  .glass-button-primary {
+    background: var(--accent-cyan);
+    border: none;
+    border-radius: 50px;
+    color: var(--black-95);
+    font-weight: 600;
+    padding: 14px 32px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .glass-button-primary:hover {
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  /* ========== Scrollbar Styling ========== */
+  .glass-scrollbar::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  .glass-scrollbar::-webkit-scrollbar-track {
+    background: var(--white-5);
+    border-radius: 5px;
+  }
+
+  .glass-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--white-30);
+    border-radius: 5px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  .glass-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--white-50);
+    background-clip: content-box;
+  }
+
+  /* ========== Badge Styles ========== */
+  .glass-badge {
+    background: var(--accent-cyan-subtle);
+    border: none;
+    color: var(--accent-cyan);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+  }
+
+  /* Only use cyan variations for status */
+  .glass-badge-active {
+    background: var(--accent-cyan);
+    color: var(--black-95);
+    box-shadow: 0 0 30px rgba(6, 182, 212, 0.4);
+  }
+
+  .glass-badge-muted {
+    background: var(--white-1);
+    color: var(--white-50);
+    box-shadow: none;
+  }
+
+  /* ========== Metric Indicators ========== */
+  /* For percentage changes and metrics only */
+  .metric-positive {
+    color: var(--indicator-success);
+    font-weight: var(--weight-semibold);
+  }
+
+  .metric-negative {
+    color: var(--indicator-error);
+    font-weight: var(--weight-semibold);
+  }
+
+  .metric-neutral {
+    color: var(--indicator-warning);
+    font-weight: var(--weight-semibold);
+  }
+
+  /* Metric badge style with pastel background */
+  .metric-badge-positive {
+    background: rgba(67, 249, 83, 0.1);
+    color: var(--indicator-success);
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .metric-badge-negative {
+    background: rgba(255, 116, 108, 0.1);
+    color: var(--indicator-error);
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .metric-badge-neutral {
+    background: rgba(216, 239, 77, 0.1);
+    color: var(--indicator-warning);
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+}
