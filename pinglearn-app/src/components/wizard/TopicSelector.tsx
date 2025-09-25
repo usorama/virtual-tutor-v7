@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { ChevronRight } from 'lucide-react'
 import { useState } from 'react'
+import { formatTopicWithChapter, sortTopicsByChapter } from '@/lib/chapter-mappings'
 
 interface TopicSelectorProps {
   subjects: string[]
@@ -53,44 +54,38 @@ export function TopicSelector({
   }
 
   return (
-    <div className={cn('space-y-4', className)}>
-      <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold">Select Topics to Study</h2>
-        <p className="text-gray-600">
-          Choose specific topics for each subject you want to focus on
-        </p>
-      </div>
-
+    <div className={cn('space-y-6', className)}>
       <div className="max-w-4xl mx-auto space-y-4">
         {subjects.map(subject => {
           const topics = availableTopics[subject] || []
           const selected = selectedTopics[subject] || []
           const isExpanded = expandedSubject === subject
-          
+
           return (
-            <Card 
+            <Card
               key={subject}
               className={cn(
-                'transition-all',
+                'glass-interactive-elevated transition-all',
                 {
-                  'ring-2 ring-blue-600': isExpanded,
+                  'border-2 border-accent': isExpanded,
+                  'border border-white/10': !isExpanded,
                 }
               )}
             >
-              <CardHeader 
-                className="cursor-pointer"
+              <CardHeader
+                className="cursor-pointer hover:bg-white/5"
                 onClick={() => setExpandedSubject(isExpanded ? null : subject)}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <CardTitle className="text-lg">{subject}</CardTitle>
-                    <Badge variant="secondary">
+                    <CardTitle className="text-lg text-white">{subject}</CardTitle>
+                    <Badge variant="secondary" className="bg-accent/20 text-accent border-accent/30">
                       {selected.length}/{topics.length} selected
                     </Badge>
                   </div>
-                  <ChevronRight 
+                  <ChevronRight
                     className={cn(
-                      'h-5 w-5 transition-transform',
+                      'h-5 w-5 transition-transform text-white/60',
                       {
                         'rotate-90': isExpanded,
                       }
@@ -98,39 +93,41 @@ export function TopicSelector({
                   />
                 </div>
               </CardHeader>
-              
+
               {isExpanded && (
                 <CardContent className="pt-0">
                   <div className="space-y-3">
                     {/* Select all checkbox */}
-                    <div className="flex items-center space-x-2 pb-2 border-b">
+                    <div className="flex items-center space-x-2 pb-2 border-b border-white/10">
                       <Checkbox
                         id={`${subject}-all`}
                         checked={selected.length === topics.length && topics.length > 0}
                         onCheckedChange={() => handleSelectAll(subject)}
+                        className="border-white/20 data-[state=checked]:bg-accent data-[state=checked]:border-accent"
                       />
-                      <label 
+                      <label
                         htmlFor={`${subject}-all`}
-                        className="text-sm font-medium cursor-pointer"
+                        className="text-sm font-medium cursor-pointer text-white"
                       >
                         Select All
                       </label>
                     </div>
 
-                    {/* Topics grid */}
+                    {/* Topics grid - sorted by chapter number */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                      {topics.map(topic => {
+                      {sortTopicsByChapter(topics).map(topic => {
                         const isSelected = selected.includes(topic)
                         const id = `${subject}-${topic}`
-                        
+                        const displayTopic = formatTopicWithChapter(topic)
+
                         return (
-                          <div 
+                          <div
                             key={topic}
                             className={cn(
                               'flex items-center space-x-2 p-2 rounded-md transition-colors',
                               {
-                                'bg-blue-50': isSelected,
-                                'hover:bg-gray-50': !isSelected,
+                                'bg-accent/10 border border-accent/30': isSelected,
+                                'hover:bg-white/5': !isSelected,
                               }
                             )}
                           >
@@ -138,12 +135,13 @@ export function TopicSelector({
                               id={id}
                               checked={isSelected}
                               onCheckedChange={() => handleToggleTopic(subject, topic)}
+                              className="border-white/20 data-[state=checked]:bg-accent data-[state=checked]:border-accent"
                             />
-                            <label 
+                            <label
                               htmlFor={id}
-                              className="text-sm cursor-pointer flex-1"
+                              className="text-sm cursor-pointer flex-1 text-white"
                             >
-                              {topic}
+                              {displayTopic}
                             </label>
                           </div>
                         )
@@ -159,9 +157,9 @@ export function TopicSelector({
 
       {/* Summary of selections */}
       <div className="text-center mt-6">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-white/70">
           Total topics selected: {' '}
-          <span className="font-medium text-green-600">
+          <span className="font-medium text-accent">
             {Object.values(selectedTopics).reduce((sum, topics) => sum + topics.length, 0)}
           </span>
         </p>

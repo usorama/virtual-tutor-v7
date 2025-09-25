@@ -58,39 +58,32 @@ export function GradeSelector({
   }
 
   return (
-    <div className={cn('space-y-4', className)}>
-      <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold">Select Your Grade</h2>
-        <p className="text-gray-600">
-          Choose your current grade level to personalize your learning experience
-        </p>
-      </div>
-
+    <div className={cn('space-y-6', className)}>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
         {availableGrades.map(grade => (
           <Card
             key={grade}
             className={cn(
-              'cursor-pointer transition-all hover:shadow-lg',
+              'glass-interactive-elevated cursor-pointer transition-all hover:bg-white/5',
               {
-                'ring-2 ring-blue-600 bg-blue-50': selectedGrade === grade,
-                'hover:ring-2 hover:ring-gray-300': selectedGrade !== grade,
+                'border-2 border-accent bg-accent/10': selectedGrade === grade,
+                'border border-white/10 hover:border-white/20': selectedGrade !== grade,
               }
             )}
             onClick={() => onGradeSelect(grade)}
           >
             <CardContent className="p-6 text-center">
-              <GraduationCap 
+              <GraduationCap
                 className={cn(
                   'h-12 w-12 mx-auto mb-3',
                   {
-                    'text-blue-600': selectedGrade === grade,
-                    'text-gray-400': selectedGrade !== grade,
+                    'text-accent': selectedGrade === grade,
+                    'text-white/60': selectedGrade !== grade,
                   }
                 )}
               />
-              <h3 className="font-semibold text-lg">{GRADE_LABELS[grade]}</h3>
-              <p className="text-sm text-gray-500 mt-1">
+              <h3 className="font-semibold text-lg text-white">{GRADE_LABELS[grade]}</h3>
+              <p className="text-sm text-white/60 mt-1">
                 {grade === 9 || grade === 10 ? 'Secondary' : 'Higher Secondary'}
               </p>
             </CardContent>
@@ -100,7 +93,7 @@ export function GradeSelector({
 
       {selectedGrade && (
         <div className="text-center mt-6">
-          <p className="text-sm text-green-600 font-medium">
+          <p className="text-sm text-accent font-medium">
             You&apos;ve selected {GRADE_LABELS[selectedGrade]}
           </p>
         </div>

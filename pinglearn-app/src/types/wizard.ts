@@ -25,9 +25,11 @@ export interface WizardContextType {
   updateTopics: (subject: string, topics: string[]) => void
   nextStep: () => void
   previousStep: () => void
+  goToStep: (step: number) => void
   reset: () => void
   canGoNext: () => boolean
   canGoPrevious: () => boolean
+  canNavigateToStep: (targetStep: number) => boolean
 }
 
 export const WIZARD_STEPS = {

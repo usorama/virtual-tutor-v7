@@ -123,7 +123,21 @@
     border-radius: 12px;
     box-shadow:
       0 0 20px rgba(6, 182, 212, 0.03),
-      0 2px 12px rgba(0, 0, 0, 0.4);
+      0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+  }
+
+  /* Elevated cards with subtle grey shadow */
+  .glass-interactive-elevated {
+    background: var(--white-1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: none;
+    border-radius: 12px;
+    box-shadow:
+      0 0 20px rgba(6, 182, 212, 0.03),
+      0 6px 25px rgba(255, 255, 255, 0.08),
+      0 4px 15px rgba(0, 0, 0, 0.25);
     transition: all 0.2s ease;
   }
 
@@ -216,7 +230,7 @@
 
   /* ========== Page Backgrounds ========== */
   .bg-app {
-    background-color: var(--black-95);
+    background-color: var(--black-100);
   }
 
   .bg-glass-gradient {

@@ -6,7 +6,6 @@ import "../styles/marketing.css";
 import { AuthProvider } from '@/lib/auth/auth-provider';
 import Navigation from '@/components/marketing/sections/Navigation';
 import { ThemeProvider } from '@/contexts/ThemeContext';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -92,10 +91,6 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>
             <div className="min-h-screen bg-background text-foreground">
-              {/* Add theme toggle to header/nav area */}
-              <div className="fixed top-4 right-4 z-[60]">
-                <ThemeToggle />
-              </div>
               <Navigation />
               <main className="pt-20">
                 {children}

@@ -11,68 +11,62 @@ interface StepIndicatorProps {
 
 export function StepIndicator({ currentStep, className }: StepIndicatorProps) {
   return (
-    <div className={cn('w-full max-w-4xl mx-auto px-4', className)}>
-      <div className="relative">
-        {/* Progress bar background */}
-        <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200">
-          <div 
-            className="h-full bg-blue-600 transition-all duration-300"
-            style={{ width: `${(currentStep / (WIZARD_STEP_NAMES.length - 1)) * 100}%` }}
-          />
-        </div>
+    <div className={cn('w-full max-w-2xl mx-auto', className)}>
+      {/* Clean horizontal step indicator */}
+      <div className="relative flex items-center justify-center space-x-8">
+        {WIZARD_STEP_NAMES.map((name, index) => {
+          const isActive = index === currentStep
+          const isCompleted = index < currentStep
+          const isUpcoming = index > currentStep
 
-        {/* Steps */}
-        <div className="relative flex justify-between">
-          {WIZARD_STEP_NAMES.map((name, index) => {
-            const isActive = index === currentStep
-            const isCompleted = index < currentStep
-            
-            return (
-              <div 
-                key={index}
-                className="flex flex-col items-center"
+          return (
+            <div key={index} className="flex items-center">
+              {/* Step Circle */}
+              <div
+                className={cn(
+                  'relative flex h-10 w-10 items-center justify-center rounded-full transition-all duration-300',
+                  {
+                    // Active step - Cyan with glow
+                    'bg-accent text-background shadow-lg shadow-accent/50': isActive,
+                    // Completed steps - Cyan with check
+                    'bg-accent text-background': isCompleted,
+                    // Upcoming steps - Glass effect
+                    'bg-white/5 text-white/50 border border-white/10': isUpcoming,
+                  }
+                )}
               >
-                {/* Circle */}
-                <div
-                  className={cn(
-                    'relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 bg-white transition-colors',
-                    {
-                      'border-blue-600 bg-blue-600': isActive || isCompleted,
-                      'border-gray-300': !isActive && !isCompleted,
-                    }
-                  )}
-                >
-                  {isCompleted ? (
-                    <Check className="h-4 w-4 text-white" />
-                  ) : (
-                    <span 
-                      className={cn('text-sm font-semibold', {
-                        'text-white': isActive,
-                        'text-gray-500': !isActive && !isCompleted,
-                      })}
-                    >
-                      {index + 1}
-                    </span>
-                  )}
-                </div>
-                
-                {/* Label */}
-                <span
-                  className={cn(
-                    'mt-1 text-xs font-medium text-center max-w-[100px]',
-                    {
-                      'text-blue-600': isActive,
-                      'text-gray-900': isCompleted,
-                      'text-gray-500': !isActive && !isCompleted,
-                    }
-                  )}
-                >
-                  {name}
-                </span>
+                {isCompleted ? (
+                  <Check className="h-5 w-5" />
+                ) : (
+                  <span className="text-sm font-semibold">
+                    {index + 1}
+                  </span>
+                )}
               </div>
-            )
-          })}
-        </div>
+
+              {/* Step Label - Only show for active step */}
+              {isActive && (
+                <div className="ml-3">
+                  <div className="text-sm font-medium text-accent">
+                    {name}
+                  </div>
+                </div>
+              )}
+
+              {/* Connecting line */}
+              {index < WIZARD_STEP_NAMES.length - 1 && (
+                <div className="ml-4 w-12 h-0.5 bg-white/10">
+                  <div
+                    className={cn(
+                      'h-full bg-accent transition-all duration-500',
+                      isCompleted ? 'w-full' : 'w-0'
+                    )}
+                  />
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
     </div>
   )

@@ -9,6 +9,7 @@ import { BookOpen, Brain, Trophy, Clock, GraduationCap, CheckCircle2, Mic } from
 import { GRADE_LABELS } from '@/types/wizard'
 import { SessionHistory } from '@/components/session/SessionHistory'
 import { QuickStart } from '@/components/session/QuickStart'
+import { AuthenticatedLayout } from '@/components/layout/AuthenticatedLayout'
 
 export default async function DashboardPage() {
   const user = await getUser()
@@ -27,7 +28,8 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
+    <AuthenticatedLayout>
+      <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
       <div className="container mx-auto px-4 py-8">
         <header className="flex justify-between items-center mb-8">
           <div>
@@ -221,5 +223,6 @@ export default async function DashboardPage() {
         </div>
       </div>
     </div>
+    </AuthenticatedLayout>
   )
 }

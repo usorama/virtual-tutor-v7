@@ -56,7 +56,7 @@ export function LoginForm() {
   }
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full max-w-md glass-card">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
         <CardDescription>Enter your credentials to access your account</CardDescription>
@@ -81,7 +81,7 @@ export function LoginForm() {
                 placeholder="email@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className={`pl-10 ${errors.email ? 'border-destructive' : ''}`}
+                className={`pl-10 glass-interactive ${errors.email ? 'border-destructive' : ''}`}
                 disabled={loading}
                 autoComplete="email"
               />
@@ -112,7 +112,7 @@ export function LoginForm() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className={`pl-10 ${errors.password ? 'border-destructive' : ''}`}
+                className={`pl-10 glass-interactive ${errors.password ? 'border-destructive' : ''}`}
                 disabled={loading}
                 autoComplete="current-password"
               />
@@ -137,9 +137,9 @@ export function LoginForm() {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <Button 
-            type="submit" 
-            className="w-full" 
+          <Button
+            type="submit"
+            className="w-full glass-button"
             disabled={loading}
           >
             {loading ? (

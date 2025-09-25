@@ -117,6 +117,14 @@ export function WizardProvider({ children }: WizardProviderProps) {
     }))
   }, [])
 
+  const goToStep = useCallback((step: number) => {
+    setState(prev => ({
+      ...prev,
+      currentStep: step,
+      isComplete: false,
+    }))
+  }, [])
+
   const reset = useCallback(() => {
     setState(initialState)
     localStorage.removeItem(STORAGE_KEY)
@@ -146,6 +154,39 @@ export function WizardProvider({ children }: WizardProviderProps) {
     return state.currentStep > WIZARD_STEPS.GRADE_SELECTION
   }, [state.currentStep])
 
+  const canNavigateToStep = useCallback((targetStep: number) => {
+    // Can always go back to previous steps
+    if (targetStep < state.currentStep) {
+      return true
+    }
+
+    // Can only go forward if all previous steps are completed
+    if (targetStep > state.currentStep) {
+      // Check if all steps up to target are valid
+      for (let step = 0; step < targetStep; step++) {
+        switch (step) {
+          case WIZARD_STEPS.GRADE_SELECTION:
+            if (state.grade === null) return false
+            break
+          case WIZARD_STEPS.SUBJECT_SELECTION:
+            if (state.subjects.length === 0) return false
+            break
+          case WIZARD_STEPS.TOPIC_SELECTION:
+            if (!state.subjects.every(subject =>
+              state.topics[subject] && state.topics[subject].length > 0
+            )) return false
+            break
+          case WIZARD_STEPS.PURPOSE_SELECTION:
+            if (state.purpose === null) return false
+            break
+        }
+      }
+      return true
+    }
+
+    return true // Can navigate to current step
+  }, [state])
+
   const value: WizardContextType = {
     state,
     updateGrade,
@@ -154,9 +195,11 @@ export function WizardProvider({ children }: WizardProviderProps) {
     updateTopics,
     nextStep,
     previousStep,
+    goToStep,
     reset,
     canGoNext,
     canGoPrevious,
+    canNavigateToStep,
   }
 
   // Don't render until hydrated to avoid hydration mismatch

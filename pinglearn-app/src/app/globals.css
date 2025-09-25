@@ -1,58 +1,94 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:is(.dark *));
+/* Import PingLearn Glass Morphism Design System */
+@import "../styles/glass-morphism.css";
 
+/* Custom Scrollbar Styles - Hidden by Default */
+@layer utilities {
+  /* Hide scrollbar by default, show on hover */
+  .scrollbar-hover::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-hover::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 3px;
+  }
+
+  .scrollbar-hover::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0);
+    border-radius: 3px;
+    transition: background 0.3s ease;
+  }
+
+  .scrollbar-hover:hover::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .scrollbar-hover::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Firefox scrollbar */
+  .scrollbar-hover {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    transition: scrollbar-color 0.3s ease;
+  }
+
+  .scrollbar-hover:hover {
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  }
+}
+
+/* PingLearn Design System - Global Variables */
 :root {
-  --background: #ffffff;
-  --foreground: #020617;
-  --card: #ffffff;
-  --card-foreground: #020617;
-  --popover: #ffffff;
-  --popover-foreground: #020617;
-  --primary: #0f172a;
-  --primary-foreground: #f8fafc;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #0f172a;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #f1f5f9;
-  --accent-foreground: #0f172a;
-  --destructive: #ef4444;
-  --destructive-foreground: #f8fafc;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #020617;
-  --radius: 0.5rem;
-  --sky-400: #38bdf8;
-  --sky-500: #0ea5e9;
+  /* Core Background - 100% Black Canvas */
+  --background: #000000;
+  --foreground: #FFFFFF;
+
+  /* Card & Container Colors - Glass Effect Base */
+  --card: rgba(255, 255, 255, 0.03);
+  --card-foreground: #FFFFFF;
+  --popover: rgba(255, 255, 255, 0.05);
+  --popover-foreground: #FFFFFF;
+
+  /* Primary - Cyan from Logo */
+  --primary: #06B6D4;
+  --primary-foreground: #0D0D0D;
+
+  /* Secondary - Subtle Glass */
+  --secondary: rgba(255, 255, 255, 0.05);
+  --secondary-foreground: #FFFFFF;
+
+  /* Muted - Lower Opacity Text */
+  --muted: rgba(255, 255, 255, 0.1);
+  --muted-foreground: rgba(255, 255, 255, 0.7);
+
+  /* Accent - Cyan */
+  --accent: #06B6D4;
+  --accent-foreground: #0D0D0D;
+
+  /* Destructive - Pastel Red for Errors */
+  --destructive: #FF746C;
+  --destructive-foreground: #0D0D0D;
+
+  /* Borders - Subtle White */
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.05);
+  --ring: rgba(6, 182, 212, 0.5);
+
+  /* Border Radius */
+  --radius: 1rem;
+
+  /* Sky colors for compatibility */
+  --sky-400: #06B6D4;
+  --sky-500: #06B6D4;
 }
 
-/* Dark theme class-based implementation */
-.dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
-  --primary: 210 40% 98%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 212.7 26.8% 83.9%;
-
-  /* PingLearn specific dark colors */
-  --cyan-accent: 186 94% 55%;  /* Cyan-500 */
-  --cyan-hover: 186 94% 65%;   /* Cyan-400 */
-}
+/* Remove dark theme variant - PingLearn is always dark */
+/* The design system is a premium dark-first glass morphism system */
 
 @theme inline {
   --color-background: var(--background);
@@ -90,26 +126,36 @@
   }
 }
 
-/* Smooth theme transitions */
-* {
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
+/* Global Styles */
 * {
   border-color: var(--border);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
+/* HTML and Body - PingLearn 100% Black Canvas */
+html {
+  background: #000000;
+  color-scheme: dark;
 }
 
+body {
+  background: #000000 !important;
+  color: #FFFFFF !important;
+  min-height: 100vh;
+  font-family: var(--font-sf-pro, var(--font-inter)), -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
+/* Ensure all backgrounds are 100% black */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background-color: #000000 !important;
+  }
+  html {
+    background-color: #000000 !important;
   }
 }

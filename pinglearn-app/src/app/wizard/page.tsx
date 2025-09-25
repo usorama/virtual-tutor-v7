@@ -3,14 +3,13 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useWizard } from '@/contexts/WizardContext'
-import { StepIndicator } from '@/components/wizard/StepIndicator'
 import { NavigationButtons } from '@/components/wizard/NavigationButtons'
 import { GradeSelector } from '@/components/wizard/GradeSelector'
 import { PurposeSelector } from '@/components/wizard/PurposeSelector'
 import { SubjectSelector } from '@/components/wizard/SubjectSelector'
 import { TopicSelector } from '@/components/wizard/TopicSelector'
 import { WizardSummary } from '@/components/wizard/WizardSummary'
-import { WIZARD_STEPS, CurriculumData } from '@/types/wizard'
+import { WIZARD_STEPS, WIZARD_STEP_NAMES, CurriculumData } from '@/types/wizard'
 import { 
   getCurriculumData, 
   saveWizardSelections,
@@ -18,8 +17,26 @@ import {
   completeWizard 
 } from '@/lib/wizard/actions'
 import { Card } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
+
+// Helper functions for angled card display
+function getStepDescription(stepIndex: number): string {
+  const descriptions = [
+    'Choose your current grade level',
+    'Select subjects to focus on',
+    'Pick specific topics to study',
+    'Define your learning goals',
+    'Review and confirm setup'
+  ]
+  return descriptions[stepIndex] || ''
+}
+
+function getStepProgress(stepIndex: number): number {
+  const progressValues = [20, 40, 60, 80, 100]
+  return progressValues[stepIndex] || 0
+}
 
 export default function WizardPage() {
   const router = useRouter()
@@ -31,8 +48,10 @@ export default function WizardPage() {
     updateTopics,
     nextStep,
     previousStep,
+    goToStep,
     canGoNext,
     canGoPrevious,
+    canNavigateToStep,
   } = useWizard()
 
   const [isLoading, setIsLoading] = useState(false)
@@ -159,93 +178,273 @@ export default function WizardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 flex flex-col">
-      <div className="max-w-6xl mx-auto space-y-4 p-4 flex-1 flex flex-col justify-center">
-        {/* Header */}
-        <div className="text-center space-y-1">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
-            Welcome to Virtual Tutor
-          </h1>
-          <p className="text-muted-foreground">
-            Let&apos;s personalize your learning journey
-          </p>
-        </div>
+    <div className="h-screen bg-background flex items-center justify-center px-4 py-8 overflow-hidden">
+      {/* Professional Dialog Container */}
+      <div className="w-full max-w-4xl relative">
+        {/* Unified Wizard Component with Tab Navigation */}
+        <div className="relative w-full">
+          {/* Tab Navigation Row - Full width to match card */}
+          <div className="relative flex gap-0 w-full overflow-hidden">
+            {/* All Step Tabs */}
+            {WIZARD_STEP_NAMES.map((stepName, index) => {
+              const isActive = index === state.currentStep;
+              const isClickable = canNavigateToStep(index);
+              const tabWidth = `${100 / WIZARD_STEP_NAMES.length}%`;
 
-      {/* Step Indicator */}
-      <StepIndicator currentStep={state.currentStep} />
+              return (
+                <div
+                  key={index}
+                  className="relative flex"
+                  style={{ width: tabWidth }}
+                >
+                  {/* Tab */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (isClickable && index !== state.currentStep) {
+                        goToStep(index);
+                      }
+                    }}
+                    disabled={!isClickable || isLoading || isSaving}
+                    className={`
+                      flex-1 relative h-16 px-4 py-3 transition-all duration-300
+                      ${isActive
+                        ? 'bg-transparent rounded-t-[40px] z-20'
+                        : isClickable
+                          ? 'bg-white/5 border border-white/10 border-b-0 opacity-80 hover:opacity-100 hover:bg-white/10 cursor-pointer rounded-t-[32px]'
+                          : 'bg-white/5 border border-white/10 border-b-0 opacity-40 cursor-not-allowed rounded-t-[32px]'
+                      }
+                    `}
+                    style={isActive ? {
+                      border: '1px solid rgba(6, 182, 212, 0.6)',
+                      borderBottom: 'none',
+                      backgroundColor: 'transparent',
+                      backdropFilter: 'blur(20px)',
+                      WebkitBackdropFilter: 'blur(20px)',
+                      marginBottom: '-1px',
+                      width: '100%'
+                    } : {}}
+                  >
+                    {/* Tab Content */}
+                    <div className="flex items-center gap-3 h-full px-4">
+                      {/* Step Number Circle - Left Aligned */}
+                      <div className={`flex items-center justify-center min-w-[24px] w-6 h-6 rounded-full text-xs font-bold flex-shrink-0 ${
+                        isActive
+                          ? 'bg-accent text-black'
+                          : isClickable
+                            ? 'bg-white/10 text-white/70'
+                            : 'bg-white/5 text-white/30'
+                      }`}>
+                        {index + 1}
+                      </div>
 
-      {/* Apple-Style Wizard Container */}
-      <div className="relative">
-        {/* Main Content Card */}
-        <Card className="mx-16 p-6 min-h-[400px] relative flex-1">
-          {isLoading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+                      {/* Tab Text - Two Lines */}
+                      <div className={`flex-1 text-right`}>
+                        {(() => {
+                          // Smart text splitting - keep '&' with previous word
+                          const words = stepName.split(' ');
+                          const lines = [];
+                          let currentLine = '';
+
+                          for (let i = 0; i < words.length; i++) {
+                            const word = words[i];
+                            if (word === '&' && currentLine) {
+                              // Add '&' to current line
+                              currentLine += ` ${word}`;
+                            } else if (currentLine && word !== '&') {
+                              // Push current line and start new one
+                              lines.push(currentLine);
+                              currentLine = word;
+                            } else {
+                              // Start or continue current line
+                              currentLine = currentLine ? `${currentLine} ${word}` : word;
+                            }
+                          }
+                          if (currentLine) lines.push(currentLine);
+
+                          return lines.map((line, lineIndex) => (
+                            <div
+                              key={lineIndex}
+                              className={`text-xs font-medium uppercase tracking-wider leading-tight ${
+                                isActive
+                                  ? 'text-accent'
+                                  : isClickable
+                                    ? 'text-white/70'
+                                    : 'text-white/30'
+                              }`}
+                            >
+                              {line}
+                            </div>
+                          ));
+                        })()}
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Main Wizard Card - Seamlessly connected to active tab */}
+          <div className="relative">
+            {/* Top border cover - hides the border where active tab connects */}
+            <div
+              className="absolute top-0 h-[2px] z-15"
+              style={{
+                left: `${(state.currentStep * 100) / WIZARD_STEP_NAMES.length}%`,
+                width: `${100 / WIZARD_STEP_NAMES.length}%`,
+                marginTop: '-1px',
+                backgroundColor: 'transparent' // Make it transparent to avoid visible line
+              }}
+            />
+
+            <Card className="p-8 overflow-hidden relative z-10 w-full"
+                style={{
+                  backgroundColor: 'transparent',
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)',
+                  border: '1px solid rgba(6, 182, 212, 0.6)',
+                  borderTop: '1px solid rgba(6, 182, 212, 0.6)',
+                  borderRadius: '0 0 40px 40px',
+                  marginTop: '-1px',
+                  width: '100%',
+                  boxShadow: '0 8px 24px rgba(6, 182, 212, 0.2)'
+                }}>
+
+          {/* Content Area with dynamic height */}
+          <div className="flex flex-col" style={{
+            minHeight: '300px',
+            maxHeight: '500px'
+          }}>
+            {/* Progress Indicator at top of content */}
+            <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
+              <div className="text-sm text-white/60">
+                Step {state.currentStep + 1} of {WIZARD_STEP_NAMES.length}
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="text-2xl font-bold text-accent">
+                  {getStepProgress(state.currentStep)}%
+                </div>
+                <div className="text-sm text-white/60">
+                  Complete
+                </div>
+              </div>
             </div>
-          ) : (
-            <>
-              {/* Step Content */}
-              {state.currentStep === WIZARD_STEPS.GRADE_SELECTION && (
-                <GradeSelector
-                  selectedGrade={state.grade}
-                  onGradeSelect={updateGrade}
-                />
-              )}
 
-              {state.currentStep === WIZARD_STEPS.SUBJECT_SELECTION && (
-                <SubjectSelector
-                  availableSubjects={availableSubjects}
-                  selectedSubjects={state.subjects}
-                  onSubjectsChange={updateSubjects}
-                />
-              )}
+            {isLoading ? (
+              <div className="flex items-center justify-center py-24">
+                <Loader2 className="h-8 w-8 animate-spin text-accent" />
+              </div>
+            ) : (
+              <div className="flex-1 overflow-y-auto scrollbar-hover" style={{
+                minHeight: '200px'
+              }}>
+                {/* Dynamic Title and Description based on step */}
+                <div className="text-center space-y-2 mb-8">
+                  <h1 className="text-3xl font-bold text-white">
+                    {WIZARD_STEP_NAMES[state.currentStep]}
+                  </h1>
+                  <p className="text-white/70 text-lg">
+                    {getStepDescription(state.currentStep)}
+                  </p>
+                </div>
 
-              {state.currentStep === WIZARD_STEPS.TOPIC_SELECTION && (
-                <TopicSelector
-                  subjects={state.subjects}
-                  availableTopics={availableTopics}
-                  selectedTopics={state.topics}
-                  onTopicsChange={updateTopics}
-                />
-              )}
+                {/* Step Content */}
+                {state.currentStep === WIZARD_STEPS.GRADE_SELECTION && (
+                  <GradeSelector
+                    selectedGrade={state.grade}
+                    onGradeSelect={updateGrade}
+                  />
+                )}
 
-              {state.currentStep === WIZARD_STEPS.PURPOSE_SELECTION && (
-                <div>
-                  <h2 className="text-xl font-bold mb-4">
-                    How would you like to approach these topics?
-                  </h2>
+                {state.currentStep === WIZARD_STEPS.SUBJECT_SELECTION && (
+                  <SubjectSelector
+                    availableSubjects={availableSubjects}
+                    selectedSubjects={state.subjects}
+                    onSubjectsChange={updateSubjects}
+                  />
+                )}
+
+                {state.currentStep === WIZARD_STEPS.TOPIC_SELECTION && (
+                  <TopicSelector
+                    subjects={state.subjects}
+                    availableTopics={availableTopics}
+                    selectedTopics={state.topics}
+                    onTopicsChange={updateTopics}
+                  />
+                )}
+
+                {state.currentStep === WIZARD_STEPS.PURPOSE_SELECTION && (
                   <PurposeSelector
                     selected={state.purpose}
                     onSelect={updatePurpose}
                   />
-                </div>
+                )}
+
+                {state.currentStep === WIZARD_STEPS.SUMMARY && (
+                  <WizardSummary
+                    grade={state.grade}
+                    purpose={state.purpose}
+                    subjects={state.subjects}
+                    topics={state.topics}
+                    className="h-full"
+                  />
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Bottom Navigation - Three Button Layout */}
+          <div className="flex justify-between items-center mt-8 pt-6 border-t border-white/10">
+            {/* Cancel Button */}
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={handleCancel}
+              disabled={isSaving}
+              className="text-white/70 hover:text-white hover:bg-white/5"
+            >
+              Cancel
+            </Button>
+
+            {/* Navigation Buttons */}
+            <div className="flex items-center space-x-3">
+              {/* Back Button */}
+              {canGoPrevious() && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={previousStep}
+                  disabled={isSaving}
+                  className="glass-interactive border-white/20 text-white hover:bg-white/5"
+                >
+                  Back
+                </Button>
               )}
 
-              {state.currentStep === WIZARD_STEPS.SUMMARY && (
-                <WizardSummary
-                  grade={state.grade}
-                  purpose={state.purpose}
-                  subjects={state.subjects}
-                  topics={state.topics}
-                />
-              )}
-            </>
-          )}
-        </Card>
-
-        {/* Apple-Style Navigation - Floating over the card */}
-        <NavigationButtons
-          canGoNext={canGoNext()}
-          canGoPrevious={canGoPrevious()}
-          onNext={handleNext}
-          onPrevious={previousStep}
-          onCancel={handleCancel}
-          isLastStep={state.currentStep === WIZARD_STEPS.SUMMARY}
-          isLoading={isSaving}
-          showCancel={true}
-          className="absolute inset-0 pointer-events-none [&>*]:pointer-events-auto"
-        />
-      </div>
+              {/* Continue/Finish Button */}
+              <Button
+                type="button"
+                onClick={handleNext}
+                disabled={!canGoNext() || isSaving}
+                className="glass-button min-w-[120px]"
+              >
+                {isSaving ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    {state.currentStep === WIZARD_STEPS.SUMMARY ? 'Finishing...' : 'Saving...'}
+                  </>
+                ) : state.currentStep === WIZARD_STEPS.SUMMARY ? (
+                  'Finish Setup'
+                ) : (
+                  'Continue'
+                )}
+              </Button>
+            </div>
+          </div>
+            </Card>
+          </div>
+        </div>
       </div>
     </div>
   )

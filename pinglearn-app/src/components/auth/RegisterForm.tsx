@@ -48,7 +48,7 @@ export function RegisterForm() {
 
   if (success) {
     return (
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md glass-card">
         <CardHeader className="text-center">
           <CheckCircle className="w-12 h-12 text-primary mx-auto mb-4" />
           <CardTitle className="text-2xl font-bold">Registration Successful!</CardTitle>
@@ -63,7 +63,7 @@ export function RegisterForm() {
         </CardContent>
         <CardFooter>
           <Link href="/login" className="w-full">
-            <Button className="w-full" variant="outline">
+            <Button className="w-full glass-button-secondary" variant="outline">
               Go to Login
             </Button>
           </Link>
@@ -73,7 +73,7 @@ export function RegisterForm() {
   }
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full max-w-md glass-card">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold">Create an Account</CardTitle>
         <CardDescription>Enter your details to get started</CardDescription>
@@ -98,7 +98,7 @@ export function RegisterForm() {
                 placeholder="email@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className={`pl-10 ${errors.email ? 'border-destructive' : ''}`}
+                className={`pl-10 glass-interactive ${errors.email ? 'border-destructive' : ''}`}
                 disabled={loading}
                 autoComplete="email"
               />
@@ -120,7 +120,7 @@ export function RegisterForm() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className={`pl-10 ${errors.password ? 'border-destructive' : ''}`}
+                className={`pl-10 glass-interactive ${errors.password ? 'border-destructive' : ''}`}
                 disabled={loading}
                 autoComplete="new-password"
               />
@@ -145,7 +145,7 @@ export function RegisterForm() {
                 placeholder="••••••••"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className={`pl-10 ${errors.confirmPassword ? 'border-destructive' : ''}`}
+                className={`pl-10 glass-interactive ${errors.confirmPassword ? 'border-destructive' : ''}`}
                 disabled={loading}
                 autoComplete="new-password"
               />
@@ -156,9 +156,9 @@ export function RegisterForm() {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <Button 
-            type="submit" 
-            className="w-full" 
+          <Button
+            type="submit"
+            className="w-full glass-button" 
             disabled={loading}
           >
             {loading ? (

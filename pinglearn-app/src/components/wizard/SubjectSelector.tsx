@@ -87,14 +87,7 @@ export function SubjectSelector({
   }
 
   return (
-    <div className={cn('space-y-4', className)}>
-      <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold">Select Your Subjects</h2>
-        <p className="text-gray-600">
-          Choose the subjects you want to study (you can select multiple)
-        </p>
-      </div>
-
+    <div className={cn('space-y-6', className)}>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
         {availableSubjects.map(subject => {
           const config = SUBJECT_CONFIG[subject] || {
@@ -105,15 +98,15 @@ export function SubjectSelector({
           }
           const Icon = config.icon
           const isSelected = selectedSubjects.includes(subject)
-          
+
           return (
             <Card
               key={subject}
               className={cn(
-                'cursor-pointer transition-all hover:shadow-lg relative',
+                'glass-interactive-elevated cursor-pointer transition-all hover:bg-white/5 relative',
                 {
-                  'ring-2 ring-blue-600 bg-blue-50': isSelected,
-                  'hover:ring-2 hover:ring-gray-300': !isSelected,
+                  'border-2 border-accent bg-accent/10': isSelected,
+                  'border border-white/10 hover:border-white/20': !isSelected,
                 }
               )}
               onClick={() => handleToggleSubject(subject)}
@@ -121,17 +114,17 @@ export function SubjectSelector({
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <Icon 
+                    <Icon
                       className={cn(
                         'h-10 w-10 mb-3',
                         {
-                          'text-blue-600': isSelected,
-                          'text-gray-400': !isSelected,
+                          'text-accent': isSelected,
+                          'text-white/60': !isSelected,
                         }
                       )}
                     />
-                    <h3 className="font-semibold text-lg">{config.name}</h3>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <h3 className="font-semibold text-lg text-white">{config.name}</h3>
+                    <p className="text-sm text-white/60 mt-1">
                       {config.description}
                     </p>
                   </div>
@@ -139,7 +132,7 @@ export function SubjectSelector({
                     checked={isSelected}
                     onCheckedChange={() => handleToggleSubject(subject)}
                     onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                    className="mt-1"
+                    className="mt-1 border-white/20 data-[state=checked]:bg-accent data-[state=checked]:border-accent"
                   />
                 </div>
               </CardContent>
@@ -150,7 +143,7 @@ export function SubjectSelector({
 
       {selectedSubjects.length > 0 && (
         <div className="text-center mt-6">
-          <p className="text-sm text-green-600 font-medium">
+          <p className="text-sm text-accent font-medium">
             {selectedSubjects.length} subject{selectedSubjects.length !== 1 ? 's' : ''} selected
           </p>
         </div>
