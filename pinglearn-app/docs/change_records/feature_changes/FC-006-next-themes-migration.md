@@ -3,10 +3,10 @@
 **Template Version**: 3.0
 **Change ID**: FC-006
 **Related**: Improves FC-004-B (Dark Theme)
-**Status**: APPROVED ✅
-**Approved**: 2025-09-24 14:45 PST
-**Risk Level**: LOW ✅
-**Value**: HIGH 💎
+**Status**: ⛔ BLOCKED - DO NOT IMPLEMENT
+**Blocked**: 2025-09-25 (Critical issues discovered)
+**Risk Level**: HIGH 🔴 (Updated from LOW)
+**Value**: NEGATIVE (Risk > Benefit)
 
 ---
 

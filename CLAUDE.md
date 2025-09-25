@@ -184,5 +184,7 @@ tests/features/   # ✅ Feature tests
 ---
 
 **This is attempt #8 after 7 failures. Respect boundaries. Follow rules. Maintain stability.**
-- always start main pinglearn app on port 3006, and livekit python agent service for the app to work
-- Python Livekit service runs in venv and is available at the root folder @livekit-agent/   pinglearn app is available @pinglearn-app/
+- **FRONTEND PORT**: Always start PingLearn frontend on port 3006 (npm run dev automatically uses this port)
+- **LIVEKIT SERVICE**: Python LiveKit agent service must be running for voice functionality
+- Python Livekit service runs in venv and is available at the root folder @livekit-agent/
+- PingLearn app is available @pinglearn-app/
