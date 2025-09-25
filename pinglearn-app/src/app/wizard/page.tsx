@@ -178,9 +178,11 @@ export default function WizardPage() {
   }
 
   return (
-    <div className="h-screen bg-background flex items-center justify-center px-4 py-8 overflow-hidden">
-      {/* Professional Dialog Container */}
-      <div className="w-full max-w-4xl relative">
+    <div className="h-screen bg-background flex justify-center px-4 pt-16 pb-8 overflow-hidden">
+      {/* Professional Dialog Container - Fixed top position, centered horizontally */}
+      <div className="w-full max-w-4xl mx-auto relative" style={{
+        maxHeight: 'calc(100vh - 8rem)' // 4rem top (pt-16) + 4rem bottom (pb-8) = 8rem
+      }}>
         {/* Unified Wizard Component with Tab Navigation */}
         <div className="relative w-full">
           {/* Tab Navigation Row - Full width to match card */}
@@ -314,7 +316,7 @@ export default function WizardPage() {
           {/* Content Area with dynamic height */}
           <div className="flex flex-col" style={{
             minHeight: '300px',
-            maxHeight: '500px'
+            maxHeight: 'calc(100vh - 16rem)' // Accounts for padding, tabs, and navigation
           }}>
             {/* Progress Indicator at top of content */}
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
