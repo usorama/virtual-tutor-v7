@@ -178,13 +178,19 @@ export default function WizardPage() {
   }
 
   return (
-    <div className="h-screen bg-background flex justify-center px-4 pt-16 pb-8 overflow-hidden">
+    <div className="h-screen bg-background flex justify-center px-4 pt-12 pb-12 overflow-hidden">
       {/* Professional Dialog Container - Fixed top position, centered horizontally */}
       <div className="w-full max-w-4xl mx-auto relative" style={{
-        maxHeight: 'calc(100vh - 8rem)' // 4rem top (pt-16) + 4rem bottom (pb-8) = 8rem
+        maxHeight: 'calc(100vh - 6rem)', // 3rem top (pt-12) + 3rem bottom (pb-12) = 6rem
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column'
       }}>
         {/* Unified Wizard Component with Tab Navigation */}
-        <div className="relative w-full">
+        <div className="relative w-full flex flex-col" style={{
+          maxHeight: '100%',
+          overflow: 'visible'
+        }}>
           {/* Tab Navigation Row - Full width to match card */}
           <div className="relative flex gap-0 w-full overflow-hidden">
             {/* All Step Tabs */}
@@ -300,7 +306,7 @@ export default function WizardPage() {
               }}
             />
 
-            <Card className="p-8 overflow-hidden relative z-10 w-full"
+            <Card className="p-6 overflow-hidden relative z-10 w-full flex flex-col"
                 style={{
                   backgroundColor: 'transparent',
                   backdropFilter: 'blur(20px)',
@@ -315,8 +321,9 @@ export default function WizardPage() {
 
           {/* Content Area with dynamic height */}
           <div className="flex flex-col" style={{
-            minHeight: '300px',
-            maxHeight: 'calc(100vh - 16rem)' // Accounts for padding, tabs, and navigation
+            height: 'auto',
+            maxHeight: '400px', // Fixed max height for content area
+            minHeight: '300px'
           }}>
             {/* Progress Indicator at top of content */}
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
@@ -338,9 +345,7 @@ export default function WizardPage() {
                 <Loader2 className="h-8 w-8 animate-spin text-accent" />
               </div>
             ) : (
-              <div className="flex-1 overflow-y-auto scrollbar-hover" style={{
-                minHeight: '200px'
-              }}>
+              <div className="flex-1 overflow-y-auto scrollbar-hover">
                 {/* Dynamic Title and Description based on step */}
                 <div className="text-center space-y-2 mb-8">
                   <h1 className="text-3xl font-bold text-white">
@@ -397,7 +402,7 @@ export default function WizardPage() {
           </div>
 
           {/* Bottom Navigation - Three Button Layout */}
-          <div className="flex justify-between items-center mt-8 pt-6 border-t border-white/10">
+          <div className="flex justify-between items-center mt-4 pt-4 border-t border-white/10">
             {/* Cancel Button */}
             <Button
               type="button"
