@@ -182,6 +182,7 @@ export function Component({
                         </defs>
                     </svg>
                 )}
+                {/* Original shadow layer - 40% coverage */}
                 <div
                     style={{
                         backgroundColor: color,
@@ -190,7 +191,106 @@ export function Component({
                         maskRepeat: "no-repeat",
                         maskPosition: "center",
                         width: "100%",
-                        height: "100%"
+                        height: "100%",
+                        opacity: 0.8
+                    }}
+                />
+
+                {/* Colorful gradient shadows - 60% coverage - Using Transform Positioning */}
+
+                {/* Main Cyan shadow - Bottom area (working position) */}
+                <div
+                    style={{
+                        backgroundColor: 'rgba(6, 182, 212, 0.8)',
+                        maskImage: `url('https://framerusercontent.com/images/ceBGguIpUU8luwByxuQz79t7To.png')`,
+                        maskSize: sizing === "stretch" ? "120% 120%" : "cover",
+                        maskRepeat: "no-repeat",
+                        maskPosition: "center", // Keep mask where it works
+                        width: "100%",
+                        height: "100%",
+                        opacity: 1,
+                        transform: 'scale(1.1) rotate(15deg) translateY(20%)', // Move visually to bottom
+                        transformOrigin: 'center'
+                    }}
+                />
+
+                {/* Bright Yellow shadow - Top area */}
+                <div
+                    style={{
+                        backgroundColor: 'rgba(251, 191, 36, 0.8)',
+                        maskImage: `url('https://framerusercontent.com/images/ceBGguIpUU8luwByxuQz79t7To.png')`,
+                        maskSize: sizing === "stretch" ? "130% 130%" : "cover",
+                        maskRepeat: "no-repeat",
+                        maskPosition: "center", // Keep mask where it works
+                        width: "100%",
+                        height: "100%",
+                        opacity: 0.9,
+                        transform: 'scale(1.2) rotate(25deg) translateY(-40%)', // Move visually to top
+                        transformOrigin: 'center'
+                    }}
+                />
+
+                {/* Pastel Green shadow - Middle left */}
+                <div
+                    style={{
+                        backgroundColor: 'rgba(34, 197, 94, 0.7)',
+                        maskImage: `url('https://framerusercontent.com/images/ceBGguIpUU8luwByxuQz79t7To.png')`,
+                        maskSize: sizing === "stretch" ? "110% 110%" : "cover",
+                        maskRepeat: "no-repeat",
+                        maskPosition: "center", // Keep mask where it works
+                        width: "100%",
+                        height: "100%",
+                        opacity: 0.8,
+                        transform: 'scale(0.95) rotate(-10deg) translateX(-30%) translateY(-10%)', // Move to middle-left
+                        transformOrigin: 'center'
+                    }}
+                />
+
+                {/* Additional Cyan - Top right */}
+                <div
+                    style={{
+                        backgroundColor: 'rgba(6, 182, 212, 0.6)',
+                        maskImage: `url('https://framerusercontent.com/images/ceBGguIpUU8luwByxuQz79t7To.png')`,
+                        maskSize: sizing === "stretch" ? "100% 100%" : "cover",
+                        maskRepeat: "no-repeat",
+                        maskPosition: "center", // Keep mask where it works
+                        width: "100%",
+                        height: "100%",
+                        opacity: 0.7,
+                        transform: 'scale(0.9) rotate(-20deg) translateX(40%) translateY(-30%)', // Move to top-right
+                        transformOrigin: 'center'
+                    }}
+                />
+
+                {/* Additional Green - Middle right */}
+                <div
+                    style={{
+                        backgroundColor: 'rgba(34, 197, 94, 0.5)',
+                        maskImage: `url('https://framerusercontent.com/images/ceBGguIpUU8luwByxuQz79t7To.png')`,
+                        maskSize: sizing === "stretch" ? "90% 90%" : "cover",
+                        maskRepeat: "no-repeat",
+                        maskPosition: "center", // Keep mask where it works
+                        width: "100%",
+                        height: "100%",
+                        opacity: 0.6,
+                        transform: 'scale(1.15) rotate(35deg) translateX(50%) translateY(10%)', // Move to middle-right
+                        transformOrigin: 'center'
+                    }}
+                />
+
+                {/* Amber/Orange shadow - Bottom left */}
+                <div
+                    style={{
+                        backgroundColor: 'rgba(245, 158, 11, 0.6)',
+                        maskImage: `url('https://framerusercontent.com/images/ceBGguIpUU8luwByxuQz79t7To.png')`,
+                        maskSize: sizing === "stretch" ? "105% 105%" : "cover",
+                        maskRepeat: "no-repeat",
+                        maskPosition: "center", // Keep mask where it works
+                        width: "100%",
+                        height: "100%",
+                        opacity: 0.7,
+                        transform: 'scale(0.85) rotate(-30deg) translateX(-40%) translateY(30%)', // Move to bottom-left
+                        transformOrigin: 'center'
                     }}
                 />
             </div>
