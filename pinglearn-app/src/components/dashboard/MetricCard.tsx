@@ -31,11 +31,11 @@ export function MetricCard({ title, value, change, icon, className, hasGradient 
   const getTrendColor = () => {
     switch (change?.trend) {
       case 'up':
-        return 'text-white-50'
+        return 'text-green-500'
       case 'down':
-        return 'text-indicator-error'
+        return 'text-orange-500'
       default:
-        return 'text-white-50'
+        return 'text-yellow-500'
     }
   }
 
@@ -71,9 +71,11 @@ export function MetricCard({ title, value, change, icon, className, hasGradient 
           filter: 'blur(20px)'
         }}
       />
-      {/* Icon positioned top-right */}
-      <div className="absolute top-6 right-6 text-white-30 opacity-60">
-        {icon}
+      {/* Icon positioned top-right with cyan circle */}
+      <div className="absolute top-5 right-5 w-10 h-10 rounded-full bg-accent-cyan flex items-center justify-center">
+        <div className="text-black-100">
+          {icon}
+        </div>
       </div>
 
       {/* Title */}
@@ -82,16 +84,21 @@ export function MetricCard({ title, value, change, icon, className, hasGradient 
       </div>
 
       {/* Value - Large and prominent */}
-      <div className="text-4xl font-bold text-white-100 mb-2">
+      <div className="text-5xl font-heavy text-accent-cyan mb-2">
         {typeof value === 'number' ? value.toLocaleString() : value}
       </div>
 
       {/* Change Indicator */}
       {change && (
-        <div className={`flex items-center gap-1.5 ${getTrendColor()}`}>
-          {getTrendIcon()}
-          <span className="text-caption1 font-medium">
-            {change.description}
+        <div className="flex items-center gap-1.5">
+          <span className={getTrendColor()}>
+            {getTrendIcon()}
+          </span>
+          <span className={`text-caption1 font-medium ${getTrendColor()}`}>
+            {change.value}
+          </span>
+          <span className="text-caption1 font-medium text-white-50">
+            {change.description.replace(change.value, '').trim()}
           </span>
         </div>
       )}
