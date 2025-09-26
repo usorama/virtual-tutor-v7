@@ -86,16 +86,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} font-sans antialiased min-h-screen bg-background text-foreground`}
+        className={`${inter.variable} font-sans antialiased min-h-screen text-foreground`}
       >
         <ThemeProvider>
           <AuthProvider>
-            <div className="min-h-screen bg-background text-foreground">
-              <Navigation />
-              <main className="pt-20">
-                {children}
-              </main>
-            </div>
+            {children}
           </AuthProvider>
         </ThemeProvider>
       </body>

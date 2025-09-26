@@ -138,24 +138,24 @@ html {
 }
 
 body {
-  background: #000000 !important;
-  color: #FFFFFF !important;
+  background: #000000;
+  color: #FFFFFF;
   min-height: 100vh;
   font-family: var(--font-sf-pro, var(--font-inter)), -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Ensure all backgrounds are 100% black */
+/* Default backgrounds - can be overridden by specific pages */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply text-foreground;
-    background-color: #000000 !important;
+    /* Removed !important to allow page-specific backgrounds */
   }
   html {
-    background-color: #000000 !important;
+    /* Removed !important to allow page-specific backgrounds */
   }
 }

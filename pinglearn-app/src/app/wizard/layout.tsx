@@ -19,11 +19,7 @@ export default async function WizardLayout({
   return (
     <SharedThemeProvider>
       <WizardProvider>
-        <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
-          <div className="container mx-auto px-4 py-8">
-            {children}
-          </div>
-        </div>
+        {children}
       </WizardProvider>
     </SharedThemeProvider>
   )

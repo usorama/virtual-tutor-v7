@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Responsive Wizard - ONE Page, Multiple Layouts</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Viewport indicator */
+        .viewport-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 1000;
+        }
+
+        .viewport-indicator .size {
+            font-weight: bold;
+            color: #06b6d4;
+        }
+
+        /* Container that responds to viewport */
+        .wizard-container {
+            max-width: 1024px;
+            margin: 60px auto 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(6, 182, 212, 0.6);
+            border-radius: 0 0 40px 40px;
+            overflow: hidden;
+        }
+
+        /* DESKTOP NAVIGATION (768px and up) */
+        .desktop-navigation {
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .desktop-navigation {
+                display: flex;
+                gap: 0;
+                margin-bottom: -1px;
+            }
+
+            .tab {
+                flex: 1;
+                padding: 16px;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-bottom: none;
+                border-radius: 32px 32px 0 0;
+                cursor: pointer;
+                transition: all 0.3s;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .tab.active {
+                background: transparent;
+                backdrop-filter: blur(20px);
+                border-color: rgba(6, 182, 212, 0.6);
+                border-radius: 40px 40px 0 0;
+                position: relative;
+                z-index: 10;
+            }
+
+            .tab-number {
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.1);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 12px;
+                color: white;
+            }
+
+            .tab.active .tab-number {
+                background: #06b6d4;
+                color: black;
+            }
+
+            .tab-text {
+                flex: 1;
+                color: white;
+                font-size: 14px;
+                text-align: center;
+            }
+
+            .tab.active .tab-text {
+                color: #06b6d4;
+                font-weight: 600;
+            }
+        }
+
+        /* MOBILE NAVIGATION (below 768px) */
+        .mobile-navigation {
+            display: block;
+            padding: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .mobile-navigation {
+                display: none;
+            }
+        }
+
+        .mobile-dots {
+            text-align: center;
+        }
+
+        .mobile-step-name {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .mobile-step-desc {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            width: 32px;
+            background: #06b6d4;
+            border-radius: 5px;
+        }
+
+        .dot.completed {
+            background: rgba(6, 182, 212, 0.6);
+        }
+
+        /* Main content area */
+        .wizard-content {
+            padding: 30px;
+            min-height: 300px;
+        }
+
+        .content-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .content-title {
+            color: white;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .content-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+        }
+
+        .content-body {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Navigation buttons */
+        .nav-buttons {
+            padding: 20px 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .btn.primary {
+            background: rgba(6, 182, 212, 0.3);
+            border-color: rgba(6, 182, 212, 0.6);
+        }
+
+        .btn.primary:hover {
+            background: rgba(6, 182, 212, 0.4);
+        }
+
+        /* Demo info box */
+        .info-box {
+            max-width: 1024px;
+            margin: 30px auto;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            color: white;
+        }
+
+        .info-box h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #06b6d4;
+        }
+
+        .info-box p {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .info-box code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .resize-hint {
+            background: rgba(6, 182, 212, 0.2);
+            border: 1px solid rgba(6, 182, 212, 0.4);
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 15px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* Responsive text adjustments */
+        @media (max-width: 480px) {
+            .content-title {
+                font-size: 24px;
+            }
+
+            .wizard-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Viewport Size Indicator -->
+    <div class="viewport-indicator">
+        <span>Viewport: </span>
+        <span class="size" id="viewport-size">0px</span>
+        <span id="device-type"></span>
+    </div>
+
+    <!-- Info Box -->
+    <div class="info-box">
+        <h2>🎯 This is ONE Page - Not Multiple Pages!</h2>
+        <p><strong>Resize your browser window</strong> to see how the SAME page adapts:</p>
+        <p>• <code>Desktop (≥768px)</code>: Horizontal tabs like current design</p>
+        <p>• <code>Mobile (<768px)</code>: Dots navigation for compact screens</p>
+        <div class="resize-hint">
+            ↔️ Try resizing your browser window now to see the magic!
+        </div>
+    </div>
+
+    <!-- Main Wizard Container -->
+    <div class="wizard-container">
+        <!-- Desktop Navigation (Hidden on Mobile) -->
+        <div class="desktop-navigation">
+            <div class="tab active">
+                <span class="tab-number">1</span>
+                <span class="tab-text">Select Grade</span>
+            </div>
+            <div class="tab">
+                <span class="tab-number">2</span>
+                <span class="tab-text">Choose Subjects</span>
+            </div>
+            <div class="tab">
+                <span class="tab-number">3</span>
+                <span class="tab-text">Pick Topics</span>
+            </div>
+            <div class="tab">
+                <span class="tab-number">4</span>
+                <span class="tab-text">Learning Goals</span>
+            </div>
+            <div class="tab">
+                <span class="tab-number">5</span>
+                <span class="tab-text">Review & Start</span>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation (Hidden on Desktop) -->
+        <div class="mobile-navigation">
+            <div class="mobile-dots">
+                <div class="mobile-step-name">Select Grade</div>
+                <div class="mobile-step-desc">Choose your current grade level</div>
+
+                <div class="dots-container">
+                    <div class="dot active"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content (Same for Both) -->
+        <div class="wizard-content">
+            <div class="content-header">
+                <h1 class="content-title">Select Your Grade</h1>
+                <p class="content-description">Choose your current grade level to personalize your learning experience</p>
+            </div>
+
+            <div class="content-body">
+                <p>Grade selection options would appear here</p>
+                <p style="margin-top: 20px; font-size: 14px; opacity: 0.7;">
+                    This content area remains the same regardless of viewport size.
+                    Only the navigation changes!
+                </p>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons (Same for Both) -->
+        <div class="nav-buttons">
+            <button class="btn" onclick="alert('Cancel')">Cancel</button>
+            <div>
+                <button class="btn" disabled>Back</button>
+                <button class="btn primary" style="margin-left: 10px;">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Update viewport indicator
+        function updateViewport() {
+            const width = window.innerWidth;
+            document.getElementById('viewport-size').textContent = `${width}px`;
+
+            let deviceType = '';
+            if (width >= 1024) {
+                deviceType = ' (Desktop)';
+            } else if (width >= 768) {
+                deviceType = ' (Tablet)';
+            } else {
+                deviceType = ' (Mobile)';
+            }
+            document.getElementById('device-type').textContent = deviceType;
+        }
+
+        // Update on load and resize
+        updateViewport();
+        window.addEventListener('resize', updateViewport);
+
+        // Make tabs and dots clickable for demo
+        const steps = [
+            { name: 'Select Grade', desc: 'Choose your current grade level' },
+            { name: 'Choose Subjects', desc: 'Select subjects to focus on' },
+            { name: 'Pick Topics', desc: 'Pick specific topics to study' },
+            { name: 'Learning Goals', desc: 'Define your learning goals' },
+            { name: 'Review & Start', desc: 'Review and confirm setup' }
+        ];
+
+        function selectStep(index) {
+            // Update desktop tabs
+            document.querySelectorAll('.tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === index);
+            });
+
+            // Update mobile dots
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+                dot.classList.toggle('completed', i < index);
+            });
+
+            // Update mobile text
+            document.querySelector('.mobile-step-name').textContent = steps[index].name;
+            document.querySelector('.mobile-step-desc').textContent = steps[index].desc;
+
+            // Update content
+            document.querySelector('.content-title').textContent = steps[index].name;
+            document.querySelector('.content-description').textContent = steps[index].desc;
+        }
+
+        // Make tabs clickable
+        document.querySelectorAll('.tab').forEach((tab, index) => {
+            tab.addEventListener('click', () => selectStep(index));
+        });
+
+        // Make dots clickable
+        document.querySelectorAll('.dot').forEach((dot, index) => {
+            dot.addEventListener('click', () => selectStep(index));
+        });
+    </script>
+</body>
+</html>

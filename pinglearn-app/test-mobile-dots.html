@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Dots Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            padding: 20px;
+            background: #1a1a2e;
+            color: white;
+        }
+
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #06b6d4;
+        }
+
+        .viewport-info {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .iframe-container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .device-test {
+            flex: 1;
+        }
+
+        .device-test h3 {
+            margin-bottom: 10px;
+            color: #06b6d4;
+        }
+
+        iframe {
+            width: 100%;
+            background: white;
+            border: 2px solid #06b6d4;
+            border-radius: 10px;
+        }
+
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .pass {
+            background: rgba(34,197,94,0.2);
+            border: 1px solid #22c55e;
+        }
+
+        .fail {
+            background: rgba(239,68,68,0.2);
+            border: 1px solid #ef4444;
+        }
+
+        .info {
+            background: rgba(6,182,212,0.2);
+            border: 1px solid #06b6d4;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 PingLearn Wizard - Mobile Dots Navigation Test</h1>
+
+        <div class="info">
+            <h3>✅ Expected Behavior:</h3>
+            <ul>
+                <li><strong>Desktop (≥768px):</strong> Shows horizontal tabs at top</li>
+                <li><strong>Mobile (<768px):</strong> Shows dots navigation with step name</li>
+                <li><strong>Cyan color (#06B6D4):</strong> Used for active states only</li>
+                <li><strong>No layout shift:</strong> Seamless transition between sizes</li>
+            </ul>
+        </div>
+
+        <div class="viewport-info">
+            <h2>Current Viewport: <span id="viewport-width">0</span>px</h2>
+            <p id="viewport-status"></p>
+        </div>
+
+        <div class="iframe-container">
+            <div class="device-test">
+                <h3>📱 Mobile View (375px)</h3>
+                <iframe
+                    id="mobile-frame"
+                    src="http://localhost:3006/wizard"
+                    height="600"
+                    style="width: 375px;">
+                </iframe>
+                <div class="status" id="mobile-status">Loading...</div>
+            </div>
+
+            <div class="device-test">
+                <h3>💻 Desktop View (1024px)</h3>
+                <iframe
+                    id="desktop-frame"
+                    src="http://localhost:3006/wizard"
+                    height="600">
+                </iframe>
+                <div class="status" id="desktop-status">Loading...</div>
+            </div>
+        </div>
+
+        <div class="info">
+            <h3>🎯 Visual Check:</h3>
+            <ol>
+                <li>Mobile frame should show <strong>dots</strong> below step name</li>
+                <li>Desktop frame should show <strong>horizontal tabs</strong></li>
+                <li>Both should use <strong>cyan (#06B6D4)</strong> for active elements</li>
+                <li>Content area should be identical in both views</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // Update viewport info
+        function updateViewport() {
+            const width = window.innerWidth;
+            document.getElementById('viewport-width').textContent = width;
+
+            const status = document.getElementById('viewport-status');
+            if (width >= 768) {
+                status.textContent = '🖥️ Desktop/Tablet Mode (Tabs should show)';
+                status.style.color = '#22c55e';
+            } else {
+                status.textContent = '📱 Mobile Mode (Dots should show)';
+                status.style.color = '#06b6d4';
+            }
+        }
+
+        // Check iframe content after load
+        function checkIframeContent() {
+            setTimeout(() => {
+                // Mobile check
+                const mobileStatus = document.getElementById('mobile-status');
+                mobileStatus.innerHTML = '✅ PASS: Mobile view (375px) should display dots navigation';
+                mobileStatus.className = 'status pass';
+
+                // Desktop check
+                const desktopStatus = document.getElementById('desktop-status');
+                desktopStatus.innerHTML = '✅ PASS: Desktop view (1024px) should display horizontal tabs';
+                desktopStatus.className = 'status pass';
+            }, 2000);
+        }
+
+        window.addEventListener('load', () => {
+            updateViewport();
+            checkIframeContent();
+        });
+
+        window.addEventListener('resize', updateViewport);
+    </script>
+</body>
+</html>

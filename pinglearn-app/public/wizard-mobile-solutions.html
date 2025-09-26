@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wizard Mobile Navigation Solutions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .solution-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .solution-title {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .wizard-content {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Solution A: Vertical Stack */
+        .vertical-tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .vertical-tab {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .vertical-tab:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .vertical-tab.active {
+            background: rgba(6, 182, 212, 0.3);
+            border-color: rgba(6, 182, 212, 0.6);
+        }
+
+        .vertical-tab .step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .vertical-tab.active .step-number {
+            background: #06b6d4;
+            color: black;
+        }
+
+        .vertical-tab .step-name {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .vertical-tab .step-status {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        /* Solution B: Dots + Current Step */
+        .dots-navigation {
+            text-align: center;
+        }
+
+        .current-step-display {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .current-step-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot:hover {
+            transform: scale(1.2);
+        }
+
+        .dot.active {
+            width: 32px;
+            background: #06b6d4;
+            border-radius: 5px;
+        }
+
+        .dot.completed {
+            background: rgba(6, 182, 212, 0.6);
+        }
+
+        /* Solution C: Single Step with Navigation */
+        .single-step-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .nav-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .nav-button:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .step-info {
+            flex: 1;
+            text-align: center;
+            color: white;
+        }
+
+        .step-info .step-label {
+            font-size: 12px;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .step-info .step-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .step-info .step-progress {
+            font-size: 11px;
+            opacity: 0.6;
+            margin-top: 4px;
+        }
+
+        /* Navigation buttons for demo */
+        .demo-controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .demo-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .demo-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Desktop comparison */
+        .desktop-note {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 30px;
+            color: white;
+            text-align: center;
+        }
+
+        .desktop-note h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .desktop-note p {
+            font-size: 14px;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="desktop-note">
+            <h2>📱 Mobile Navigation Solutions</h2>
+            <p>These solutions replace horizontal tabs on mobile devices (< 768px width). On desktop/tablet, the original horizontal tabs remain.</p>
+        </div>
+
+        <!-- Solution A: Vertical Stack -->
+        <div class="solution-card">
+            <h3 class="solution-title">Solution A: Vertical Stack (Expandable)</h3>
+
+            <div class="vertical-tabs">
+                <div class="vertical-tab active">
+                    <span class="step-number">1</span>
+                    <span class="step-name">Select Grade</span>
+                    <span class="step-status">Current</span>
+                </div>
+                <div class="vertical-tab">
+                    <span class="step-number">2</span>
+                    <span class="step-name">Choose Subjects</span>
+                    <span class="step-status">Next</span>
+                </div>
+                <div class="vertical-tab">
+                    <span class="step-number">3</span>
+                    <span class="step-name">Pick Topics</span>
+                    <span class="step-status">—</span>
+                </div>
+                <div class="vertical-tab">
+                    <span class="step-number">4</span>
+                    <span class="step-name">Learning Goals</span>
+                    <span class="step-status">—</span>
+                </div>
+                <div class="vertical-tab">
+                    <span class="step-number">5</span>
+                    <span class="step-name">Review & Start</span>
+                    <span class="step-status">—</span>
+                </div>
+            </div>
+
+            <div class="wizard-content">Grade Selection Content</div>
+        </div>
+
+        <!-- Solution B: Dots Navigation -->
+        <div class="solution-card">
+            <h3 class="solution-title">Solution B: Dots + Current Step Name</h3>
+
+            <div class="dots-navigation">
+                <div class="current-step-display">Select Grade</div>
+                <div class="current-step-subtitle">Choose your current grade level</div>
+
+                <div class="dots-container">
+                    <div class="dot active"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+
+            <div class="wizard-content">Grade Selection Content</div>
+        </div>
+
+        <!-- Solution C: Single Step with Prev/Next -->
+        <div class="solution-card">
+            <h3 class="solution-title">Solution C: Single Step with Navigation</h3>
+
+            <div class="single-step-nav">
+                <button class="nav-button" disabled>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 18l-6-6 6-6"/>
+                    </svg>
+                </button>
+
+                <div class="step-info">
+                    <div class="step-label">Step 1 of 5</div>
+                    <div class="step-title">Select Grade</div>
+                    <div class="step-progress">20% Complete</div>
+                </div>
+
+                <button class="nav-button">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="wizard-content">Grade Selection Content</div>
+        </div>
+
+        <!-- Interactive Demo Controls -->
+        <div class="solution-card" style="background: rgba(0, 0, 0, 0.3);">
+            <h3 class="solution-title">Try Interactive Demo</h3>
+            <div class="demo-controls">
+                <button class="demo-btn" onclick="simulateStep(1)">Step 1</button>
+                <button class="demo-btn" onclick="simulateStep(2)">Step 2</button>
+                <button class="demo-btn" onclick="simulateStep(3)">Step 3</button>
+                <button class="demo-btn" onclick="simulateStep(4)">Step 4</button>
+                <button class="demo-btn" onclick="simulateStep(5)">Step 5</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const steps = [
+            { name: 'Select Grade', desc: 'Choose your current grade level' },
+            { name: 'Choose Subjects', desc: 'Select subjects to focus on' },
+            { name: 'Pick Topics', desc: 'Pick specific topics to study' },
+            { name: 'Learning Goals', desc: 'Define your learning goals' },
+            { name: 'Review & Start', desc: 'Review and confirm setup' }
+        ];
+
+        function simulateStep(stepNum) {
+            const stepIndex = stepNum - 1;
+            const step = steps[stepIndex];
+
+            // Update Solution A
+            document.querySelectorAll('.vertical-tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === stepIndex);
+                const status = tab.querySelector('.step-status');
+                if (i < stepIndex) status.textContent = '✓';
+                else if (i === stepIndex) status.textContent = 'Current';
+                else status.textContent = '—';
+            });
+
+            // Update Solution B
+            document.querySelector('.current-step-display').textContent = step.name;
+            document.querySelector('.current-step-subtitle').textContent = step.desc;
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === stepIndex);
+                dot.classList.toggle('completed', i < stepIndex);
+            });
+
+            // Update Solution C
+            const prevBtn = document.querySelectorAll('.nav-button')[0];
+            const nextBtn = document.querySelectorAll('.nav-button')[1];
+            prevBtn.disabled = stepIndex === 0;
+            nextBtn.disabled = stepIndex === 4;
+
+            document.querySelector('.step-label').textContent = `Step ${stepNum} of 5`;
+            document.querySelector('.step-title').textContent = step.name;
+            document.querySelector('.step-progress').textContent = `${stepNum * 20}% Complete`;
+
+            // Update content areas
+            document.querySelectorAll('.wizard-content').forEach(content => {
+                content.textContent = `${step.name} Content`;
+            });
+        }
+
+        // Make navigation buttons work for Solution C
+        document.querySelectorAll('.nav-button').forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                const currentStep = parseInt(document.querySelector('.step-label').textContent.match(/\d+/)[0]);
+                if (index === 0 && currentStep > 1) {
+                    simulateStep(currentStep - 1);
+                } else if (index === 1 && currentStep < 5) {
+                    simulateStep(currentStep + 1);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

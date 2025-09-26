@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PingLearn Dashboard - Premium Wireframe with Design System</title>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <!-- Phosphor Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css" />
+
+    <style>
+        /* ========== PingLearn Design System Variables ========== */
+        :root {
+            /* Core Colors - ONLY 3 COLORS */
+            --black-100: #000000;
+            --black-95: #0D0D0D;
+            --black-90: #1A1A1A;
+            --black-85: #262626;
+
+            /* White Opacity Scale */
+            --white-100: rgba(255, 255, 255, 1);
+            --white-70: rgba(255, 255, 255, 0.7);
+            --white-50: rgba(255, 255, 255, 0.5);
+            --white-30: rgba(255, 255, 255, 0.3);
+            --white-10: rgba(255, 255, 255, 0.1);
+            --white-5: rgba(255, 255, 255, 0.05);
+            --white-3: rgba(255, 255, 255, 0.03);
+            --white-2: rgba(255, 255, 255, 0.02);
+            --white-1: rgba(255, 255, 255, 0.01);
+
+            /* Accent Colors - ONLY CYAN */
+            --accent-cyan: #06B6D4;
+            --accent-cyan-glow: rgba(6, 182, 212, 0.5);
+            --accent-cyan-subtle: rgba(6, 182, 212, 0.1);
+            --accent-cyan-border: rgba(6, 182, 212, 0.2);
+
+            /* Pastel Indicators - For Metrics Only */
+            --indicator-success: #43F953;
+            --indicator-warning: #D8EF4D;
+            --indicator-error: #FF746C;
+
+            /* Apple Typography Scale */
+            --text-largeTitle: 2.125rem;  /* 34pt */
+            --text-title1: 1.75rem;        /* 28pt */
+            --text-title2: 1.375rem;       /* 22pt */
+            --text-title3: 1.25rem;        /* 20pt */
+            --text-headline: 1.0625rem;    /* 17pt */
+            --text-body: 1.0625rem;        /* 17pt */
+            --text-callout: 1rem;          /* 16pt */
+            --text-subheadline: 0.9375rem; /* 15pt */
+            --text-footnote: 0.8125rem;    /* 13pt */
+            --text-caption1: 0.75rem;      /* 12pt */
+            --text-caption2: 0.6875rem;    /* 11pt */
+
+            /* Apple Font Weights */
+            --weight-ultralight: 100;
+            --weight-thin: 200;
+            --weight-light: 300;
+            --weight-regular: 400;
+            --weight-medium: 500;
+            --weight-semibold: 600;
+            --weight-bold: 700;
+            --weight-heavy: 800;
+            --weight-black: 900;
+        }
+
+        /* ========== Base Styles ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--black-100);
+            color: var(--white-100);
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+            font-weight: var(--weight-regular);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-feature-settings: "kern" 1;
+            text-rendering: optimizeLegibility;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ========== Glass Morphism Components ========== */
+        .liquid-glass {
+            background: var(--white-1);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: none;
+            border-radius: 20px;
+            box-shadow:
+                0 0 40px rgba(6, 182, 212, 0.1),
+                0 8px 32px rgba(0, 0, 0, 0.6),
+                0 4px 16px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card {
+            background: linear-gradient(
+                135deg,
+                var(--white-1) 0%,
+                rgba(255, 255, 255, 0.005) 100%
+            );
+            backdrop-filter: blur(16px) saturate(160%);
+            -webkit-backdrop-filter: blur(16px) saturate(160%);
+            border: none;
+            border-radius: 16px;
+            box-shadow:
+                0 0 30px rgba(6, 182, 212, 0.05),
+                0 4px 24px rgba(0, 0, 0, 0.5),
+                0 2px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            padding: 24px;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 0 50px rgba(6, 182, 212, 0.1),
+                0 8px 32px rgba(0, 0, 0, 0.6),
+                0 4px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ========== Typography Classes ========== */
+        .text-largeTitle {
+            font-size: var(--text-largeTitle);
+            font-weight: var(--weight-bold);
+            line-height: 1.2;
+            letter-spacing: -0.022em;
+        }
+
+        .text-title1 {
+            font-size: var(--text-title1);
+            font-weight: var(--weight-heavy);
+            line-height: 1.25;
+            letter-spacing: -0.021em;
+        }
+
+        .text-title2 {
+            font-size: var(--text-title2);
+            font-weight: var(--weight-bold);
+            line-height: 1.27;
+            letter-spacing: -0.019em;
+        }
+
+        .text-title3 {
+            font-size: var(--text-title3);
+            font-weight: var(--weight-regular);
+            line-height: 1.3;
+            letter-spacing: -0.016em;
+        }
+
+        .text-headline {
+            font-size: var(--text-headline);
+            font-weight: var(--weight-semibold);
+            line-height: 1.41;
+            letter-spacing: -0.011em;
+        }
+
+        .text-caption1 {
+            font-size: var(--text-caption1);
+            font-weight: var(--weight-regular);
+            line-height: 1.33;
+        }
+
+        .text-caption2 {
+            font-size: var(--text-caption2);
+            font-weight: var(--weight-regular);
+            line-height: 1.27;
+            letter-spacing: 0.004em;
+        }
+
+        /* ========== Navigation ========== */
+        .top-nav {
+            background: var(--white-1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--white-10);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: var(--weight-semibold);
+            font-size: 18px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-cyan), #0891B2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: var(--weight-bold);
+            color: var(--black-95);
+        }
+
+        .nav-items {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-item {
+            color: var(--white-70);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            font-size: var(--text-footnote);
+            font-weight: var(--weight-medium);
+        }
+
+        .nav-item.active {
+            background: var(--accent-cyan-subtle);
+            color: var(--accent-cyan);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .grade-badge {
+            background: var(--accent-cyan-subtle);
+            color: var(--accent-cyan);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: var(--text-caption1);
+            font-weight: var(--weight-semibold);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            background: var(--accent-cyan-subtle);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: var(--weight-semibold);
+            color: var(--accent-cyan);
+            font-size: var(--text-footnote);
+        }
+
+        /* ========== Container ========== */
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* ========== Dashboard Header ========== */
+        .dashboard-header {
+            margin-bottom: 32px;
+        }
+
+        .welcome-message {
+            font-size: var(--text-largeTitle);
+            font-weight: var(--weight-bold);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .streak-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, rgba(67, 249, 83, 0.1), rgba(67, 249, 83, 0.05));
+            color: var(--indicator-success);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: var(--text-footnote);
+            font-weight: var(--weight-semibold);
+        }
+
+        .subtitle {
+            color: var(--white-50);
+            font-size: var(--text-subheadline);
+        }
+
+        /* ========== Dashboard Tabs ========== */
+        .tabs-container {
+            background: var(--white-1);
+            backdrop-filter: blur(16px);
+            border-radius: 16px;
+            padding: 8px;
+            margin-bottom: 32px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            border-radius: 12px;
+            background: transparent;
+            color: var(--white-50);
+            border: none;
+            font-weight: var(--weight-medium);
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            font-size: var(--text-footnote);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab.active {
+            background: var(--accent-cyan-subtle);
+            color: var(--accent-cyan);
+        }
+
+        .tab:hover {
+            background: var(--white-5);
+        }
+
+        /* ========== Main Chart Section ========== */
+        .main-chart-section {
+            margin-bottom: 32px;
+            display: grid;
+            grid-template-columns: 78% 20%;
+            gap: 24px;
+            align-items: stretch;
+        }
+
+        .chart-card {
+            padding: 32px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .chart-title {
+            font-size: var(--text-title1);
+            font-weight: var(--weight-heavy);
+            color: var(--white-100);
+        }
+
+        .chart-period {
+            display: flex;
+            gap: 8px;
+        }
+
+        .period-btn {
+            padding: 6px 12px;
+            background: transparent;
+            border: 1px solid var(--white-10);
+            border-radius: 8px;
+            color: var(--white-50);
+            font-size: var(--text-caption1);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: var(--weight-medium);
+        }
+
+        .period-btn.active {
+            background: var(--accent-cyan-subtle);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        /* Chart Actions Panel */
+        .chart-actions-panel {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .actions-title {
+            font-size: var(--text-title1);
+            font-weight: var(--weight-heavy);
+            color: var(--white-100);
+            margin-bottom: 20px;
+        }
+
+        .chart-action-btn {
+            background: var(--white-2);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--white-10);
+            color: var(--white-100);
+            padding: 14px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            font-size: var(--text-caption1);
+            font-weight: var(--weight-medium);
+            text-align: center;
+            flex: 1;
+            margin-bottom: 12px;
+            min-height: 90px;
+            justify-content: center;
+        }
+
+        .chart-action-btn:last-child {
+            margin-bottom: 0;
+        }
+
+        .chart-action-btn:hover {
+            background: var(--accent-cyan-subtle);
+            border-color: var(--accent-cyan-border);
+            transform: translateY(-2px);
+        }
+
+        .chart-action-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-cyan-subtle);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-cyan);
+        }
+
+        .chart-action-icon i {
+            font-size: 16px;
+        }
+
+        .chart-action-label {
+            font-weight: var(--weight-semibold);
+            color: var(--white-100);
+            font-size: var(--text-caption1);
+        }
+
+        .chart-action-desc {
+            font-size: var(--text-caption2);
+            color: var(--white-50);
+        }
+
+        /* Combo Chart (Bars + Line) */
+        .combo-chart {
+            position: relative;
+            height: 280px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .combo-chart svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .chart-grid {
+            stroke: var(--white-5);
+            stroke-width: 1;
+        }
+
+        .chart-bar {
+            transition: opacity 0.3s ease, transform 0.2s ease;
+        }
+
+        .chart-bar:hover {
+            opacity: 0.8;
+            transform: scale(1.02);
+        }
+
+        .chart-line {
+            filter: drop-shadow(0 4px 12px rgba(6, 182, 212, 0.4));
+        }
+
+        .chart-line-area {
+            opacity: 0.2;
+        }
+
+        .chart-dot-line {
+            filter: drop-shadow(0 2px 8px rgba(6, 182, 212, 0.6));
+            transition: all 0.3s ease;
+        }
+
+        .chart-dot-line:hover {
+            transform: scale(1.3);
+        }
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 16px;
+            padding: 12px;
+            background: var(--white-2);
+            border-radius: 12px;
+            border: 1px solid var(--white-10);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: var(--text-caption1);
+            color: var(--white-70);
+            font-weight: var(--weight-medium);
+        }
+
+        .legend-bar {
+            width: 12px;
+            height: 8px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+
+        .legend-line {
+            width: 16px;
+            height: 3px;
+            background: var(--accent-cyan);
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .legend-line::after {
+            content: '';
+            position: absolute;
+            right: -2px;
+            top: -2px;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border: 2px solid var(--black-100);
+            border-radius: 50%;
+        }
+
+        /* Circular Progress Chart */
+        .circular-progress-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .circular-progress-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 12px 0;
+        }
+
+        .circular-progress {
+            filter: drop-shadow(0 4px 12px rgba(6, 182, 212, 0.3));
+        }
+
+        .progress-ring {
+            transition: stroke-dashoffset 2s ease-out;
+        }
+
+        .progress-percentage {
+            font-size: var(--text-body);
+            font-weight: var(--weight-heavy);
+            fill: var(--white-100);
+        }
+
+        .progress-label {
+            font-size: var(--text-caption1);
+            color: var(--white-70);
+            font-weight: var(--weight-medium);
+            margin-top: 8px;
+        }
+
+        /* Timeline Component */
+        .session-timeline {
+            position: relative;
+            padding-left: 60px;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--accent-cyan) 0%, var(--white-10) 50%, transparent 100%);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 16px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            margin: 0 -16px;
+            padding: 16px;
+        }
+
+        .timeline-item:hover {
+            background: var(--white-3);
+            transform: translateX(8px);
+        }
+
+        .timeline-time {
+            position: absolute;
+            left: -50px;
+            top: 18px;
+            font-size: var(--text-caption1);
+            font-weight: var(--weight-medium);
+            color: var(--white-70);
+            text-align: right;
+            width: 40px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -30px;
+            top: 22px;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border: 2px solid var(--black-100);
+            border-radius: 50%;
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.6);
+        }
+
+        .timeline-content {
+            margin-left: 8px;
+        }
+
+        .session-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: var(--text-caption2);
+            font-weight: var(--weight-semibold);
+            margin-bottom: 6px;
+        }
+
+        .math-badge {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+        }
+
+        .physics-badge {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22C55E;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .chemistry-badge {
+            background: rgba(168, 85, 247, 0.15);
+            color: #A855F7;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .session-title {
+            font-size: var(--text-body);
+            font-weight: var(--weight-semibold);
+            color: var(--white-100);
+            margin-bottom: 6px;
+        }
+
+        .session-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: var(--text-caption1);
+            color: var(--white-50);
+        }
+
+        .session-type, .session-duration, .session-score {
+            font-weight: var(--weight-medium);
+        }
+
+        .timeline-date {
+            position: absolute;
+            right: 0;
+            top: 18px;
+            font-size: var(--text-caption1);
+            color: var(--white-50);
+            font-weight: var(--weight-medium);
+        }
+
+        .view-all-btn {
+            background: var(--white-5);
+            border: 1px solid var(--white-10);
+            color: var(--white-70);
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: var(--text-body);
+            font-weight: var(--weight-medium);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .view-all-btn:hover {
+            background: var(--white-10);
+            color: var(--white-100);
+            border-color: var(--accent-cyan-border);
+        }
+
+        .chart-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            font-size: var(--text-caption2);
+            color: var(--white-30);
+            font-weight: var(--weight-medium);
+        }
+
+        /* ========== Metric Cards Grid ========== */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .metric-card {
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            min-height: 120px;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-cyan), #0891B2);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .metric-card:hover::before {
+            opacity: 1;
+        }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .metric-title {
+            font-size: var(--text-caption1);
+            color: var(--white-50);
+            font-weight: var(--weight-medium);
+        }
+
+        .metric-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--accent-cyan-subtle);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-cyan);
+        }
+
+        .metric-icon i {
+            font-size: 16px;
+        }
+
+        .metric-value {
+            font-size: var(--text-title1);
+            font-weight: var(--weight-bold);
+            margin-bottom: 6px;
+            color: var(--white-100);
+        }
+
+        .metric-change {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: var(--text-caption2);
+            font-weight: var(--weight-medium);
+        }
+
+        .metric-change.positive {
+            color: var(--indicator-success);
+        }
+
+        .metric-change.negative {
+            color: var(--indicator-error);
+        }
+
+        .metric-change.neutral {
+            color: var(--white-50);
+        }
+
+        /* ========== Recent Sessions ========== */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: var(--white-1);
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .activity-item:hover {
+            background: var(--white-2);
+        }
+
+        .activity-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-cyan-subtle);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--accent-cyan);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: var(--weight-medium);
+            margin-bottom: 4px;
+            color: var(--white-100);
+            font-size: var(--text-subheadline);
+        }
+
+        .activity-description {
+            font-size: var(--text-footnote);
+            color: var(--white-50);
+        }
+
+        .activity-time {
+            font-size: var(--text-caption1);
+            color: var(--white-30);
+        }
+
+        /* ========== Mobile Responsive ========== */
+        @media (max-width: 768px) {
+            .nav-items {
+                display: none;
+            }
+
+            .grade-badge {
+                display: none;
+            }
+
+            .container {
+                padding: 16px;
+            }
+
+            .welcome-message {
+                font-size: var(--text-title2);
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .main-chart-section {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .chart-actions-panel {
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 12px;
+                gap: 8px;
+            }
+
+            .chart-action-btn {
+                min-width: 100px;
+                min-height: auto;
+                padding: 12px;
+            }
+
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .metric-value {
+                font-size: var(--text-title3);
+            }
+
+            .combo-chart {
+                height: 200px;
+            }
+
+            .chart-card {
+                padding: 20px;
+            }
+
+            /* Mobile Bottom Nav */
+            .mobile-nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(20px);
+                border-top: 1px solid var(--white-10);
+                display: flex;
+                justify-content: space-around;
+                padding: 8px 0;
+                z-index: 100;
+            }
+
+            .mobile-nav-item {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 8px;
+                color: var(--white-50);
+                text-decoration: none;
+                transition: all 0.2s;
+            }
+
+            .mobile-nav-item.active {
+                color: var(--accent-cyan);
+            }
+
+            .mobile-nav-icon {
+                font-size: 20px;
+                margin-bottom: 4px;
+            }
+
+            .mobile-nav-label {
+                font-size: var(--text-caption2);
+                font-weight: var(--weight-medium);
+            }
+
+            body {
+                padding-bottom: 70px;
+            }
+        }
+
+        /* Tablet */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .metrics-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Large Desktop */
+        @media (min-width: 1440px) {
+            .metrics-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating Action Button */
+        .fab {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            right: 16px;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--accent-cyan), #0891B2);
+            border-radius: 50%;
+            box-shadow: 0 4px 16px rgba(6, 182, 212, 0.4);
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 99;
+            transition: all 0.3s;
+            color: var(--black-95);
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 24px rgba(6, 182, 212, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .fab {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="logo">
+            <div class="logo-icon">P</div>
+            <span>PingLearn</span>
+        </div>
+
+        <!-- Desktop Nav Items -->
+        <div class="nav-items">
+            <a href="#" class="nav-item active">Dashboard</a>
+            <a href="#" class="nav-item">Textbooks</a>
+            <a href="#" class="nav-item">Classroom</a>
+            <a href="#" class="nav-item">Sessions</a>
+            <a href="#" class="nav-item">Notes</a>
+            <a href="#" class="nav-item">Help</a>
+        </div>
+
+        <div class="user-menu">
+            <div class="grade-badge">
+                <i class="ph-duotone ph-graduation-cap"></i>
+                <span>Grade 10</span>
+            </div>
+            <div class="avatar">UM</div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <h1 class="welcome-message">
+                Welcome back, Uma!
+                <span class="streak-badge">
+                    <i class="ph-fill ph-flame"></i>
+                    7-day streak
+                </span>
+            </h1>
+            <p class="subtitle">Keep up the excellent progress!</p>
+        </div>
+
+        <!-- Dashboard Tabs -->
+        <div class="tabs-container">
+            <button class="tab active" onclick="switchTab('overview')">
+                <i data-lucide="bar-chart-2" style="width: 16px; height: 16px;"></i>
+                Overview
+            </button>
+            <button class="tab" onclick="switchTab('progress')">
+                <i data-lucide="trending-up" style="width: 16px; height: 16px;"></i>
+                Progress
+            </button>
+            <button class="tab" onclick="switchTab('analytics')">
+                <i class="ph ph-chart-line-up"></i>
+                Analytics
+            </button>
+            <button class="tab" onclick="switchTab('activity')">
+                <i data-lucide="activity" style="width: 16px; height: 16px;"></i>
+                Activity
+            </button>
+        </div>
+
+        <!-- Tab Content: Overview -->
+        <div id="overview" class="tab-content active">
+            <!-- Main Chart Section with 80/20 Split -->
+            <div class="main-chart-section">
+                <div class="liquid-glass chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Your Study Progress</h3>
+                        <div class="chart-period">
+                            <button class="period-btn">Daily</button>
+                            <button class="period-btn active">Weekly</button>
+                            <button class="period-btn">Monthly</button>
+                        </div>
+                    </div>
+
+                    <!-- Combo Chart (Bars + Line) -->
+                    <div class="combo-chart">
+                        <svg viewBox="0 0 800 280" preserveAspectRatio="none">
+                            <defs>
+                                <linearGradient id="barGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:rgba(255, 255, 255, 0.15);stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:rgba(255, 255, 255, 0.05);stop-opacity:1" />
+                                </linearGradient>
+                                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#06B6D4;stop-opacity:0.3" />
+                                    <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:0" />
+                                </linearGradient>
+                            </defs>
+
+                            <!-- Grid Lines -->
+                            <g class="chart-grid">
+                                <line x1="0" y1="60" x2="800" y2="60" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+                                <line x1="0" y1="120" x2="800" y2="120" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+                                <line x1="0" y1="180" x2="800" y2="180" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+                                <line x1="0" y1="240" x2="800" y2="240" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+                            </g>
+
+                            <!-- Study Sessions Bars (Left Y-axis: 0-4 sessions) -->
+                            <!-- Mon: 2 sessions -->
+                            <rect class="chart-bar" x="50" y="120" width="40" height="120" fill="url(#barGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="4" />
+                            <!-- Tue: 1 session -->
+                            <rect class="chart-bar" x="150" y="180" width="40" height="60" fill="url(#barGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="4" />
+                            <!-- Wed: 3 sessions -->
+                            <rect class="chart-bar" x="250" y="60" width="40" height="180" fill="url(#barGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="4" />
+                            <!-- Thu: 2 sessions -->
+                            <rect class="chart-bar" x="350" y="120" width="40" height="120" fill="url(#barGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="4" />
+                            <!-- Fri: 1 session -->
+                            <rect class="chart-bar" x="450" y="180" width="40" height="60" fill="url(#barGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="4" />
+                            <!-- Sat: 2 sessions -->
+                            <rect class="chart-bar" x="550" y="120" width="40" height="120" fill="url(#barGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="4" />
+                            <!-- Sun: 3 sessions -->
+                            <rect class="chart-bar" x="650" y="60" width="40" height="180" fill="url(#barGradient)" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="4" />
+
+                            <!-- Topics Mastered Line (Right Y-axis: 10-30 topics, cumulative) -->
+                            <!-- Area under line -->
+                            <path class="chart-line-area" d="M70,220 L170,210 L270,170 L370,140 L470,120 L570,100 L670,70 L670,240 L70,240 Z" fill="url(#lineGradient)" opacity="0.3" />
+
+                            <!-- Topics Mastered Line -->
+                            <path class="chart-line" d="M70,220 L170,210 L270,170 L370,140 L470,120 L570,100 L670,70" fill="none" stroke="#06B6D4" stroke-width="3" />
+
+                            <!-- Data Points on Line (Topics Mastered) -->
+                            <circle class="chart-dot-line" cx="70" cy="220" r="4" fill="#06B6D4" stroke="#000" stroke-width="2" />   <!-- 12 topics -->
+                            <circle class="chart-dot-line" cx="170" cy="210" r="4" fill="#06B6D4" stroke="#000" stroke-width="2" />  <!-- 14 topics -->
+                            <circle class="chart-dot-line" cx="270" cy="170" r="5" fill="#06B6D4" stroke="#000" stroke-width="2" />  <!-- 18 topics -->
+                            <circle class="chart-dot-line" cx="370" cy="140" r="4" fill="#06B6D4" stroke="#000" stroke-width="2" />  <!-- 21 topics -->
+                            <circle class="chart-dot-line" cx="470" cy="120" r="4" fill="#06B6D4" stroke="#000" stroke-width="2" />  <!-- 23 topics -->
+                            <circle class="chart-dot-line" cx="570" cy="100" r="4" fill="#06B6D4" stroke="#000" stroke-width="2" />  <!-- 26 topics -->
+                            <circle class="chart-dot-line" cx="670" cy="70" r="5" fill="#06B6D4" stroke="#000" stroke-width="2" />   <!-- 30 topics -->
+                        </svg>
+
+                        <!-- Chart Legend -->
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <div class="legend-bar"></div>
+                                <span>Study Sessions</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-line"></div>
+                                <span>Topics Mastered</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-labels">
+                        <span>Mon</span>
+                        <span>Tue</span>
+                        <span>Wed</span>
+                        <span>Thu</span>
+                        <span>Fri</span>
+                        <span>Sat</span>
+                        <span>Sun</span>
+                    </div>
+                </div>
+
+                <!-- Quick Actions Panel - Right Side -->
+                <div class="liquid-glass chart-actions-panel">
+                    <h3 class="actions-title">Quick Actions</h3>
+                    <button class="chart-action-btn">
+                        <div class="chart-action-icon">
+                            <i data-lucide="mic" style="width: 16px; height: 16px;"></i>
+                        </div>
+                        <div class="chart-action-label">Start Session</div>
+                        <div class="chart-action-desc">Voice Learning</div>
+                    </button>
+                    <button class="chart-action-btn">
+                        <div class="chart-action-icon">
+                            <i data-lucide="upload" style="width: 16px; height: 16px;"></i>
+                        </div>
+                        <div class="chart-action-label">Upload</div>
+                        <div class="chart-action-desc">Add Textbook</div>
+                    </button>
+                    <button class="chart-action-btn">
+                        <div class="chart-action-icon">
+                            <i class="ph-duotone ph-pen-nib"></i>
+                        </div>
+                        <div class="chart-action-label">Practice</div>
+                        <div class="chart-action-desc">Take Test</div>
+                    </button>
+                    <button class="chart-action-btn">
+                        <div class="chart-action-icon">
+                            <i data-lucide="compass" style="width: 16px; height: 16px;"></i>
+                        </div>
+                        <div class="chart-action-label">Browse</div>
+                        <div class="chart-action-desc">Curriculum</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Metrics Grid - 8 Cards -->
+            <div class="metrics-grid">
+                <div class="glass-card metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Study Sessions</div>
+                        <div class="metric-icon">
+                            <i data-lucide="clock" style="width: 16px; height: 16px;"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">24</div>
+                    <div class="metric-change positive">
+                        <i data-lucide="arrow-up" style="width: 12px; height: 12px;"></i>
+                        12% from last week
+                    </div>
+                </div>
+
+                <div class="glass-card metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Topics Mastered</div>
+                        <div class="metric-icon">
+                            <i class="ph-duotone ph-graduation-cap"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">18</div>
+                    <div class="metric-change positive">
+                        <i data-lucide="arrow-up" style="width: 12px; height: 12px;"></i>
+                        3 new this week
+                    </div>
+                </div>
+
+                <div class="glass-card metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Voice Minutes</div>
+                        <div class="metric-icon">
+                            <i class="ph ph-waveform"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">156</div>
+                    <div class="metric-change positive">
+                        <i data-lucide="arrow-up" style="width: 12px; height: 12px;"></i>
+                        28% increase
+                    </div>
+                </div>
+
+                <div class="glass-card metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Math Problems</div>
+                        <div class="metric-icon">
+                            <i class="ph ph-function"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">342</div>
+                    <div class="metric-change positive">
+                        <i data-lucide="arrow-up" style="width: 12px; height: 12px;"></i>
+                        95% accuracy
+                    </div>
+                </div>
+
+                <div class="glass-card metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Textbooks</div>
+                        <div class="metric-icon">
+                            <i class="ph-duotone ph-book-open"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">5</div>
+                    <div class="metric-change neutral">
+                        2 in progress
+                    </div>
+                </div>
+
+                <div class="glass-card metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Achievements</div>
+                        <div class="metric-icon">
+                            <i class="ph-fill ph-trophy"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">12</div>
+                    <div class="metric-change positive">
+                        <i data-lucide="arrow-up" style="width: 12px; height: 12px;"></i>
+                        2 new badges
+                    </div>
+                </div>
+
+                <div class="glass-card metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Study Streak</div>
+                        <div class="metric-icon">
+                            <i class="ph-duotone ph-flame"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">7</div>
+                    <div class="metric-change positive">
+                        <i data-lucide="zap" style="width: 12px; height: 12px;"></i>
+                        Keep it going!
+                    </div>
+                </div>
+
+                <div class="glass-card metric-card circular-progress-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Weekly Goal</div>
+                        <div class="metric-icon">
+                            <i data-lucide="target" style="width: 16px; height: 16px;"></i>
+                        </div>
+                    </div>
+
+                    <!-- Circular Progress Chart -->
+                    <div class="circular-progress-container">
+                        <svg class="circular-progress" viewBox="0 0 120 120" width="80" height="80">
+                            <defs>
+                                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#06B6D4;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#0891B2;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <!-- Background circle -->
+                            <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="8"/>
+                            <!-- Progress circle (87% completion) -->
+                            <circle class="progress-ring" cx="60" cy="60" r="50" fill="none" stroke="url(#progressGradient)" stroke-width="8"
+                                    stroke-linecap="round" transform="rotate(-90 60 60)"
+                                    stroke-dasharray="314" stroke-dashoffset="41"/>
+                            <!-- Center text -->
+                            <text x="60" y="65" text-anchor="middle" class="progress-percentage">87%</text>
+                        </svg>
+                        <div class="progress-label">28/32 Topics</div>
+                    </div>
+
+                    <div class="metric-change positive">
+                        <i data-lucide="zap" style="width: 12px; height: 12px;"></i>
+                        4 topics to go!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Sessions Section - Timeline Style -->
+            <div class="glass-card" style="margin-bottom: 32px;">
+                <h3 style="margin-bottom: 20px;" class="text-title2">Recent Sessions</h3>
+
+                <!-- Timeline Container -->
+                <div class="session-timeline">
+                    <!-- Timeline Line -->
+                    <div class="timeline-line"></div>
+
+                    <!-- Session Items -->
+                    <div class="timeline-item" onclick="playSession('session-1')">
+                        <div class="timeline-time">14:30</div>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="session-badge math-badge">Mathematics</div>
+                            <div class="session-title">Triangles & Similarity</div>
+                            <div class="session-details">
+                                <span class="session-type">🎤 Voice Session</span>
+                                <span class="session-duration">45 min</span>
+                                <span class="session-score">92% accuracy</span>
+                            </div>
+                        </div>
+                        <div class="timeline-date">Today</div>
+                    </div>
+
+                    <div class="timeline-item" onclick="playSession('session-2')">
+                        <div class="timeline-time">09:15</div>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="session-badge math-badge">Mathematics</div>
+                            <div class="session-title">Statistics Overview</div>
+                            <div class="session-details">
+                                <span class="session-type">📝 Practice</span>
+                                <span class="session-duration">30 min</span>
+                                <span class="session-score">15 problems solved</span>
+                            </div>
+                        </div>
+                        <div class="timeline-date">Today</div>
+                    </div>
+
+                    <div class="timeline-item" onclick="playSession('session-3')">
+                        <div class="timeline-time">16:20</div>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="session-badge physics-badge">Physics</div>
+                            <div class="session-title">Motion & Velocity</div>
+                            <div class="session-details">
+                                <span class="session-type">🎤 Voice Session</span>
+                                <span class="session-duration">38 min</span>
+                                <span class="session-score">85% completion</span>
+                            </div>
+                        </div>
+                        <div class="timeline-date">Yesterday</div>
+                    </div>
+
+                    <div class="timeline-item" onclick="playSession('session-4')">
+                        <div class="timeline-time">11:45</div>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="session-badge math-badge">Mathematics</div>
+                            <div class="session-title">Quadratic Equations</div>
+                            <div class="session-details">
+                                <span class="session-type">📖 Review</span>
+                                <span class="session-duration">25 min</span>
+                                <span class="session-score">Chapter 4 completed</span>
+                            </div>
+                        </div>
+                        <div class="timeline-date">Yesterday</div>
+                    </div>
+
+                    <div class="timeline-item" onclick="playSession('session-5')">
+                        <div class="timeline-time">14:10</div>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="session-badge chemistry-badge">Chemistry</div>
+                            <div class="session-title">Chemical Reactions</div>
+                            <div class="session-details">
+                                <span class="session-type">🎤 Voice Session</span>
+                                <span class="session-duration">42 min</span>
+                                <span class="session-score">18 concepts learned</span>
+                            </div>
+                        </div>
+                        <div class="timeline-date">2 days ago</div>
+                    </div>
+                </div>
+
+                <!-- View All Sessions Button -->
+                <div style="text-align: center; margin-top: 24px;">
+                    <button class="view-all-btn">
+                        <span>View All Sessions</span>
+                        <i data-lucide="arrow-right" style="width: 14px; height: 14px; margin-left: 8px;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Other tab contents remain hidden for wireframe -->
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="mobile-nav" style="display: none;">
+        <a href="#" class="mobile-nav-item active">
+            <div class="mobile-nav-icon">
+                <i data-lucide="home" style="width: 20px; height: 20px;"></i>
+            </div>
+            <div class="mobile-nav-label">Home</div>
+        </a>
+        <a href="#" class="mobile-nav-item">
+            <div class="mobile-nav-icon">
+                <i class="ph ph-book-open"></i>
+            </div>
+            <div class="mobile-nav-label">Textbooks</div>
+        </a>
+        <a href="#" class="mobile-nav-item">
+            <div class="mobile-nav-icon">
+                <i class="ph ph-student"></i>
+            </div>
+            <div class="mobile-nav-label">Learn</div>
+        </a>
+        <a href="#" class="mobile-nav-item">
+            <div class="mobile-nav-icon">
+                <i data-lucide="file-text" style="width: 20px; height: 20px;"></i>
+            </div>
+            <div class="mobile-nav-label">Notes</div>
+        </a>
+        <a href="#" class="mobile-nav-item">
+            <div class="mobile-nav-icon">
+                <i data-lucide="user" style="width: 20px; height: 20px;"></i>
+            </div>
+            <div class="mobile-nav-label">Profile</div>
+        </a>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="fab">
+        <i data-lucide="mic" style="width: 24px; height: 24px;"></i>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked tab
+            event.target.closest('.tab').classList.add('active');
+        }
+
+        // Responsive handling
+        function handleResponsive() {
+            const isMobile = window.innerWidth < 768;
+            const mobileNav = document.querySelector('.mobile-nav');
+            const gradeBadge = document.querySelector('.grade-badge');
+
+            if (isMobile) {
+                mobileNav.style.display = 'flex';
+                if (gradeBadge) gradeBadge.style.display = 'none';
+            } else {
+                mobileNav.style.display = 'none';
+                if (gradeBadge) gradeBadge.style.display = 'flex';
+            }
+        }
+
+        // Initialize
+        window.addEventListener('resize', handleResponsive);
+        handleResponsive();
+
+        // Animate chart on load
+        window.addEventListener('load', () => {
+            // Animate combo chart elements
+            const chartBars = document.querySelectorAll('.chart-bar');
+            const chartLine = document.querySelector('.chart-line');
+            const chartLineArea = document.querySelector('.chart-line-area');
+            const chartDots = document.querySelectorAll('.chart-dot-line');
+
+            // Animate bars with staggered timing
+            chartBars.forEach((bar, index) => {
+                bar.style.transform = 'scaleY(0)';
+                bar.style.transformOrigin = 'bottom';
+                bar.style.animation = `growBar 0.8s ease-out ${index * 0.1}s forwards`;
+            });
+
+            // Animate line
+            if (chartLine) {
+                chartLine.style.strokeDasharray = '1000';
+                chartLine.style.strokeDashoffset = '1000';
+                chartLine.style.animation = 'drawLine 2s ease-out 0.5s forwards';
+            }
+
+            // Animate line area
+            if (chartLineArea) {
+                chartLineArea.style.opacity = '0';
+                chartLineArea.style.animation = 'fadeInArea 2s ease-out 1s forwards';
+            }
+
+            // Animate dots with staggered timing
+            chartDots.forEach((dot, index) => {
+                dot.style.transform = 'scale(0)';
+                dot.style.animation = `popIn 0.3s ease-out ${1.5 + index * 0.1}s forwards`;
+            });
+
+            // Animate circular progress
+            const progressRing = document.querySelector('.progress-ring');
+            if (progressRing) {
+                progressRing.style.strokeDashoffset = '314'; // Full circle
+                setTimeout(() => {
+                    progressRing.style.strokeDashoffset = '41'; // 87% progress
+                }, 1000);
+            }
+
+            // Animate timeline items
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            timelineItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                item.style.animation = `slideInTimeline 0.5s ease-out ${2 + index * 0.1}s forwards`;
+            });
+        });
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes drawLine {
+                to {
+                    stroke-dashoffset: 0;
+                }
+            }
+            @keyframes fadeInArea {
+                to {
+                    opacity: 0.2;
+                }
+            }
+            @keyframes growBar {
+                to {
+                    transform: scaleY(1);
+                }
+            }
+            @keyframes popIn {
+                to {
+                    transform: scale(1);
+                }
+            }
+            @keyframes slideInTimeline {
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Period button switching
+        document.querySelectorAll('.period-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Session playback functionality
+        function playSession(sessionId) {
+            // Animate the clicked timeline item
+            const clickedItem = event.currentTarget;
+            clickedItem.style.background = 'rgba(6, 182, 212, 0.1)';
+            clickedItem.style.transform = 'translateX(12px) scale(1.02)';
+
+            // Show loading indicator
+            const badge = clickedItem.querySelector('.session-badge');
+            const originalBadgeText = badge.textContent;
+            badge.textContent = '▶ Loading...';
+            badge.style.background = 'rgba(6, 182, 212, 0.2)';
+
+            // Simulate session loading
+            setTimeout(() => {
+                alert(`🎬 Opening ${sessionId} recording...\n\nThis would navigate to the session playback page with:\n• Full audio/video recording\n• Synchronized transcript\n• Interactive notes and highlights\n• Progress tracking`);
+
+                // Reset styling
+                clickedItem.style.background = '';
+                clickedItem.style.transform = '';
+                badge.textContent = originalBadgeText;
+                badge.style.background = '';
+            }, 1000);
+        }
+
+        // Add click animations to other interactive elements
+        document.querySelectorAll('.glass-card, .metric-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+            });
+        });
+    </script>
+</body>
+</html>
