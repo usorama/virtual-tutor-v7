@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import "../styles/katex.css";
 import "../styles/marketing.css";
+import "../styles/glass-morphism.css";
 import { AuthProvider } from '@/lib/auth/auth-provider';
 import Navigation from '@/components/marketing/sections/Navigation';
 import { ThemeProvider } from '@/contexts/ThemeContext';

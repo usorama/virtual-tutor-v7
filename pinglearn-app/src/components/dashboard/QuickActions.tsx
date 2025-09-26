@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Mic, Upload, PenTool, Compass } from 'lucide-react'
+import { Mic, Upload, PenTool, Compass, Settings } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 
 interface QuickAction {
@@ -18,37 +18,44 @@ const quickActions: QuickAction[] = [
     id: 'voice-session',
     label: 'Start Session',
     description: 'Voice Learning',
-    icon: <Mic className="h-4 w-4" />,
+    icon: <Mic className="h-6 w-6" />,
     href: '/classroom',
     primary: true
-  },
-  {
-    id: 'upload',
-    label: 'Upload',
-    description: 'Add Textbook',
-    icon: <Upload className="h-4 w-4" />,
-    href: '/textbooks'
   },
   {
     id: 'practice',
     label: 'Practice',
     description: 'Take Test',
-    icon: <PenTool className="h-4 w-4" />,
+    icon: <PenTool className="h-6 w-6" />,
     href: '/practice'
+  },
+  {
+    id: 'preferences',
+    label: 'Preferences',
+    description: 'Settings & Profile',
+    icon: <Settings className="h-6 w-6" />,
+    href: '/wizard'
   },
   {
     id: 'explore',
     label: 'Explore',
     description: 'Browse Topics',
-    icon: <Compass className="h-4 w-4" />,
+    icon: <Compass className="h-6 w-6" />,
     href: '/explore'
+  },
+  {
+    id: 'upload',
+    label: 'Upload',
+    description: 'Add Textbook',
+    icon: <Upload className="h-6 w-6" />,
+    href: '/textbooks'
   }
 ]
 
 export function QuickActions({ className }: { className?: string }) {
   return (
     <Card
-      className={`p-6 overflow-hidden ${className}`}
+      className={`p-6 overflow-hidden flex flex-col h-full ${className}`}
       style={{
         backgroundColor: 'rgba(255, 255, 255, 0.03)',
         backdropFilter: 'blur(10px)',
@@ -63,35 +70,48 @@ export function QuickActions({ className }: { className?: string }) {
         borderRadius: '32px'
       }}
     >
-      <h3 className="text-title1 font-heavy text-white-100 mb-6">Quick Actions</h3>
+      <h3 className="text-title2 font-bold text-accent mb-6">Quick Actions</h3>
 
-      <div className="space-y-3">
+      <div className="flex-1 flex flex-col justify-between space-y-3">
         {quickActions.map((action) => (
           <Link key={action.id} href={action.href}>
             <button
-              className={`w-full flex items-center gap-3 p-4 rounded-2xl transition-all duration-300 text-left group ${
+              className={`w-full flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 text-left group ${
                 action.primary
-                  ? 'bg-white-20 text-white-100 hover:bg-white-25 hover:transform hover:scale-105'
-                  : 'bg-white-5 text-white-100 hover:bg-white-10 hover:transform hover:translateX(2px)'
+                  ? 'text-white-100 hover:transform hover:scale-102'
+                  : 'text-white-100 hover:transform hover:translateX(1px)'
               }`}
               style={{
-                backdropFilter: 'blur(5px)',
-                WebkitBackdropFilter: 'blur(5px)',
-                border: '1px solid rgba(255, 255, 255, 0.05)',
-                boxShadow: 'inset -2px -2px 6px rgba(128,128,128,0.95)'
+                backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                backdropFilter: 'blur(1px)',
+                WebkitBackdropFilter: 'blur(1px)',
+                border: '1px solid rgba(255, 255, 255, 0.06)'
               }}
             >
-              {/* Icon */}
-              <div className={`flex-shrink-0 ${action.primary ? 'text-white-100' : 'text-white-70 group-hover:text-white-100'}`}>
-                {action.icon}
+              {/* Icon with glass effect cyan circle */}
+              <div
+                className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center relative overflow-hidden"
+                style={{
+                  background: 'rgba(6, 182, 212, 0.7)',
+                  boxShadow: `
+                    inset 2px 2px 4px rgba(255, 255, 255, 0.25),
+                    inset -2px -2px 4px rgba(0, 0, 0, 0.3),
+                    0 2px 8px rgba(6, 182, 212, 0.3)
+                  `,
+                  border: '1px solid rgba(255, 255, 255, 0.1)'
+                }}
+              >
+                <div className="text-white-100">
+                  {action.icon}
+                </div>
               </div>
 
               {/* Content */}
               <div className="flex-1 min-w-0">
-                <div className={`font-semibold text-sm ${action.primary ? 'text-white-100' : 'text-white-100'}`}>
+                <div className="font-bold text-base text-white-100">
                   {action.label}
                 </div>
-                <div className={`text-xs ${action.primary ? 'text-white-85' : 'text-white-50'}`}>
+                <div className="text-sm text-white-50 mt-0.5">
                   {action.description}
                 </div>
               </div>

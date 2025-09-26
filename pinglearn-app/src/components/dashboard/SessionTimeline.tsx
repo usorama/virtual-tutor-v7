@@ -99,7 +99,7 @@ export function SessionTimeline({ sessions, onSessionClick, className }: Session
         borderRadius: '32px'
       }}
     >
-      <h3 className="text-title2 font-bold text-white-100 mb-6">Recent Sessions</h3>
+      <h3 className="text-title2 font-bold text-accent-cyan mb-6">Recent Sessions</h3>
 
       {/* Timeline Container */}
       <div ref={timelineRef} className="relative pl-14">

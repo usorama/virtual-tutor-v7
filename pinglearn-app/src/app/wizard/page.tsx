@@ -245,7 +245,7 @@ export default function WizardPage() {
                       borderLeft: '1px solid rgba(255, 255, 255, 0.08)',
                       borderRight: '1px solid rgba(255, 255, 255, 0.08)',
                       borderBottom: 'none',
-                      backgroundColor: 'rgba(20, 20, 22, 0.6)',
+                      backgroundColor: 'rgba(6, 182, 212, 0.05)',
                       backdropFilter: 'blur(20px)',
                       WebkitBackdropFilter: 'blur(20px)',
                       marginBottom: '-2px',
@@ -399,7 +399,7 @@ export default function WizardPage() {
                   style={{
                     left: `${(state.currentStep * 100) / WIZARD_STEP_NAMES.length}%`,
                     width: `${100 / WIZARD_STEP_NAMES.length}%`,
-                    backgroundColor: 'rgba(20, 20, 22, 0.6)',
+                    backgroundColor: 'rgba(6, 182, 212, 0.05)',
                     top: 0
                   }}
                 />

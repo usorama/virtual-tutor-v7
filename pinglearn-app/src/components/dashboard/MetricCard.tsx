@@ -71,9 +71,20 @@ export function MetricCard({ title, value, change, icon, className, hasGradient 
           filter: 'blur(20px)'
         }}
       />
-      {/* Icon positioned top-right with cyan circle */}
-      <div className="absolute top-5 right-5 w-10 h-10 rounded-full bg-accent-cyan flex items-center justify-center">
-        <div className="text-black-100">
+      {/* Icon positioned top-right with glass effect cyan circle - increased size */}
+      <div
+        className="absolute top-5 right-5 w-14 h-14 rounded-full flex items-center justify-center relative overflow-hidden"
+        style={{
+          background: 'rgba(6, 182, 212, 0.7)',
+          boxShadow: `
+            inset 2px 2px 4px rgba(255, 255, 255, 0.25),
+            inset -2px -2px 4px rgba(0, 0, 0, 0.3),
+            0 2px 8px rgba(6, 182, 212, 0.3)
+          `,
+          border: '1px solid rgba(255, 255, 255, 0.1)'
+        }}
+      >
+        <div className="text-white-100">
           {icon}
         </div>
       </div>
@@ -84,7 +95,7 @@ export function MetricCard({ title, value, change, icon, className, hasGradient 
       </div>
 
       {/* Value - Large and prominent */}
-      <div className="text-5xl font-heavy text-accent-cyan mb-2">
+      <div className="text-5xl font-heavy text-accent mb-2">
         {typeof value === 'number' ? value.toLocaleString() : value}
       </div>
 

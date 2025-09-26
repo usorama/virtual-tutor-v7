@@ -43,6 +43,10 @@ const config: Config = {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          cyan: "#06B6D4",
+          "cyan-glow": "rgba(6, 182, 212, 0.5)",
+          "cyan-subtle": "rgba(6, 182, 212, 0.1)",
+          "cyan-border": "rgba(6, 182, 212, 0.2)",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -51,6 +55,28 @@ const config: Config = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        // Add custom colors from glass-morphism.css
+        black: {
+          100: "#000000",
+          95: "#0D0D0D",
+          90: "#1A1A1A",
+          85: "#262626",
+        },
+        white: {
+          100: "rgba(255, 255, 255, 1)",
+          85: "rgba(255, 255, 255, 0.85)",
+          70: "rgba(255, 255, 255, 0.7)",
+          50: "rgba(255, 255, 255, 0.5)",
+          30: "rgba(255, 255, 255, 0.3)",
+          25: "rgba(255, 255, 255, 0.25)",
+          20: "rgba(255, 255, 255, 0.20)",
+          15: "rgba(255, 255, 255, 0.15)",
+          10: "rgba(255, 255, 255, 0.1)",
+          5: "rgba(255, 255, 255, 0.05)",
+          3: "rgba(255, 255, 255, 0.03)",
+          2: "rgba(255, 255, 255, 0.02)",
+          1: "rgba(255, 255, 255, 0.01)",
         },
       },
       borderRadius: {

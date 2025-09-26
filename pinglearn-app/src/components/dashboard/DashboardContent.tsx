@@ -98,11 +98,11 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
     : 0
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Main Chart Section with Quick Actions */}
-      <div className="grid lg:grid-cols-5 gap-4">
-        {/* Combo Chart - 4 columns */}
-        <div className="lg:col-span-4">
+      <div className="grid lg:grid-cols-7 gap-4 items-stretch">
+        {/* Combo Chart - 5 columns (reduced from 4) */}
+        <div className="lg:col-span-5 flex">
           <ComboChart
             data={mockChartData}
             period={chartPeriod}
@@ -110,61 +110,61 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
           />
         </div>
 
-        {/* Quick Actions - 1 column */}
-        <div className="lg:col-span-1 h-full">
-          <QuickActions className="h-full flex flex-col" />
+        {/* Quick Actions - 2 columns (increased from 1) */}
+        <div className="lg:col-span-2 flex">
+          <QuickActions className="flex-1" />
         </div>
       </div>
 
       {/* Metric Cards Grid - 4x2 layout */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <MetricCard
           title="Study Sessions"
           value={14}
           change={{ value: '12%', trend: 'up', description: '12% from last week' }}
-          icon={<Clock className="h-4 w-4" />}
+          icon={<Clock className="h-6 w-6" />}
         />
 
         <MetricCard
           title="Topics Mastered"
           value={18}
           change={{ value: '3', trend: 'up', description: '3 new this week' }}
-          icon={<BookOpen className="h-4 w-4" />}
+          icon={<BookOpen className="h-6 w-6" />}
         />
 
         <MetricCard
           title="Voice Minutes"
           value={156}
           change={{ value: '28%', trend: 'up', description: '28% increase' }}
-          icon={<Mic className="h-4 w-4" />}
+          icon={<Mic className="h-6 w-6" />}
         />
 
         <MetricCard
           title="Math Problems"
           value={89}
           change={{ value: '15', trend: 'up', description: '15 solved today' }}
-          icon={<Activity className="h-4 w-4" />}
+          icon={<Activity className="h-6 w-6" />}
         />
 
         <MetricCard
           title="Textbooks"
           value={textbookCount}
           change={{ value: '2', trend: 'up', description: '2 added recently' }}
-          icon={<BookOpen className="h-4 w-4" />}
+          icon={<BookOpen className="h-6 w-6" />}
         />
 
         <MetricCard
           title="Achievements"
           value={7}
           change={{ value: '1', trend: 'up', description: '1 new badge earned' }}
-          icon={<Trophy className="h-4 w-4" />}
+          icon={<Trophy className="h-6 w-6" />}
         />
 
         <MetricCard
           title="Study Streak"
           value="5 days"
           change={{ value: 'ongoing', trend: 'up', description: 'Keep it going!' }}
-          icon={<Flame className="h-4 w-4" />}
+          icon={<Flame className="h-6 w-6" />}
         />
 
         {/* Weekly Goal Card - replacing circular progress */}
@@ -172,12 +172,12 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
           title="Weekly Goal"
           value="87%"
           change={{ value: '28/32', trend: 'up', description: '4 topics to go!' }}
-          icon={<Target className="h-4 w-4" />}
+          icon={<Target className="h-6 w-6" />}
         />
       </div>
 
       {/* Recent Sessions Timeline */}
-      <div className="grid lg:grid-cols-1 gap-4">
+      <div className="grid lg:grid-cols-1">
         <SessionTimeline
           sessions={mockSessions}
           onSessionClick={handleSessionClick}
@@ -196,9 +196,21 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
                  0 6px 20px -5px rgba(0, 0, 0, 0.15)
                `
              }}>
-          <div className="flex items-center gap-2 mb-4">
-            <Sparkles className="h-5 w-5 text-accent-cyan" />
-            <h3 className="text-title3 font-bold text-white-100">Your Learning Profile</h3>
+          <div className="flex items-center gap-3 mb-4">
+            <div
+              className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 relative overflow-hidden"
+              style={{
+                background: 'rgba(6, 182, 212, 0.7)',
+                boxShadow: `
+                  inset 2px 2px 4px rgba(255, 255, 255, 0.25),
+                  inset -2px -2px 4px rgba(0, 0, 0, 0.3),
+                  0 2px 8px rgba(6, 182, 212, 0.3)
+                `,
+                border: '1px solid rgba(255, 255, 255, 0.1)'
+              }}>
+              <Sparkles className="h-6 w-6 text-white-100" />
+            </div>
+            <h3 className="text-title3 font-bold text-accent">Your Learning Profile</h3>
           </div>
           <p className="text-white-70 mb-4">Your personalized curriculum preferences</p>
 
@@ -217,7 +229,12 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
                   {profile.preferred_subjects?.map((subject: string) => (
                     <div
                       key={subject}
-                      className="px-2 py-1 bg-accent-cyan-subtle border border-accent-cyan-border rounded-xl text-accent-cyan text-xs font-medium"
+                      className="px-2 py-1 rounded-xl text-xs font-medium"
+                      style={{
+                        backgroundColor: 'var(--accent-cyan-subtle)',
+                        border: '1px solid var(--accent-cyan-border)',
+                        color: 'var(--accent-cyan)'
+                      }}
                     >
                       {subject}
                     </div>
@@ -245,22 +262,22 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
                  0 8px 25px -6px rgba(0, 0, 0, 0.12)
                `
              }}>
-          <h3 className="text-title3 font-bold text-white-100 mb-4">Study Tips</h3>
+          <h3 className="text-title3 font-bold text-accent mb-4">Study Tips</h3>
           <div className="space-y-3">
             <div className="flex items-start gap-3">
-              <div className="w-2 h-2 bg-accent-cyan rounded-full mt-2 flex-shrink-0" />
+              <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: 'var(--accent-cyan)' }} />
               <p className="text-caption1 text-white-70">
                 Take short breaks every 25 minutes for better retention
               </p>
             </div>
             <div className="flex items-start gap-3">
-              <div className="w-2 h-2 bg-accent-cyan rounded-full mt-2 flex-shrink-0" />
+              <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: 'var(--accent-cyan)' }} />
               <p className="text-caption1 text-white-70">
                 Review previous topics before starting new ones
               </p>
             </div>
             <div className="flex items-start gap-3">
-              <div className="w-2 h-2 bg-accent-cyan rounded-full mt-2 flex-shrink-0" />
+              <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: 'var(--accent-cyan)' }} />
               <p className="text-caption1 text-white-70">
                 Practice voice sessions help improve understanding
               </p>

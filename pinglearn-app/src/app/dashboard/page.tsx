@@ -48,7 +48,7 @@ export default async function DashboardPage() {
             {/* Header */}
             <header className="flex justify-between items-center mb-8">
               <div>
-                <h1 className="text-title1 font-heavy text-white-100">Welcome Back!</h1>
+                <h1 className="text-title1 font-heavy text-accent">Welcome Back!</h1>
                 <div className="flex items-center gap-4 mt-2">
                   <p className="text-white-70">{user.email}</p>
                   {profile?.grade && (

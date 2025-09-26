@@ -58,7 +58,7 @@ export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
 
   return (
     <Card
-      className="p-6 overflow-hidden"
+      className="p-6 overflow-hidden flex flex-col h-full"
       style={{
         backgroundColor: 'rgba(255, 255, 255, 0.03)',
         backdropFilter: 'blur(10px)',
@@ -75,7 +75,7 @@ export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
     >
       {/* Chart Header */}
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-title1 font-heavy text-accent-cyan">Your Study Progress</h3>
+        <h3 className="text-title1 font-heavy text-accent">Your Study Progress</h3>
         <div className="flex gap-2">
           {(['daily', 'weekly', 'monthly'] as const).map((p) => (
             <button
@@ -83,9 +83,10 @@ export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
               onClick={() => onPeriodChange(p)}
               className={`px-3 py-1.5 rounded-2xl text-sm font-medium transition-all duration-300 ${
                 period === p
-                  ? 'bg-accent-cyan text-black-100'
+                  ? 'text-black-100'
                   : 'text-white-70 hover:text-white-100 hover:bg-white-5'
               }`}
+              style={period === p ? { backgroundColor: 'var(--accent-cyan)' } : {}}
             >
               {p.charAt(0).toUpperCase() + p.slice(1)}
             </button>
@@ -94,8 +95,8 @@ export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
       </div>
 
       {/* Combo Chart */}
-      <div ref={chartRef} className="relative h-80 mb-4">
-        <svg viewBox="0 0 800 280" className="w-full h-full">
+      <div ref={chartRef} className="relative h-80">
+        <svg viewBox="0 0 800 320" className="w-full h-full">
           <defs>
             <linearGradient id="barGradient" x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" style={{ stopColor: 'rgba(160, 160, 160, 0.4)', stopOpacity: 1 }} />
@@ -119,9 +120,9 @@ export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
                 key={`bar-${index}`}
                 className="chart-bar"
                 x={barX - 20}  // Center the bar (width is 40, so subtract half)
-                y={240 - (value * 60)} // Scale bars based on value
+                y={280 - (value * 70)} // Scale bars based on value
                 width="40"
-                height={value * 60}
+                height={value * 70}
                 fill="url(#barGradient)"
                 rx="4"
               />
@@ -131,10 +132,10 @@ export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
           {/* Topics Mastered Line Area */}
           <path
             className="chart-line-area"
-            d={`M50,${240 - data.topicsMastered[0] * 4} ${data.topicsMastered.map((value, index) => {
+            d={`M50,${280 - data.topicsMastered[0] * 5} ${data.topicsMastered.map((value, index) => {
               const spacing = 700 / (data.topicsMastered.length - 1)
-              return `L${50 + index * spacing},${240 - value * 4}`
-            }).join(' ')} L${50 + (data.topicsMastered.length - 1) * 700 / (data.topicsMastered.length - 1)},240 L50,240 Z`}
+              return `L${50 + index * spacing},${280 - value * 5}`
+            }).join(' ')} L${50 + (data.topicsMastered.length - 1) * 700 / (data.topicsMastered.length - 1)},280 L50,280 Z`}
             fill="url(#lineGradient)"
             opacity="0.3"
           />
@@ -142,9 +143,9 @@ export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
           {/* Topics Mastered Line */}
           <path
             className="chart-line"
-            d={`M50,${240 - data.topicsMastered[0] * 4} ${data.topicsMastered.map((value, index) => {
+            d={`M50,${280 - data.topicsMastered[0] * 5} ${data.topicsMastered.map((value, index) => {
               const spacing = 700 / (data.topicsMastered.length - 1)
-              return `L${50 + index * spacing},${240 - value * 4}`
+              return `L${50 + index * spacing},${280 - value * 5}`
             }).join(' ')}`}
             fill="none"
             stroke="#06B6D4"
@@ -160,7 +161,7 @@ export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
                 key={`dot-${index}`}
                 className="chart-dot-line"
                 cx={50 + index * spacing}
-                cy={240 - value * 4}
+                cy={280 - value * 5}
                 r="4"
                 fill="#06B6D4"
                 stroke="#000"
@@ -172,13 +173,27 @@ export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
         </svg>
       </div>
 
-      {/* Chart Labels */}
-      <div className="flex justify-between mb-6">
-        {data.labels.map((label) => (
-          <span key={label} className="text-caption1 text-white-50 font-medium flex-1 text-center">
-            {label}
-          </span>
-        ))}
+      {/* Chart Labels - properly aligned under data points */}
+      <div className="relative h-6 mb-6">
+        {data.labels.map((label, index) => {
+          // Calculate exact x position to match chart data points
+          const totalWidth = 700
+          const spacing = totalWidth / (data.labels.length - 1)
+          const leftPosition = (50 + index * spacing) / 8 // Convert SVG units to percentage
+
+          return (
+            <span
+              key={label}
+              className="absolute text-caption1 text-white-50 font-medium"
+              style={{
+                left: `${leftPosition}%`,
+                transform: 'translateX(-50%)'
+              }}
+            >
+              {label}
+            </span>
+          )
+        })}
       </div>
 
       {/* Chart Legend */}
