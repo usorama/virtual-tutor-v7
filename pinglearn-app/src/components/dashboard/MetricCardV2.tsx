@@ -116,9 +116,9 @@ export function MetricCardV2({
             </div>
           )}
 
-          {/* Icon in black circle */}
+          {/* Icon in black circle - matching Quick Actions */}
           <div
-            className="flex h-10 w-10 items-center justify-center rounded-full transition-transform duration-300 group-hover:scale-110"
+            className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
             style={{
               backgroundColor: 'rgb(0, 0, 0)',
               border: '1px solid rgba(255, 255, 255, 0.1)',

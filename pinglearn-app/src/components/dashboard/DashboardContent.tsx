@@ -122,49 +122,49 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
           title="Study Sessions"
           value={14}
           change={{ value: '12%', trend: 'up', description: '12% from last week' }}
-          icon={<Clock className="h-5 w-5" />}
+          icon={<Clock className="h-6 w-6" />}
         />
 
         <MetricCardV2
           title="Topics Mastered"
           value={18}
           change={{ value: '3', trend: 'up', description: '3 new this week' }}
-          icon={<BookOpen className="h-5 w-5" />}
+          icon={<BookOpen className="h-6 w-6" />}
         />
 
         <MetricCardV2
           title="Voice Minutes"
           value={156}
           change={{ value: '28%', trend: 'up', description: '28% increase' }}
-          icon={<Mic className="h-5 w-5" />}
+          icon={<Mic className="h-6 w-6" />}
         />
 
         <MetricCardV2
           title="Math Problems"
           value={89}
           change={{ value: '15', trend: 'up', description: '15 solved today' }}
-          icon={<Activity className="h-5 w-5" />}
+          icon={<Activity className="h-6 w-6" />}
         />
 
         <MetricCardV2
           title="Textbooks"
           value={textbookCount}
           change={{ value: '2', trend: 'up', description: '2 added recently' }}
-          icon={<BookOpen className="h-5 w-5" />}
+          icon={<BookOpen className="h-6 w-6" />}
         />
 
         <MetricCardV2
           title="Achievements"
           value={7}
           change={{ value: '1', trend: 'up', description: '1 new badge earned' }}
-          icon={<Trophy className="h-5 w-5" />}
+          icon={<Trophy className="h-6 w-6" />}
         />
 
         <MetricCardV2
           title="Study Streak"
           value="5 days"
           change={{ value: 'ongoing', trend: 'up', description: 'Keep it going!' }}
-          icon={<Flame className="h-5 w-5" />}
+          icon={<Flame className="h-6 w-6" />}
         />
 
         {/* Weekly Goal Card - replacing circular progress */}
@@ -172,7 +172,7 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
           title="Weekly Goal"
           value="87%"
           change={{ value: '28/32', trend: 'up', description: '4 topics to go!' }}
-          icon={<Target className="h-5 w-5" />}
+          icon={<Target className="h-6 w-6" />}
         />
       </div>
 
