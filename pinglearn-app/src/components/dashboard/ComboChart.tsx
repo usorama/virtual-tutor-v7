@@ -75,7 +75,7 @@ export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
     >
       {/* Chart Header */}
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-title1 font-heavy text-white-100">Your Study Progress</h3>
+        <h3 className="text-title1 font-heavy text-accent-cyan">Your Study Progress</h3>
         <div className="flex gap-2">
           {(['daily', 'weekly', 'monthly'] as const).map((p) => (
             <button
@@ -94,7 +94,7 @@ export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
       </div>
 
       {/* Combo Chart */}
-      <div ref={chartRef} className="relative h-80 mb-6">
+      <div ref={chartRef} className="relative h-80 mb-4">
         <svg viewBox="0 0 800 280" className="w-full h-full">
           <defs>
             <linearGradient id="barGradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -111,7 +111,9 @@ export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
 
           {/* Study Sessions Bars */}
           {data.studySessions.map((value, index) => {
-            const barX = 70 + index * 100  // Center bars at same x as line points
+            // Calculate x position to center under labels
+            const spacing = 700 / (data.studySessions.length - 1)  // Total width divided by gaps
+            const barX = 50 + index * spacing  // Start at 50, spread evenly
             return (
               <rect
                 key={`bar-${index}`}
@@ -129,9 +131,10 @@ export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
           {/* Topics Mastered Line Area */}
           <path
             className="chart-line-area"
-            d={`M70,${240 - data.topicsMastered[0] * 4} ${data.topicsMastered.map((value, index) =>
-              `L${70 + index * 100},${240 - value * 4}`
-            ).join(' ')} L${70 + (data.topicsMastered.length - 1) * 100},240 L70,240 Z`}
+            d={`M50,${240 - data.topicsMastered[0] * 4} ${data.topicsMastered.map((value, index) => {
+              const spacing = 700 / (data.topicsMastered.length - 1)
+              return `L${50 + index * spacing},${240 - value * 4}`
+            }).join(' ')} L${50 + (data.topicsMastered.length - 1) * 700 / (data.topicsMastered.length - 1)},240 L50,240 Z`}
             fill="url(#lineGradient)"
             opacity="0.3"
           />
@@ -139,9 +142,10 @@ export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
           {/* Topics Mastered Line */}
           <path
             className="chart-line"
-            d={`M70,${240 - data.topicsMastered[0] * 4} ${data.topicsMastered.map((value, index) =>
-              `L${70 + index * 100},${240 - value * 4}`
-            ).join(' ')}`}
+            d={`M50,${240 - data.topicsMastered[0] * 4} ${data.topicsMastered.map((value, index) => {
+              const spacing = 700 / (data.topicsMastered.length - 1)
+              return `L${50 + index * spacing},${240 - value * 4}`
+            }).join(' ')}`}
             fill="none"
             stroke="#06B6D4"
             strokeWidth="3"
@@ -149,38 +153,32 @@ export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
           />
 
           {/* Data Points on Line */}
-          {data.topicsMastered.map((value, index) => (
-            <circle
-              key={`dot-${index}`}
-              className="chart-dot-line"
-              cx={70 + index * 100}
-              cy={240 - value * 4}
-              r="4"
-              fill="#06B6D4"
-              stroke="#000"
-              strokeWidth="2"
-              filter="drop-shadow(0 0 6px rgba(6, 182, 212, 0.6))"
-            />
-          ))}
+          {data.topicsMastered.map((value, index) => {
+            const spacing = 700 / (data.topicsMastered.length - 1)
+            return (
+              <circle
+                key={`dot-${index}`}
+                className="chart-dot-line"
+                cx={50 + index * spacing}
+                cy={240 - value * 4}
+                r="4"
+                fill="#06B6D4"
+                stroke="#000"
+                strokeWidth="2"
+                filter="drop-shadow(0 0 6px rgba(6, 182, 212, 0.6))"
+              />
+            )
+          })}
         </svg>
       </div>
 
       {/* Chart Labels */}
-      <div className="relative mb-6" style={{ paddingLeft: '70px', paddingRight: '70px' }}>
-        <div className="flex justify-between">
-          {data.labels.map((label, index) => (
-            <span
-              key={index}
-              className="text-caption1 text-white-50 font-medium"
-              style={{
-                position: 'relative',
-                left: index === 0 ? '-20px' : index === data.labels.length - 1 ? '20px' : '0'
-              }}
-            >
-              {label}
-            </span>
-          ))}
-        </div>
+      <div className="flex justify-between mb-6">
+        {data.labels.map((label) => (
+          <span key={label} className="text-caption1 text-white-50 font-medium flex-1 text-center">
+            {label}
+          </span>
+        ))}
       </div>
 
       {/* Chart Legend */}
