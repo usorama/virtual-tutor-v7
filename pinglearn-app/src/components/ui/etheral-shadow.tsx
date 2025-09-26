@@ -185,12 +185,13 @@ export function Component({
                 <div
                     style={{
                         background: `
-                            radial-gradient(ellipse 60% 50% at 20% 20%, rgba(251, 146, 60, 0.35) 0%, transparent 70%),
+                            radial-gradient(ellipse 60% 50% at 15% 15%, rgba(20, 184, 166, 0.4) 0%, transparent 70%),
+                            radial-gradient(ellipse 60% 50% at 25% 25%, rgba(251, 146, 60, 0.35) 0%, transparent 70%),
                             radial-gradient(ellipse 70% 60% at 50% 50%, rgba(34, 197, 94, 0.4) 0%, transparent 70%),
                             radial-gradient(ellipse 65% 55% at 80% 80%, rgba(6, 182, 212, 0.45) 0%, transparent 70%),
                             ${color}
                         `,
-                        backgroundBlendMode: 'screen, overlay, multiply, normal',
+                        backgroundBlendMode: 'screen, overlay, multiply, multiply, normal',
                         maskImage: `url('https://framerusercontent.com/images/ceBGguIpUU8luwByxuQz79t7To.png')`,
                         maskSize: sizing === "stretch" ? "100% 100%" : "cover",
                         maskRepeat: "no-repeat",
