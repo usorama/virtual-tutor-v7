@@ -236,18 +236,20 @@ export default function WizardPage() {
                       ${isActive
                         ? 'bg-transparent rounded-t-[40px] z-20'
                         : isClickable
-                          ? 'bg-white/5 border border-white/10 border-b-0 opacity-80 hover:opacity-100 hover:bg-white/10 cursor-pointer rounded-t-[32px]'
-                          : 'bg-white/5 border border-white/10 border-b-0 opacity-40 cursor-not-allowed rounded-t-[32px]'
+                          ? 'bg-white/5 border border-white/[8%] border-b-0 opacity-80 hover:opacity-100 hover:bg-white/10 cursor-pointer rounded-t-[32px]'
+                          : 'bg-white/5 border border-white/[8%] border-b-0 opacity-40 cursor-not-allowed rounded-t-[32px]'
                       }
                     `}
                     style={isActive ? {
-                      border: '1px solid rgba(255, 255, 255, 0.6)',
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
                       borderBottom: 'none',
-                      backgroundColor: 'rgba(255, 255, 255, 0.015)',
+                      backgroundColor: 'rgba(20, 20, 22, 0.6)',
                       backdropFilter: 'blur(20px)',
                       WebkitBackdropFilter: 'blur(20px)',
-                      filter: 'drop-shadow(0 0 6px rgba(255, 255, 255, 0.2))',
-                      boxShadow: 'none',
+                      boxShadow: `
+                        inset -4px -4px 12px rgba(128, 128, 128, 0.95),
+                        inset 4px 4px 12px rgba(0, 0, 0, 0.2)
+                      `,
                       marginBottom: '-1px',
                       width: '100%'
                     } : {}}
@@ -369,23 +371,26 @@ export default function WizardPage() {
                 width: `${100 / WIZARD_STEP_NAMES.length}%`,
                 height: '2px',
                 marginTop: '-1px',
-                backgroundColor: 'rgba(255, 255, 255, 0.015)' // Same as card background to hide border
+                backgroundColor: 'rgba(20, 20, 22, 0.6)' // Same as card background to hide border
               }}
             />
 
             <Card className="p-6 overflow-hidden relative z-10 w-full flex flex-col"
                 style={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.015)',
+                  backgroundColor: 'rgba(20, 20, 22, 0.6)',
                   backdropFilter: 'blur(20px)',
                   WebkitBackdropFilter: 'blur(20px)',
-                  border: '1px solid rgba(255, 255, 255, 0.6)',
-                  borderTop: '1px solid rgba(255, 255, 255, 0.6)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  borderTop: '1px solid rgba(255, 255, 255, 0.08)',
                   borderRadius: '0 0 40px 40px',
                   marginTop: '-1px',
                   width: '100%',
                   boxShadow: `
-                    0 8px 32px rgba(0, 0, 0, 0.4),
-                    inset 0 2px 20px rgba(0, 0, 0, 0.5)
+                    inset -4px -4px 12px rgba(128, 128, 128, 0.95),
+                    inset 4px 4px 12px rgba(0, 0, 0, 0.2),
+                    0 8px 32px -8px rgba(0, 0, 0, 0.3),
+                    0 4px 20px -4px rgba(6, 182, 212, 0.15),
+                    0 2px 16px -2px rgba(34, 197, 94, 0.08)
                   `
                 }}>
 

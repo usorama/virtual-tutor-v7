@@ -110,18 +110,21 @@ export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
           {/* Grid Lines Removed */}
 
           {/* Study Sessions Bars */}
-          {data.studySessions.map((value, index) => (
-            <rect
-              key={`bar-${index}`}
-              className="chart-bar"
-              x={50 + index * 100}
-              y={240 - (value * 60)} // Scale bars based on value
-              width="40"
-              height={value * 60}
-              fill="url(#barGradient)"
-              rx="4"
-            />
-          ))}
+          {data.studySessions.map((value, index) => {
+            const barX = 70 + index * 100  // Center bars at same x as line points
+            return (
+              <rect
+                key={`bar-${index}`}
+                className="chart-bar"
+                x={barX - 20}  // Center the bar (width is 40, so subtract half)
+                y={240 - (value * 60)} // Scale bars based on value
+                width="40"
+                height={value * 60}
+                fill="url(#barGradient)"
+                rx="4"
+              />
+            )
+          })}
 
           {/* Topics Mastered Line Area */}
           <path
@@ -163,12 +166,21 @@ export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
       </div>
 
       {/* Chart Labels */}
-      <div className="flex justify-between px-12 mb-6">
-        {data.labels.map((label, index) => (
-          <span key={index} className="text-caption1 text-white-50 font-medium">
-            {label}
-          </span>
-        ))}
+      <div className="relative mb-6" style={{ paddingLeft: '70px', paddingRight: '70px' }}>
+        <div className="flex justify-between">
+          {data.labels.map((label, index) => (
+            <span
+              key={index}
+              className="text-caption1 text-white-50 font-medium"
+              style={{
+                position: 'relative',
+                left: index === 0 ? '-20px' : index === data.labels.length - 1 ? '20px' : '0'
+              }}
+            >
+              {label}
+            </span>
+          ))}
+        </div>
       </div>
 
       {/* Chart Legend */}
