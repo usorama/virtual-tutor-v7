@@ -241,17 +241,18 @@ export default function WizardPage() {
                       }
                     `}
                     style={isActive ? {
-                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                      borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                      borderLeft: '1px solid rgba(255, 255, 255, 0.08)',
+                      borderRight: '1px solid rgba(255, 255, 255, 0.08)',
                       borderBottom: 'none',
                       backgroundColor: 'rgba(20, 20, 22, 0.6)',
                       backdropFilter: 'blur(20px)',
                       WebkitBackdropFilter: 'blur(20px)',
-                      boxShadow: `
-                        inset -4px -4px 12px rgba(128, 128, 128, 0.95),
-                        inset 4px 4px 12px rgba(0, 0, 0, 0.2)
-                      `,
-                      marginBottom: '-1px',
-                      width: '100%'
+                      marginBottom: '-2px',
+                      paddingBottom: '2px',
+                      width: '100%',
+                      position: 'relative',
+                      zIndex: 21
                     } : {}}
                   >
                     {/* Tab Content */}
@@ -363,27 +364,17 @@ export default function WizardPage() {
 
           {/* Main Wizard Card - Seamlessly connected to active tab on desktop */}
           <div className="relative">
-            {/* Remove border between active tab and card - make it transparent only in that section */}
-            <div
-              className="absolute top-0 z-20 hidden md:block"
-              style={{
-                left: `${(state.currentStep * 100) / WIZARD_STEP_NAMES.length}%`,
-                width: `${100 / WIZARD_STEP_NAMES.length}%`,
-                height: '2px',
-                marginTop: '-1px',
-                backgroundColor: 'rgba(20, 20, 22, 0.6)' // Same as card background to hide border
-              }}
-            />
-
-            <Card className="p-6 overflow-hidden relative z-10 w-full flex flex-col"
+            <Card className="p-6 overflow-hidden relative z-10 w-full flex flex-col md:rounded-t-none"
                 style={{
                   backgroundColor: 'rgba(20, 20, 22, 0.6)',
                   backdropFilter: 'blur(20px)',
                   WebkitBackdropFilter: 'blur(20px)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                  borderLeft: '1px solid rgba(255, 255, 255, 0.08)',
+                  borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                  borderTop: 'none',
                   borderRadius: '0 0 40px 40px',
-                  marginTop: '-1px',
+                  marginTop: '0',
                   width: '100%',
                   boxShadow: `
                     inset -4px -4px 12px rgba(128, 128, 128, 0.95),
@@ -391,8 +382,28 @@ export default function WizardPage() {
                     0 8px 32px -8px rgba(0, 0, 0, 0.3),
                     0 4px 20px -4px rgba(6, 182, 212, 0.15),
                     0 2px 16px -2px rgba(34, 197, 94, 0.08)
-                  `
+                  `,
+                  position: 'relative'
                 }}>
+              {/* Top border that's segmented - hidden under active tab */}
+              <div
+                className="absolute top-0 left-0 right-0 h-[1px] hidden md:block"
+                style={{
+                  background: 'linear-gradient(to right, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.08) 100%)',
+                  zIndex: 5
+                }}
+              >
+                {/* Hide border segment under active tab */}
+                <div
+                  className="absolute h-[1px]"
+                  style={{
+                    left: `${(state.currentStep * 100) / WIZARD_STEP_NAMES.length}%`,
+                    width: `${100 / WIZARD_STEP_NAMES.length}%`,
+                    backgroundColor: 'rgba(20, 20, 22, 0.6)',
+                    top: 0
+                  }}
+                />
+              </div>
 
 
           {/* Content Area with dynamic height */}
