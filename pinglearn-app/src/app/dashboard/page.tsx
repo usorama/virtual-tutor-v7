@@ -28,8 +28,8 @@ export default async function DashboardPage() {
 
   return (
     <AuthenticatedLayout>
-      {/* Main container with ethereal background */}
-      <div className="relative h-screen overflow-hidden bg-black">
+      {/* Main container with ethereal background - Fixed height minus nav */}
+      <div className="relative min-h-[calc(100vh-4rem)] bg-black">
         {/* Ethereal shadow background with subtle vibrant colors */}
         <EtheralShadow
           color="rgba(60, 60, 70, 0.5)"
@@ -115,8 +115,8 @@ export default async function DashboardPage() {
           }}
         />
 
-        {/* Content layer */}
-        <div className="relative z-10 h-full overflow-y-auto">
+        {/* Content layer - Let the body handle scrolling */}
+        <div className="relative z-10">
           <div className="container mx-auto px-4 py-8">
             {/* Header */}
             <header className="flex justify-between items-center mb-8">
