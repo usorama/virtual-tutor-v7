@@ -82,7 +82,7 @@ export function MetricCardV2({
       {/* Main Card Section - Title and Value */}
       <h2 className="text-sm font-medium text-white-50">{title}</h2>
 
-      <p className="mt-2 text-5xl font-bold tracking-tight text-accent-cyan">
+      <p className="mt-2 text-5xl font-bold tracking-tight" style={{ color: '#06B6D4' }}>
         {typeof value === 'number' ? value.toLocaleString() : value}
       </p>
 
@@ -124,7 +124,7 @@ export function MetricCardV2({
               border: '1px solid rgba(255, 255, 255, 0.1)',
             }}
           >
-            <div className="text-accent-cyan">
+            <div style={{ color: '#06B6D4' }}>
               {icon}
             </div>
           </div>
