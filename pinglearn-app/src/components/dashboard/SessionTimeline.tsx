@@ -90,7 +90,12 @@ export function SessionTimeline({ sessions, onSessionClick, className }: Session
         backdropFilter: 'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
         border: '1px solid rgba(255, 255, 255, 0.1)',
-        boxShadow: 'inset -4px -4px 12px rgba(128,128,128,0.95), inset 4px 4px 12px rgba(0,0,0,0.1)',
+        boxShadow: `
+          inset -4px -4px 12px rgba(128,128,128,0.95),
+          inset 4px 4px 12px rgba(0,0,0,0.1),
+          0 14px 48px -10px rgba(6, 182, 212, 0.06),
+          0 8px 28px -6px rgba(34, 197, 94, 0.04)
+        `,
         borderRadius: '32px'
       }}
     >

@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from 'react'
 import { Target, Zap } from 'lucide-react'
-import { Card } from '@/components/ui/card'
 
 interface CircularProgressProps {
   value: number // Percentage (0-100)
@@ -40,22 +39,31 @@ export function CircularProgress({
   }, [value])
 
   return (
-    <Card
-      className={`p-6 text-center overflow-hidden ${className}`}
+    <div
+      className={`relative p-6 text-center overflow-hidden ${className}`}
       style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.03)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        boxShadow: 'inset -4px -4px 12px rgba(128,128,128,0.95), inset 4px 4px 12px rgba(0,0,0,0.1)',
-        borderRadius: '32px'
+        backgroundColor: 'rgba(20, 20, 22, 0.5)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        boxShadow: `
+          inset -2px -2px 6px rgba(255, 255, 255, 0.01),
+          inset 2px 2px 6px rgba(0, 0, 0, 0.4),
+          0 8px 32px -8px rgba(0, 0, 0, 0.3),
+          0 6px 24px -6px rgba(34, 197, 94, 0.12),
+          0 3px 18px -3px rgba(6, 182, 212, 0.1)
+        `,
+        borderRadius: '40px',
+        minHeight: '160px'
       }}
     >
-      {/* Header */}
-      <div className="flex justify-between items-center mb-4">
-        <div className="text-caption1 font-semibold text-white-70">Weekly Goal</div>
-        <Target className="h-4 w-4 text-white-50" />
+      {/* Icon positioned top-right */}
+      <div className="absolute top-6 right-6 text-white-30 opacity-60">
+        <Target className="h-4 w-4" />
       </div>
+
+      {/* Title */}
+      <div className="text-caption1 font-medium text-white-50 mb-4 text-left">Weekly Goal</div>
 
       {/* Circular Progress Chart */}
       <div className="flex flex-col items-center mb-4">
@@ -121,6 +129,6 @@ export function CircularProgress({
           transition: stroke-dashoffset 2s ease-out;
         }
       `}</style>
-    </Card>
+    </div>
   )
 }

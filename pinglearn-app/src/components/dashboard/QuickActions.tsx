@@ -54,7 +54,12 @@ export function QuickActions({ className }: { className?: string }) {
         backdropFilter: 'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
         border: '1px solid rgba(255, 255, 255, 0.1)',
-        boxShadow: 'inset -4px -4px 12px rgba(128,128,128,0.95), inset 4px 4px 12px rgba(0,0,0,0.1)',
+        boxShadow: `
+          inset -4px -4px 12px rgba(128,128,128,0.95),
+          inset 4px 4px 12px rgba(0,0,0,0.1),
+          0 10px 36px -6px rgba(34, 197, 94, 0.06),
+          0 6px 24px -4px rgba(0, 0, 0, 0.15)
+        `,
         borderRadius: '32px'
       }}
     >

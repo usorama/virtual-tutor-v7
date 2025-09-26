@@ -190,7 +190,12 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
         {/* Learning Profile */}
         <div className="p-6 bg-white-3 rounded-[32px] border border-white-10 relative overflow-hidden"
              style={{
-               boxShadow: 'inset -4px -4px 12px rgba(128,128,128,0.95), inset 4px 4px 12px rgba(0,0,0,0.1)'
+               boxShadow: `
+                 inset -4px -4px 12px rgba(128,128,128,0.95),
+                 inset 4px 4px 12px rgba(0,0,0,0.1),
+                 0 10px 35px -8px rgba(6, 182, 212, 0.08),
+                 0 6px 20px -5px rgba(0, 0, 0, 0.15)
+               `
              }}>
           <div className="flex items-center gap-2 mb-4">
             <Sparkles className="h-5 w-5 text-accent-cyan" />
@@ -234,7 +239,12 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
         {/* Study Tips */}
         <div className="p-6 bg-white-3 rounded-[32px] border border-white-10 relative overflow-hidden"
              style={{
-               boxShadow: 'inset -4px -4px 12px rgba(128,128,128,0.95), inset 4px 4px 12px rgba(0,0,0,0.1)'
+               boxShadow: `
+                 inset -4px -4px 12px rgba(128,128,128,0.95),
+                 inset 4px 4px 12px rgba(0,0,0,0.1),
+                 0 12px 40px -10px rgba(34, 197, 94, 0.06),
+                 0 8px 25px -6px rgba(0, 0, 0, 0.12)
+               `
              }}>
           <h3 className="text-title3 font-bold text-white-100 mb-4">Study Tips</h3>
           <div className="space-y-3">

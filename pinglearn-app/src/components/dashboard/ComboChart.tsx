@@ -64,7 +64,12 @@ export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
         backdropFilter: 'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
         border: '1px solid rgba(255, 255, 255, 0.1)',
-        boxShadow: 'inset -4px -4px 12px rgba(128,128,128,0.95), inset 4px 4px 12px rgba(0,0,0,0.1)',
+        boxShadow: `
+          inset -4px -4px 12px rgba(128,128,128,0.95),
+          inset 4px 4px 12px rgba(0,0,0,0.1),
+          0 12px 40px -8px rgba(6, 182, 212, 0.08),
+          0 8px 32px -4px rgba(0, 0, 0, 0.2)
+        `,
         borderRadius: '32px'
       }}
     >

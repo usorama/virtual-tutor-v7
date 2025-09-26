@@ -384,7 +384,10 @@ export default function WizardPage() {
                   marginTop: '-1px',
                   width: '100%',
                   filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.3))',
-                  boxShadow: `0 8px 32px rgba(0, 0, 0, 0.4)`
+                  boxShadow: `
+                    0 8px 32px rgba(0, 0, 0, 0.4),
+                    inset 0 2px 20px rgba(0, 0, 0, 0.5)
+                  `
                 }}>
 
 

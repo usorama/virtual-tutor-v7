@@ -2,7 +2,6 @@
 
 import { ReactNode } from 'react'
 import { ArrowUp, ArrowDown, TrendingUp } from 'lucide-react'
-import { Card } from '@/components/ui/card'
 
 interface MetricCardProps {
   title: string
@@ -31,34 +30,45 @@ export function MetricCard({ title, value, change, icon, className }: MetricCard
   const getTrendColor = () => {
     switch (change?.trend) {
       case 'up':
-        return 'text-indicator-success'
+        return 'text-white-50'
       case 'down':
         return 'text-indicator-error'
       default:
-        return 'text-accent-cyan'
+        return 'text-white-50'
     }
   }
 
   return (
-    <Card
-      className={`p-4 hover:transform hover:translateY(-1px) transition-all duration-300 overflow-hidden ${className}`}
+    <div
+      className={`relative p-6 hover:transform hover:translateY(-1px) transition-all duration-300 overflow-hidden ${className}`}
       style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.03)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        boxShadow: 'inset -4px -4px 12px rgba(128,128,128,0.95), inset 4px 4px 12px rgba(0,0,0,0.1)',
-        borderRadius: '32px'
+        backgroundColor: 'rgba(20, 20, 22, 0.5)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        boxShadow: `
+          inset -2px -2px 6px rgba(255, 255, 255, 0.01),
+          inset 2px 2px 6px rgba(0, 0, 0, 0.4),
+          0 8px 32px -8px rgba(0, 0, 0, 0.3),
+          0 4px 20px -4px rgba(6, 182, 212, 0.15),
+          0 2px 16px -2px rgba(34, 197, 94, 0.08)
+        `,
+        borderRadius: '40px',
+        minHeight: '160px'
       }}
     >
-      {/* Header */}
-      <div className="flex justify-between items-center mb-3">
-        <div className="text-caption1 font-semibold text-white-70">{title}</div>
-        <div className="text-white-50">{icon}</div>
+      {/* Icon positioned top-right */}
+      <div className="absolute top-6 right-6 text-white-30 opacity-60">
+        {icon}
       </div>
 
-      {/* Value */}
-      <div className="text-title3 font-heavy text-white-100 mb-2">
+      {/* Title */}
+      <div className="text-caption1 font-medium text-white-50 mb-3">
+        {title}
+      </div>
+
+      {/* Value - Large and prominent */}
+      <div className="text-title1 font-heavy text-white-100 mb-3">
         {typeof value === 'number' ? value.toLocaleString() : value}
       </div>
 
@@ -71,6 +81,6 @@ export function MetricCard({ title, value, change, icon, className }: MetricCard
           </span>
         </div>
       )}
-    </Card>
+    </div>
   )
 }
