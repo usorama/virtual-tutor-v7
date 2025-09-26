@@ -62,7 +62,7 @@ export function MetricCardV2({
   return (
     <div
       className={cn(
-        'w-full rounded-2xl p-6 text-card-foreground',
+        'w-full p-6 text-card-foreground',
         className
       )}
       style={{
@@ -77,6 +77,7 @@ export function MetricCardV2({
           0 10px 36px -6px rgba(34, 197, 94, 0.06),
           0 6px 24px -4px rgba(0, 0, 0, 0.15)
         `,
+        borderRadius: '32px'
       }}
     >
       {/* Main Card Section - Title and Value */}

@@ -54,7 +54,7 @@ export function MetricCard({ title, value, change, icon, className, hasGradient 
           0 4px 20px -4px rgba(6, 182, 212, 0.15),
           0 2px 16px -2px rgba(34, 197, 94, 0.08)
         `,
-        borderRadius: '40px',
+        borderRadius: '32px',
         minHeight: '160px'
       }}
     >

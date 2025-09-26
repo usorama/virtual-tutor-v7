@@ -98,26 +98,27 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
     : 0
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-10">
       {/* Main Chart Section with Quick Actions */}
-      <div className="grid lg:grid-cols-7 gap-4 items-stretch">
-        {/* Combo Chart - 5 columns (reduced from 4) */}
+      <div className="grid lg:grid-cols-7 gap-6 items-stretch">
+        {/* Combo Chart - 5 columns, stretched horizontally */}
         <div className="lg:col-span-5 flex">
           <ComboChart
             data={mockChartData}
             period={chartPeriod}
             onPeriodChange={setChartPeriod}
+            className="flex-1"
           />
         </div>
 
-        {/* Quick Actions - 2 columns (increased from 1) */}
+        {/* Quick Actions - 2 columns */}
         <div className="lg:col-span-2 flex">
           <QuickActions className="flex-1" />
         </div>
       </div>
 
       {/* Metric Cards Grid - 4x2 layout */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         <MetricCardV2
           title="Study Sessions"
           value={14}
@@ -185,7 +186,7 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
       </div>
 
       {/* Learning Profile and Additional Info */}
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-6">
         {/* Learning Profile */}
         <div className="p-6 bg-white-3 rounded-[32px] border border-white-10 relative overflow-hidden"
              style={{
@@ -203,7 +204,9 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
                 backgroundColor: 'rgb(0, 0, 0)',
                 border: '1px solid rgba(255, 255, 255, 0.1)'
               }}>
-              <Sparkles className="h-6 w-6 text-accent-cyan" />
+              <div style={{ color: '#06B6D4' }}>
+                <Sparkles className="h-6 w-6" />
+              </div>
             </div>
             <h3 className="text-title3 font-bold text-accent">Your Learning Profile</h3>
           </div>

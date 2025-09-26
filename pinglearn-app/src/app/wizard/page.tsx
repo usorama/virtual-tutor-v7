@@ -180,9 +180,9 @@ export default function WizardPage() {
 
   return (
     <div className="relative h-screen overflow-hidden bg-black">
-      {/* Fresh Etheral Shadow Component - AS-IS */}
+      {/* Single Ethereal Shadow with seamless multi-color blending */}
       <EtheralShadow
-        color="rgba(60, 60, 70, 0.8)"
+        color="rgba(60, 60, 70, 0.7)"
         animation={{ scale: 50, speed: 80 }}
         noise={{ opacity: 30, scale: 0.5 }}
         style={{

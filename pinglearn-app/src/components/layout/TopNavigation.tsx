@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
   Home,
@@ -49,11 +50,15 @@ export function TopNavigation({ user }: TopNavigationProps) {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link href="/dashboard" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">P</span>
-              </div>
-              <span className="font-semibold text-xl">PingLearn</span>
+            <Link href="/dashboard" className="flex items-center">
+              <Image
+                src="/logos/pinglearn-logo.svg"
+                alt="PingLearn"
+                width={405}
+                height={135}
+                className="h-27 w-auto"
+                priority
+              />
             </Link>
 
             {/* Navigation Items */}
@@ -94,11 +99,15 @@ export function TopNavigation({ user }: TopNavigationProps) {
         <div className="px-4">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link href="/dashboard" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">P</span>
-              </div>
-              <span className="font-semibold text-xl">PingLearn</span>
+            <Link href="/dashboard" className="flex items-center">
+              <Image
+                src="/logos/pinglearn-logo.svg"
+                alt="PingLearn"
+                width={405}
+                height={135}
+                className="h-27 w-auto"
+                priority
+              />
             </Link>
 
             {/* Right Side Items */}

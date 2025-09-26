@@ -11,9 +11,10 @@ interface ComboChartProps {
   }
   period: 'daily' | 'weekly' | 'monthly'
   onPeriodChange: (period: 'daily' | 'weekly' | 'monthly') => void
+  className?: string
 }
 
-export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
+export function ComboChart({ data, period, onPeriodChange, className }: ComboChartProps) {
   const chartRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -58,7 +59,7 @@ export function ComboChart({ data, period, onPeriodChange }: ComboChartProps) {
 
   return (
     <Card
-      className="p-6 overflow-hidden flex flex-col h-full"
+      className={`p-6 overflow-hidden flex flex-col h-full ${className || ''}`}
       style={{
         backgroundColor: 'rgba(255, 255, 255, 0.03)',
         backdropFilter: 'blur(10px)',

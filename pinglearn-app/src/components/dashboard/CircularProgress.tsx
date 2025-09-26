@@ -53,7 +53,7 @@ export function CircularProgress({
           0 6px 24px -6px rgba(34, 197, 94, 0.12),
           0 3px 18px -3px rgba(6, 182, 212, 0.1)
         `,
-        borderRadius: '40px',
+        borderRadius: '32px',
         minHeight: '160px'
       }}
     >
