@@ -13,7 +13,6 @@ import {
 } from 'lucide-react'
 import { GRADE_LABELS } from '@/types/wizard'
 import { ComboChart } from './ComboChart'
-import { CircularProgress } from './CircularProgress'
 import { SessionTimeline } from './SessionTimeline'
 import { MetricCard } from './MetricCard'
 import { QuickActions } from './QuickActions'
@@ -168,12 +167,12 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
           icon={<Flame className="h-4 w-4" />}
         />
 
-        {/* Circular Progress Card */}
-        <CircularProgress
-          value={87}
-          current={28}
-          total={32}
-          label="Topics"
+        {/* Weekly Goal Card - replacing circular progress */}
+        <MetricCard
+          title="Weekly Goal"
+          value="87%"
+          change={{ value: '28/32', trend: 'up', description: '4 topics to go!' }}
+          icon={<Target className="h-4 w-4" />}
         />
       </div>
 

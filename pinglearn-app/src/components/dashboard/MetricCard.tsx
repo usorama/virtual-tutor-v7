@@ -13,9 +13,10 @@ interface MetricCardProps {
   }
   icon: ReactNode
   className?: string
+  hasGradient?: boolean
 }
 
-export function MetricCard({ title, value, change, icon, className }: MetricCardProps) {
+export function MetricCard({ title, value, change, icon, className, hasGradient = false }: MetricCardProps) {
   const getTrendIcon = () => {
     switch (change?.trend) {
       case 'up':
@@ -42,7 +43,7 @@ export function MetricCard({ title, value, change, icon, className }: MetricCard
     <div
       className={`relative p-6 hover:transform hover:translateY(-1px) transition-all duration-300 overflow-hidden ${className}`}
       style={{
-        backgroundColor: 'rgba(20, 20, 22, 0.5)',
+        backgroundColor: 'rgba(20, 20, 22, 0.6)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
         border: '1px solid rgba(255, 255, 255, 0.08)',
@@ -57,18 +58,31 @@ export function MetricCard({ title, value, change, icon, className }: MetricCard
         minHeight: '160px'
       }}
     >
+      {/* Gradient overlay - top left corner */}
+      <div
+        className="absolute top-0 left-0 w-48 h-48 opacity-40 pointer-events-none"
+        style={{
+          background: `radial-gradient(ellipse at top left,
+            rgba(34, 197, 94, 0.6) 0%,
+            rgba(6, 182, 212, 0.4) 25%,
+            rgba(251, 146, 60, 0.3) 50%,
+            transparent 70%
+          )`,
+          filter: 'blur(20px)'
+        }}
+      />
       {/* Icon positioned top-right */}
       <div className="absolute top-6 right-6 text-white-30 opacity-60">
         {icon}
       </div>
 
       {/* Title */}
-      <div className="text-caption1 font-medium text-white-50 mb-3">
+      <div className="text-sm font-medium text-white-50 mb-2">
         {title}
       </div>
 
       {/* Value - Large and prominent */}
-      <div className="text-title1 font-heavy text-white-100 mb-3">
+      <div className="text-4xl font-bold text-white-100 mb-2">
         {typeof value === 'number' ? value.toLocaleString() : value}
       </div>
 
