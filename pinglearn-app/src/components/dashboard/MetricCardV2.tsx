@@ -15,7 +15,7 @@ interface MetricCardV2Props {
     trend: 'up' | 'down' | 'neutral'
     description: string
   }
-  /** Icon to display in the top-left corner */
+  /** Icon to display */
   icon: React.ReactNode
   /** Optional additional class names */
   className?: string
@@ -23,7 +23,7 @@ interface MetricCardV2Props {
 
 /**
  * A modern metric card component with glassmorphism effect
- * Inspired by the card-3 component structure but tailored for metrics
+ * Following the card-3 component two-section structure
  */
 export function MetricCardV2({
   title,
@@ -62,15 +62,15 @@ export function MetricCardV2({
   return (
     <div
       className={cn(
-        'relative w-full rounded-2xl p-6',
+        'w-full rounded-2xl p-6 text-card-foreground',
         className
       )}
       style={{
         // Glassmorphism effect for main container
-        backgroundColor: 'rgba(20, 20, 22, 0.4)',
+        backgroundColor: 'rgba(20, 20, 22, 0.6)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        border: '1px solid rgba(255, 255, 255, 0.06)',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
         boxShadow: `
           inset -2px -2px 8px rgba(255, 255, 255, 0.02),
           inset 2px 2px 8px rgba(0, 0, 0, 0.3),
@@ -78,49 +78,57 @@ export function MetricCardV2({
         `,
       }}
     >
-      {/* Icon positioned top-left with black background */}
-      <div className="absolute top-4 left-4">
-        <div
-          className="w-10 h-10 rounded-full flex items-center justify-center"
-          style={{
-            backgroundColor: 'rgb(0, 0, 0)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-          }}
-        >
-          <div className="text-accent-cyan">
-            {icon}
+      {/* Main Card Section - Title and Value */}
+      <h2 className="text-sm font-medium text-white-50">{title}</h2>
+
+      <p className="mt-2 text-5xl font-bold tracking-tight text-accent-cyan">
+        {typeof value === 'number' ? value.toLocaleString() : value}
+      </p>
+
+      {/* Sub-Card Section - Interactive area with trend and icon */}
+      <div
+        className="group mt-6 cursor-pointer rounded-xl p-4 transition-all duration-300"
+        style={{
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          border: '1px solid rgba(255, 255, 255, 0.05)',
+        }}
+      >
+        <div className="flex items-center justify-between">
+          {/* Trend Information */}
+          {change ? (
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className={getTrendColor()}>
+                  {getTrendIcon()}
+                </span>
+                <span className={`text-sm font-semibold ${getTrendColor()}`}>
+                  {change.value}
+                </span>
+              </div>
+              <p className="text-xs text-white-50 mt-1">
+                {change.description.replace(change.value, '').trim()}
+              </p>
+            </div>
+          ) : (
+            <div>
+              <p className="text-xs text-white-50">No change data</p>
+            </div>
+          )}
+
+          {/* Icon in black circle */}
+          <div
+            className="flex h-10 w-10 items-center justify-center rounded-full transition-transform duration-300 group-hover:scale-110"
+            style={{
+              backgroundColor: 'rgb(0, 0, 0)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+            }}
+          >
+            <div className="text-accent-cyan">
+              {icon}
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Title positioned below icon */}
-      <div className="mt-14 mb-2">
-        <p className="text-sm font-medium text-white-50">
-          {title}
-        </p>
-      </div>
-
-      {/* Main Value Display - Cyan colored */}
-      <div className="mb-2">
-        <p className="text-5xl font-bold tracking-tight text-accent-cyan">
-          {typeof value === 'number' ? value.toLocaleString() : value}
-        </p>
-      </div>
-
-      {/* Trend Indicator */}
-      {change && (
-        <div className="flex items-center gap-1.5">
-          <span className={getTrendColor()}>
-            {getTrendIcon()}
-          </span>
-          <span className={`text-xs font-medium ${getTrendColor()}`}>
-            {change.value}
-          </span>
-          <span className="text-xs font-medium text-white-50">
-            {change.description.replace(change.value, '').trim()}
-          </span>
-        </div>
-      )}
     </div>
   )
 }
