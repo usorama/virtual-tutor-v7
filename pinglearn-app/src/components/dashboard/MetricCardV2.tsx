@@ -66,15 +66,16 @@ export function MetricCardV2({
         className
       )}
       style={{
-        // Glassmorphism effect for main container
-        backgroundColor: 'rgba(20, 20, 22, 0.6)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
+        // Glassmorphism effect for main container - matching other cards
+        backgroundColor: 'rgba(255, 255, 255, 0.03)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
         boxShadow: `
-          inset -2px -2px 8px rgba(255, 255, 255, 0.02),
-          inset 2px 2px 8px rgba(0, 0, 0, 0.3),
-          0 8px 32px -8px rgba(0, 0, 0, 0.3)
+          inset -4px -4px 12px rgba(128,128,128,0.95),
+          inset 4px 4px 12px rgba(0,0,0,0.1),
+          0 10px 36px -6px rgba(34, 197, 94, 0.06),
+          0 6px 24px -4px rgba(0, 0, 0, 0.15)
         `,
       }}
     >
@@ -87,10 +88,10 @@ export function MetricCardV2({
 
       {/* Sub-Card Section - Interactive area with trend and icon */}
       <div
-        className="group mt-6 cursor-pointer rounded-xl p-4 transition-all duration-300"
+        className="group mt-6 cursor-pointer rounded-xl p-4 transition-all duration-300 hover:bg-muted/80"
         style={{
-          backgroundColor: 'rgba(0, 0, 0, 0.3)',
-          border: '1px solid rgba(255, 255, 255, 0.05)',
+          backgroundColor: 'rgba(20, 20, 22, 0.8)',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
         }}
       >
         <div className="flex items-center justify-between">
