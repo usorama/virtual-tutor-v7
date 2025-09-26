@@ -61,19 +61,49 @@ export function ComboChart({ data, period, onPeriodChange, className }: ComboCha
     <Card
       className={`p-6 overflow-hidden flex flex-col h-full ${className || ''}`}
       style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.03)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(10px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(10px) saturate(180%)',
         border: '1px solid rgba(255, 255, 255, 0.1)',
         boxShadow: `
-          inset -4px -4px 12px rgba(128,128,128,0.95),
-          inset 4px 4px 12px rgba(0,0,0,0.1),
-          0 12px 40px -8px rgba(6, 182, 212, 0.08),
-          0 8px 32px -4px rgba(0, 0, 0, 0.2)
+          inset -2px -2px 7px rgba(255,255,255,0.95),
+          inset 2px 2px 7px rgba(0,0,0,0.1),
+          0 10px 36px -6px rgba(34, 197, 94, 0.06),
+          0 6px 24px -4px rgba(0, 0, 0, 0.15)
         `,
-        borderRadius: '32px'
+        borderRadius: '32px',
+        overflow: 'hidden'
       }}
     >
+      {/* Pure White Corner Highlights - Internal glow effect */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '50px',
+          height: '50px',
+          background: 'radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 15%, rgba(255, 255, 255, 0.7) 25%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.05) 45%, rgba(0, 0, 0, 0) 55%)',
+          pointerEvents: 'none',
+          opacity: 1,
+          mixBlendMode: 'screen',
+          filter: 'blur(3px)'
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          right: 0,
+          width: '60px',
+          height: '55px',
+          background: 'radial-gradient(ellipse at 100% 100%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 15%, rgba(255, 255, 255, 0.7) 25%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.05) 45%, rgba(0, 0, 0, 0) 55%)',
+          pointerEvents: 'none',
+          opacity: 1,
+          mixBlendMode: 'screen',
+          filter: 'blur(3px)'
+        }}
+      />
       {/* Chart Header */}
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-title1 font-heavy text-accent">Your Study Progress</h3>
@@ -97,11 +127,11 @@ export function ComboChart({ data, period, onPeriodChange, className }: ComboCha
 
       {/* Combo Chart */}
       <div ref={chartRef} className="relative h-80">
-        <svg viewBox="0 0 800 320" className="w-full h-full">
+        <svg viewBox="0 0 800 340" className="w-full h-full">
           <defs>
             <linearGradient id="barGradient" x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" style={{ stopColor: 'rgba(160, 160, 160, 0.4)', stopOpacity: 1 }} />
-              <stop offset="100%" style={{ stopColor: 'rgba(80, 80, 80, 0.6)', stopOpacity: 1 }} />
+              <stop offset="100%" style={{ stopColor: 'rgba(0, 0, 0, 0.95)', stopOpacity: 1 }} />
             </linearGradient>
             <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" style={{ stopColor: '#06B6D4', stopOpacity: 0.3 }} />
@@ -171,43 +201,54 @@ export function ComboChart({ data, period, onPeriodChange, className }: ComboCha
               />
             )
           })}
+
+          {/* X-Axis Labels - Inside SVG for perfect alignment */}
+          {data.labels.map((label, index) => {
+            const spacing = 700 / (data.labels.length - 1)
+            return (
+              <text
+                key={`label-${index}`}
+                x={50 + index * spacing}
+                y={310}
+                textAnchor="middle"
+                fill="rgba(255, 255, 255, 1)"
+                fontSize="13"
+                fontWeight="500"
+                fontFamily="system-ui, -apple-system, sans-serif"
+              >
+                {label}
+              </text>
+            )
+          })}
         </svg>
       </div>
 
-      {/* Chart Labels - properly aligned under data points */}
-      <div className="relative h-6 mb-6">
-        {data.labels.map((label, index) => {
-          // Calculate exact x position to match chart data points
-          const totalWidth = 700
-          const spacing = totalWidth / (data.labels.length - 1)
-          const leftPosition = (50 + index * spacing) / 8 // Convert SVG units to percentage
-
-          return (
-            <span
-              key={label}
-              className="absolute text-caption1 text-white-50 font-medium"
-              style={{
-                left: `${leftPosition}%`,
-                transform: 'translateX(-50%)'
-              }}
-            >
-              {label}
-            </span>
-          )
-        })}
-      </div>
-
-      {/* Chart Legend */}
-      <div className="flex justify-center gap-6 p-3 bg-white-2 rounded-2xl border border-white-10">
+      {/* Chart Legend - Enhanced with clearer visual indicators */}
+      <div className="flex justify-center gap-6 p-3 rounded-2xl border border-white-10" style={{
+        backgroundColor: 'rgba(20, 20, 22, 0.6)',
+        border: '1px solid rgba(255, 255, 255, 0.08)'
+      }}>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-2 bg-gradient-to-b from-white-15 to-white-5 border border-white-20 rounded-sm" />
-          <span className="text-caption1 text-white-70 font-medium">Study Sessions</span>
+          {/* Actual bar representation for Study Sessions */}
+          <svg width="16" height="14" viewBox="0 0 16 14">
+            <defs>
+              <linearGradient id="legendBarGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style={{ stopColor: 'rgba(160, 160, 160, 0.4)', stopOpacity: 1 }} />
+                <stop offset="100%" style={{ stopColor: 'rgba(80, 80, 80, 0.6)', stopOpacity: 1 }} />
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="12" height="10" fill="url(#legendBarGradient)" rx="2" />
+          </svg>
+          <span className="text-caption1 text-white-70 font-medium">Study Sessions (bars)</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-0.5 bg-accent-cyan rounded-sm relative">
-            <div className="absolute -right-1 -top-1 w-2 h-2 bg-accent-cyan border-2 border-black-100 rounded-full" />
-          </div>
-          <span className="text-caption1 text-white-70 font-medium">Topics Mastered</span>
+          {/* Actual line with dot representation for Topics Mastered */}
+          <svg width="24" height="14" viewBox="0 0 24 14">
+            <line x1="0" y1="7" x2="24" y2="7" stroke="#06B6D4" strokeWidth="2" />
+            <circle cx="8" cy="7" r="3" fill="#06B6D4" stroke="#000" strokeWidth="1" />
+            <circle cx="16" cy="7" r="3" fill="#06B6D4" stroke="#000" strokeWidth="1" />
+          </svg>
+          <span className="text-caption1 text-white-70 font-medium">Topics Mastered (line)</span>
         </div>
       </div>
 

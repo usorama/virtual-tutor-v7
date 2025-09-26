@@ -14,10 +14,10 @@ import {
 import { GRADE_LABELS } from '@/types/wizard'
 import { ComboChart } from './ComboChart'
 import { SessionTimeline } from './SessionTimeline'
-import { MetricCardV2 } from './MetricCardV2'
-import { QuickActions } from './QuickActions'
+import { MetricCardV2Light } from './MetricCardV2Light'
+import { QuickActionsLight } from './QuickActionsLight'
 
-interface DashboardContentProps {
+interface DashboardContentLightProps {
   user: any
   profile: any
   textbookCount: number
@@ -83,7 +83,7 @@ const mockSessions = [
   }
 ]
 
-export function DashboardContent({ user, profile, textbookCount }: DashboardContentProps) {
+export function DashboardContentLight({ user, profile, textbookCount }: DashboardContentLightProps) {
   const [chartPeriod, setChartPeriod] = useState<'daily' | 'weekly' | 'monthly'>('weekly')
 
   const handleSessionClick = (sessionId: string) => {
@@ -113,55 +113,55 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
 
         {/* Quick Actions - 2 columns */}
         <div className="lg:col-span-2 flex">
-          <QuickActions className="flex-1" />
+          <QuickActionsLight className="flex-1" />
         </div>
       </div>
 
       {/* Metric Cards Grid - 4x2 layout */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        <MetricCardV2
+        <MetricCardV2Light
           title="Study Sessions"
           value={14}
           change={{ value: '12%', trend: 'up', description: '12% from last week' }}
           icon={<Clock className="h-6 w-6" />}
         />
 
-        <MetricCardV2
+        <MetricCardV2Light
           title="Topics Mastered"
           value={18}
           change={{ value: '3', trend: 'up', description: '3 new this week' }}
           icon={<BookOpen className="h-6 w-6" />}
         />
 
-        <MetricCardV2
+        <MetricCardV2Light
           title="Voice Minutes"
           value={156}
           change={{ value: '28%', trend: 'up', description: '28% increase' }}
           icon={<Mic className="h-6 w-6" />}
         />
 
-        <MetricCardV2
+        <MetricCardV2Light
           title="Math Problems"
           value={89}
           change={{ value: '15', trend: 'up', description: '15 solved today' }}
           icon={<Activity className="h-6 w-6" />}
         />
 
-        <MetricCardV2
+        <MetricCardV2Light
           title="Textbooks"
           value={textbookCount}
           change={{ value: '2', trend: 'up', description: '2 added recently' }}
           icon={<BookOpen className="h-6 w-6" />}
         />
 
-        <MetricCardV2
+        <MetricCardV2Light
           title="Achievements"
           value={7}
           change={{ value: '1', trend: 'up', description: '1 new badge earned' }}
           icon={<Trophy className="h-6 w-6" />}
         />
 
-        <MetricCardV2
+        <MetricCardV2Light
           title="Study Streak"
           value="5 days"
           change={{ value: 'ongoing', trend: 'up', description: 'Keep it going!' }}
@@ -169,7 +169,7 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
         />
 
         {/* Weekly Goal Card - replacing circular progress */}
-        <MetricCardV2
+        <MetricCardV2Light
           title="Weekly Goal"
           value="87%"
           change={{ value: '28/32', trend: 'up', description: '4 topics to go!' }}
@@ -188,19 +188,20 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
       {/* Learning Profile and Additional Info */}
       <div className="grid md:grid-cols-2 gap-6">
         {/* Learning Profile */}
-        <div className="p-6 bg-white-3 rounded-[32px] border border-white-10 relative overflow-hidden"
+        <div className="p-6 rounded-[32px] border relative overflow-hidden"
              style={{
-               backgroundColor: 'rgba(255, 255, 255, 0.1)',
+               backgroundColor: 'rgba(0, 0, 0, 0.03)',
                backdropFilter: 'blur(10px) saturate(180%)',
                WebkitBackdropFilter: 'blur(10px) saturate(180%)',
+               border: '1px solid rgba(0, 0, 0, 0.08)',
                boxShadow: `
-                 inset -2px -2px 7px rgba(255,255,255,0.95),
-                 inset 2px 2px 7px rgba(0,0,0,0.1),
-                 0 10px 36px -6px rgba(34, 197, 94, 0.06),
-                 0 6px 24px -4px rgba(0, 0, 0, 0.15)
+                 inset -2px -2px 7px rgba(0,0,0,0.02),
+                 inset 2px 2px 7px rgba(255,255,255,0.8),
+                 0 10px 36px -6px rgba(34, 197, 94, 0.02),
+                 0 6px 24px -4px rgba(0, 0, 0, 0.05)
                `
              }}>
-          {/* Pure White Corner Highlights - Internal glow effect */}
+          {/* Subtle Dark Corner Highlights - Internal shadow effect */}
           <div
             style={{
               position: 'absolute',
@@ -208,11 +209,10 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
               left: 0,
               width: '50px',
               height: '50px',
-              background: 'radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 15%, rgba(255, 255, 255, 0.7) 25%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.05) 45%, rgba(0, 0, 0, 0) 55%)',
+              background: 'radial-gradient(circle at 0% 0%, rgba(0, 0, 0, 0.06) 0%, rgba(0, 0, 0, 0.04) 15%, rgba(0, 0, 0, 0.02) 25%, rgba(0, 0, 0, 0.01) 35%, rgba(0, 0, 0, 0.005) 45%, rgba(0, 0, 0, 0) 55%)',
               pointerEvents: 'none',
               opacity: 1,
-              mixBlendMode: 'screen',
-              filter: 'blur(3px)'
+              filter: 'blur(2px)'
             }}
           />
           <div
@@ -222,80 +222,75 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
               right: 0,
               width: '60px',
               height: '55px',
-              background: 'radial-gradient(ellipse at 100% 100%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 15%, rgba(255, 255, 255, 0.7) 25%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.05) 45%, rgba(0, 0, 0, 0) 55%)',
+              background: 'radial-gradient(ellipse at 100% 100%, rgba(0, 0, 0, 0.06) 0%, rgba(0, 0, 0, 0.04) 15%, rgba(0, 0, 0, 0.02) 25%, rgba(0, 0, 0, 0.01) 35%, rgba(0, 0, 0, 0.005) 45%, rgba(0, 0, 0, 0) 55%)',
               pointerEvents: 'none',
               opacity: 1,
-              mixBlendMode: 'screen',
-              filter: 'blur(3px)'
+              filter: 'blur(2px)'
             }}
           />
           <div className="flex items-center gap-3 mb-4">
             <div
               className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
               style={{
-                backgroundColor: 'rgba(20, 20, 22, 0.8)',
-                border: '1px solid rgba(255, 255, 255, 0.1)'
+                backgroundColor: 'rgba(240, 240, 245, 0.8)',
+                border: '1px solid rgba(0, 0, 0, 0.1)'
               }}>
-              <div style={{ color: '#06B6D4' }}>
+              <div style={{ color: '#0891b2' }}>
                 <Sparkles className="h-6 w-6" />
               </div>
             </div>
-            <h3 className="text-title3 font-bold text-accent">Your Learning Profile</h3>
+            <h3 className="text-title3 font-bold text-cyan-700">Your Learning Profile</h3>
           </div>
-          <p className="text-white-70 mb-4">Your personalized curriculum preferences</p>
+          <p className="text-gray-600 mb-4">Your personalized curriculum preferences</p>
 
           {profile && (
             <div className="space-y-4">
               <div>
-                <p className="text-caption1 font-medium text-white-50 mb-2">Grade</p>
-                <div className="inline-block px-3 py-1 bg-white-5 border border-white-10 rounded-2xl text-white-100 text-sm">
+                <p className="text-caption1 font-medium text-gray-500 mb-2">Grade</p>
+                <div className="inline-block px-3 py-1 bg-gray-100 border border-gray-200 rounded-2xl text-gray-800 text-sm">
                   {profile.grade ? GRADE_LABELS[profile.grade] : 'Not set'}
                 </div>
               </div>
 
               <div>
-                <p className="text-caption1 font-medium text-white-50 mb-2">Subjects</p>
+                <p className="text-caption1 font-medium text-gray-500 mb-2">Subjects</p>
                 <div className="flex flex-wrap gap-2">
                   {profile.preferred_subjects?.map((subject: string) => (
                     <div
                       key={subject}
-                      className="px-2 py-1 rounded-xl text-xs font-medium"
-                      style={{
-                        backgroundColor: 'var(--accent-cyan-subtle)',
-                        border: '1px solid var(--accent-cyan-border)',
-                        color: 'var(--accent-cyan)'
-                      }}
+                      className="px-2 py-1 rounded-xl text-xs font-medium bg-cyan-50 border border-cyan-200 text-cyan-700"
                     >
                       {subject}
                     </div>
                   )) || (
-                    <span className="text-caption1 text-white-50">No subjects selected</span>
+                    <span className="text-caption1 text-gray-500">No subjects selected</span>
                   )}
                 </div>
               </div>
 
               <div>
-                <p className="text-caption1 font-medium text-white-50 mb-1">Total Topics</p>
-                <p className="text-title3 font-bold text-white-100">{totalTopics}</p>
+                <p className="text-caption1 font-medium text-gray-500 mb-1">Total Topics</p>
+                <p className="text-title3 font-bold text-gray-800">{totalTopics}</p>
               </div>
             </div>
           )}
         </div>
 
         {/* Study Tips */}
-        <div className="p-6 bg-white-3 rounded-[32px] border border-white-10 relative overflow-hidden"
+        <div className="p-6 rounded-[32px] border relative overflow-hidden"
              style={{
-               backgroundColor: 'rgba(255, 255, 255, 0.1)',
+               backgroundColor: 'rgba(0, 0, 0, 0.03)',
                backdropFilter: 'blur(10px) saturate(180%)',
                WebkitBackdropFilter: 'blur(10px) saturate(180%)',
+               border: '1px solid rgba(0, 0, 0, 0.08)',
                boxShadow: `
-                 inset -2px -2px 7px rgba(255,255,255,0.95),
-                 inset 2px 2px 7px rgba(0,0,0,0.1),
-                 0 10px 36px -6px rgba(34, 197, 94, 0.06),
-                 0 6px 24px -4px rgba(0, 0, 0, 0.15)
+                 inset -2px -2px 7px rgba(0,0,0,0.02),
+                 inset 2px 2px 7px rgba(255,255,255,0.8),
+                 0 10px 36px -6px rgba(34, 197, 94, 0.02),
+                 0 6px 24px -4px rgba(0, 0, 0, 0.05)
                `
              }}>
-          {/* Pure White Corner Highlights - Internal glow effect */}
+          {/* Subtle Dark Corner Highlights - Internal shadow effect */}
           <div
             style={{
               position: 'absolute',
@@ -303,11 +298,10 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
               left: 0,
               width: '50px',
               height: '50px',
-              background: 'radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 15%, rgba(255, 255, 255, 0.7) 25%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.05) 45%, rgba(0, 0, 0, 0) 55%)',
+              background: 'radial-gradient(circle at 0% 0%, rgba(0, 0, 0, 0.06) 0%, rgba(0, 0, 0, 0.04) 15%, rgba(0, 0, 0, 0.02) 25%, rgba(0, 0, 0, 0.01) 35%, rgba(0, 0, 0, 0.005) 45%, rgba(0, 0, 0, 0) 55%)',
               pointerEvents: 'none',
               opacity: 1,
-              mixBlendMode: 'screen',
-              filter: 'blur(3px)'
+              filter: 'blur(2px)'
             }}
           />
           <div
@@ -317,30 +311,29 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
               right: 0,
               width: '60px',
               height: '55px',
-              background: 'radial-gradient(ellipse at 100% 100%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 15%, rgba(255, 255, 255, 0.7) 25%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.05) 45%, rgba(0, 0, 0, 0) 55%)',
+              background: 'radial-gradient(ellipse at 100% 100%, rgba(0, 0, 0, 0.06) 0%, rgba(0, 0, 0, 0.04) 15%, rgba(0, 0, 0, 0.02) 25%, rgba(0, 0, 0, 0.01) 35%, rgba(0, 0, 0, 0.005) 45%, rgba(0, 0, 0, 0) 55%)',
               pointerEvents: 'none',
               opacity: 1,
-              mixBlendMode: 'screen',
-              filter: 'blur(3px)'
+              filter: 'blur(2px)'
             }}
           />
-          <h3 className="text-title3 font-bold text-accent mb-4">Study Tips</h3>
+          <h3 className="text-title3 font-bold text-cyan-700 mb-4">Study Tips</h3>
           <div className="space-y-3">
             <div className="flex items-start gap-3">
-              <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: 'var(--accent-cyan)' }} />
-              <p className="text-caption1 text-white-70">
+              <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0 bg-cyan-500" />
+              <p className="text-caption1 text-gray-600">
                 Take short breaks every 25 minutes for better retention
               </p>
             </div>
             <div className="flex items-start gap-3">
-              <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: 'var(--accent-cyan)' }} />
-              <p className="text-caption1 text-white-70">
+              <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0 bg-cyan-500" />
+              <p className="text-caption1 text-gray-600">
                 Review previous topics before starting new ones
               </p>
             </div>
             <div className="flex items-start gap-3">
-              <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: 'var(--accent-cyan)' }} />
-              <p className="text-caption1 text-white-70">
+              <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0 bg-cyan-500" />
+              <p className="text-caption1 text-gray-600">
                 Practice voice sessions help improve understanding
               </p>
             </div>

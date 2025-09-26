@@ -43,48 +43,59 @@ export function MetricCard({ title, value, change, icon, className, hasGradient 
     <div
       className={`relative p-6 hover:transform hover:translateY(-1px) transition-all duration-300 overflow-hidden ${className}`}
       style={{
-        backgroundColor: 'rgba(20, 20, 22, 0.6)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(10px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(10px) saturate(180%)',
         border: '1px solid rgba(255, 255, 255, 0.08)',
         boxShadow: `
-          inset -4px -4px 12px rgba(128, 128, 128, 0.95),
-          inset 4px 4px 12px rgba(0, 0, 0, 0.2),
-          0 8px 32px -8px rgba(0, 0, 0, 0.3),
-          0 4px 20px -4px rgba(6, 182, 212, 0.15),
-          0 2px 16px -2px rgba(34, 197, 94, 0.08)
+          inset -2px -2px 7px rgba(255, 255, 255, 0.95),
+          inset 2px 2px 7px rgba(0, 0, 0, 0.1),
+          0 10px 36px -6px rgba(34, 197, 94, 0.06),
+          0 6px 24px -4px rgba(0, 0, 0, 0.15)
         `,
         borderRadius: '32px',
-        minHeight: '160px'
+        minHeight: '160px',
+        overflow: 'hidden'
       }}
     >
-      {/* Gradient overlay - top left corner */}
+      {/* Pure White Corner Highlights - Internal glow effect */}
       <div
-        className="absolute top-0 left-0 w-48 h-48 opacity-40 pointer-events-none"
         style={{
-          background: `radial-gradient(ellipse at top left,
-            rgba(34, 197, 94, 0.6) 0%,
-            rgba(6, 182, 212, 0.4) 25%,
-            rgba(251, 146, 60, 0.3) 50%,
-            transparent 70%
-          )`,
-          filter: 'blur(20px)'
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '50px',
+          height: '50px',
+          background: 'radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 15%, rgba(255, 255, 255, 0.7) 25%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.05) 45%, rgba(0, 0, 0, 0) 55%)',
+          pointerEvents: 'none',
+          opacity: 1,
+          mixBlendMode: 'screen',
+          filter: 'blur(3px)'
         }}
       />
-      {/* Icon positioned top-right with glass effect cyan circle - increased size */}
       <div
-        className="absolute top-5 right-5 w-14 h-14 rounded-full flex items-center justify-center relative overflow-hidden"
         style={{
-          background: 'rgba(6, 182, 212, 0.7)',
-          boxShadow: `
-            inset 2px 2px 4px rgba(255, 255, 255, 0.25),
-            inset -2px -2px 4px rgba(0, 0, 0, 0.3),
-            0 2px 8px rgba(6, 182, 212, 0.3)
-          `,
+          position: 'absolute',
+          bottom: 0,
+          right: 0,
+          width: '60px',
+          height: '55px',
+          background: 'radial-gradient(ellipse at 100% 100%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 15%, rgba(255, 255, 255, 0.7) 25%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.05) 45%, rgba(0, 0, 0, 0) 55%)',
+          pointerEvents: 'none',
+          opacity: 1,
+          mixBlendMode: 'screen',
+          filter: 'blur(3px)'
+        }}
+      />
+      {/* Icon positioned top-right with standard dark circle */}
+      <div
+        className="absolute top-5 right-5 w-14 h-14 rounded-full flex items-center justify-center"
+        style={{
+          backgroundColor: 'rgba(20, 20, 22, 0.8)',
           border: '1px solid rgba(255, 255, 255, 0.1)'
         }}
       >
-        <div className="text-white-100">
+        <div style={{ color: '#06B6D4' }}>
           {icon}
         </div>
       </div>

@@ -11,6 +11,7 @@ import {
   Clock,
   FileText,
   HelpCircle,
+  ScrollText,
   Menu,
   X
 } from 'lucide-react';
@@ -25,6 +26,7 @@ const navItems = [
   { href: '/sessions', label: 'Past Lessons', icon: Clock },
   { href: '/notes', label: 'Notes', icon: FileText },
   { href: '/help', label: 'Help', icon: HelpCircle },
+  { href: '/changelog', label: 'Changelog', icon: ScrollText },
 ];
 
 interface TopNavigationProps {

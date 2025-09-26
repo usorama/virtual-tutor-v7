@@ -52,26 +52,27 @@ const quickActions: QuickAction[] = [
   }
 ]
 
-export function QuickActions({ className }: { className?: string }) {
+export function QuickActionsLight({ className }: { className?: string }) {
   return (
     <Card
       className={`p-6 overflow-hidden flex flex-col h-full relative ${className}`}
       style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        // Light theme glassmorphism
+        backgroundColor: 'rgba(0, 0, 0, 0.03)',
         backdropFilter: 'blur(10px) saturate(180%)',
         WebkitBackdropFilter: 'blur(10px) saturate(180%)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
+        border: '1px solid rgba(0, 0, 0, 0.08)',
         boxShadow: `
-          inset -2px -2px 7px rgba(255,255,255,0.95),
-          inset 2px 2px 7px rgba(0,0,0,0.1),
-          0 10px 36px -6px rgba(34, 197, 94, 0.06),
-          0 6px 24px -4px rgba(0, 0, 0, 0.15)
+          inset -2px -2px 7px rgba(0,0,0,0.02),
+          inset 2px 2px 7px rgba(255,255,255,0.8),
+          0 10px 36px -6px rgba(34, 197, 94, 0.02),
+          0 6px 24px -4px rgba(0, 0, 0, 0.05)
         `,
         borderRadius: '32px',
         overflow: 'hidden'
       }}
     >
-      {/* Pure White Corner Highlights - Internal glow effect */}
+      {/* Subtle Dark Corner Highlights - Internal shadow effect for light theme */}
       <div
         style={{
           position: 'absolute',
@@ -79,11 +80,10 @@ export function QuickActions({ className }: { className?: string }) {
           left: 0,
           width: '50px',
           height: '50px',
-          background: 'radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 15%, rgba(255, 255, 255, 0.7) 25%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.05) 45%, rgba(0, 0, 0, 0) 55%)',
+          background: 'radial-gradient(circle at 0% 0%, rgba(0, 0, 0, 0.06) 0%, rgba(0, 0, 0, 0.04) 15%, rgba(0, 0, 0, 0.02) 25%, rgba(0, 0, 0, 0.01) 35%, rgba(0, 0, 0, 0.005) 45%, rgba(0, 0, 0, 0) 55%)',
           pointerEvents: 'none',
           opacity: 1,
-          mixBlendMode: 'screen',
-          filter: 'blur(3px)'
+          filter: 'blur(2px)'
         }}
       />
       <div
@@ -93,14 +93,13 @@ export function QuickActions({ className }: { className?: string }) {
           right: 0,
           width: '60px',
           height: '55px',
-          background: 'radial-gradient(ellipse at 100% 100%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 15%, rgba(255, 255, 255, 0.7) 25%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.05) 45%, rgba(0, 0, 0, 0) 55%)',
+          background: 'radial-gradient(ellipse at 100% 100%, rgba(0, 0, 0, 0.06) 0%, rgba(0, 0, 0, 0.04) 15%, rgba(0, 0, 0, 0.02) 25%, rgba(0, 0, 0, 0.01) 35%, rgba(0, 0, 0, 0.005) 45%, rgba(0, 0, 0, 0) 55%)',
           pointerEvents: 'none',
           opacity: 1,
-          mixBlendMode: 'screen',
-          filter: 'blur(3px)'
+          filter: 'blur(2px)'
         }}
       />
-      <h3 className="text-title2 font-bold text-accent mb-6">Quick Actions</h3>
+      <h3 className="text-title2 font-bold text-cyan-700 mb-6">Quick Actions</h3>
 
       <div className="flex-1 flex flex-col justify-between space-y-3">
         {quickActions.map((action) => (
@@ -108,33 +107,33 @@ export function QuickActions({ className }: { className?: string }) {
             <button
               className={`w-full flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 text-left group ${
                 action.primary
-                  ? 'text-white-100 hover:transform hover:scale-102'
-                  : 'text-white-100 hover:transform hover:translateX(1px)'
+                  ? 'text-gray-800 hover:transform hover:scale-102'
+                  : 'text-gray-800 hover:transform hover:translateX(1px)'
               }`}
               style={{
-                backgroundColor: 'rgba(20, 20, 22, 0.6)',
-                border: '1px solid rgba(255, 255, 255, 0.08)'
+                backgroundColor: 'rgba(240, 240, 245, 0.6)',
+                border: '1px solid rgba(0, 0, 0, 0.08)'
               }}
             >
-              {/* Icon with black circle */}
+              {/* Icon with light circle */}
               <div
                 className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
                 style={{
-                  backgroundColor: 'rgba(20, 20, 22, 0.8)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)'
+                  backgroundColor: 'rgba(240, 240, 245, 0.8)',
+                  border: '1px solid rgba(0, 0, 0, 0.1)'
                 }}
               >
-                <div style={{ color: '#06B6D4' }}>
+                <div style={{ color: '#0891b2' }}>
                   {action.icon}
                 </div>
               </div>
 
               {/* Content */}
               <div className="flex-1 min-w-0">
-                <div className="font-bold text-base text-white-100">
+                <div className="font-bold text-base text-gray-800">
                   {action.label}
                 </div>
-                <div className="text-sm text-white-50 mt-0.5">
+                <div className="text-sm text-gray-600 mt-0.5">
                   {action.description}
                 </div>
               </div>

@@ -8,9 +8,9 @@ import { GraduationCap } from 'lucide-react'
 import { GRADE_LABELS } from '@/types/wizard'
 import { AuthenticatedLayout } from '@/components/layout/AuthenticatedLayout'
 import { Component as EtheralShadow } from '@/components/ui/etheral-shadow'
-import { DashboardContent } from '@/components/dashboard/DashboardContent'
+import { DashboardContentLight } from '@/components/dashboard/DashboardContentLight'
 
-export default async function DashboardPage() {
+export default async function DashboardLightPage() {
   const user = await getUser()
 
   if (!user) {
@@ -28,13 +28,13 @@ export default async function DashboardPage() {
 
   return (
     <AuthenticatedLayout>
-      {/* Main container with ethereal background */}
-      <div className="relative h-screen overflow-hidden bg-black">
-        {/* Ethereal shadow background with subtle vibrant colors */}
+      {/* Main container with light ethereal background */}
+      <div className="relative h-screen overflow-hidden bg-white">
+        {/* Ethereal shadow background with very subtle colors */}
         <EtheralShadow
-          color="rgba(60, 60, 70, 0.5)"
+          color="rgba(240, 240, 245, 0.3)"
           animation={{ scale: 50, speed: 80 }}
-          noise={{ opacity: 30, scale: 0.5 }}
+          noise={{ opacity: 15, scale: 0.5 }}
           style={{
             position: 'absolute',
             inset: 0,
@@ -42,8 +42,8 @@ export default async function DashboardPage() {
           }}
         />
 
-        {/* Additional color gradients for depth - more visible and distinct */}
-        {/* Cyan gradient - top center - STRONGER */}
+        {/* Additional color gradients for depth - very subtle for light theme */}
+        {/* Cyan gradient - top center - VERY SUBTLE */}
         <div
           style={{
             position: 'absolute',
@@ -51,13 +51,13 @@ export default async function DashboardPage() {
             left: '35%',
             width: '350px',
             height: '350px',
-            background: 'radial-gradient(circle, rgba(6, 182, 212, 0.35) 0%, rgba(6, 182, 212, 0.15) 30%, transparent 60%)',
-            filter: 'blur(40px)',
+            background: 'radial-gradient(circle, rgba(6, 182, 212, 0.08) 0%, rgba(6, 182, 212, 0.03) 30%, transparent 60%)',
+            filter: 'blur(50px)',
             zIndex: 0,
             pointerEvents: 'none'
           }}
         />
-        {/* Green gradient - left side - VISIBLE */}
+        {/* Green gradient - left side - SUBTLE */}
         <div
           style={{
             position: 'absolute',
@@ -65,8 +65,8 @@ export default async function DashboardPage() {
             left: '-5%',
             width: '300px',
             height: '300px',
-            background: 'radial-gradient(circle, rgba(34, 197, 94, 0.3) 0%, rgba(34, 197, 94, 0.1) 40%, transparent 65%)',
-            filter: 'blur(50px)',
+            background: 'radial-gradient(circle, rgba(34, 197, 94, 0.06) 0%, rgba(34, 197, 94, 0.02) 40%, transparent 65%)',
+            filter: 'blur(60px)',
             zIndex: 0,
             pointerEvents: 'none'
           }}
@@ -79,13 +79,13 @@ export default async function DashboardPage() {
             right: '5%',
             width: '400px',
             height: '400px',
-            background: 'radial-gradient(circle, rgba(234, 179, 8, 0.25) 0%, rgba(234, 179, 8, 0.1) 35%, transparent 60%)',
-            filter: 'blur(60px)',
+            background: 'radial-gradient(circle, rgba(234, 179, 8, 0.05) 0%, rgba(234, 179, 8, 0.02) 35%, transparent 60%)',
+            filter: 'blur(70px)',
             zIndex: 0,
             pointerEvents: 'none'
           }}
         />
-        {/* Cyan accent - bottom left - VISIBLE */}
+        {/* Cyan accent - bottom left - SUBTLE */}
         <div
           style={{
             position: 'absolute',
@@ -93,13 +93,13 @@ export default async function DashboardPage() {
             left: '10%',
             width: '250px',
             height: '250px',
-            background: 'radial-gradient(circle, rgba(6, 182, 212, 0.28) 0%, transparent 55%)',
-            filter: 'blur(45px)',
+            background: 'radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 55%)',
+            filter: 'blur(55px)',
             zIndex: 0,
             pointerEvents: 'none'
           }}
         />
-        {/* Orange gradient - right side - SUBTLE but VISIBLE */}
+        {/* Orange gradient - right side - VERY SUBTLE */}
         <div
           style={{
             position: 'absolute',
@@ -107,8 +107,8 @@ export default async function DashboardPage() {
             right: '15%',
             width: '200px',
             height: '200px',
-            background: 'radial-gradient(circle, rgba(251, 146, 60, 0.2) 0%, transparent 55%)',
-            filter: 'blur(50px)',
+            background: 'radial-gradient(circle, rgba(251, 146, 60, 0.04) 0%, transparent 55%)',
+            filter: 'blur(60px)',
             transform: 'translateY(-50%)',
             zIndex: 0,
             pointerEvents: 'none'
@@ -121,13 +121,13 @@ export default async function DashboardPage() {
             {/* Header */}
             <header className="flex justify-between items-center mb-8">
               <div>
-                <h1 className="text-title1 font-heavy text-accent">Welcome Back!</h1>
+                <h1 className="text-title1 font-heavy text-cyan-600">Welcome Back!</h1>
                 <div className="flex items-center gap-4 mt-2">
-                  <p className="text-white-70">{user.email}</p>
+                  <p className="text-gray-600">{user.email}</p>
                   {profile?.grade && (
                     <Badge
                       variant="secondary"
-                      className="flex items-center gap-1 bg-white-5 border-white-10 text-white-70"
+                      className="flex items-center gap-1 bg-gray-100 border-gray-200 text-gray-600"
                     >
                       <GraduationCap className="h-3 w-3" />
                       {GRADE_LABELS[profile.grade]}
@@ -139,7 +139,7 @@ export default async function DashboardPage() {
                 <Button
                   variant="outline"
                   type="submit"
-                  className="bg-white-5 border-white-10 text-white-70 hover:bg-white-10 hover:text-white-100"
+                  className="bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100 hover:text-gray-800"
                 >
                   Sign Out
                 </Button>
@@ -147,7 +147,7 @@ export default async function DashboardPage() {
             </header>
 
             {/* Dashboard Content */}
-            <DashboardContent
+            <DashboardContentLight
               user={user}
               profile={profile}
               textbookCount={textbookCount || 0}

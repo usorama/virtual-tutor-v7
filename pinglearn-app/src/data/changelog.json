@@ -1,0 +1,48 @@
+{
+  "entries": [
+    {
+      "version": "1.0.0",
+      "date": "2025-09-26",
+      "type": "major",
+      "title": "PingLearn AI Math Tutor - Initial Release",
+      "description": "The revolutionary AI-powered mathematics learning platform that combines voice interaction with beautiful visual learning.",
+      "features": [
+        "🎯 AI-powered mathematics tutoring with Gemini Live API integration",
+        "🎤 LiveKit voice agent for real-time conversational learning",
+        "📐 Beautiful KaTeX mathematical equation rendering with SHOW-then-TELL synchronization",
+        "🌈 Ethereal shadow backgrounds with seamless multi-color blending",
+        "📊 Comprehensive dashboard with real-time learning metrics",
+        "🧙‍♂️ Interactive setup wizard for personalized learning experience",
+        "📚 Complete NCERT Grade 10 Mathematics curriculum integration",
+        "💬 Real-time transcription with intelligent math detection",
+        "📱 Fully responsive design for all screen sizes",
+        "🎨 Modern glassmorphism UI with ultra-rounded corners"
+      ],
+      "improvements": [
+        "Zero TypeScript errors with strict mode enforcement",
+        "Protected core architecture for stability",
+        "Optimized performance with Turbopack",
+        "Seamless WebSocket singleton management",
+        "Feature flag system for safe rollouts"
+      ],
+      "technical": [
+        "Next.js 15.5.3 with App Router",
+        "TypeScript strict mode",
+        "Supabase for authentication and data",
+        "shadcn/ui component library",
+        "Framer Motion animations",
+        "Tailwind CSS for styling"
+      ],
+      "contributors": [
+        "PingLearn Development Team",
+        "Claude AI Assistant",
+        "Open Source Community"
+      ]
+    }
+  ],
+  "metadata": {
+    "lastUpdated": "2025-09-26",
+    "totalReleases": 1,
+    "currentVersion": "1.0.0"
+  }
+}

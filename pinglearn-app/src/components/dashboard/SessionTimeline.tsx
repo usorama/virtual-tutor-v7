@@ -86,19 +86,49 @@ export function SessionTimeline({ sessions, onSessionClick, className }: Session
     <Card
       className={`p-6 overflow-hidden ${className}`}
       style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.03)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(10px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(10px) saturate(180%)',
         border: '1px solid rgba(255, 255, 255, 0.1)',
         boxShadow: `
-          inset -4px -4px 12px rgba(128,128,128,0.95),
-          inset 4px 4px 12px rgba(0,0,0,0.1),
-          0 14px 48px -10px rgba(6, 182, 212, 0.06),
-          0 8px 28px -6px rgba(34, 197, 94, 0.04)
+          inset -2px -2px 7px rgba(255,255,255,0.95),
+          inset 2px 2px 7px rgba(0,0,0,0.1),
+          0 10px 36px -6px rgba(34, 197, 94, 0.06),
+          0 6px 24px -4px rgba(0, 0, 0, 0.15)
         `,
-        borderRadius: '32px'
+        borderRadius: '32px',
+        overflow: 'hidden'
       }}
     >
+      {/* Pure White Corner Highlights - Internal glow effect */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '50px',
+          height: '50px',
+          background: 'radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 15%, rgba(255, 255, 255, 0.7) 25%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.05) 45%, rgba(0, 0, 0, 0) 55%)',
+          pointerEvents: 'none',
+          opacity: 1,
+          mixBlendMode: 'screen',
+          filter: 'blur(3px)'
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          right: 0,
+          width: '60px',
+          height: '55px',
+          background: 'radial-gradient(ellipse at 100% 100%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 15%, rgba(255, 255, 255, 0.7) 25%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.05) 45%, rgba(0, 0, 0, 0) 55%)',
+          pointerEvents: 'none',
+          opacity: 1,
+          mixBlendMode: 'screen',
+          filter: 'blur(3px)'
+        }}
+      />
       <h3 className="text-title2 font-bold text-accent-cyan mb-6">Recent Sessions</h3>
 
       {/* Timeline Container */}
@@ -162,7 +192,10 @@ export function SessionTimeline({ sessions, onSessionClick, className }: Session
 
       {/* View All Sessions Button */}
       <div className="text-center mt-6">
-        <button className="inline-flex items-center gap-2 px-6 py-3 bg-white-5 border border-white-10 rounded-2xl text-body font-medium text-white-70 hover:bg-white-10 hover:text-white-100 hover:border-white-20 transition-all duration-300">
+        <button className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-body font-medium text-white-70 hover:text-white-100 transition-all duration-300" style={{
+          backgroundColor: 'rgba(20, 20, 22, 0.6)',
+          border: '1px solid rgba(255, 255, 255, 0.08)'
+        }}>
           <span>View All Sessions</span>
           <ArrowRight className="h-3.5 w-3.5" />
         </button>

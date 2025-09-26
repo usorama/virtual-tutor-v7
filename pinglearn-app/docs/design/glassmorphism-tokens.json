@@ -1,0 +1,221 @@
+{
+  "$schema": "https://design-tokens.io/draft-07/schema",
+  "name": "PingLearn Glassmorphism Design Tokens",
+  "version": "2.0.0",
+  "description": "Apple 2025 Glassmorphism design tokens for PingLearn dashboard components",
+  "lastUpdated": "2025-09-26",
+
+  "glassmorphism": {
+    "containers": {
+      "main": {
+        "backgroundColor": {
+          "value": "rgba(255, 255, 255, 0.1)",
+          "type": "color",
+          "description": "Apple 2025 main container glassmorphism background"
+        },
+        "backdropFilter": {
+          "value": "blur(10px) saturate(180%)",
+          "type": "filter",
+          "description": "Apple glassmorphism blur with saturation boost"
+        },
+        "border": {
+          "value": "1px solid rgba(255, 255, 255, 0.05)",
+          "type": "border",
+          "description": "Subtle border for glass containers"
+        },
+        "borderRadius": {
+          "value": "32px",
+          "type": "dimension",
+          "description": "Ultra-rounded corners for Apple aesthetics"
+        },
+        "boxShadow": {
+          "value": "inset -2px -2px 6px rgba(255,255,255,0.9), inset 2px 2px 6px rgba(0,0,0,0.1), 0 10px 36px -6px rgba(34, 197, 94, 0.06), 0 6px 24px -4px rgba(0, 0, 0, 0.15)",
+          "type": "shadow",
+          "description": "Inner shadows with pure white highlights + outer shadows"
+        }
+      },
+      "inner": {
+        "backgroundColor": {
+          "value": "rgba(20, 20, 22, 0.6)",
+          "type": "color",
+          "description": "Standardized inner section background - 60% opacity"
+        },
+        "border": {
+          "value": "1px solid rgba(255, 255, 255, 0.08)",
+          "type": "border",
+          "description": "Inner section border"
+        }
+      },
+      "iconCircle": {
+        "backgroundColor": {
+          "value": "rgba(20, 20, 22, 0.8)",
+          "type": "color",
+          "description": "Standardized icon circle background - 80% opacity (DARKEST)"
+        },
+        "border": {
+          "value": "1px solid rgba(255, 255, 255, 0.1)",
+          "type": "border",
+          "description": "Icon circle border"
+        }
+      }
+    },
+
+    "cornerHighlights": {
+      "topLeft": {
+        "background": {
+          "value": "radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 15%, rgba(255, 255, 255, 0.7) 25%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.05) 45%, rgba(0, 0, 0, 0) 55%)",
+          "type": "gradient",
+          "description": "Pure white corner highlight - top left"
+        },
+        "size": {
+          "width": "50px",
+          "height": "50px"
+        },
+        "filter": {
+          "value": "blur(3px)",
+          "type": "filter"
+        },
+        "mixBlendMode": {
+          "value": "screen",
+          "type": "blendMode"
+        }
+      },
+      "bottomRight": {
+        "background": {
+          "value": "radial-gradient(ellipse at 100% 100%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 15%, rgba(255, 255, 255, 0.7) 25%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.05) 45%, rgba(0, 0, 0, 0) 55%)",
+          "type": "gradient",
+          "description": "Pure white corner highlight - bottom right"
+        },
+        "size": {
+          "width": "60px",
+          "height": "55px"
+        },
+        "filter": {
+          "value": "blur(3px)",
+          "type": "filter"
+        },
+        "mixBlendMode": {
+          "value": "screen",
+          "type": "blendMode"
+        }
+      }
+    },
+
+    "backgroundGradients": {
+      "cyan": {
+        "topCenter": {
+          "value": "radial-gradient(circle, rgba(6, 182, 212, 0.35) 0%, rgba(6, 182, 212, 0.15) 30%, transparent 60%)",
+          "type": "gradient",
+          "position": "top: 5%, left: 35%",
+          "size": "350px x 350px",
+          "filter": "blur(40px)"
+        },
+        "bottomLeft": {
+          "value": "radial-gradient(circle, rgba(6, 182, 212, 0.28) 0%, transparent 55%)",
+          "type": "gradient",
+          "position": "bottom: 25%, left: 10%",
+          "size": "250px x 250px",
+          "filter": "blur(45px)"
+        }
+      },
+      "green": {
+        "leftSide": {
+          "value": "radial-gradient(circle, rgba(34, 197, 94, 0.3) 0%, rgba(34, 197, 94, 0.1) 40%, transparent 65%)",
+          "type": "gradient",
+          "position": "top: 20%, left: -5%",
+          "size": "300px x 300px",
+          "filter": "blur(50px)"
+        }
+      },
+      "yellow": {
+        "bottomRight": {
+          "value": "radial-gradient(circle, rgba(234, 179, 8, 0.25) 0%, rgba(234, 179, 8, 0.1) 35%, transparent 60%)",
+          "type": "gradient",
+          "position": "bottom: 10%, right: 5%",
+          "size": "400px x 400px",
+          "filter": "blur(60px)"
+        }
+      },
+      "orange": {
+        "rightSide": {
+          "value": "radial-gradient(circle, rgba(251, 146, 60, 0.2) 0%, transparent 55%)",
+          "type": "gradient",
+          "position": "top: 45%, right: 15%",
+          "size": "200px x 200px",
+          "filter": "blur(50px)"
+        }
+      }
+    },
+
+    "etherealShadow": {
+      "config": {
+        "color": "rgba(60, 60, 70, 0.5)",
+        "animation": {
+          "scale": 50,
+          "speed": 80
+        },
+        "noise": {
+          "opacity": 30,
+          "scale": 0.5
+        }
+      }
+    },
+
+    "standardColors": {
+      "iconColor": {
+        "value": "#06B6D4",
+        "type": "color",
+        "description": "Standard cyan color for all icons"
+      },
+      "accent": {
+        "value": "#06B6D4",
+        "type": "color",
+        "description": "Primary accent color"
+      },
+      "textWhite100": {
+        "value": "rgba(255, 255, 255, 1)",
+        "type": "color",
+        "description": "Primary white text"
+      },
+      "textWhite70": {
+        "value": "rgba(255, 255, 255, 0.7)",
+        "type": "color",
+        "description": "Secondary white text"
+      },
+      "textWhite50": {
+        "value": "rgba(255, 255, 255, 0.5)",
+        "type": "color",
+        "description": "Muted white text"
+      }
+    }
+  },
+
+  "usage": {
+    "description": "How to use these tokens in components",
+    "examples": {
+      "mainContainer": {
+        "style": {
+          "backgroundColor": "glassmorphism.containers.main.backgroundColor",
+          "backdropFilter": "glassmorphism.containers.main.backdropFilter",
+          "WebkitBackdropFilter": "glassmorphism.containers.main.backdropFilter",
+          "border": "glassmorphism.containers.main.border",
+          "boxShadow": "glassmorphism.containers.main.boxShadow",
+          "borderRadius": "glassmorphism.containers.main.borderRadius",
+          "overflow": "hidden"
+        }
+      },
+      "innerSection": {
+        "style": {
+          "backgroundColor": "glassmorphism.containers.inner.backgroundColor",
+          "border": "glassmorphism.containers.inner.border"
+        }
+      },
+      "iconCircle": {
+        "style": {
+          "backgroundColor": "glassmorphism.containers.iconCircle.backgroundColor",
+          "border": "glassmorphism.containers.iconCircle.border"
+        }
+      }
+    }
+  }
+}

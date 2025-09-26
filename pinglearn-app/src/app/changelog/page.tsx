@@ -1,214 +1,183 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Timeline } from "@/components/ui/timeline";
-import Navigation from "@/components/marketing/sections/Navigation";
-import Footer from "@/components/marketing/sections/Footer";
-import { CheckCircle, Rocket, Code, Users, Brain, Shield } from "lucide-react";
+import Link from 'next/link';
+import { ArrowLeft, Clock, Calendar, Users, Package, Zap } from 'lucide-react';
+import { Timeline } from '@/components/ui/timeline';
+import { Component as EtheralShadow } from '@/components/ui/etheral-shadow';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import changelogData from '@/data/changelog.json';
 
 export default function ChangelogPage() {
-  const data = [
-    {
-      title: "Jan 2025",
-      content: (
-        <div>
-          <p className="text-white font-semibold text-sm md:text-base mb-8">
-            🚀 PingLearn v2.0 - Major Platform Overhaul
-          </p>
-          <div className="mb-8">
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm mb-2">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              Redesigned UI with glassmorphism effects
-            </div>
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm mb-2">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              Integrated Gemini Live API for enhanced learning
-            </div>
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm mb-2">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              Real-time streaming display improvements
-            </div>
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm mb-2">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              Protected core architecture implementation
-            </div>
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              Performance improvements: 400ms response time
+
+  // Transform changelog entries for timeline component
+  const timelineData = changelogData.entries.map((entry) => ({
+    title: `v${entry.version}`,
+    content: (
+      <div className="space-y-6">
+        {/* Header Section */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-3 flex-wrap">
+            <Badge
+              variant={(entry.type as string) === 'major' ? 'default' : (entry.type as string) === 'minor' ? 'secondary' : 'outline'}
+              className="text-sm px-3 py-1"
+            >
+              {entry.type.toUpperCase()} RELEASE
+            </Badge>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Calendar className="h-4 w-4" />
+              <span>{new Date(entry.date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}</span>
             </div>
           </div>
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4">
-            <div className="flex items-center space-x-3 mb-2">
-              <Rocket className="w-5 h-5 text-cyan-400" />
-              <span className="text-white font-medium">Key Achievement</span>
-            </div>
-            <p className="text-white/60 text-sm">
-              Successfully reduced latency by 60% through WebSocket optimization
-              and smart caching strategies.
-            </p>
-          </div>
+
+          <h3 className="text-2xl font-bold text-white">{entry.title}</h3>
+          <p className="text-lg text-white/70">{entry.description}</p>
         </div>
-      ),
-    },
-    {
-      title: "Dec 2024",
-      content: (
-        <div>
-          <p className="text-white font-semibold text-sm md:text-base mb-8">
-            🎄 Holiday Update - Voice Recognition Enhancements
-          </p>
-          <div className="mb-8">
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm mb-2">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              LiveKit voice agent integration
-            </div>
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm mb-2">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              Multi-language support (10 languages)
-            </div>
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm mb-2">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              Improved math equation recognition
-            </div>
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              KaTeX rendering optimization
+
+        {/* Features Section */}
+        {entry.features && entry.features.length > 0 && (
+          <div className="space-y-3">
+            <h4 className="text-lg font-semibold flex items-center gap-2 text-white">
+              <Zap className="h-5 w-5 text-green-500" />
+              New Features
+            </h4>
+            <ul className="space-y-2">
+              {entry.features.map((feature, idx) => (
+                <li key={idx} className="text-sm text-white/60 pl-4">
+                  {feature}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Improvements Section */}
+        {entry.improvements && entry.improvements.length > 0 && (
+          <div className="space-y-3">
+            <h4 className="text-lg font-semibold flex items-center gap-2 text-white">
+              <Package className="h-5 w-5 text-blue-500" />
+              Improvements
+            </h4>
+            <ul className="space-y-2">
+              {entry.improvements.map((improvement, idx) => (
+                <li key={idx} className="text-sm text-white/60 pl-4">
+                  • {improvement}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Technical Stack */}
+        {entry.technical && entry.technical.length > 0 && (
+          <div className="space-y-3">
+            <h4 className="text-lg font-semibold flex items-center gap-2 text-white">
+              <Clock className="h-5 w-5 text-purple-500" />
+              Technical Stack
+            </h4>
+            <ul className="space-y-2">
+              {entry.technical.map((tech, idx) => (
+                <li key={idx} className="text-sm text-white/60 pl-4">
+                  • {tech}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Contributors */}
+        {entry.contributors && entry.contributors.length > 0 && (
+          <div className="space-y-3">
+            <h4 className="text-lg font-semibold flex items-center gap-2 text-white">
+              <Users className="h-5 w-5 text-orange-500" />
+              Contributors
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {entry.contributors.map((contributor, idx) => (
+                <Badge key={idx} variant="outline" className="text-xs">
+                  {contributor}
+                </Badge>
+              ))}
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-3">
-              <Code className="w-8 h-8 text-cyan-400 mb-2" />
-              <p className="text-white/80 text-sm font-medium">15k+</p>
-              <p className="text-white/60 text-xs">Lines of Code</p>
-            </div>
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-3">
-              <Users className="w-8 h-8 text-cyan-400 mb-2" />
-              <p className="text-white/80 text-sm font-medium">5,000+</p>
-              <p className="text-white/60 text-xs">Beta Users</p>
-            </div>
-          </div>
-        </div>
-      ),
-    },
-    {
-      title: "Nov 2024",
-      content: (
-        <div>
-          <p className="text-white font-semibold text-sm md:text-base mb-8">
-            📚 CBSE Curriculum Integration
-          </p>
-          <div className="mb-8">
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm mb-2">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              Complete Grade 10 Mathematics syllabus
-            </div>
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm mb-2">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              NCERT textbook integration
-            </div>
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm mb-2">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              Chapter-wise progress tracking
-            </div>
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm mb-2">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              500+ practice problems added
-            </div>
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              Exam preparation mode launched
-            </div>
-          </div>
-        </div>
-      ),
-    },
-    {
-      title: "Oct 2024",
-      content: (
-        <div>
-          <p className="text-white font-semibold text-sm md:text-base mb-8">
-            🏗️ Foundation & Architecture
-          </p>
-          <div className="mb-8">
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm mb-2">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              Next.js 15 migration completed
-            </div>
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm mb-2">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              Supabase integration for auth & database
-            </div>
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm mb-2">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              TypeScript strict mode enabled
-            </div>
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              Initial MVP with basic chat functionality
-            </div>
-          </div>
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4">
-            <div className="flex items-center space-x-3 mb-2">
-              <Brain className="w-5 h-5 text-cyan-400" />
-              <span className="text-white font-medium">Innovation</span>
-            </div>
-            <p className="text-white/60 text-sm">
-              Pioneered the SHOW-then-TELL approach: mathematical concepts appear
-              400ms before voice explanation for optimal comprehension.
-            </p>
-          </div>
-        </div>
-      ),
-    },
-    {
-      title: "Sep 2024",
-      content: (
-        <div>
-          <p className="text-white font-semibold text-sm md:text-base mb-8">
-            💡 Project Inception
-          </p>
-          <div className="mb-8">
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm mb-2">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              PingLearn concept ideation
-            </div>
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm mb-2">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              Market research & competitor analysis
-            </div>
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm mb-2">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              Initial wireframes and prototypes
-            </div>
-            <div className="flex gap-2 items-center text-white/70 text-xs md:text-sm">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              Technology stack finalized
-            </div>
-          </div>
-          <div className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 rounded-lg p-4">
-            <div className="flex items-center space-x-3 mb-2">
-              <Shield className="w-5 h-5 text-cyan-400" />
-              <span className="text-white font-medium">Our Promise</span>
-            </div>
-            <p className="text-white/60 text-sm">
-              Building a safe, COPPA-compliant learning platform that puts
-              student privacy and educational outcomes first.
-            </p>
-          </div>
-        </div>
-      ),
-    },
-  ];
+        )}
+      </div>
+    )
+  }));
 
   return (
-    <>
-      <Navigation />
-      <div className="min-h-screen bg-black">
-        <div className="pt-32">
-          <Timeline data={data} />
+    <div className="min-h-screen bg-black relative overflow-hidden">
+      {/* Ethereal Shadow Background */}
+      <EtheralShadow
+        color="rgba(60, 60, 70, 0.7)"
+        animation={{ scale: 50, speed: 80 }}
+        noise={{ opacity: 30, scale: 0.5 }}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 0
+        }}
+      />
+
+      {/* Content */}
+      <div className="relative z-10">
+        {/* Navigation */}
+        <div className="container mx-auto px-4 py-6">
+          <Link href="/dashboard">
+            <Button variant="ghost" className="gap-2 text-white hover:text-white/80">
+              <ArrowLeft className="h-4 w-4" />
+              Back to Dashboard
+            </Button>
+          </Link>
+        </div>
+
+        {/* Main Content */}
+        <div className="container mx-auto px-4 pb-20">
+          <div className="max-w-7xl mx-auto">
+            {/* Page Header */}
+            <div className="text-center mb-12">
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                PingLearn Changelog
+              </h1>
+              <p className="text-lg text-white/70 max-w-2xl mx-auto">
+                Track the evolution of PingLearn as we continuously improve the AI-powered mathematics learning experience.
+              </p>
+
+              {/* Current Version Badge */}
+              <div className="mt-6">
+                <Badge variant="default" className="text-lg px-4 py-2 bg-cyan-500/20 border-cyan-500/50 text-cyan-200">
+                  Current Version: {changelogData.metadata.currentVersion}
+                </Badge>
+              </div>
+            </div>
+
+            {/* Timeline Component */}
+            <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8">
+              <Timeline data={timelineData} />
+            </div>
+
+            {/* Footer Stats */}
+            <div className="mt-20 text-center space-y-4">
+              <div className="flex justify-center gap-8 text-sm text-white/60">
+                <div>
+                  <span className="font-semibold text-white">{changelogData.metadata.totalReleases}</span>
+                  {' '}Total Release{changelogData.metadata.totalReleases !== 1 ? 's' : ''}
+                </div>
+                <div>
+                  Last Updated:{' '}
+                  <span className="font-semibold text-white">
+                    {new Date(changelogData.metadata.lastUpdated).toLocaleDateString()}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <Footer />
-    </>
+    </div>
   );
 }

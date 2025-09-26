@@ -180,15 +180,88 @@ export default function WizardPage() {
 
   return (
     <div className="relative h-screen overflow-hidden bg-black">
-      {/* Single Ethereal Shadow with seamless multi-color blending */}
+      {/* Ethereal shadow background with subtle vibrant colors */}
       <EtheralShadow
-        color="rgba(60, 60, 70, 0.7)"
+        color="rgba(60, 60, 70, 0.5)"
         animation={{ scale: 50, speed: 80 }}
         noise={{ opacity: 30, scale: 0.5 }}
         style={{
           position: 'absolute',
           inset: 0,
           zIndex: 0
+        }}
+      />
+
+      {/* Additional color gradients for depth - more visible and distinct */}
+      {/* Cyan gradient - top center - STRONGER */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '5%',
+          left: '35%',
+          width: '350px',
+          height: '350px',
+          background: 'radial-gradient(circle, rgba(6, 182, 212, 0.35) 0%, rgba(6, 182, 212, 0.15) 30%, transparent 60%)',
+          filter: 'blur(40px)',
+          zIndex: 0,
+          pointerEvents: 'none'
+        }}
+      />
+      {/* Green gradient - left side - VISIBLE */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '20%',
+          left: '-5%',
+          width: '300px',
+          height: '300px',
+          background: 'radial-gradient(circle, rgba(34, 197, 94, 0.3) 0%, rgba(34, 197, 94, 0.1) 40%, transparent 65%)',
+          filter: 'blur(50px)',
+          zIndex: 0,
+          pointerEvents: 'none'
+        }}
+      />
+      {/* Yellow gradient - bottom right - WARM ACCENT */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: '10%',
+          right: '5%',
+          width: '400px',
+          height: '400px',
+          background: 'radial-gradient(circle, rgba(234, 179, 8, 0.25) 0%, rgba(234, 179, 8, 0.1) 35%, transparent 60%)',
+          filter: 'blur(60px)',
+          zIndex: 0,
+          pointerEvents: 'none'
+        }}
+      />
+      {/* Cyan accent - bottom left - VISIBLE */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: '25%',
+          left: '10%',
+          width: '250px',
+          height: '250px',
+          background: 'radial-gradient(circle, rgba(6, 182, 212, 0.28) 0%, transparent 55%)',
+          filter: 'blur(45px)',
+          zIndex: 0,
+          pointerEvents: 'none'
+        }}
+      />
+      {/* Orange gradient - right side - SUBTLE but VISIBLE */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '45%',
+          right: '15%',
+          width: '200px',
+          height: '200px',
+          background: 'radial-gradient(circle, rgba(251, 146, 60, 0.2) 0%, transparent 55%)',
+          filter: 'blur(50px)',
+          transform: 'translateY(-50%)',
+          zIndex: 0,
+          pointerEvents: 'none'
         }}
       />
 
@@ -366,7 +439,7 @@ export default function WizardPage() {
           <div className="relative">
             <Card className="p-6 overflow-hidden relative z-10 w-full flex flex-col md:rounded-t-none"
                 style={{
-                  backgroundColor: 'rgba(20, 20, 22, 0.6)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.02)',
                   backdropFilter: 'blur(20px)',
                   WebkitBackdropFilter: 'blur(20px)',
                   borderLeft: '1px solid rgba(255, 255, 255, 0.08)',
@@ -377,33 +450,30 @@ export default function WizardPage() {
                   marginTop: '0',
                   width: '100%',
                   boxShadow: `
-                    inset -4px -4px 12px rgba(128, 128, 128, 0.95),
-                    inset 4px 4px 12px rgba(0, 0, 0, 0.2),
-                    0 8px 32px -8px rgba(0, 0, 0, 0.3),
-                    0 4px 20px -4px rgba(6, 182, 212, 0.15),
-                    0 2px 16px -2px rgba(34, 197, 94, 0.08)
+                    inset 0 -2px 7px rgba(255, 255, 255, 0.95),
+                    inset -2px 0 7px rgba(0, 0, 0, 0.1),
+                    0 10px 36px -6px rgba(34, 197, 94, 0.06),
+                    0 6px 24px -4px rgba(0, 0, 0, 0.15)
                   `,
-                  position: 'relative'
+                  position: 'relative',
+                  overflow: 'hidden'
                 }}>
-              {/* Top border that's segmented - hidden under active tab */}
+              {/* Pure White Corner Highlight - Bottom Right Only */}
               <div
-                className="absolute top-0 left-0 right-0 h-[1px] hidden md:block"
                 style={{
-                  background: 'linear-gradient(to right, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.08) 100%)',
-                  zIndex: 5
+                  position: 'absolute',
+                  bottom: 0,
+                  right: 0,
+                  width: '60px',
+                  height: '55px',
+                  background: 'radial-gradient(ellipse at 100% 100%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 15%, rgba(255, 255, 255, 0.7) 25%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.05) 45%, rgba(0, 0, 0, 0) 55%)',
+                  pointerEvents: 'none',
+                  opacity: 1,
+                  mixBlendMode: 'screen',
+                  filter: 'blur(3px)',
+                  borderBottomRightRadius: '40px'
                 }}
-              >
-                {/* Hide border segment under active tab */}
-                <div
-                  className="absolute h-[1px]"
-                  style={{
-                    left: `${(state.currentStep * 100) / WIZARD_STEP_NAMES.length}%`,
-                    width: `${100 / WIZARD_STEP_NAMES.length}%`,
-                    backgroundColor: 'rgba(6, 182, 212, 0.05)',
-                    top: 0
-                  }}
-                />
-              </div>
+              />
 
 
           {/* Content Area with dynamic height */}
