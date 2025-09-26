@@ -47,8 +47,8 @@ export function MetricCard({ title, value, change, icon, className }: MetricCard
         WebkitBackdropFilter: 'blur(20px)',
         border: '1px solid rgba(255, 255, 255, 0.08)',
         boxShadow: `
-          inset -2px -2px 6px rgba(255, 255, 255, 0.01),
-          inset 2px 2px 6px rgba(0, 0, 0, 0.4),
+          inset -4px -4px 12px rgba(128, 128, 128, 0.95),
+          inset 4px 4px 12px rgba(0, 0, 0, 0.2),
           0 8px 32px -8px rgba(0, 0, 0, 0.3),
           0 4px 20px -4px rgba(6, 182, 212, 0.15),
           0 2px 16px -2px rgba(34, 197, 94, 0.08)
