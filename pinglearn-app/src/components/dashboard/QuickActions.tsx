@@ -88,20 +88,15 @@ export function QuickActions({ className }: { className?: string }) {
                 border: '1px solid rgba(255, 255, 255, 0.06)'
               }}
             >
-              {/* Icon with glass effect cyan circle */}
+              {/* Icon with black circle */}
               <div
-                className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center relative overflow-hidden"
+                className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
                 style={{
-                  background: 'rgba(6, 182, 212, 0.7)',
-                  boxShadow: `
-                    inset 2px 2px 4px rgba(255, 255, 255, 0.25),
-                    inset -2px -2px 4px rgba(0, 0, 0, 0.3),
-                    0 2px 8px rgba(6, 182, 212, 0.3)
-                  `,
+                  backgroundColor: 'rgb(0, 0, 0)',
                   border: '1px solid rgba(255, 255, 255, 0.1)'
                 }}
               >
-                <div className="text-white-100">
+                <div className="text-accent-cyan">
                   {action.icon}
                 </div>
               </div>

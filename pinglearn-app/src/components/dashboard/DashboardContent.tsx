@@ -14,7 +14,7 @@ import {
 import { GRADE_LABELS } from '@/types/wizard'
 import { ComboChart } from './ComboChart'
 import { SessionTimeline } from './SessionTimeline'
-import { MetricCard } from './MetricCard'
+import { MetricCardV2 } from './MetricCardV2'
 import { QuickActions } from './QuickActions'
 
 interface DashboardContentProps {
@@ -118,61 +118,61 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
 
       {/* Metric Cards Grid - 4x2 layout */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <MetricCard
+        <MetricCardV2
           title="Study Sessions"
           value={14}
           change={{ value: '12%', trend: 'up', description: '12% from last week' }}
-          icon={<Clock className="h-6 w-6" />}
+          icon={<Clock className="h-5 w-5" />}
         />
 
-        <MetricCard
+        <MetricCardV2
           title="Topics Mastered"
           value={18}
           change={{ value: '3', trend: 'up', description: '3 new this week' }}
-          icon={<BookOpen className="h-6 w-6" />}
+          icon={<BookOpen className="h-5 w-5" />}
         />
 
-        <MetricCard
+        <MetricCardV2
           title="Voice Minutes"
           value={156}
           change={{ value: '28%', trend: 'up', description: '28% increase' }}
-          icon={<Mic className="h-6 w-6" />}
+          icon={<Mic className="h-5 w-5" />}
         />
 
-        <MetricCard
+        <MetricCardV2
           title="Math Problems"
           value={89}
           change={{ value: '15', trend: 'up', description: '15 solved today' }}
-          icon={<Activity className="h-6 w-6" />}
+          icon={<Activity className="h-5 w-5" />}
         />
 
-        <MetricCard
+        <MetricCardV2
           title="Textbooks"
           value={textbookCount}
           change={{ value: '2', trend: 'up', description: '2 added recently' }}
-          icon={<BookOpen className="h-6 w-6" />}
+          icon={<BookOpen className="h-5 w-5" />}
         />
 
-        <MetricCard
+        <MetricCardV2
           title="Achievements"
           value={7}
           change={{ value: '1', trend: 'up', description: '1 new badge earned' }}
-          icon={<Trophy className="h-6 w-6" />}
+          icon={<Trophy className="h-5 w-5" />}
         />
 
-        <MetricCard
+        <MetricCardV2
           title="Study Streak"
           value="5 days"
           change={{ value: 'ongoing', trend: 'up', description: 'Keep it going!' }}
-          icon={<Flame className="h-6 w-6" />}
+          icon={<Flame className="h-5 w-5" />}
         />
 
         {/* Weekly Goal Card - replacing circular progress */}
-        <MetricCard
+        <MetricCardV2
           title="Weekly Goal"
           value="87%"
           change={{ value: '28/32', trend: 'up', description: '4 topics to go!' }}
-          icon={<Target className="h-6 w-6" />}
+          icon={<Target className="h-5 w-5" />}
         />
       </div>
 
@@ -198,17 +198,12 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
              }}>
           <div className="flex items-center gap-3 mb-4">
             <div
-              className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 relative overflow-hidden"
+              className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
               style={{
-                background: 'rgba(6, 182, 212, 0.7)',
-                boxShadow: `
-                  inset 2px 2px 4px rgba(255, 255, 255, 0.25),
-                  inset -2px -2px 4px rgba(0, 0, 0, 0.3),
-                  0 2px 8px rgba(6, 182, 212, 0.3)
-                `,
+                backgroundColor: 'rgb(0, 0, 0)',
                 border: '1px solid rgba(255, 255, 255, 0.1)'
               }}>
-              <Sparkles className="h-6 w-6 text-white-100" />
+              <Sparkles className="h-6 w-6 text-accent-cyan" />
             </div>
             <h3 className="text-title3 font-bold text-accent">Your Learning Profile</h3>
           </div>
