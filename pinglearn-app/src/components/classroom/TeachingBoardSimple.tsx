@@ -38,6 +38,9 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
   const displayBufferRef = useRef<DisplayBuffer | null>(null);
   const [highlightTrigger, setHighlightTrigger] = useState(0);
 
+  // 400ms timing queue for show-then-tell methodology
+  const pendingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   // Smart math detection
   const isValidMathContent = useCallback((content: string): boolean => {
     const cleanContent = content.trim();
@@ -228,7 +231,18 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
           // Subscribe to future updates - this is reactive!
           unsubscribe = displayBuffer.subscribe((items) => {
             console.log('[TeachingBoardSimple] Buffer update received:', items.length, 'items');
-            processBufferItems(items as LiveDisplayItem[]);
+
+            // Clear any existing timeout to prevent multiple delays
+            if (pendingTimeoutRef.current) {
+              clearTimeout(pendingTimeoutRef.current);
+            }
+
+            // SHOW-THEN-TELL: Visual content appears after 400ms delay
+            // This gives visual lead time before audio for optimal learning comprehension
+            pendingTimeoutRef.current = setTimeout(() => {
+              console.log('[TeachingBoardSimple] Processing items after 400ms delay');
+              processBufferItems(items as LiveDisplayItem[]);
+            }, 400); // 400ms visual lead time
           });
 
           // Highlight trigger for time-based highlighting
@@ -257,6 +271,10 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
       }
       if (highlightInterval) {
         clearInterval(highlightInterval);
+      }
+      // Clear pending timeout to prevent memory leaks
+      if (pendingTimeoutRef.current) {
+        clearTimeout(pendingTimeoutRef.current);
       }
     };
   }, [processBufferItems, sessionId]);
