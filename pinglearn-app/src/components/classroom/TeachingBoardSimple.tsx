@@ -225,6 +225,15 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
       }
     });
 
+    // POST-PROCESSING: Re-evaluate paragraph types after aggregation
+    // This catches math content that spans multiple chunks (like "fraction p/q, where p and q are integers")
+    aggregatedContent.forEach(paragraph => {
+      if (paragraph.type === 'text' && isValidMathContent(paragraph.content)) {
+        console.log('[TeachingBoardSimple] Converting text to math:', paragraph.content.substring(0, 50) + '...');
+        paragraph.type = 'math';
+      }
+    });
+
     console.log('[TeachingBoardSimple] Aggregated', teacherItems.length, 'chunks into', aggregatedContent.length, 'paragraphs');
 
     setContent(aggregatedContent);
@@ -307,18 +316,56 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
     };
   }, [processBufferItems, sessionId]);
 
-  // Render math with KaTeX
-  const renderMath = (latex: string) => {
+  // Enhanced math rendering with natural language preprocessing
+  const renderMath = (content: string) => {
     try {
-      return katex.renderToString(latex, {
+      // If content is already LaTeX, render directly
+      if (content.includes('\\') || content.includes('$')) {
+        return katex.renderToString(content, {
+          displayMode: true,
+          throwOnError: false,
+          trust: true,
+          strict: false
+        });
+      }
+
+      // Convert natural language math to LaTeX
+      let processedContent = content;
+
+      // Convert common patterns to LaTeX
+      processedContent = processedContent
+        // Handle fractions like "fraction p/q" -> "\frac{p}{q}"
+        .replace(/\bfraction\s+([a-z0-9]+)\s*\/\s*([a-z0-9]+)/gi, '\\frac{$1}{$2}')
+        // Handle "square root of x" -> "\sqrt{x}"
+        .replace(/\bsquare\s+root\s+of\s+([a-z0-9]+)/gi, '\\sqrt{$1}')
+        // Handle "x squared" -> "x^2"
+        .replace(/\b([a-z])\s+squared\b/gi, '$1^2')
+        // Handle "x cubed" -> "x^3"
+        .replace(/\b([a-z])\s+cubed\b/gi, '$1^3')
+        // Handle "is equal to" -> "="
+        .replace(/\bis\s+equal\s+to\b/gi, ' = ')
+        // Handle "greater than" -> ">"
+        .replace(/\bgreater\s+than\b/gi, ' > ')
+        // Handle "less than" -> "<"
+        .replace(/\bless\s+than\b/gi, ' < ');
+
+      // If still no LaTeX detected after conversion, wrap in text mode
+      if (!processedContent.includes('\\') && !processedContent.includes('^')) {
+        // For pure text descriptions, render as formatted text with math styling
+        return `<span class="font-mono text-lg bg-gray-50 dark:bg-gray-800 px-2 py-1 rounded">${processedContent}</span>`;
+      }
+
+      // Render the processed LaTeX
+      return katex.renderToString(processedContent, {
         displayMode: true,
         throwOnError: false,
         trust: true,
         strict: false
       });
     } catch (error) {
-      console.error('KaTeX rendering error:', error);
-      return `<span class="text-red-500">[Math Error]</span>`;
+      console.error('KaTeX rendering error for content:', content, error);
+      // Fallback to styled text if KaTeX fails
+      return `<span class="font-mono text-lg bg-gray-50 dark:bg-gray-800 px-2 py-1 rounded text-blue-700 dark:text-blue-300">${content}</span>`;
     }
   };
 
