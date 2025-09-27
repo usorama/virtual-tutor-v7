@@ -332,7 +332,7 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
   return (
     <div className={`h-full bg-background ${className}`}>
       <ScrollArea ref={scrollAreaRef} className="h-full">
-        <div className="p-6 max-w-4xl mx-auto">
+        <div className="px-6 pt-6 pb-24 max-w-4xl mx-auto">
           {error ? (
             <div className="text-center text-red-600 py-12">
               <p className="text-lg font-medium mb-2">Error</p>

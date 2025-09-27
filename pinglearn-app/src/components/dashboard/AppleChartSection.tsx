@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ComboChart } from './ComboChart'
+import { AppleComboChart } from './AppleComboChart'
 import { AppleLightGlassContainer } from './AppleLightGlass'
 
 export function AppleChartSection() {
@@ -15,7 +15,7 @@ export function AppleChartSection() {
 
   return (
     <AppleLightGlassContainer>
-      <ComboChart
+      <AppleComboChart
         data={mockChartData}
         period={chartPeriod}
         onPeriodChange={setChartPeriod}

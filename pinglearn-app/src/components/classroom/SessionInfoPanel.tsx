@@ -5,19 +5,22 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
 import { Progress } from '@/components/ui/progress';
 import {
-  Volume2, VolumeX, Clock, TrendingUp,
+  Clock, TrendingUp,
   Activity, BookOpen, Signal, ChevronRight,
   Sparkles, Zap
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { AudioControlPanel } from './AudioControlPanel';
 
 interface AudioControlState {
-  isMuted: boolean;
-  volume: number;
-  hasPermissions?: boolean;
+  // Microphone controls (student input)
+  micMuted: boolean;
+  micPermissions: boolean;
+  // Volume controls (teacher output)
+  teacherVolume: number;
+  teacherMuted: boolean;
 }
 
 interface SessionInfoPanelProps {
@@ -101,8 +104,8 @@ export function SessionInfoPanel({
 
   return (
     <div className={cn("flex flex-col h-full bg-background/80 dark:bg-background/60", className)}>
-      <ScrollArea className="flex-1 p-3">
-        <div className="space-y-3">
+      <ScrollArea className="flex-1">
+        <div className="p-3 pb-20 space-y-3">
           {/* Session Status - Glassmorphic Header */}
           <GlassCard>
             <div className="p-4">
@@ -218,67 +221,19 @@ export function SessionInfoPanel({
             </GlassCard>
           )}
 
-          {/* Audio Controls - Glassmorphic */}
+          {/* Audio Controls - Using AudioControlPanel */}
           <GlassCard>
-            <div className="p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center">
-                  <Volume2 className="w-3 h-3 text-purple-400" />
-                </div>
-                <span className="text-sm font-medium">Audio</span>
-              </div>
-
-              {/* Volume Control */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={onMuteToggle}
-                    className="h-7 w-7 hover:bg-white/10"
-                  >
-                    {audioControls.isMuted ? (
-                      <VolumeX className="w-3 h-3" />
-                    ) : (
-                      <Volume2 className="w-3 h-3" />
-                    )}
-                  </Button>
-                  <Slider
-                    value={[audioControls.isMuted ? 0 : audioControls.volume]}
-                    onValueChange={([value]) => onVolumeChange(value)}
-                    max={100}
-                    step={1}
-                    className="flex-1"
-                    disabled={audioControls.isMuted}
-                  />
-                  <span className="text-xs text-muted-foreground w-8 text-right tabular-nums">
-                    {audioControls.isMuted ? '0' : audioControls.volume}
-                  </span>
-                </div>
-
-                {/* Speed Controls */}
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-muted-foreground">Speed</span>
-                  <div className="flex gap-1">
-                    {['0.75x', '1x', '1.25x'].map((speed) => (
-                      <Button
-                        key={speed}
-                        variant={speed === '1x' ? 'secondary' : 'ghost'}
-                        size="sm"
-                        className={cn(
-                          "h-6 px-2 text-xs",
-                          speed === '1x'
-                            ? "bg-primary/20 hover:bg-primary/30"
-                            : "hover:bg-white/10"
-                        )}
-                      >
-                        {speed}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <AudioControlPanel
+              audioControls={audioControls}
+              onVolumeChange={onVolumeChange}
+              onMuteToggle={onMuteToggle}
+              onSpeedChange={(speed) => {
+                // TODO: Implement speed change handler
+                console.log('Speed changed to:', speed);
+              }}
+              currentSpeed={1}
+              className="bg-transparent border-none shadow-none"
+            />
           </GlassCard>
 
           {/* Curriculum Navigation - Glassmorphic */}

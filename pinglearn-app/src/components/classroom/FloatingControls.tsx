@@ -13,19 +13,24 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
-import styles from '@/styles/floating-controls.module.css';
+import { AudioControlPanel } from './AudioControlPanel';
 
 interface FloatingControlsProps {
   audioControls: {
-    isMuted: boolean;
-    volume: number;
+    // Microphone controls (student input)
+    micMuted: boolean;
+    micPermissions: boolean;
+    // Volume controls (teacher output)
+    teacherVolume: number;
+    teacherMuted: boolean;
   };
   sessionControlState: 'active' | 'paused' | 'ended';
   isTransitioning: boolean;
   isConnecting: boolean;
   isLoading: boolean;
-  onMuteToggle: () => void;
-  onVolumeChange: (volume: number) => void;
+  onMicMuteToggle: () => void;
+  onTeacherVolumeChange: (volume: number) => void;
+  onTeacherMuteToggle: () => void;
   onPauseResume: () => void;
   onEndSession: () => void;
   className?: string;
@@ -37,28 +42,52 @@ export function FloatingControls({
   isTransitioning,
   isConnecting,
   isLoading,
-  onMuteToggle,
-  onVolumeChange,
+  onMicMuteToggle,
+  onTeacherVolumeChange,
+  onTeacherMuteToggle,
   onPauseResume,
   onEndSession,
   className
 }: FloatingControlsProps) {
-  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
-  const volumeRef = useRef<HTMLDivElement>(null);
+  const [showAudioControls, setShowAudioControls] = useState(false);
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
+  const audioControlsRef = useRef<HTMLDivElement>(null);
 
-  // Handle clicks outside volume slider
+  // Handle clicks outside audio controls
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (volumeRef.current && !volumeRef.current.contains(event.target as Node)) {
-        setShowVolumeSlider(false);
+      if (audioControlsRef.current && !audioControlsRef.current.contains(event.target as Node)) {
+        setShowAudioControls(false);
       }
     }
 
-    if (showVolumeSlider) {
+    if (showAudioControls) {
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
-  }, [showVolumeSlider]);
+  }, [showAudioControls]);
+
+  // Handle hover with delay
+  const handleMouseEnter = () => {
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+    }
+    const timeout = setTimeout(() => {
+      setShowAudioControls(true);
+    }, 300); // 300ms delay to prevent accidental triggers
+    setHoverTimeout(timeout);
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+    }
+    // Small delay before hiding to allow moving to the popup
+    const timeout = setTimeout(() => {
+      setShowAudioControls(false);
+    }, 150);
+    setHoverTimeout(timeout);
+  };
 
   const isDisabled = isConnecting || isLoading || isTransitioning;
 
@@ -78,79 +107,81 @@ export function FloatingControls({
       )}
     >
       <div className="flex items-center gap-3">
-        {/* Mute/Unmute Control */}
+        {/* Microphone Mute/Unmute Control (Student Input) */}
         <button
-          onClick={onMuteToggle}
+          onClick={onMicMuteToggle}
           disabled={isDisabled}
           className={cn(
             'relative w-12 h-12 rounded-full flex items-center justify-center',
             'transition-all duration-200',
             'hover:scale-110 active:scale-95',
-            audioControls.isMuted
+            audioControls.micMuted
               ? 'bg-red-500/20 hover:bg-red-500/30'
               : 'bg-white/10 hover:bg-white/20',
             isDisabled && 'opacity-50 cursor-not-allowed'
           )}
-          aria-label={audioControls.isMuted ? 'Unmute' : 'Mute'}
+          aria-label={audioControls.micMuted ? 'Unmute Microphone' : 'Mute Microphone'}
         >
-          {audioControls.isMuted ? (
+          {audioControls.micMuted ? (
             <MicOff className="w-5 h-5 text-red-400" />
           ) : (
             <Mic className="w-5 h-5 text-white" />
           )}
         </button>
 
-        {/* Volume Control */}
-        <div className="relative" ref={volumeRef}>
+        {/* Teacher Audio Control (Hover for Full Controls) */}
+        <div className="relative" ref={audioControlsRef}>
           <button
-            onClick={() => setShowVolumeSlider(!showVolumeSlider)}
+            onClick={onTeacherMuteToggle}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
             disabled={isDisabled}
             className={cn(
               'relative w-12 h-12 rounded-full flex items-center justify-center',
               'transition-all duration-200',
-              'bg-white/10 hover:bg-white/20',
               'hover:scale-110 active:scale-95',
+              audioControls.teacherMuted
+                ? 'bg-orange-500/20 hover:bg-orange-500/30'
+                : 'bg-white/10 hover:bg-white/20',
               isDisabled && 'opacity-50 cursor-not-allowed'
             )}
-            aria-label="Volume control"
+            aria-label={audioControls.teacherMuted ? 'Unmute Teacher' : 'Mute Teacher (Hover for controls)'}
           >
-            {audioControls.volume === 0 || audioControls.isMuted ? (
-              <VolumeX className="w-5 h-5 text-white/70" />
+            {audioControls.teacherMuted || audioControls.teacherVolume === 0 ? (
+              <VolumeX className="w-5 h-5 text-orange-400" />
             ) : (
               <Volume2 className="w-5 h-5 text-white" />
             )}
           </button>
 
-          {/* Volume Slider Popup */}
+          {/* Audio Controls Popup */}
           <AnimatePresence>
-            {showVolumeSlider && (
+            {showAudioControls && (
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{ duration: 0.15 }}
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
                 className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3"
+                onMouseEnter={() => {
+                  if (hoverTimeout) clearTimeout(hoverTimeout);
+                }}
+                onMouseLeave={handleMouseLeave}
               >
-                <div className="bg-black/80 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-xl">
-                  <div className="flex flex-col items-center gap-2">
-                    <span className="text-xs text-white/60">Volume</span>
-                    <div className="h-32 flex items-center">
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={audioControls.isMuted ? 0 : audioControls.volume}
-                        onChange={(e) => onVolumeChange(Number(e.target.value))}
-                        className={styles.volumeSlider}
-                        disabled={isDisabled}
-                        aria-label="Volume level"
-                      />
-                    </div>
-                    <span className="text-sm font-mono text-white/80">
-                      {audioControls.isMuted ? 0 : audioControls.volume}%
-                    </span>
-                  </div>
-                </div>
+                <AudioControlPanel
+                  audioControls={{
+                    teacherVolume: audioControls.teacherVolume,
+                    teacherMuted: audioControls.teacherMuted
+                  }}
+                  onVolumeChange={onTeacherVolumeChange}
+                  onMuteToggle={onTeacherMuteToggle}
+                  onSpeedChange={(speed) => {
+                    // TODO: Implement speed change handler
+                    console.log('Speed changed to:', speed);
+                  }}
+                  currentSpeed={1}
+                  compact={true}
+                />
               </motion.div>
             )}
           </AnimatePresence>

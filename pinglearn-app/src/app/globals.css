@@ -3,6 +3,20 @@
 /* Import PingLearn Glass Morphism Design System */
 @import "../styles/glass-morphism.css";
 
+/* CRITICAL: Lock viewport scrolling for classroom page */
+html, body {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+/* Ensure root element respects viewport */
+#__next {
+  height: 100%;
+  overflow: hidden;
+}
+
 /* Custom Scrollbar Styles - Hidden by Default */
 @layer utilities {
   /* Hide scrollbar by default, show on hover */

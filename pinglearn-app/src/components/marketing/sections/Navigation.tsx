@@ -66,6 +66,7 @@ export default function Navigation({ transparent = false }: NavigationProps) {
   const { user, loading } = useAuth();
 
   // Don't render navigation if user is signed in (hide marketing navigation after signin)
+  // Show navigation during loading to prevent flickering, hide only after confirmed user
   if (!loading && user) {
     return null;
   }

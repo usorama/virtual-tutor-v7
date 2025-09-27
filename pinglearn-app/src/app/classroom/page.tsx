@@ -25,9 +25,13 @@ interface ErrorBoundaryState {
 }
 
 interface AudioControlState {
-  isMuted: boolean;
-  volume: number;
-  hasPermissions: boolean;
+  // Microphone controls (student input)
+  micMuted: boolean;
+  micPermissions: boolean;
+
+  // Volume controls (teacher output)
+  teacherVolume: number;
+  teacherMuted: boolean;
 }
 
 export default function ClassroomPage() {
@@ -61,9 +65,10 @@ export default function ClassroomPage() {
 
   // Local UI state
   const [audioControls, setAudioControls] = useState<AudioControlState>({
-    isMuted: false,
-    volume: 100,
-    hasPermissions: false
+    micMuted: false,
+    micPermissions: false,
+    teacherVolume: 80,
+    teacherMuted: false
   });
   const [userId, setUserId] = useState<string | null>(null);
   const [currentTopic, setCurrentTopic] = useState<string>('General Mathematics');
@@ -178,7 +183,7 @@ export default function ClassroomPage() {
       // Stop the stream immediately - we just needed to request permissions
       stream.getTracks().forEach(track => track.stop());
 
-      setAudioControls(prev => ({ ...prev, hasPermissions: true }));
+      setAudioControls(prev => ({ ...prev, micPermissions: true }));
       return true;
     } catch (err) {
       console.error('Permission denied:', err);
@@ -187,7 +192,7 @@ export default function ClassroomPage() {
         : 'Unable to access microphone. Please check your device settings and try again.';
 
       setErrorBoundary({ hasError: true, error: new Error(errorMessage) });
-      setAudioControls(prev => ({ ...prev, hasPermissions: false }));
+      setAudioControls(prev => ({ ...prev, micPermissions: false }));
       return false;
     }
   }
@@ -326,23 +331,49 @@ export default function ClassroomPage() {
   }
 
   /**
-   * Toggle mute state
+   * Toggle microphone mute state (student input)
+   * This mutes the student's microphone without disrupting the AI teaching session
    */
-  async function toggleMute() {
+  async function toggleMicMute() {
     try {
-      if (audioControls.isMuted) {
+      if (audioControls.micMuted) {
         await controls.unmute();
       } else {
         await controls.mute();
       }
-      setAudioControls(prev => ({ ...prev, isMuted: !prev.isMuted }));
+      setAudioControls(prev => ({ ...prev, micMuted: !prev.micMuted }));
     } catch (err) {
-      console.error('Error toggling mute:', err);
+      console.error('Error toggling microphone mute:', err);
       setErrorBoundary({
         hasError: true,
-        error: err instanceof Error ? err : new Error('Failed to toggle mute')
+        error: err instanceof Error ? err : new Error('Failed to toggle microphone mute')
       });
     }
+  }
+
+  /**
+   * Set teacher volume (teacher output)
+   * Controls how loud the student hears the AI teacher
+   */
+  async function setTeacherVolume(volume: number) {
+    try {
+      await controls.setVolume(volume / 100); // Convert percentage to 0-1 range
+      setAudioControls(prev => ({ ...prev, teacherVolume: volume }));
+    } catch (err) {
+      console.error('Error setting teacher volume:', err);
+      setErrorBoundary({
+        hasError: true,
+        error: err instanceof Error ? err : new Error('Failed to set teacher volume')
+      });
+    }
+  }
+
+  /**
+   * Toggle teacher volume mute (teacher output)
+   * Mutes the AI teacher's voice completely for the student
+   */
+  function toggleTeacherMute() {
+    setAudioControls(prev => ({ ...prev, teacherMuted: !prev.teacherMuted }));
   }
 
   // Note: Volume control available through setAudioControls state
@@ -373,7 +404,7 @@ export default function ClassroomPage() {
   // Error boundary display
   if (errorBoundary.hasError) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-muted flex items-center justify-center p-4">
+      <div className="fixed inset-0 top-16 bg-gradient-to-b from-background to-muted flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle className="text-destructive">Session Error</CardTitle>
@@ -410,9 +441,9 @@ export default function ClassroomPage() {
   // Chat-based learning interface
   if (session && (isActive || isPaused)) {
     return (
-      <div className="h-screen flex flex-col bg-background relative">
+      <div className="fixed inset-0 top-16 flex flex-col bg-background overflow-hidden">
         {/* Minimal Top Status Bar */}
-        <header className="flex items-center justify-between px-4 py-2 border-b bg-background/95 backdrop-blur">
+        <header className="flex-shrink-0 flex items-center justify-between px-4 py-2 border-b bg-background/95 backdrop-blur">
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium">{currentTopic}</span>
             <Badge variant={getStatusBadgeVariant(sessionState.status)} className="text-xs">
@@ -440,7 +471,7 @@ export default function ClassroomPage() {
         </header>
 
         {/* Main Teaching Display Area - 80/20 Split */}
-        <main className="flex-1 overflow-hidden">
+        <main className="flex-1 min-h-0 overflow-hidden">
           <ResizableSplit
             defaultSplit={80}
             minSplit={65}
@@ -455,14 +486,15 @@ export default function ClassroomPage() {
             />
             <TabsContainer
               sessionId={sessionId || undefined}
+              voiceSessionId={session?.id}
               topic={currentTopic}
               sessionState={sessionState}
               liveMetrics={liveMetrics}
               qualityScore={qualityScore}
               engagementTrend={engagementTrend}
               audioControls={audioControls}
-              onVolumeChange={(volume) => setAudioControls(prev => ({ ...prev, volume }))}
-              onMuteToggle={toggleMute}
+              onVolumeChange={setTeacherVolume}
+              onMuteToggle={toggleTeacherMute}
               duration={session?.startedAt ? Date.now() - new Date(session.startedAt).getTime() : 0}
               isPaused={sessionControlState === 'paused'}
               className="h-full"
@@ -477,8 +509,9 @@ export default function ClassroomPage() {
           isTransitioning={isTransitioning}
           isConnecting={isConnecting}
           isLoading={isLoading}
-          onMuteToggle={toggleMute}
-          onVolumeChange={(volume) => setAudioControls(prev => ({ ...prev, volume }))}
+          onMicMuteToggle={toggleMicMute}
+          onTeacherVolumeChange={setTeacherVolume}
+          onTeacherMuteToggle={toggleTeacherMute}
           onPauseResume={handlePauseResume}
           onEndSession={handleEndSession}
         />
@@ -523,7 +556,7 @@ export default function ClassroomPage() {
         )}
 
         {/* Status Messages */}
-        <div className="fixed bottom-4 right-4 space-y-2 max-w-md">
+        <div className="fixed bottom-20 right-4 space-y-2 max-w-md z-40">
           {sessionControlState === 'paused' && (
             <Alert>
               <AlertCircle className="h-4 w-4" />
@@ -565,7 +598,7 @@ export default function ClassroomPage() {
 
   // Show start session interface
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted flex items-center justify-center p-4">
+    <div className="fixed inset-0 top-16 bg-gradient-to-b from-background to-muted flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Start AI Learning Session</CardTitle>
@@ -575,7 +608,7 @@ export default function ClassroomPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Permission Status */}
-          {!audioControls.hasPermissions && (
+          {!audioControls.micPermissions && (
             <Alert>
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>

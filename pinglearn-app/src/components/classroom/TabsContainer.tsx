@@ -4,12 +4,14 @@ import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SessionInfoPanel } from './SessionInfoPanel';
 import { NotesPanel } from './NotesPanel';
+import { useSmartNotes } from '@/features/notes/useSmartNotes';
 import { cn } from '@/lib/utils';
 import { Info, FileText } from 'lucide-react';
 
 interface TabsContainerProps {
   // Session Info Panel props
   sessionId?: string;
+  voiceSessionId?: string; // For Smart Notes integration
   topic: string;
   sessionState: any;
   liveMetrics?: {
@@ -24,25 +26,24 @@ interface TabsContainerProps {
   qualityScore?: number;
   engagementTrend?: 'improving' | 'declining' | 'stable';
   audioControls: {
-    isMuted: boolean;
-    volume: number;
-    hasPermissions?: boolean;
+    // Microphone controls (student input)
+    micMuted: boolean;
+    micPermissions: boolean;
+    // Volume controls (teacher output)
+    teacherVolume: number;
+    teacherMuted: boolean;
   };
   onVolumeChange: (volume: number) => void;
   onMuteToggle: () => void;
   duration: number;
   isPaused: boolean;
 
-  // Notes Panel props (will be populated later)
-  keyConcepts?: any[];
-  examples?: any[];
-  summary?: string[];
-
   className?: string;
 }
 
 export function TabsContainer({
   sessionId,
+  voiceSessionId,
   topic,
   sessionState,
   liveMetrics,
@@ -53,15 +54,25 @@ export function TabsContainer({
   onMuteToggle,
   duration,
   isPaused,
-  keyConcepts,
-  examples,
-  summary,
   className = ''
 }: TabsContainerProps) {
+  // Use Smart Notes hook for real-time notes generation
+  const {
+    notes,
+    keyConcepts,
+    examples,
+    summary,
+    isLoading,
+    error,
+    isLive,
+    hasNotes,
+    wordCount,
+    conceptCount
+  } = useSmartNotes(sessionId, voiceSessionId);
   return (
     <Tabs
       defaultValue="session"
-      className={cn("flex flex-col h-full", className)}
+      className={cn("flex flex-col h-full overflow-hidden", className)}
     >
       {/* Custom styled tabs list with glassmorphic effect */}
       <TabsList className={cn(
@@ -122,14 +133,17 @@ export function TabsContainer({
       {/* Notes Tab */}
       <TabsContent
         value="notes"
-        className="flex-1 mt-0 overflow-hidden"
+        className="flex-1 mt-0 overflow-hidden relative"
       >
         <NotesPanel
           sessionId={sessionId}
           keyConcepts={keyConcepts}
           examples={examples}
           summary={summary}
-          className="h-full"
+          isLive={isLive}
+          isLoading={isLoading}
+          wordCount={wordCount}
+          className="absolute inset-0"
         />
       </TabsContent>
     </Tabs>

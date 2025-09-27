@@ -11,7 +11,7 @@ import { AppleLightGlassCard, AppleLightGlassContainer } from '@/components/dash
 import { AppleButton } from '@/components/dashboard/AppleButtons'
 import { AppleChartSection } from '@/components/dashboard/AppleChartSection'
 import { AppleSessionSection } from '@/components/dashboard/AppleSessionSection'
-import { QuickActionsLight } from '@/components/dashboard/QuickActionsLight'
+import { AppleQuickActions } from '@/components/dashboard/AppleQuickActions'
 
 export default async function DashboardApplePage() {
   const user = await getUser()
@@ -80,7 +80,7 @@ export default async function DashboardApplePage() {
             {/* Quick Actions - 2 columns */}
             <div className="lg:col-span-2">
               <AppleLightGlassContainer className="h-full">
-                <QuickActionsLight />
+                <AppleQuickActions />
               </AppleLightGlassContainer>
             </div>
           </div>

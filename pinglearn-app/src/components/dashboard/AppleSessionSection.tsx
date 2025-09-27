@@ -1,6 +1,6 @@
 'use client'
 
-import { SessionTimeline } from './SessionTimeline'
+import { AppleSessionTimeline } from './AppleSessionTimeline'
 import { AppleLightGlassContainer } from './AppleLightGlass'
 
 const mockSessions = [
@@ -63,7 +63,7 @@ export function AppleSessionSection() {
 
   return (
     <AppleLightGlassContainer>
-      <SessionTimeline
+      <AppleSessionTimeline
         sessions={mockSessions}
         onSessionClick={handleSessionClick}
       />
