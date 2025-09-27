@@ -4,11 +4,14 @@ import { getUserProfile, checkWizardCompletion, getTextbookCount } from '@/lib/w
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { signOut } from '@/lib/auth/actions'
-import { GraduationCap, Clock, BookOpen, Trophy, Mic, Activity, Target, Flame, ChevronRight } from 'lucide-react'
+import { GraduationCap, Clock, BookOpen, Trophy, Mic, Activity, Target, Flame, ChevronRight, Sparkles } from 'lucide-react'
 import { GRADE_LABELS } from '@/types/wizard'
 import { AuthenticatedLayout } from '@/components/layout/AuthenticatedLayout'
 import { AppleLightGlassCard, AppleLightGlassContainer } from '@/components/dashboard/AppleLightGlass'
 import { AppleButton } from '@/components/dashboard/AppleButtons'
+import { ComboChart } from '@/components/dashboard/ComboChart'
+import { SessionTimeline } from '@/components/dashboard/SessionTimeline'
+import { QuickActionsLight } from '@/components/dashboard/QuickActionsLight'
 
 export default async function DashboardApplePage() {
   const user = await getUser()
@@ -67,6 +70,32 @@ export default async function DashboardApplePage() {
             </div>
           </header>
 
+          {/* Main Chart Section with Quick Actions */}
+          <div className="grid lg:grid-cols-7 gap-6 items-stretch mb-10">
+            {/* Combo Chart - 5 columns */}
+            <div className="lg:col-span-5">
+              <AppleLightGlassContainer>
+                <ComboChart
+                  data={{
+                    studySessions: [2, 1, 3, 2, 1, 2, 3],
+                    topicsMastered: [12, 14, 18, 21, 23, 26, 30],
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                  }}
+                  period="weekly"
+                  onPeriodChange={() => {}}
+                  className="h-full"
+                />
+              </AppleLightGlassContainer>
+            </div>
+
+            {/* Quick Actions - 2 columns */}
+            <div className="lg:col-span-2">
+              <AppleLightGlassContainer className="h-full">
+                <QuickActionsLight />
+              </AppleLightGlassContainer>
+            </div>
+          </div>
+
           {/* Quick Actions - Only primary CTA gets blue */}
           <div className="mb-10">
             <div className="flex gap-3">
@@ -89,58 +118,58 @@ export default async function DashboardApplePage() {
             </div>
           </div>
 
-          {/* Metrics Grid - Apple Style Cards */}
+          {/* Metrics Grid - Consistent Glass Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-            <AppleMetricCard
+            <AppleLightGlassCard
               title="Study Sessions"
               value={14}
               change={{ value: "12%", trend: "up", description: "from last week" }}
               icon={<Clock />}
             />
 
-            <AppleMetricCard
+            <AppleLightGlassCard
               title="Topics Mastered"
               value={18}
               change={{ value: "3", trend: "up", description: "new this week" }}
               icon={<BookOpen />}
             />
 
-            <AppleMetricCard
+            <AppleLightGlassCard
               title="Voice Minutes"
               value={156}
               change={{ value: "28%", trend: "up", description: "increase" }}
               icon={<Mic />}
             />
 
-            <AppleMetricCard
+            <AppleLightGlassCard
               title="Math Problems"
               value={89}
               change={{ value: "15", trend: "up", description: "solved today" }}
               icon={<Activity />}
             />
 
-            <AppleGlassCard
+            <AppleLightGlassCard
               title="Textbooks"
               value={textbookCount || 0}
               change={{ value: "2", trend: "up", description: "added recently" }}
               icon={<BookOpen />}
             />
 
-            <AppleGlassCard
+            <AppleLightGlassCard
               title="Achievements"
               value={7}
               change={{ value: "1", trend: "up", description: "new badge" }}
               icon={<Trophy />}
             />
 
-            <AppleGlassCard
+            <AppleLightGlassCard
               title="Study Streak"
               value="5 days"
               change={{ value: "ongoing", trend: "up", description: "" }}
               icon={<Flame />}
             />
 
-            <AppleGlassCard
+            <AppleLightGlassCard
               title="Weekly Goal"
               value="87%"
               change={{ value: "28/32", trend: "up", description: "topics" }}
@@ -148,20 +177,62 @@ export default async function DashboardApplePage() {
             />
           </div>
 
-          {/* Content Cards - Simple borders, no complex effects */}
+          {/* Recent Sessions Timeline */}
+          <div className="mb-10">
+            <AppleLightGlassContainer>
+              <SessionTimeline
+                sessions={[
+                  {
+                    id: 'session-1',
+                    title: 'Triangles & Similarity',
+                    subject: 'Mathematics' as const,
+                    type: 'voice' as const,
+                    time: '14:30',
+                    duration: '45 min',
+                    score: '92% accuracy',
+                    date: 'Today'
+                  },
+                  {
+                    id: 'session-2',
+                    title: 'Statistics Overview',
+                    subject: 'Mathematics' as const,
+                    type: 'practice' as const,
+                    time: '09:15',
+                    duration: '30 min',
+                    score: '15 problems solved',
+                    date: 'Today'
+                  },
+                  {
+                    id: 'session-3',
+                    title: 'Quadratic Equations',
+                    subject: 'Mathematics' as const,
+                    type: 'review' as const,
+                    time: '11:45',
+                    duration: '25 min',
+                    score: 'Chapter 4 completed',
+                    date: 'Yesterday'
+                  }
+                ]}
+                onSessionClick={() => {}}
+              />
+            </AppleLightGlassContainer>
+          </div>
+
+          {/* Content Cards - Using glass containers */}
           <div className="grid md:grid-cols-2 gap-4">
             {/* Learning Profile Card */}
-            <div
-              className="rounded-xl p-6"
-              style={{
-                backgroundColor: '#FFFFFF',
-                border: '1px solid #D2D2D7',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
-              }}
-            >
-              <h3 className="text-xl font-semibold text-[#1D1D1F] mb-4">
-                Your Learning Profile
-              </h3>
+            <AppleLightGlassContainer>
+              <div className="flex items-center gap-3 mb-4">
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: 'rgba(0, 0, 0, 0.04)' }}
+                >
+                  <Sparkles className="h-5 w-5" style={{ color: '#1D1D1F' }} />
+                </div>
+                <h3 className="text-xl font-semibold text-[#1D1D1F]">
+                  Your Learning Profile
+                </h3>
+              </div>
               <p className="text-[#86868B] text-sm mb-6">
                 Personalized curriculum preferences
               </p>
@@ -198,53 +269,64 @@ export default async function DashboardApplePage() {
                       ))}
                     </div>
                   </div>
+
+                  <div>
+                    <p className="text-xs text-[#86868B] mb-1">Total Topics</p>
+                    <p className="text-2xl font-semibold text-[#1D1D1F]">
+                      {profile.selected_topics
+                        ? Object.values(profile.selected_topics as Record<string, string[]>)
+                            .reduce((sum, topics) => sum + topics.length, 0)
+                        : 0}
+                    </p>
+                  </div>
                 </div>
               )}
-            </div>
+            </AppleLightGlassContainer>
 
-            {/* Recent Activity Card */}
-            <div
-              className="rounded-xl p-6"
-              style={{
-                backgroundColor: '#FFFFFF',
-                border: '1px solid #D2D2D7',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
-              }}
-            >
+            {/* Study Tips Card */}
+            <AppleLightGlassContainer>
               <h3 className="text-xl font-semibold text-[#1D1D1F] mb-4">
-                Recent Activity
+                Study Tips
               </h3>
               <div className="space-y-3">
-                <div className="flex items-center justify-between py-2">
-                  <div>
-                    <p className="text-sm text-[#1D1D1F]">Triangles & Similarity</p>
-                    <p className="text-xs text-[#86868B]">45 min ago</p>
-                  </div>
-                  <span className="text-xs text-[#86868B]">92%</span>
+                <div className="flex items-start gap-3">
+                  <div
+                    className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
+                    style={{ backgroundColor: '#1D1D1F' }}
+                  />
+                  <p className="text-sm" style={{ color: '#1D1D1F' }}>
+                    Take short breaks every 25 minutes for better retention
+                  </p>
                 </div>
-
-                <div className="flex items-center justify-between py-2 border-t border-[#E8E8ED]">
-                  <div>
-                    <p className="text-sm text-[#1D1D1F]">Statistics Overview</p>
-                    <p className="text-xs text-[#86868B]">2 hours ago</p>
-                  </div>
-                  <span className="text-xs text-[#86868B]">15 problems</span>
+                <div className="flex items-start gap-3">
+                  <div
+                    className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
+                    style={{ backgroundColor: '#1D1D1F' }}
+                  />
+                  <p className="text-sm" style={{ color: '#1D1D1F' }}>
+                    Review previous topics before starting new ones
+                  </p>
                 </div>
-
-                <div className="flex items-center justify-between py-2 border-t border-[#E8E8ED]">
-                  <div>
-                    <p className="text-sm text-[#1D1D1F]">Quadratic Equations</p>
-                    <p className="text-xs text-[#86868B]">Yesterday</p>
-                  </div>
-                  <span className="text-xs text-[#86868B]">Completed</span>
+                <div className="flex items-start gap-3">
+                  <div
+                    className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
+                    style={{ backgroundColor: '#1D1D1F' }}
+                  />
+                  <p className="text-sm" style={{ color: '#1D1D1F' }}>
+                    Practice voice sessions help improve understanding
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div
+                    className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
+                    style={{ backgroundColor: '#1D1D1F' }}
+                  />
+                  <p className="text-sm" style={{ color: '#1D1D1F' }}>
+                    Use visual aids and diagrams for complex concepts
+                  </p>
                 </div>
               </div>
-
-              {/* View All - text link style */}
-              <AppleButton variant="text" className="mt-4 text-sm">
-                View All Activity →
-              </AppleButton>
-            </div>
+            </AppleLightGlassContainer>
           </div>
         </div>
       </div>

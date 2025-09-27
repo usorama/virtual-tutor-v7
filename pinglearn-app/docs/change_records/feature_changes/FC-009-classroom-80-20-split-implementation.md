@@ -26,8 +26,8 @@ CHECKPOINT: Safety rollback point before implementing FC-009
 🚨 This commit serves as the rollback point for FC-009"
 ```
 
-**Checkpoint Hash**: [To be filled after commit]
-**Rollback Command**: `git reset --hard [checkpoint-hash]`
+**Checkpoint Hash**: `69035be`
+**Rollback Command**: `git reset --hard 69035be`
 
 ---
 

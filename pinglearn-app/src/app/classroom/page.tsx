@@ -13,8 +13,11 @@ import { LiveKitRoom } from '@/components/voice/LiveKitRoom';
 import { AudioVisualizer } from '@/components/classroom/AudioVisualizer';
 import { useVoiceSession } from '@/hooks/useVoiceSession';
 import { useSessionState } from '@/hooks/useSessionState';
+import { useSessionMetrics } from '@/hooks/useSessionMetrics';
 import { SessionOrchestrator } from '@/protected-core';
 import styles from '@/styles/classroom-chat.module.css';
+import { ResizableSplit } from '@/components/ui/resizable-split';
+import { SessionInfoPanel } from '@/components/classroom/SessionInfoPanel';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -53,8 +56,8 @@ export default function ClassroomPage() {
     getDetailedStatus
   } = useSessionState();
 
-  // Metrics available but not used in chat interface
-  // const { liveMetrics, qualityScore, engagementTrend } = useSessionMetrics();
+  // Metrics now used in SessionInfoPanel
+  const { liveMetrics, qualityScore, engagementTrend } = useSessionMetrics();
 
   // Local UI state
   const [audioControls, setAudioControls] = useState<AudioControlState>({
@@ -436,13 +439,35 @@ export default function ClassroomPage() {
           )}
         </header>
 
-        {/* Main Teaching Display Area */}
+        {/* Main Teaching Display Area - 80/20 Split */}
         <main className="flex-1 overflow-hidden">
-          <TeachingBoardSimple
-            sessionId={sessionId || undefined}
-            topic={currentTopic}
+          <ResizableSplit
+            defaultSplit={80}
+            minSplit={65}
+            maxSplit={85}
+            direction="horizontal"
             className="h-full"
-          />
+          >
+            <TeachingBoardSimple
+              sessionId={sessionId || undefined}
+              topic={currentTopic}
+              className="h-full"
+            />
+            <SessionInfoPanel
+              sessionId={sessionId || undefined}
+              topic={currentTopic}
+              sessionState={sessionState}
+              liveMetrics={liveMetrics}
+              qualityScore={qualityScore}
+              engagementTrend={engagementTrend}
+              audioControls={audioControls}
+              onVolumeChange={(volume) => setAudioControls(prev => ({ ...prev, volume }))}
+              onMuteToggle={toggleMute}
+              duration={session?.startedAt ? Date.now() - new Date(session.startedAt).getTime() : 0}
+              isPaused={sessionControlState === 'paused'}
+              className="h-full"
+            />
+          </ResizableSplit>
         </main>
 
         {/* Bottom Control Bar */}
