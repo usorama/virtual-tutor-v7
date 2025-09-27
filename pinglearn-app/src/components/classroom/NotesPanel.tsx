@@ -112,8 +112,8 @@ export function NotesPanel({
   const displayExamples = examples.length > 0 ? examples : mockExamples;
   const displaySummary = summary.length > 0 ? summary : mockSummary;
 
-  // Check if we have actual notes content (not just mock data)
-  const hasNotes = keyConcepts.length > 0 || examples.length > 0 || summary.length > 0;
+  // Check if we have any content to display (real or mock)
+  const hasNotes = displayKeyConcepts.length > 0 || displayExamples.length > 0 || displaySummary.length > 0;
 
   // Copy notes to clipboard function
   const copyNotesToClipboard = useCallback(async () => {
