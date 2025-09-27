@@ -17,7 +17,7 @@ import { useSessionMetrics } from '@/hooks/useSessionMetrics';
 import { SessionOrchestrator } from '@/protected-core';
 import styles from '@/styles/classroom-chat.module.css';
 import { ResizableSplit } from '@/components/ui/resizable-split';
-import { SessionInfoPanel } from '@/components/classroom/SessionInfoPanel';
+import { TabsContainer } from '@/components/classroom/TabsContainer';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -453,7 +453,7 @@ export default function ClassroomPage() {
               topic={currentTopic}
               className="h-full"
             />
-            <SessionInfoPanel
+            <TabsContainer
               sessionId={sessionId || undefined}
               topic={currentTopic}
               sessionState={sessionState}
