@@ -2,6 +2,10 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { Room, RoomEvent, RemoteTrack, RemoteTrackPublication } from 'livekit-client';
+import { EventEmitter } from 'events';
+
+// Create shared event bus for LiveKit data communication
+export const liveKitEventBus = new EventEmitter();
 
 interface LiveKitRoomProps {
   roomName: string;
@@ -25,9 +29,23 @@ export function LiveKitRoom({
   const [isConnected, setIsConnected] = useState(false);
   const audioElementRef = useRef<HTMLAudioElement>(null);
 
+  // Audio delay system for show-then-tell methodology
+  const pendingAudioTracksRef = useRef<RemoteTrack[]>([]);
+  const audioDelayTimeoutsRef = useRef<NodeJS.Timeout[]>([]);
+
   useEffect(() => {
     return () => {
       room.disconnect();
+
+      // Clean up audio delay timeouts
+      audioDelayTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+      audioDelayTimeoutsRef.current = [];
+
+      // Clean up pending audio tracks
+      pendingAudioTracksRef.current = [];
+
+      // Clean up event bus listeners when component unmounts
+      liveKitEventBus.removeAllListeners();
     };
   }, [room]);
 
@@ -82,14 +100,20 @@ export function LiveKitRoom({
     onDisconnected();
   };
 
-  // Handle remote audio tracks (teacher voice)
+  // Handle remote audio tracks (teacher voice) with 400ms delay
   useEffect(() => {
     const handleTrackSubscribed = (
       track: RemoteTrack,
       publication: RemoteTrackPublication
     ) => {
       if (track.kind === 'audio' && audioElementRef.current) {
-        track.attach(audioElementRef.current);
+        console.log('[LiveKitRoom] Audio track received - storing for delayed playback');
+
+        // Store track for delayed attachment (show-then-tell methodology)
+        pendingAudioTracksRef.current.push(track);
+
+        // NOTE: We don't immediately attach the track here!
+        // Audio will be delayed by 400ms and triggered by transcript events
       }
     };
 
@@ -120,35 +144,43 @@ export function LiveKitRoom({
         const data = JSON.parse(decoder.decode(payload));
 
         if (data.type === 'transcript') {
-          // TEMPORARY FIX: Re-enabling direct DisplayBuffer update until SessionOrchestrator integration is fixed
-          // This restores immediate functionality while proper architecture is implemented
-          console.log('[LiveKitRoom] Processing transcript with', data.segments.length, 'segments');
+          console.log('[LiveKitRoom] Transcript received, emitting to SessionOrchestrator');
 
-          // Import and use DisplayBuffer directly
-          import('@/protected-core').then(({ getDisplayBuffer }) => {
-            const buffer = getDisplayBuffer();
-
-            if (data.segments && Array.isArray(data.segments)) {
-              data.segments.forEach((segment: any) => {
-                buffer.addItem({
-                  type: segment.type || 'text',
-                  content: segment.content || '',
-                  speaker: data.speaker || 'teacher',
-                  confidence: segment.confidence || 1.0
-                });
-
-                console.log('[LiveKitRoom] Added to DisplayBuffer:', {
-                  type: segment.type,
-                  content: segment.content.substring(0, 50) + '...'
-                });
-              });
-            }
-          }).catch(error => {
-            console.error('[LiveKitRoom] Error accessing DisplayBuffer:', error);
+          // Emit event for SessionOrchestrator
+          liveKitEventBus.emit('livekit:transcript', {
+            segments: data.segments,
+            speaker: data.speaker || 'teacher',
+            timestamp: Date.now()
           });
+
+          // SHOW-THEN-TELL: Trigger delayed audio playback (400ms after visual)
+          console.log(`[LiveKitRoom] Transcript received - scheduling audio delay for show-then-tell`);
+
+          // Schedule audio playback 400ms later
+          const audioTimeout = setTimeout(() => {
+            console.log('[LiveKitRoom] Playing delayed audio (400ms after visual)');
+
+            // Attach any pending audio tracks
+            if (pendingAudioTracksRef.current.length > 0 && audioElementRef.current) {
+              pendingAudioTracksRef.current.forEach(track => {
+                try {
+                  track.attach(audioElementRef.current!);
+                  console.log('[LiveKitRoom] Audio track attached with 400ms delay');
+                } catch (error) {
+                  console.error('[LiveKitRoom] Error attaching delayed audio:', error);
+                }
+              });
+
+              // Clear pending tracks after attachment
+              pendingAudioTracksRef.current = [];
+            }
+          }, 400); // 400ms delay for show-then-tell methodology
+
+          // Store timeout for cleanup
+          audioDelayTimeoutsRef.current.push(audioTimeout);
         }
       } catch (error) {
-        console.error('Error processing data packet:', error);
+        console.error('[LiveKitRoom] Error processing data packet:', error);
       }
     };
 

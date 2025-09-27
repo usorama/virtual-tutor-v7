@@ -58,6 +58,7 @@ export class SessionOrchestrator {
   private messageCount = 0;
   private mathEquationCount = 0;
   private errorCount = 0;
+  private liveKitDataListener: any = null;
 
   private constructor() {
     this.wsManager = WebSocketManager.getInstance();
@@ -140,8 +141,8 @@ export class SessionOrchestrator {
           await this.livekitService.startSession(config.studentId, config.topic);
           this.currentSession.voiceConnectionStatus = 'connected';
 
-          // CRITICAL FIX PC-011: Setup LiveKit listener AFTER connection
-          this.setupLiveKitTranscriptionListener();
+          // CRITICAL FIX FS-00-AB-1: Setup LiveKit data channel listener AFTER connection
+          this.setupLiveKitDataChannelListener();
         } catch (error) {
           console.error('LiveKit session start failed:', error);
           this.currentSession.voiceConnectionStatus = 'error';
@@ -205,6 +206,18 @@ export class SessionOrchestrator {
       // Update session state
       this.currentSession.status = 'ended';
       this.currentSession.endTime = Date.now();
+
+      // Clean up LiveKit data channel listener
+      if (this.liveKitDataListener) {
+        try {
+          import('@/components/voice/LiveKitRoom').then(({ liveKitEventBus }) => {
+            liveKitEventBus.off('livekit:transcript', this.liveKitDataListener);
+            this.liveKitDataListener = null;
+          });
+        } catch (error) {
+          console.warn('Error removing LiveKit listener:', error);
+        }
+      }
 
       // Stop voice services
       if (this.livekitService) {
@@ -305,26 +318,28 @@ export class SessionOrchestrator {
     };
   }
 
-  addTranscriptionItem(content: string, speaker?: 'student' | 'teacher' | 'ai', type: 'text' | 'math' | 'code' | 'diagram' | 'image' = 'text', confidence?: number): void {
+  addTranscriptionItem(item: { type: 'text' | 'math' | 'code' | 'diagram' | 'image'; content: string; speaker?: 'student' | 'teacher' | 'ai'; confidence?: number }): string {
     if (!this.currentSession || this.currentSession.status !== 'active') {
-      return;
+      return '';
     }
 
-    this.displayBuffer.addItem({
-      type,
-      content,
-      speaker,
-      confidence,
+    const itemId = this.displayBuffer.addItem({
+      type: item.type,
+      content: item.content,
+      speaker: item.speaker,
+      confidence: item.confidence,
     });
 
     this.messageCount++;
 
-    if (type === 'math') {
+    if (item.type === 'math') {
       this.mathEquationCount++;
     }
 
     // Update activity timestamp
     this.currentSession.lastActivity = Date.now();
+
+    return itemId;
   }
 
   private setupTranscriptionHandlers(): void {
@@ -337,19 +352,19 @@ export class SessionOrchestrator {
         const data = JSON.parse(event.data as string);
 
         if (data.type === 'transcription') {
-          this.addTranscriptionItem(
-            data.content,
-            data.speaker,
-            data.contentType || 'text',
-            data.confidence
-          );
+          this.addTranscriptionItem({
+            type: data.contentType || 'text',
+            content: data.content,
+            speaker: data.speaker,
+            confidence: data.confidence
+          });
         } else if (data.type === 'math') {
-          this.addTranscriptionItem(
-            data.content,
-            data.speaker,
-            'math',
-            data.confidence
-          );
+          this.addTranscriptionItem({
+            type: 'math',
+            content: data.content,
+            speaker: data.speaker,
+            confidence: data.confidence
+          });
         }
       } catch (error) {
         console.warn('Failed to process WebSocket message:', error);
@@ -385,41 +400,58 @@ export class SessionOrchestrator {
   }
 
   /**
-   * PC-011: Setup LiveKit transcription listener AFTER connection established
+   * FS-00-AB-1: Setup LiveKit data channel listener using event bus
    * This method is called from startSession() after successful LiveKit initialization
    */
-  private setupLiveKitTranscriptionListener(): void {
-    if (!this.livekitService) {
-      console.warn('[PC-011] No LiveKit service available');
-      return;
-    }
+  private setupLiveKitDataChannelListener(): void {
+    console.log('[FS-00-AB-1] Setting up LiveKit data channel listener');
 
-    console.log('[PC-011] Setting up LiveKit transcription listener (post-connection)');
-
-    // Now we know the service is connected
-    (this.livekitService as any).on('transcriptionReceived', (data: any) => {
-      console.log('[PC-011] Transcription received:', {
-        type: data.type,
-        speaker: data.speaker,
-        contentLength: data.content?.length,
-        timestamp: new Date().toISOString()
-      });
-
-      // Add to display buffer
-      this.addTranscriptionItem(
-        data.content,
-        data.speaker as 'student' | 'teacher' | 'ai',
-        data.type as 'text' | 'math' | 'code' | 'diagram' | 'image',
-        data.confidence
-      );
-
-      // Log math equations for debugging
-      if (data.type === 'math' && data.latex) {
-        console.log('[PC-011] Math equation:', data.latex);
+    // Import the event bus dynamically to avoid circular dependencies
+    import('@/components/voice/LiveKitRoom').then(({ liveKitEventBus }) => {
+      // Remove old listener if exists
+      if (this.liveKitDataListener) {
+        liveKitEventBus.off('livekit:transcript', this.liveKitDataListener);
       }
-    });
 
-    console.log('[PC-011] LiveKit listener attached successfully');
+      // Create new listener
+      this.liveKitDataListener = (data: any) => {
+        console.log('[FS-00-AB-1] Received transcript from LiveKit data channel');
+
+        if (!data.segments || !Array.isArray(data.segments)) {
+          console.warn('[FS-00-AB-1] Invalid transcript data structure');
+          return;
+        }
+
+        // Process each segment
+        data.segments.forEach((segment: any) => {
+          // Validate segment
+          if (!segment.content) {
+            console.warn('[FS-00-AB-1] Segment missing content');
+            return;
+          }
+
+          // Add to display buffer with deduplication check
+          const itemId = this.addTranscriptionItem({
+            type: segment.type || 'text',
+            content: segment.content,
+            speaker: data.speaker || 'teacher',
+            confidence: segment.confidence || 1.0
+          });
+
+          console.log('[FS-00-AB-1] Added transcript item to DisplayBuffer:', {
+            id: itemId,
+            type: segment.type,
+            contentLength: segment.content.length
+          });
+        });
+      };
+
+      // Attach listener
+      liveKitEventBus.on('livekit:transcript', this.liveKitDataListener);
+      console.log('[FS-00-AB-1] LiveKit data channel listener attached');
+    }).catch(error => {
+      console.error('[FS-00-AB-1] Failed to setup LiveKit data channel listener:', error);
+    });
   }
 
   /**

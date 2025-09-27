@@ -174,7 +174,9 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
 
       // Start new paragraph if speaker changes, significant time gap, or special content
       const isNewSpeaker = currentSpeaker !== item.speaker;
-      const isMathContent = item.type === 'math' && isValidMathContent(itemContent);
+      // ENHANCED: Check for math content in both 'math' type items AND text items with math patterns
+      const isMathContent = (item.type === 'math' && isValidMathContent(itemContent)) ||
+                           (item.type === 'text' && isValidMathContent(itemContent));
       const isStepContent = /^(Step \d+|\d+\.|\d+\))/i.test(itemContent);
       const isNewResponse = isSignificantGap;
 
