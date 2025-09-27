@@ -69,61 +69,43 @@ export function MetricCardV2Light({
         className
       )}
       style={{
-        // Light theme glassmorphism effect - using dark overlay with low opacity
+        // Apple 2025 Liquid Glass Light Theme
         backgroundColor: 'rgba(0, 0, 0, 0.03)',
-        backdropFilter: 'blur(10px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(10px) saturate(180%)',
+        backdropFilter: 'blur(4px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(4px) saturate(180%)',
         border: '1px solid rgba(0, 0, 0, 0.08)',
-        boxShadow: `
-          inset -2px -2px 7px rgba(0,0,0,0.02),
-          inset 2px 2px 7px rgba(255,255,255,0.8),
-          0 10px 36px -6px rgba(34, 197, 94, 0.02),
-          0 6px 24px -4px rgba(0, 0, 0, 0.05)
-        `,
+        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.08)',
         borderRadius: '32px',
         overflow: 'hidden'
       }}
     >
-      {/* Subtle Dark Corner Highlights - Internal shadow effect for light theme */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '50px',
-          height: '50px',
-          background: 'radial-gradient(circle at 0% 0%, rgba(0, 0, 0, 0.06) 0%, rgba(0, 0, 0, 0.04) 15%, rgba(0, 0, 0, 0.02) 25%, rgba(0, 0, 0, 0.01) 35%, rgba(0, 0, 0, 0.005) 45%, rgba(0, 0, 0, 0) 55%)',
-          pointerEvents: 'none',
-          opacity: 1,
-          filter: 'blur(2px)'
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          right: 0,
-          width: '60px',
-          height: '55px',
-          background: 'radial-gradient(ellipse at 100% 100%, rgba(0, 0, 0, 0.06) 0%, rgba(0, 0, 0, 0.04) 15%, rgba(0, 0, 0, 0.02) 25%, rgba(0, 0, 0, 0.01) 35%, rgba(0, 0, 0, 0.005) 45%, rgba(0, 0, 0, 0) 55%)',
-          pointerEvents: 'none',
-          opacity: 1,
-          filter: 'blur(2px)'
-        }}
-      />
       {/* Main Card Section - Title and Value */}
-      <h2 className="text-sm font-medium text-gray-500">{title}</h2>
+      <h2
+        className="text-sm font-medium"
+        style={{ color: 'var(--text-secondary)' }}
+      >
+        {title}
+      </h2>
 
-      <p className="mt-2 text-5xl font-bold tracking-tight text-cyan-600">
+      <p
+        className="mt-2 text-5xl font-bold tracking-tight"
+        style={{ color: 'var(--color-accent-primary)' }}
+      >
         {typeof value === 'number' ? value.toLocaleString() : value}
       </p>
 
       {/* Sub-Card Section - Interactive area with trend and icon */}
       <div
-        className="group mt-6 cursor-pointer rounded-xl p-4 transition-all duration-300 hover:bg-gray-50"
+        className="group mt-6 cursor-pointer rounded-xl p-4 transition-all duration-300"
         style={{
-          backgroundColor: 'rgba(240, 240, 245, 0.6)',
-          border: '1px solid rgba(0, 0, 0, 0.08)',
+          backgroundColor: 'var(--system-gray-1)',
+          border: '1px solid var(--system-gray-3)',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = 'var(--system-gray-2)'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = 'var(--system-gray-1)'
         }}
       >
         <div className="flex items-center justify-between">
@@ -138,25 +120,33 @@ export function MetricCardV2Light({
                   {change.value}
                 </span>
               </div>
-              <p className="text-xs text-gray-500 mt-1">
+              <p
+                className="text-xs mt-1"
+                style={{ color: 'var(--text-muted)' }}
+              >
                 {change.description.replace(change.value, '').trim()}
               </p>
             </div>
           ) : (
             <div>
-              <p className="text-xs text-gray-500">No change data</p>
+              <p
+                className="text-xs"
+                style={{ color: 'var(--text-muted)' }}
+              >
+                No change data
+              </p>
             </div>
           )}
 
-          {/* Icon in light circle - matching Quick Actions light theme */}
+          {/* Icon in black circle - Apple 2025 standard */}
           <div
             className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
             style={{
-              backgroundColor: 'rgba(240, 240, 245, 0.8)',
-              border: '1px solid rgba(0, 0, 0, 0.1)',
+              backgroundColor: 'rgba(20, 20, 22, 0.9)',
+              border: '1px solid rgba(0, 0, 0, 0.2)',
             }}
           >
-            <div style={{ color: '#0891b2' }}>
+            <div style={{ color: 'var(--color-accent-hover)' }}>
               {icon}
             </div>
           </div>

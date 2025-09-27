@@ -7,7 +7,6 @@ import { signOut } from '@/lib/auth/actions'
 import { GraduationCap } from 'lucide-react'
 import { GRADE_LABELS } from '@/types/wizard'
 import { AuthenticatedLayout } from '@/components/layout/AuthenticatedLayout'
-import { Component as EtheralShadow } from '@/components/ui/etheral-shadow'
 import { DashboardContentLight } from '@/components/dashboard/DashboardContentLight'
 
 export default async function DashboardLightPage() {
@@ -28,19 +27,25 @@ export default async function DashboardLightPage() {
 
   return (
     <AuthenticatedLayout>
-      {/* Main container with light ethereal background */}
-      <div className="relative h-screen overflow-hidden bg-white">
-        {/* Ethereal shadow background with very subtle colors */}
-        <EtheralShadow
-          color="rgba(240, 240, 245, 0.3)"
-          animation={{ scale: 50, speed: 80 }}
-          noise={{ opacity: 15, scale: 0.5 }}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            zIndex: 0
-          }}
-        />
+      {/* Main container with Apple 2025 semantic color system */}
+      <div
+        className="relative h-screen overflow-hidden bg-white"
+        style={{
+          // Apple 2025 Semantic Color System
+          '--system-background': '#FFFFFF',
+          '--system-gray-1': '#F2F2F7',
+          '--system-gray-2': '#E5E5EA',
+          '--system-gray-3': '#D1D1D6',
+          '--system-gray-4': '#C7C7CC',
+          '--system-gray-5': '#AEAEB2',
+          '--system-gray-6': '#8E8E93',
+          '--text-primary': '#000000',
+          '--text-secondary': '#374151',
+          '--text-muted': '#6b7280',
+          '--color-accent-primary': '#155e75',
+          '--color-accent-hover': '#0891b2'
+        } as React.CSSProperties}
+      >
 
         {/* Additional color gradients for depth - very subtle for light theme */}
         {/* Cyan gradient - top center - VERY SUBTLE */}
@@ -121,13 +126,23 @@ export default async function DashboardLightPage() {
             {/* Header */}
             <header className="flex justify-between items-center mb-8">
               <div>
-                <h1 className="text-title1 font-heavy text-cyan-600">Welcome Back!</h1>
+                <h1
+                  className="text-title1 font-heavy"
+                  style={{ color: 'var(--color-accent-primary)' }}
+                >
+                  Welcome Back!
+                </h1>
                 <div className="flex items-center gap-4 mt-2">
-                  <p className="text-gray-600">{user.email}</p>
+                  <p style={{ color: 'var(--text-secondary)' }}>{user.email}</p>
                   {profile?.grade && (
                     <Badge
                       variant="secondary"
-                      className="flex items-center gap-1 bg-gray-100 border-gray-200 text-gray-600"
+                      className="flex items-center gap-1"
+                      style={{
+                        backgroundColor: 'var(--system-gray-1)',
+                        borderColor: 'var(--system-gray-3)',
+                        color: 'var(--text-primary)'
+                      }}
                     >
                       <GraduationCap className="h-3 w-3" />
                       {GRADE_LABELS[profile.grade]}
@@ -139,7 +154,12 @@ export default async function DashboardLightPage() {
                 <Button
                   variant="outline"
                   type="submit"
-                  className="bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100 hover:text-gray-800"
+                  className="hover:opacity-90 transition-opacity"
+                  style={{
+                    backgroundColor: 'var(--system-gray-1)',
+                    borderColor: 'var(--system-gray-3)',
+                    color: 'var(--text-primary)'
+                  }}
                 >
                   Sign Out
                 </Button>

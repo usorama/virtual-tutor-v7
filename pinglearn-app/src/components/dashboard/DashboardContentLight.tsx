@@ -235,42 +235,89 @@ export function DashboardContentLight({ user, profile, textbookCount }: Dashboar
                 backgroundColor: 'rgba(240, 240, 245, 0.8)',
                 border: '1px solid rgba(0, 0, 0, 0.1)'
               }}>
-              <div style={{ color: '#0891b2' }}>
+              <div style={{ color: 'var(--color-accent-hover)' }}>
                 <Sparkles className="h-6 w-6" />
               </div>
             </div>
-            <h3 className="text-title3 font-bold text-cyan-700">Your Learning Profile</h3>
+            <h3
+              className="text-title3 font-bold"
+              style={{ color: 'var(--color-accent-primary)' }}
+            >
+              Your Learning Profile
+            </h3>
           </div>
-          <p className="text-gray-600 mb-4">Your personalized curriculum preferences</p>
+          <p
+            className="mb-4"
+            style={{ color: 'var(--text-secondary)' }}
+          >
+            Your personalized curriculum preferences
+          </p>
 
           {profile && (
             <div className="space-y-4">
               <div>
-                <p className="text-caption1 font-medium text-gray-500 mb-2">Grade</p>
-                <div className="inline-block px-3 py-1 bg-gray-100 border border-gray-200 rounded-2xl text-gray-800 text-sm">
+                <p
+                  className="text-caption1 font-medium mb-2"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  Grade
+                </p>
+                <div
+                  className="inline-block px-3 py-1 rounded-2xl text-sm"
+                  style={{
+                    backgroundColor: 'var(--system-gray-1)',
+                    border: '1px solid var(--system-gray-3)',
+                    color: 'var(--text-primary)'
+                  }}
+                >
                   {profile.grade ? GRADE_LABELS[profile.grade] : 'Not set'}
                 </div>
               </div>
 
               <div>
-                <p className="text-caption1 font-medium text-gray-500 mb-2">Subjects</p>
+                <p
+                  className="text-caption1 font-medium mb-2"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  Subjects
+                </p>
                 <div className="flex flex-wrap gap-2">
                   {profile.preferred_subjects?.map((subject: string) => (
                     <div
                       key={subject}
-                      className="px-2 py-1 rounded-xl text-xs font-medium bg-cyan-50 border border-cyan-200 text-cyan-700"
+                      className="px-2 py-1 rounded-xl text-xs font-medium"
+                      style={{
+                        backgroundColor: '#cffafe',
+                        border: '1px solid var(--system-gray-3)',
+                        color: 'var(--color-accent-primary)'
+                      }}
                     >
                       {subject}
                     </div>
                   )) || (
-                    <span className="text-caption1 text-gray-500">No subjects selected</span>
+                    <span
+                      className="text-caption1"
+                      style={{ color: 'var(--text-muted)' }}
+                    >
+                      No subjects selected
+                    </span>
                   )}
                 </div>
               </div>
 
               <div>
-                <p className="text-caption1 font-medium text-gray-500 mb-1">Total Topics</p>
-                <p className="text-title3 font-bold text-gray-800">{totalTopics}</p>
+                <p
+                  className="text-caption1 font-medium mb-1"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  Total Topics
+                </p>
+                <p
+                  className="text-title3 font-bold"
+                  style={{ color: 'var(--text-primary)' }}
+                >
+                  {totalTopics}
+                </p>
               </div>
             </div>
           )}
@@ -317,23 +364,46 @@ export function DashboardContentLight({ user, profile, textbookCount }: Dashboar
               filter: 'blur(2px)'
             }}
           />
-          <h3 className="text-title3 font-bold text-cyan-700 mb-4">Study Tips</h3>
+          <h3
+            className="text-title3 font-bold mb-4"
+            style={{ color: 'var(--color-accent-primary)' }}
+          >
+            Study Tips
+          </h3>
           <div className="space-y-3">
             <div className="flex items-start gap-3">
-              <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0 bg-cyan-500" />
-              <p className="text-caption1 text-gray-600">
+              <div
+                className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
+                style={{ backgroundColor: 'var(--color-accent-primary)' }}
+              />
+              <p
+                className="text-caption1"
+                style={{ color: 'var(--text-secondary)' }}
+              >
                 Take short breaks every 25 minutes for better retention
               </p>
             </div>
             <div className="flex items-start gap-3">
-              <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0 bg-cyan-500" />
-              <p className="text-caption1 text-gray-600">
+              <div
+                className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
+                style={{ backgroundColor: 'var(--color-accent-primary)' }}
+              />
+              <p
+                className="text-caption1"
+                style={{ color: 'var(--text-secondary)' }}
+              >
                 Review previous topics before starting new ones
               </p>
             </div>
             <div className="flex items-start gap-3">
-              <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0 bg-cyan-500" />
-              <p className="text-caption1 text-gray-600">
+              <div
+                className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
+                style={{ backgroundColor: 'var(--color-accent-primary)' }}
+              />
+              <p
+                className="text-caption1"
+                style={{ color: 'var(--text-secondary)' }}
+              >
                 Practice voice sessions help improve understanding
               </p>
             </div>
