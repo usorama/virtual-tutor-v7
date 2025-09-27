@@ -19,12 +19,32 @@ export class DisplayBuffer {
   private items: DisplayItem[] = [];
   private maxItems = 1000;
   private subscribers: Set<(items: DisplayItem[]) => void> = new Set();
+  private recentItems = new Map<string, number>(); // content hash → timestamp
+  private DEDUP_WINDOW_MS = 1000; // 1 second window
 
   addItem(item: Omit<DisplayItem, 'id' | 'timestamp'>): void {
+    // Generate content hash for deduplication
+    const contentHash = this.hashContent(item.content);
+    const now = Date.now();
+
+    // Check for recent duplicate
+    const lastSeen = this.recentItems.get(contentHash);
+    if (lastSeen && (now - lastSeen) < this.DEDUP_WINDOW_MS) {
+      console.log('[DisplayBuffer] Duplicate item detected, skipping');
+      return; // Skip duplicate
+    }
+
+    // Update recent items map
+    this.recentItems.set(contentHash, now);
+
+    // Clean old entries
+    this.cleanRecentItems(now);
+
+    // Add item as normal
     const newItem: DisplayItem = {
       ...item,
       id: `item_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      timestamp: Date.now(),
+      timestamp: now,
     };
 
     this.items.push(newItem);
@@ -97,6 +117,26 @@ export class DisplayBuffer {
     return this.items.filter(item =>
       item.timestamp >= startTime && item.timestamp <= endTime
     );
+  }
+
+  private hashContent(content: string): string {
+    // Simple hash for deduplication
+    let hash = 0;
+    for (let i = 0; i < content.length; i++) {
+      const char = content.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash.toString();
+  }
+
+  private cleanRecentItems(now: number): void {
+    // Remove entries older than dedup window
+    for (const [hash, timestamp] of this.recentItems.entries()) {
+      if (now - timestamp > this.DEDUP_WINDOW_MS) {
+        this.recentItems.delete(hash);
+      }
+    }
   }
 }
 

@@ -323,7 +323,7 @@ export class SessionOrchestrator {
       return '';
     }
 
-    const itemId = this.displayBuffer.addItem({
+    this.displayBuffer.addItem({
       type: item.type,
       content: item.content,
       speaker: item.speaker,
@@ -339,7 +339,9 @@ export class SessionOrchestrator {
     // Update activity timestamp
     this.currentSession.lastActivity = Date.now();
 
-    return itemId;
+    // Return the last item's ID for logging purposes
+    const lastItem = this.displayBuffer.getLastItem();
+    return lastItem?.id || '';
   }
 
   private setupTranscriptionHandlers(): void {
