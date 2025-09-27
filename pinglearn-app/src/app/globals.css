@@ -3,14 +3,14 @@
 /* Import PingLearn Glass Morphism Design System */
 @import "../styles/glass-morphism.css";
 
-/* Default viewport settings - allow scrolling on all pages except classroom */
+/* Default viewport settings */
 html, body {
   height: 100%;
   width: 100%;
   position: relative;
 }
 
-/* Allow natural scrolling for Next.js root element */
+/* Next.js root element */
 #__next {
   min-height: 100%;
 }

@@ -89,6 +89,29 @@ export default function RootLayout({
       <body
         className={`${inter.variable} font-sans antialiased min-h-screen text-foreground`}
       >
+        {/* Inline script to prevent white flash during initial render */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Immediately set dark background to prevent white flash
+              // This runs before React hydration, eliminating the FOUC
+              (function() {
+                // Set black background immediately
+                document.documentElement.style.backgroundColor = '#000000';
+                document.body.style.backgroundColor = '#000000';
+
+                // Add dark theme class if needed
+                if (!document.documentElement.classList.contains('dark')) {
+                  document.documentElement.classList.add('dark');
+                }
+
+                // Ensure proper viewport settings
+                document.documentElement.style.height = '100%';
+                document.body.style.minHeight = '100vh';
+              })();
+            `,
+          }}
+        />
         <ThemeProvider>
           <AuthProvider>
             {children}
