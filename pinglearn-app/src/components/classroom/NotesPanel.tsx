@@ -392,15 +392,8 @@ export function NotesPanel({
                 transition={{ delay: 0.3, duration: 0.2 }}
                 className="mt-8 pt-4 border-t border-white/10"
               >
-                <div className="flex items-center justify-between">
-                  {/* Left side - word count info */}
-                  <div className="text-xs text-muted-foreground">
-                    {wordCount > 0
-                      ? `${wordCount} words • ${displayKeyConcepts.length} concepts`
-                      : `${displayKeyConcepts.length + displayExamples.length + displaySummary.length} items`}
-                  </div>
-
-                  {/* Right side - action buttons */}
+                <div className="flex items-center justify-start">
+                  {/* Action buttons on the left */}
                   <div className="flex gap-1">
                     <Button
                       variant="ghost"
