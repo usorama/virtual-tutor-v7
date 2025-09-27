@@ -137,6 +137,7 @@ export function TabsContainer({
       >
         <NotesPanel
           sessionId={sessionId}
+          topic={topic}
           keyConcepts={keyConcepts}
           examples={examples}
           summary={summary}

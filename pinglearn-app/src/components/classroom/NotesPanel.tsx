@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -21,6 +21,7 @@ interface Note {
 
 interface NotesPanelProps {
   sessionId?: string;
+  topic?: string;
   keyConcepts?: Note[];
   examples?: Note[];
   summary?: string[];
@@ -32,6 +33,7 @@ interface NotesPanelProps {
 
 export function NotesPanel({
   sessionId,
+  topic = 'Learning Session',
   keyConcepts = [],
   examples = [],
   summary = [],
@@ -41,7 +43,6 @@ export function NotesPanel({
   isLoading = false
 }: NotesPanelProps) {
   const [copiedState, setCopiedState] = useState<'copy' | 'copied' | 'error'>('copy');
-  const notesContentRef = useRef<HTMLDivElement>(null);
 
   // Mock data for demonstration (will be replaced with real data from session)
   const mockKeyConcepts: Note[] = [
@@ -174,8 +175,6 @@ export function NotesPanel({
 
   // Handle print - only notes content
   const handlePrint = () => {
-    if (!notesContentRef.current) return;
-
     // Create a print window with only notes content
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
@@ -188,7 +187,7 @@ export function NotesPanel({
       <!DOCTYPE html>
       <html>
       <head>
-        <title>PingLearn Smart Notes</title>
+        <title>PingLearn Smart Notes - ${topic}</title>
         <style>
           body {
             font-family: system-ui, -apple-system, sans-serif;
@@ -196,13 +195,22 @@ export function NotesPanel({
             max-width: 800px;
             margin: 0 auto;
             line-height: 1.6;
+            color: #333;
           }
           h1 { color: #06B6D4; margin-bottom: 20px; }
           h2 { color: #333; margin-top: 30px; margin-bottom: 15px; }
-          pre { white-space: pre-wrap; }
+          pre {
+            white-space: pre-wrap;
+            font-family: system-ui, -apple-system, sans-serif;
+          }
+          @media print {
+            body { padding: 0; }
+          }
         </style>
       </head>
       <body>
+        <h1>PingLearn Smart Notes</h1>
+        <h2>Topic: ${topic}</h2>
         <pre>${notesHTML}</pre>
       </body>
       </html>
@@ -210,9 +218,13 @@ export function NotesPanel({
 
     printWindow.document.write(printContent);
     printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-    printWindow.close();
+
+    // Add a small delay to ensure content is loaded before printing
+    setTimeout(() => {
+      printWindow.focus();
+      printWindow.print();
+      printWindow.close();
+    }, 250);
   };
 
   // Handle export - download as text file
@@ -222,7 +234,12 @@ export function NotesPanel({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `PingLearn_Notes_${new Date().toISOString().split('T')[0]}.txt`;
+
+    // Create filename from topic - remove special chars and spaces
+    const safeTopicName = topic.replace(/[^a-zA-Z0-9]/g, '_').replace(/_+/g, '_').toLowerCase();
+    const dateStr = new Date().toISOString().split('T')[0];
+    link.download = `PingLearn_${safeTopicName}_${dateStr}.txt`;
+
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
