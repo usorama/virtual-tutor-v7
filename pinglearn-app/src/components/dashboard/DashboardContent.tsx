@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Clock,
   BookOpen,
@@ -16,75 +16,50 @@ import { ComboChart } from './ComboChart'
 import { SessionTimeline } from './SessionTimeline'
 import { MetricCardV2 } from './MetricCardV2'
 import { QuickActions } from './QuickActions'
+import { getDashboardMetrics, getDashboardChartData, getRecentSessions, type DashboardMetrics, type ChartData, type RecentSession } from '@/lib/dashboard/actions'
+import { User } from '@supabase/supabase-js'
+
+interface UserProfile {
+  grade: number | null
+  learning_purpose: string | null
+  preferred_subjects: string[] | null
+  selected_topics: Record<string, string[]> | null
+}
 
 interface DashboardContentProps {
-  user: any
-  profile: any
+  user: User
+  profile: UserProfile | null
   textbookCount: number
 }
 
-// Mock data for the charts and components
-const mockChartData = {
-  studySessions: [2, 1, 3, 2, 1, 2, 3],
-  topicsMastered: [12, 14, 18, 21, 23, 26, 30],
-  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-}
-
-const mockSessions = [
-  {
-    id: 'session-1',
-    title: 'Triangles & Similarity',
-    subject: 'Mathematics' as const,
-    type: 'voice' as const,
-    time: '14:30',
-    duration: '45 min',
-    score: '92% accuracy',
-    date: 'Today'
-  },
-  {
-    id: 'session-2',
-    title: 'Statistics Overview',
-    subject: 'Mathematics' as const,
-    type: 'practice' as const,
-    time: '09:15',
-    duration: '30 min',
-    score: '15 problems solved',
-    date: 'Today'
-  },
-  {
-    id: 'session-3',
-    title: 'Motion & Velocity',
-    subject: 'Physics' as const,
-    type: 'voice' as const,
-    time: '16:20',
-    duration: '38 min',
-    score: '85% completion',
-    date: 'Yesterday'
-  },
-  {
-    id: 'session-4',
-    title: 'Quadratic Equations',
-    subject: 'Mathematics' as const,
-    type: 'review' as const,
-    time: '11:45',
-    duration: '25 min',
-    score: 'Chapter 4 completed',
-    date: 'Yesterday'
-  },
-  {
-    id: 'session-5',
-    title: 'Chemical Reactions',
-    subject: 'Chemistry' as const,
-    type: 'voice' as const,
-    time: '14:10',
-    duration: '42 min',
-    score: '18 concepts learned',
-    date: '2 days ago'
-  }
-]
-
 export function DashboardContent({ user, profile, textbookCount }: DashboardContentProps) {
   const [chartPeriod, setChartPeriod] = useState<'daily' | 'weekly' | 'monthly'>('weekly')
+  const [metrics, setMetrics] = useState<DashboardMetrics | null>(null)
+  const [chartData, setChartData] = useState<ChartData | null>(null)
+  const [recentSessions, setRecentSessions] = useState<RecentSession[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const [metricsResult, chartResult, sessionsResult] = await Promise.all([
+          getDashboardMetrics(),
+          getDashboardChartData(),
+          getRecentSessions()
+        ])
+
+        if (metricsResult.data) setMetrics(metricsResult.data)
+        if (chartResult.data) setChartData(chartResult.data)
+        if (sessionsResult.data) setRecentSessions(sessionsResult.data)
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchDashboardData()
+  }, [])
 
   const handleSessionClick = (sessionId: string) => {
     // In a real app, this would navigate to the session recording page
@@ -104,7 +79,7 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
         {/* Combo Chart - 5 columns, stretched horizontally */}
         <div className="lg:col-span-5 flex">
           <ComboChart
-            data={mockChartData}
+            data={chartData || { studySessions: [], topicsMastered: [], labels: [] }}
             period={chartPeriod}
             onPeriodChange={setChartPeriod}
             className="flex-1"
@@ -121,28 +96,28 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         <MetricCardV2
           title="Study Sessions"
-          value={14}
+          value={loading ? '-' : metrics?.studySessions || 0}
           change={{ value: '12%', trend: 'up', description: '12% from last week' }}
           icon={<Clock className="h-6 w-6" />}
         />
 
         <MetricCardV2
           title="Topics Mastered"
-          value={18}
+          value={loading ? '-' : metrics?.topicsMastered || 0}
           change={{ value: '3', trend: 'up', description: '3 new this week' }}
           icon={<BookOpen className="h-6 w-6" />}
         />
 
         <MetricCardV2
           title="Voice Minutes"
-          value={156}
+          value={loading ? '-' : metrics?.voiceMinutes || 0}
           change={{ value: '28%', trend: 'up', description: '28% increase' }}
           icon={<Mic className="h-6 w-6" />}
         />
 
         <MetricCardV2
           title="Math Problems"
-          value={89}
+          value={loading ? '-' : metrics?.mathProblems || 0}
           change={{ value: '15', trend: 'up', description: '15 solved today' }}
           icon={<Activity className="h-6 w-6" />}
         />
@@ -156,14 +131,14 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
 
         <MetricCardV2
           title="Achievements"
-          value={7}
+          value={loading ? '-' : metrics?.achievements || 0}
           change={{ value: '1', trend: 'up', description: '1 new badge earned' }}
           icon={<Trophy className="h-6 w-6" />}
         />
 
         <MetricCardV2
           title="Study Streak"
-          value="5 days"
+          value={loading ? '-' : `${metrics?.studyStreak || 0} days`}
           change={{ value: 'ongoing', trend: 'up', description: 'Keep it going!' }}
           icon={<Flame className="h-6 w-6" />}
         />
@@ -171,7 +146,7 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
         {/* Weekly Goal Card - replacing circular progress */}
         <MetricCardV2
           title="Weekly Goal"
-          value="87%"
+          value={loading ? '-' : `${metrics?.weeklyGoalProgress || 0}%`}
           change={{ value: '28/32', trend: 'up', description: '4 topics to go!' }}
           icon={<Target className="h-6 w-6" />}
         />
@@ -180,7 +155,7 @@ export function DashboardContent({ user, profile, textbookCount }: DashboardCont
       {/* Recent Sessions Timeline */}
       <div className="grid lg:grid-cols-1">
         <SessionTimeline
-          sessions={mockSessions}
+          sessions={recentSessions}
           onSessionClick={handleSessionClick}
         />
       </div>

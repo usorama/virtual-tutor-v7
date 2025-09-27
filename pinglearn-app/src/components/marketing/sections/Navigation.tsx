@@ -65,11 +65,8 @@ export default function Navigation({ transparent = false }: NavigationProps) {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const { user, loading } = useAuth();
 
-  // Don't render navigation if user is signed in (hide marketing navigation after signin)
-  // Show navigation during loading to prevent flickering, hide only after confirmed user
-  if (!loading && user) {
-    return null;
-  }
+  // Marketing navigation should always be visible on marketing pages
+  // The app has different navigation for authenticated users in the main app area
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 

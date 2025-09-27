@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -11,6 +11,7 @@ import {
 import { MathRenderer } from './MathRenderer';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getSessionNotes, type NotesData } from '@/lib/notes/actions';
 
 interface Note {
   id: string;
@@ -43,75 +44,31 @@ export function NotesPanel({
   isLoading = false
 }: NotesPanelProps) {
   const [copiedState, setCopiedState] = useState<'copy' | 'copied' | 'error'>('copy');
+  const [notesData, setNotesData] = useState<NotesData | null>(null);
+  const [loadingNotes, setLoadingNotes] = useState(true);
 
-  // Mock data for demonstration (will be replaced with real data from session)
-  const mockKeyConcepts: Note[] = [
-    {
-      id: '1',
-      content: 'Quadratic equation',
-      type: 'definition',
-      latex: 'ax^2 + bx + c = 0'
-    },
-    {
-      id: '2',
-      content: 'Discriminant',
-      type: 'formula',
-      latex: 'D = b^2 - 4ac'
-    },
-    {
-      id: '3',
-      content: 'When D > 0: Two distinct real roots',
-      type: 'tip'
-    },
-    {
-      id: '4',
-      content: 'When D = 0: One real root (repeated)',
-      type: 'tip'
-    },
-    {
-      id: '5',
-      content: 'When D < 0: No real roots',
-      type: 'tip'
-    }
-  ];
+  useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        const result = await getSessionNotes(sessionId);
+        if (result.data) {
+          setNotesData(result.data);
+        }
+      } catch (error) {
+        console.error('Error fetching notes:', error);
+      } finally {
+        setLoadingNotes(false);
+      }
+    };
 
-  const mockExamples: Note[] = [
-    {
-      id: 'e1',
-      content: 'Example 1',
-      type: 'example',
-      latex: 'x^2 + 5x + 6 = 0'
-    },
-    {
-      id: 'e2',
-      content: 'Step 1: Identify coefficients',
-      type: 'example',
-      latex: 'a=1, b=5, c=6'
-    },
-    {
-      id: 'e3',
-      content: 'Step 2: Calculate discriminant',
-      type: 'example',
-      latex: 'D = 25 - 24 = 1'
-    },
-    {
-      id: 'e4',
-      content: 'Step 3: Find roots',
-      type: 'example',
-      latex: 'x = -2, -3'
-    }
-  ];
+    fetchNotes();
+  }, [sessionId]);
 
-  const mockSummary = [
-    'Identified quadratic equation forms',
-    'Learned discriminant formula',
-    'Practiced finding roots systematically',
-    'Understood relationship between discriminant and nature of roots'
-  ];
-
-  const displayKeyConcepts = keyConcepts.length > 0 ? keyConcepts : mockKeyConcepts;
-  const displayExamples = examples.length > 0 ? examples : mockExamples;
-  const displaySummary = summary.length > 0 ? summary : mockSummary;
+  // Use real data if available, otherwise fall back to props, then empty arrays
+  const displayKeyConcepts = notesData?.keyConcepts || keyConcepts;
+  const displayExamples = notesData?.examples || examples;
+  const displaySummary = notesData?.summary || summary;
+  const displayTopic = notesData?.sessionTopic || topic;
 
   // Check if we have any content to display (real or mock)
   const hasNotes = displayKeyConcepts.length > 0 || displayExamples.length > 0 || displaySummary.length > 0;
@@ -187,7 +144,7 @@ export function NotesPanel({
       <!DOCTYPE html>
       <html>
       <head>
-        <title>PingLearn Smart Notes - ${topic}</title>
+        <title>PingLearn Smart Notes - ${displayTopic}</title>
         <style>
           body {
             font-family: system-ui, -apple-system, sans-serif;
@@ -210,7 +167,7 @@ export function NotesPanel({
       </head>
       <body>
         <h1>PingLearn Smart Notes</h1>
-        <h2>Topic: ${topic}</h2>
+        <h2>Topic: ${displayTopic}</h2>
         <pre>${notesHTML}</pre>
       </body>
       </html>
@@ -236,7 +193,7 @@ export function NotesPanel({
     link.href = url;
 
     // Create filename from topic - remove special chars and spaces
-    const safeTopicName = topic.replace(/[^a-zA-Z0-9]/g, '_').replace(/_+/g, '_').toLowerCase();
+    const safeTopicName = displayTopic.replace(/[^a-zA-Z0-9]/g, '_').replace(/_+/g, '_').toLowerCase();
     const dateStr = new Date().toISOString().split('T')[0];
     link.download = `PingLearn_${safeTopicName}_${dateStr}.txt`;
 
@@ -259,7 +216,7 @@ export function NotesPanel({
         });
       } catch (error) {
         // User cancelled share or error occurred
-        if ((error as any).name !== 'AbortError') {
+        if (error instanceof Error && error.name !== 'AbortError') {
           toast.error('Failed to share notes');
         }
       }
@@ -286,7 +243,7 @@ export function NotesPanel({
               )}
             </div>
             <p className="text-sm text-muted-foreground">
-              {isLive ? 'Auto-generating from your learning session' : 'Auto-captured from your learning session'}
+              {loadingNotes ? 'Loading session notes...' : isLive ? 'Auto-generating from your learning session' : 'Auto-captured from your learning session'}
             </p>
           </div>
 
@@ -401,7 +358,7 @@ export function NotesPanel({
 
           {/* Action buttons - ChatGPT/Claude pattern: appear after content generation */}
           <AnimatePresence>
-            {!isLoading && hasNotes && (
+            {!isLoading && !loadingNotes && hasNotes && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
