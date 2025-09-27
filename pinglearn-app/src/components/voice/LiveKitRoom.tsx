@@ -29,20 +29,20 @@ export function LiveKitRoom({
   const [isConnected, setIsConnected] = useState(false);
   const audioElementRef = useRef<HTMLAudioElement>(null);
 
-  // Audio volume fade-in system for show-then-tell methodology
-  const audioFadeTimeoutsRef = useRef<NodeJS.Timeout[]>([]);
-  const attachedAudioElementsRef = useRef<HTMLAudioElement[]>([]);
+  // Audio delay system for show-then-tell methodology
+  const pendingAudioTracksRef = useRef<RemoteTrack[]>([]);
+  const audioDelayTimeoutsRef = useRef<NodeJS.Timeout[]>([]);
 
   useEffect(() => {
     return () => {
       room.disconnect();
 
-      // Clean up audio fade timeouts
-      audioFadeTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-      audioFadeTimeoutsRef.current = [];
+      // Clean up audio delay timeouts
+      audioDelayTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+      audioDelayTimeoutsRef.current = [];
 
-      // Clean up attached audio elements
-      attachedAudioElementsRef.current = [];
+      // Clean up pending audio tracks
+      pendingAudioTracksRef.current = [];
 
       // Clean up event bus listeners when component unmounts
       liveKitEventBus.removeAllListeners();
@@ -100,30 +100,20 @@ export function LiveKitRoom({
     onDisconnected();
   };
 
-  // Handle remote audio tracks (teacher voice) with volume fade-in
+  // Handle remote audio tracks (teacher voice) with 400ms delay
   useEffect(() => {
     const handleTrackSubscribed = (
       track: RemoteTrack,
-      _publication: RemoteTrackPublication
+      publication: RemoteTrackPublication
     ) => {
       if (track.kind === 'audio' && audioElementRef.current) {
-        console.log('[LiveKitRoom] Audio track received - attaching immediately but muted');
+        console.log('[LiveKitRoom] Audio track received - storing for delayed playback');
 
-        // Attach immediately but muted (volume = 0) for show-then-tell methodology
-        const audioElement = track.attach() as HTMLAudioElement;
-        audioElement.volume = 0; // Start muted
-        audioElement.autoplay = true;
+        // Store track for delayed attachment (show-then-tell methodology)
+        pendingAudioTracksRef.current.push(track);
 
-        // Store the audio element for later volume control
-        attachedAudioElementsRef.current.push(audioElement);
-
-        // Also attach to the main audio ref if it exists
-        if (audioElementRef.current) {
-          audioElementRef.current.srcObject = audioElement.srcObject;
-          audioElementRef.current.volume = 0;
-        }
-
-        console.log('[LiveKitRoom] Audio track attached but muted for show-then-tell timing');
+        // NOTE: We don't immediately attach the track here!
+        // Audio will be delayed by 400ms and triggered by transcript events
       }
     };
 
@@ -143,7 +133,7 @@ export function LiveKitRoom({
       onDisconnected();
     };
 
-    const handleConnectionQualityChanged = (quality: unknown) => {
+    const handleConnectionQualityChanged = (quality: any) => {
       console.log('Connection quality:', quality);
     };
 
@@ -163,47 +153,31 @@ export function LiveKitRoom({
             timestamp: Date.now()
           });
 
-          // SHOW-THEN-TELL: Trigger volume fade-in (400ms after visual)
-          console.log(`[LiveKitRoom] Transcript received - scheduling audio fade-in for show-then-tell`);
+          // SHOW-THEN-TELL: Trigger delayed audio playback (400ms after visual)
+          console.log(`[LiveKitRoom] Transcript received - scheduling audio delay for show-then-tell`);
 
-          // Schedule audio volume fade-in 400ms later
-          const fadeTimeout = setTimeout(() => {
-            console.log('[LiveKitRoom] Fading in audio volume (400ms after visual)');
+          // Schedule audio playback 400ms later
+          const audioTimeout = setTimeout(() => {
+            console.log('[LiveKitRoom] Playing delayed audio (400ms after visual)');
 
-            // Fade in volume for all attached audio elements
-            attachedAudioElementsRef.current.forEach(audioElement => {
-              try {
-                // Smooth fade-in over 100ms
-                audioElement.volume = 0;
-                const fadeSteps = 10;
-                const stepDuration = 100 / fadeSteps; // 10ms per step
-                const volumeStep = 1 / fadeSteps;
+            // Attach any pending audio tracks
+            if (pendingAudioTracksRef.current.length > 0 && audioElementRef.current) {
+              pendingAudioTracksRef.current.forEach(track => {
+                try {
+                  track.attach(audioElementRef.current!);
+                  console.log('[LiveKitRoom] Audio track attached with 400ms delay');
+                } catch (error) {
+                  console.error('[LiveKitRoom] Error attaching delayed audio:', error);
+                }
+              });
 
-                let currentStep = 0;
-                const fadeInterval = setInterval(() => {
-                  currentStep++;
-                  audioElement.volume = Math.min(1, currentStep * volumeStep);
-
-                  if (currentStep >= fadeSteps) {
-                    clearInterval(fadeInterval);
-                    audioElement.volume = 1; // Ensure final volume
-                    console.log('[LiveKitRoom] Audio fade-in completed');
-                  }
-                }, stepDuration);
-
-              } catch (error) {
-                console.error('[LiveKitRoom] Error fading in audio:', error);
-              }
-            });
-
-            // Also fade in the main audio element
-            if (audioElementRef.current) {
-              audioElementRef.current.volume = 1;
+              // Clear pending tracks after attachment
+              pendingAudioTracksRef.current = [];
             }
           }, 400); // 400ms delay for show-then-tell methodology
 
           // Store timeout for cleanup
-          audioFadeTimeoutsRef.current.push(fadeTimeout);
+          audioDelayTimeoutsRef.current.push(audioTimeout);
         }
       } catch (error) {
         console.error('[LiveKitRoom] Error processing data packet:', error);
