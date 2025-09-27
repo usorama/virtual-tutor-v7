@@ -352,7 +352,7 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
       // If still no LaTeX detected after conversion, wrap in text mode
       if (!processedContent.includes('\\') && !processedContent.includes('^')) {
         // For pure text descriptions, render as formatted text with math styling
-        return `<span class="font-mono text-lg bg-gray-50 dark:bg-gray-800 px-2 py-1 rounded">${processedContent}</span>`;
+        return `<span class="font-mono text-lg bg-gray-800/50 px-2 py-1 rounded">${processedContent}</span>`;
       }
 
       // Render the processed LaTeX
@@ -365,7 +365,7 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
     } catch (error) {
       console.error('KaTeX rendering error for content:', content, error);
       // Fallback to styled text if KaTeX fails
-      return `<span class="font-mono text-lg bg-gray-50 dark:bg-gray-800 px-2 py-1 rounded text-blue-700 dark:text-blue-300">${content}</span>`;
+      return `<span class="font-mono text-lg bg-gray-800/50 px-2 py-1 rounded text-blue-300">${content}</span>`;
     }
   };
 
@@ -397,11 +397,11 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
 
       case 'math':
         return (
-          <div className={`my-4 py-4 px-6 overflow-x-auto overflow-y-hidden max-w-full ${
+          <div className={`my-4 py-4 px-6 overflow-x-auto overflow-y-hidden max-w-full bg-transparent ${
             isCurrentlySpoken ? 'bg-blue-50 dark:bg-blue-950/50 rounded-lg' : ''
           }`}>
             <div
-              className="katex-display text-center text-lg min-w-0"
+              className="katex-display text-center text-lg min-w-0 bg-transparent"
               dangerouslySetInnerHTML={{ __html: renderMath(item.content) }}
             />
           </div>
@@ -425,7 +425,7 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
   return (
     <div className={`h-full bg-background ${className}`}>
       <ScrollArea ref={scrollAreaRef} className="h-full">
-        <div className="px-6 pt-6 pb-24 max-w-4xl mx-auto overflow-hidden">
+        <div className="px-6 pt-6 pb-24 max-w-4xl mx-auto overflow-hidden bg-transparent">
           {error ? (
             <div className="text-center text-red-600 py-12">
               <p className="text-lg font-medium mb-2">Error</p>
@@ -445,7 +445,10 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
           ) : (
             <div className="space-y-2 overflow-x-hidden overflow-y-auto">
               {content.map((item) => (
-                <div key={item.id} className="animate-in fade-in-0 duration-300">
+                <div
+                  key={item.id}
+                  className="opacity-100 transform-none animate-slide-in-smooth bg-transparent"
+                >
                   {renderContent(item)}
                 </div>
               ))}
