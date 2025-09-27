@@ -396,72 +396,56 @@ export function NotesPanel({
                   {/* Action buttons on the left with Framer Motion hover effects */}
                   <div className="flex gap-2">
                     <motion.button
-                      whileHover={{ scale: 1.1 }}
+                      whileHover={{ scale: 1.1, backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
                       whileTap={{ scale: 0.95 }}
                       onClick={copyNotesToClipboard}
                       className="relative h-8 w-8 rounded-md flex items-center justify-center text-muted-foreground hover:text-white transition-colors"
                       disabled={copiedState === 'copied'}
                       title={copiedState === 'copied' ? 'Copied!' : 'Copy notes'}
+                      initial={{ backgroundColor: 'rgba(255, 255, 255, 0)' }}
+                      transition={{ duration: 0.2 }}
                     >
-                      <motion.div
-                        className="absolute inset-0 rounded-md bg-white/10"
-                        initial={{ opacity: 0 }}
-                        whileHover={{ opacity: 1 }}
-                        transition={{ duration: 0.2 }}
-                      />
                       {copiedState === 'copied' ? (
-                        <Check className="w-4 h-4 text-green-400 relative z-10" />
+                        <Check className="w-4 h-4 text-green-400" />
                       ) : (
-                        <Copy className="w-4 h-4 relative z-10" />
+                        <Copy className="w-4 h-4" />
                       )}
                     </motion.button>
 
                     <motion.button
-                      whileHover={{ scale: 1.1 }}
+                      whileHover={{ scale: 1.1, backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handlePrint}
                       className="relative h-8 w-8 rounded-md flex items-center justify-center text-muted-foreground hover:text-white transition-colors"
                       title="Print notes"
+                      initial={{ backgroundColor: 'rgba(255, 255, 255, 0)' }}
+                      transition={{ duration: 0.2 }}
                     >
-                      <motion.div
-                        className="absolute inset-0 rounded-md bg-white/10"
-                        initial={{ opacity: 0 }}
-                        whileHover={{ opacity: 1 }}
-                        transition={{ duration: 0.2 }}
-                      />
-                      <Printer className="w-4 h-4 relative z-10" />
+                      <Printer className="w-4 h-4" />
                     </motion.button>
 
                     <motion.button
-                      whileHover={{ scale: 1.1 }}
+                      whileHover={{ scale: 1.1, backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handleExport}
                       className="relative h-8 w-8 rounded-md flex items-center justify-center text-muted-foreground hover:text-white transition-colors"
                       title="Export notes"
+                      initial={{ backgroundColor: 'rgba(255, 255, 255, 0)' }}
+                      transition={{ duration: 0.2 }}
                     >
-                      <motion.div
-                        className="absolute inset-0 rounded-md bg-white/10"
-                        initial={{ opacity: 0 }}
-                        whileHover={{ opacity: 1 }}
-                        transition={{ duration: 0.2 }}
-                      />
-                      <Download className="w-4 h-4 relative z-10" />
+                      <Download className="w-4 h-4" />
                     </motion.button>
 
                     <motion.button
-                      whileHover={{ scale: 1.1 }}
+                      whileHover={{ scale: 1.1, backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handleShare}
                       className="relative h-8 w-8 rounded-md flex items-center justify-center text-muted-foreground hover:text-white transition-colors"
                       title="Share notes"
+                      initial={{ backgroundColor: 'rgba(255, 255, 255, 0)' }}
+                      transition={{ duration: 0.2 }}
                     >
-                      <motion.div
-                        className="absolute inset-0 rounded-md bg-white/10"
-                        initial={{ opacity: 0 }}
-                        whileHover={{ opacity: 1 }}
-                        transition={{ duration: 0.2 }}
-                      />
-                      <Share2 className="w-4 h-4 relative z-10" />
+                      <Share2 className="w-4 h-4" />
                     </motion.button>
                   </div>
                 </div>
