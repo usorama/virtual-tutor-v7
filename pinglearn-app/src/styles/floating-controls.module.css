@@ -1,0 +1,75 @@
+/* Volume Slider Styling */
+.volumeSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 8px;
+  height: 100px;
+  background: transparent;
+  outline: none;
+  writing-mode: vertical-lr;
+  direction: rtl;
+}
+
+/* Track */
+.volumeSlider::-webkit-slider-runnable-track {
+  width: 8px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  backdrop-filter: blur(10px);
+}
+
+.volumeSlider::-moz-range-track {
+  width: 8px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  backdrop-filter: blur(10px);
+}
+
+/* Thumb */
+.volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.volumeSlider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+/* Hover state for thumb */
+.volumeSlider:hover::-webkit-slider-thumb {
+  transform: scale(1.1);
+}
+
+.volumeSlider:hover::-moz-range-thumb {
+  transform: scale(1.1);
+}
+
+/* Disabled state */
+.volumeSlider:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.volumeSlider:disabled::-webkit-slider-thumb {
+  cursor: not-allowed;
+}
+
+.volumeSlider:disabled::-moz-range-thumb {
+  cursor: not-allowed;
+}

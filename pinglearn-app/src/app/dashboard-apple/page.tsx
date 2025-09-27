@@ -9,8 +9,8 @@ import { GRADE_LABELS } from '@/types/wizard'
 import { AuthenticatedLayout } from '@/components/layout/AuthenticatedLayout'
 import { AppleLightGlassCard, AppleLightGlassContainer } from '@/components/dashboard/AppleLightGlass'
 import { AppleButton } from '@/components/dashboard/AppleButtons'
-import { ComboChart } from '@/components/dashboard/ComboChart'
-import { SessionTimeline } from '@/components/dashboard/SessionTimeline'
+import { AppleChartSection } from '@/components/dashboard/AppleChartSection'
+import { AppleSessionSection } from '@/components/dashboard/AppleSessionSection'
 import { QuickActionsLight } from '@/components/dashboard/QuickActionsLight'
 
 export default async function DashboardApplePage() {
@@ -74,18 +74,7 @@ export default async function DashboardApplePage() {
           <div className="grid lg:grid-cols-7 gap-6 items-stretch mb-10">
             {/* Combo Chart - 5 columns */}
             <div className="lg:col-span-5">
-              <AppleLightGlassContainer>
-                <ComboChart
-                  data={{
-                    studySessions: [2, 1, 3, 2, 1, 2, 3],
-                    topicsMastered: [12, 14, 18, 21, 23, 26, 30],
-                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                  }}
-                  period="weekly"
-                  onPeriodChange={() => {}}
-                  className="h-full"
-                />
-              </AppleLightGlassContainer>
+              <AppleChartSection />
             </div>
 
             {/* Quick Actions - 2 columns */}
@@ -179,43 +168,7 @@ export default async function DashboardApplePage() {
 
           {/* Recent Sessions Timeline */}
           <div className="mb-10">
-            <AppleLightGlassContainer>
-              <SessionTimeline
-                sessions={[
-                  {
-                    id: 'session-1',
-                    title: 'Triangles & Similarity',
-                    subject: 'Mathematics' as const,
-                    type: 'voice' as const,
-                    time: '14:30',
-                    duration: '45 min',
-                    score: '92% accuracy',
-                    date: 'Today'
-                  },
-                  {
-                    id: 'session-2',
-                    title: 'Statistics Overview',
-                    subject: 'Mathematics' as const,
-                    type: 'practice' as const,
-                    time: '09:15',
-                    duration: '30 min',
-                    score: '15 problems solved',
-                    date: 'Today'
-                  },
-                  {
-                    id: 'session-3',
-                    title: 'Quadratic Equations',
-                    subject: 'Mathematics' as const,
-                    type: 'review' as const,
-                    time: '11:45',
-                    duration: '25 min',
-                    score: 'Chapter 4 completed',
-                    date: 'Yesterday'
-                  }
-                ]}
-                onSessionClick={() => {}}
-              />
-            </AppleLightGlassContainer>
+            <AppleSessionSection />
           </div>
 
           {/* Content Cards - Using glass containers */}

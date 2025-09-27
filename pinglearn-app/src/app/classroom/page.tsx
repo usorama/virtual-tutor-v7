@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { Mic, MicOff, Loader2, AlertCircle, Play, Pause, Square, Home } from 'lucide-react';
+import { Loader2, AlertCircle, Home, Mic } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { TeachingBoardSimple } from '@/components/classroom/TeachingBoardSimple';
 import { LiveKitRoom } from '@/components/voice/LiveKitRoom';
@@ -15,9 +15,9 @@ import { useVoiceSession } from '@/hooks/useVoiceSession';
 import { useSessionState } from '@/hooks/useSessionState';
 import { useSessionMetrics } from '@/hooks/useSessionMetrics';
 import { SessionOrchestrator } from '@/protected-core';
-import styles from '@/styles/classroom-chat.module.css';
 import { ResizableSplit } from '@/components/ui/resizable-split';
 import { TabsContainer } from '@/components/classroom/TabsContainer';
+import { FloatingControls } from '@/components/classroom/FloatingControls';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -470,76 +470,33 @@ export default function ClassroomPage() {
           </ResizableSplit>
         </main>
 
-        {/* Bottom Control Bar */}
-        <div className="border-t bg-background/95 backdrop-blur p-4">
-          <div className="max-w-2xl mx-auto flex items-center justify-center gap-4">
-            {/* Student Audio Indicator */}
-            <div className="flex items-center gap-2">
-              <AudioVisualizer
-                isActive={!audioControls.isMuted && sessionControlState === 'active'}
-                type="student"
-                size="md"
-              />
-            </div>
+        {/* Floating Controls Bar */}
+        <FloatingControls
+          audioControls={audioControls}
+          sessionControlState={sessionControlState}
+          isTransitioning={isTransitioning}
+          isConnecting={isConnecting}
+          isLoading={isLoading}
+          onMuteToggle={toggleMute}
+          onVolumeChange={(volume) => setAudioControls(prev => ({ ...prev, volume }))}
+          onPauseResume={handlePauseResume}
+          onEndSession={handleEndSession}
+        />
 
-            {/* Control Buttons */}
-            <div className="flex items-center gap-2">
-              {sessionControlState === 'ended' ? (
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => router.push('/dashboard')}
-                  className="px-6"
-                >
-                  <Home className="w-5 h-5 mr-2" />
-                  Back to Dashboard
-                </Button>
-              ) : (
-                <>
-                  <Button
-                    variant={audioControls.isMuted ? "destructive" : "secondary"}
-                    size="icon"
-                    onClick={toggleMute}
-                    disabled={isConnecting || isLoading || isTransitioning}
-                    className="h-12 w-12 rounded-full"
-                  >
-                    {audioControls.isMuted ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
-                  </Button>
-
-                  <Button
-                    variant={sessionControlState === 'paused' ? 'default' : 'outline'}
-                    size="icon"
-                    onClick={handlePauseResume}
-                    disabled={isConnecting || isLoading || isTransitioning}
-                    className="h-12 w-12 rounded-full"
-                  >
-                    {isTransitioning ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : sessionControlState === 'paused' ? (
-                      <Play className="w-5 h-5" />
-                    ) : (
-                      <Pause className="w-5 h-5" />
-                    )}
-                  </Button>
-
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    onClick={handleEndSession}
-                    disabled={isConnecting || isLoading || isTransitioning}
-                    className="h-12 w-12 rounded-full"
-                  >
-                    {isTransitioning ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : (
-                      <Square className="w-5 h-5" />
-                    )}
-                  </Button>
-                </>
-              )}
-            </div>
+        {/* End Session Navigation - Only show when ended */}
+        {sessionControlState === 'ended' && (
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => router.push('/dashboard')}
+              className="px-6 bg-background/95 backdrop-blur"
+            >
+              <Home className="w-5 h-5 mr-2" />
+              Back to Dashboard
+            </Button>
           </div>
-        </div>
+        )}
 
 
         {/* LiveKit Voice Connection (Hidden) */}

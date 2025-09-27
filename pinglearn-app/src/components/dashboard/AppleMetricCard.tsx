@@ -55,9 +55,10 @@ export function AppleMetricCard({
           style={{ backgroundColor: '#F5F5F7' }}
         >
           <div style={{ color: '#1D1D1F' }}>
-            {React.cloneElement(icon as React.ReactElement, {
-              className: 'w-4 h-4'
-            })}
+            {React.isValidElement(icon)
+              ? React.cloneElement(icon, { className: 'w-4 h-4' } as any)
+              : icon
+            }
           </div>
         </div>
       </div>
@@ -132,9 +133,10 @@ export function AppleGlassCard({
           }}
         >
           <div style={{ color: '#1D1D1F' }}>
-            {React.cloneElement(icon as React.ReactElement, {
-              className: 'w-4 h-4'
-            })}
+            {React.isValidElement(icon)
+              ? React.cloneElement(icon, { className: 'w-4 h-4' } as any)
+              : icon
+            }
           </div>
         </div>
       </div>
