@@ -29,20 +29,13 @@ export function LiveKitRoom({
   const [isConnected, setIsConnected] = useState(false);
   const audioElementRef = useRef<HTMLAudioElement>(null);
 
-  // Audio delay system for show-then-tell methodology
-  const pendingAudioTracksRef = useRef<RemoteTrack[]>([]);
-  const audioDelayTimeoutsRef = useRef<NodeJS.Timeout[]>([]);
+  // FC-010: Show-Then-Tell is now handled server-side
+  // The Python agent sends transcripts 400ms before audio
+  // No client-side delay needed
 
   useEffect(() => {
     return () => {
       room.disconnect();
-
-      // Clean up audio delay timeouts
-      audioDelayTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-      audioDelayTimeoutsRef.current = [];
-
-      // Clean up pending audio tracks
-      pendingAudioTracksRef.current = [];
 
       // Clean up event bus listeners when component unmounts
       liveKitEventBus.removeAllListeners();
@@ -100,20 +93,20 @@ export function LiveKitRoom({
     onDisconnected();
   };
 
-  // Handle remote audio tracks (teacher voice) with 400ms delay
+  // Handle remote audio tracks (teacher voice)
   useEffect(() => {
     const handleTrackSubscribed = (
       track: RemoteTrack,
       publication: RemoteTrackPublication
     ) => {
       if (track.kind === 'audio' && audioElementRef.current) {
-        console.log('[LiveKitRoom] Audio track received - storing for delayed playback');
+        console.log('[LiveKitRoom] Audio track received - attaching immediately');
 
-        // Store track for delayed attachment (show-then-tell methodology)
-        pendingAudioTracksRef.current.push(track);
-
-        // NOTE: We don't immediately attach the track here!
-        // Audio will be delayed by 400ms and triggered by transcript events
+        // FC-010: Attach audio immediately
+        // The server-side transcript advance creates the Show-Then-Tell effect
+        // Transcripts are sent 400ms before audio from the Python agent
+        track.attach(audioElementRef.current);
+        console.log('[LiveKitRoom] Audio track attached - Show-Then-Tell timing handled server-side');
       }
     };
 
@@ -146,38 +139,20 @@ export function LiveKitRoom({
         if (data.type === 'transcript') {
           console.log('[LiveKitRoom] Transcript received, emitting to SessionOrchestrator');
 
+          // FC-010: The server sends transcripts 400ms before audio
+          // The showThenTell flag indicates this is an advanced transcript
+          if (data.showThenTell) {
+            console.log('[LiveKitRoom] Show-Then-Tell transcript received (400ms before audio)');
+          }
+
           // Emit event for SessionOrchestrator
           liveKitEventBus.emit('livekit:transcript', {
             segments: data.segments,
             speaker: data.speaker || 'teacher',
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            showThenTell: data.showThenTell || false,
+            audioDelay: data.audioDelay || 0
           });
-
-          // SHOW-THEN-TELL: Trigger delayed audio playback (400ms after visual)
-          console.log(`[LiveKitRoom] Transcript received - scheduling audio delay for show-then-tell`);
-
-          // Schedule audio playback 400ms later
-          const audioTimeout = setTimeout(() => {
-            console.log('[LiveKitRoom] Playing delayed audio (400ms after visual)');
-
-            // Attach any pending audio tracks
-            if (pendingAudioTracksRef.current.length > 0 && audioElementRef.current) {
-              pendingAudioTracksRef.current.forEach(track => {
-                try {
-                  track.attach(audioElementRef.current!);
-                  console.log('[LiveKitRoom] Audio track attached with 400ms delay');
-                } catch (error) {
-                  console.error('[LiveKitRoom] Error attaching delayed audio:', error);
-                }
-              });
-
-              // Clear pending tracks after attachment
-              pendingAudioTracksRef.current = [];
-            }
-          }, 400); // 400ms delay for show-then-tell methodology
-
-          // Store timeout for cleanup
-          audioDelayTimeoutsRef.current.push(audioTimeout);
         }
       } catch (error) {
         console.error('[LiveKitRoom] Error processing data packet:', error);

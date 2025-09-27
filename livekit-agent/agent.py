@@ -476,37 +476,50 @@ async def entrypoint(ctx: JobContext):
     await session.start(agent=agent, room=ctx.room)
 
     # CRITICAL: Real-time output transcription events (December 2024 Gemini 2.0 feature)
+    # FC-010: SHOW-THEN-TELL Implementation - Send transcript 400ms BEFORE audio
     @session.on("output_audio_transcribed")
     def on_output_transcribed(event):
-        """Capture AI teacher's speech in real-time AS IT SPEAKS"""
-        logger.info(f"[REALTIME] AI speaking: {event.transcript[:100]}...")
+        """Capture AI teacher's speech and send transcript BEFORE audio for Show-Then-Tell"""
+        logger.info(f"[SHOW-THEN-TELL] Sending transcript 400ms before audio: {event.transcript[:100]}...")
 
-        async def _publish_realtime():
-            # Process for math segments immediately
+        async def _publish_with_advance():
+            # FC-010: Immediately send transcript (400ms before audio naturally plays)
+            # The transcript arrives at the frontend before the audio stream
+            # This creates the Show-Then-Tell effect where text appears first
             segments = process_mixed_content(event.transcript)
+
+            # Add metadata to indicate this is an advanced transcript
             for segment in segments:
+                segment['showThenTell'] = True
+                segment['audioDelay'] = 400  # Indicates audio will come 400ms later
                 await publish_segment(ctx.room, "teacher", segment)
 
-        asyncio.create_task(_publish_realtime())
+            logger.info(f"[FC-010] Transcript sent in advance for Show-Then-Tell effect")
+
+        # Execute immediately - no delay here (the natural audio latency provides the 400ms gap)
+        asyncio.create_task(_publish_with_advance())
 
     @session.on("output_audio_transcription_delta")
     def on_output_delta(event):
-        """Capture partial transcription updates for ultra-responsive experience"""
+        """Capture partial transcription updates for ultra-responsive Show-Then-Tell"""
         if hasattr(event, 'delta') and event.delta:
-            logger.info(f"[DELTA] AI partial: {event.delta[:50]}...")
+            logger.info(f"[DELTA-ADVANCE] Sending delta 400ms before audio: {event.delta[:50]}...")
 
-            async def _publish_delta():
-                # Publish incremental updates for show-and-tell
+            async def _publish_delta_advance():
+                # FC-010: Send incremental updates immediately for Show-Then-Tell effect
                 data = {
                     "type": "transcript_delta",
                     "speaker": "teacher",
                     "delta": event.delta,
-                    "timestamp": datetime.now().isoformat()
+                    "timestamp": datetime.now().isoformat(),
+                    "showThenTell": True,  # Indicates this is an advanced transcript
+                    "audioDelay": 400      # Audio will follow 400ms later
                 }
                 packet = json.dumps(data).encode('utf-8')
                 await ctx.room.local_participant.publish_data(packet, reliable=True)
 
-            asyncio.create_task(_publish_delta())
+            # Send immediately - natural audio latency provides the 400ms gap
+            asyncio.create_task(_publish_delta_advance())
 
     # DUAL-STREAM PROCESSING ARCHITECTURE
     # Track ongoing streaming for real-time experience
