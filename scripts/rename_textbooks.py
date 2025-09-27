@@ -366,6 +366,11 @@ def main() -> int:
         default=0,
         help="Limit number of files to process (0 = no limit)",
     )
+    parser.add_argument(
+        "--quiet",
+        action="store_true",
+        help="Suppress per-file logs; only show summary",
+    )
     args = parser.parse_args()
 
     base_dir = Path(args.base_dir).expanduser().resolve()
@@ -384,23 +389,27 @@ def main() -> int:
         processed += 1
 
         if should_skip_path(pdf_path):
-            print(f"SKIP [Mathematics]: {pdf_path}")
+            if not args.quiet:
+                print(f"SKIP [Mathematics]: {pdf_path}")
             skipped += 1
             continue
 
         proposed_name = propose_rename(pdf_path, base_dir)
         if not proposed_name:
-            print(f"SKIP [No chapter detected]: {pdf_path}")
+            if not args.quiet:
+                print(f"SKIP [No chapter detected]: {pdf_path}")
             skipped += 1
             continue
 
         target_path = ensure_unique_path(pdf_path.parent, proposed_name)
         if target_path.name == pdf_path.name:
-            print(f"OK [Already named]: {pdf_path.name}")
+            if not args.quiet:
+                print(f"OK [Already named]: {pdf_path.name}")
             continue
 
         action = "RENAME" if args.apply else "DRY-RUN"
-        print(f"{action}: {pdf_path.name} -> {target_path.name}")
+        if not args.quiet:
+            print(f"{action}: {pdf_path.name} -> {target_path.name}")
 
         if args.apply:
             try:

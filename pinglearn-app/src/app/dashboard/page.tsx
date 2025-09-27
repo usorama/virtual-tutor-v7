@@ -29,7 +29,7 @@ export default async function DashboardPage() {
   return (
     <AuthenticatedLayout>
       {/* Main container with ethereal background - Fixed height minus nav */}
-      <div className="relative min-h-[calc(100vh-4rem)] bg-black">
+      <div className="relative min-h-[calc(100vh-4rem)] bg-black overflow-auto">
         {/* Ethereal shadow background with subtle vibrant colors */}
         <EtheralShadow
           color="rgba(60, 60, 70, 0.5)"

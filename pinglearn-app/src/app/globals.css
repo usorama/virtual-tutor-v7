@@ -3,18 +3,16 @@
 /* Import PingLearn Glass Morphism Design System */
 @import "../styles/glass-morphism.css";
 
-/* CRITICAL: Lock viewport scrolling for classroom page */
+/* Default viewport settings - allow scrolling on all pages except classroom */
 html, body {
-  overflow: hidden;
   height: 100%;
   width: 100%;
   position: relative;
 }
 
-/* Ensure root element respects viewport */
+/* Allow natural scrolling for Next.js root element */
 #__next {
-  height: 100%;
-  overflow: hidden;
+  min-height: 100%;
 }
 
 /* Custom Scrollbar Styles - Hidden by Default */
