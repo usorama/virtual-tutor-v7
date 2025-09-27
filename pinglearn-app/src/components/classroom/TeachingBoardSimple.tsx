@@ -38,34 +38,70 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
   const displayBufferRef = useRef<DisplayBuffer | null>(null);
   const [highlightTrigger, setHighlightTrigger] = useState(0);
 
-  // 400ms timing queue for show-then-tell methodology
-  const pendingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  // Note: Visual content now displays immediately
+  // Audio delay of 400ms is handled in LiveKitRoom for show-then-tell methodology
 
-  // Smart math detection
+  // Enhanced math detection for educational content
   const isValidMathContent = useCallback((content: string): boolean => {
-    const cleanContent = content.trim();
+    const cleanContent = content.trim().toLowerCase();
 
-    // Reject concatenated words
-    if (/^[a-zA-Z]+$/.test(cleanContent) && cleanContent.length > 3) {
+    // Reject concatenated words without spaces (transcription errors)
+    if (/^[a-zA-Z]+$/.test(cleanContent) && cleanContent.length > 8 && !/\s/.test(cleanContent)) {
       return false;
     }
 
-    // Reject rushed speech transcription
-    if (/^[a-z]+[A-Z][a-z]+/.test(cleanContent)) {
+    // Reject rushed speech transcription patterns
+    if (/^[a-z]+[A-Z][a-z]+/.test(content.trim())) {
       return false;
     }
 
-    // Must contain actual math
+    // Enhanced math patterns for educational content
     const mathPatterns = [
+      // Traditional math symbols
       /[\+\-\*\/\=\(\)\[\]\{\}]/,
-      /\\[a-zA-Z]+/,
-      /\$.*\$/,
-      /[∑∏∫∂∇√∞≠≤≥±×÷]/,
+      /\\[a-zA-Z]+/,  // LaTeX commands
+      /\$.*\$/,        // LaTeX delimiters
+      /[∑∏∫∂∇√∞≠≤≥±×÷]/,  // Math symbols
       /^\d+[\+\-\*\/\=]/,
-      /[a-z]\s*[\+\-\*\/\=]\s*[a-z0-9]/
+      /[a-z]\s*[\+\-\*\/\=]\s*[a-z0-9]/,
+
+      // Natural language math descriptions - THE KEY FIX!
+      /\bfraction\s+[a-z0-9]+\s*\/\s*[a-z0-9]+/i,  // "fraction p/q"
+      /\b(where|and)\s+[a-z]+\s+(and|are)\s+[a-z]+\s+(are\s+)?(integers?|numbers?)/i,  // "where p and q are integers"
+      /\b(rational|irrational)\s+(number|expression)/i,  // "rational number"
+      /\b(square\s+root|sqrt)\s+(of\s+)?/i,  // "square root of"
+      /\b(equation|formula|expression)\s+/i,  // "equation of"
+      /\b(sin|cos|tan|log|ln|exp)\s*\(/i,  // Math functions
+      /\b(derivative|integral|limit)\s+(of\s+)?/i,  // Calculus terms
+      /\b(is\s+equal\s+to|equals?)\b/i,  // "is equal to"
+      /\b(greater\s+than|less\s+than|not\s+equal)\b/i,  // Comparison terms
+      /\b(x|y|z|a|b|c|p|q)\s+(is|equals?)\s+/i,  // Variable assignments
+      /\blet\s+[a-z]\s+(be|equal)/i,  // "let x be"
+      /\b(coefficient|variable|constant)\b/i,  // Math terminology
+      /\b(theorem|proof|lemma)\b/i,  // Mathematical concepts
+      /\b\d+\s*(degree|percent|%)\b/i,  // Numbers with units
+
+      // LaTeX-like patterns
+      /\b[a-z]_\d+\b/i,  // Subscripts like x_1
+      /\b[a-z]\^\d+\b/i,  // Superscripts like x^2
+      /\\(frac|sqrt|sum|int|lim)/i,  // Common LaTeX commands
+
+      // Mixed content with math elements
+      /\b\d+[a-z]\b|\b[a-z]\d+\b/i,  // Mixed alphanumeric like 2x or x1
+      /\([^)]*[\+\-\*\/\=][^)]*\)/,  // Math in parentheses
     ];
 
-    return mathPatterns.some(pattern => pattern.test(cleanContent));
+    // Check if content matches any math pattern
+    const hasMatchingPattern = mathPatterns.some(pattern => pattern.test(cleanContent));
+
+    // Also check for mathematical context keywords
+    const mathKeywords = [
+      'mathematics', 'algebra', 'geometry', 'calculus', 'trigonometry',
+      'polynomial', 'quadratic', 'linear', 'exponential', 'logarithmic'
+    ];
+    const hasMapKeywords = mathKeywords.some(keyword => cleanContent.includes(keyword));
+
+    return hasMatchingPattern || hasMapKeywords;
   }, []);
 
   // Convert display items to teaching content
@@ -232,17 +268,10 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
           unsubscribe = displayBuffer.subscribe((items) => {
             console.log('[TeachingBoardSimple] Buffer update received:', items.length, 'items');
 
-            // Clear any existing timeout to prevent multiple delays
-            if (pendingTimeoutRef.current) {
-              clearTimeout(pendingTimeoutRef.current);
-            }
-
-            // SHOW-THEN-TELL: Visual content appears after 400ms delay
-            // This gives visual lead time before audio for optimal learning comprehension
-            pendingTimeoutRef.current = setTimeout(() => {
-              console.log('[TeachingBoardSimple] Processing items after 400ms delay');
-              processBufferItems(items as LiveDisplayItem[]);
-            }, 400); // 400ms visual lead time
+            // SHOW-THEN-TELL: Visual content appears IMMEDIATELY
+            // Audio will be delayed by 400ms in LiveKitRoom for proper show-then-tell methodology
+            console.log('[TeachingBoardSimple] Processing items immediately for visual display');
+            processBufferItems(items as LiveDisplayItem[]);
           });
 
           // Highlight trigger for time-based highlighting
@@ -272,10 +301,7 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
       if (highlightInterval) {
         clearInterval(highlightInterval);
       }
-      // Clear pending timeout to prevent memory leaks
-      if (pendingTimeoutRef.current) {
-        clearTimeout(pendingTimeoutRef.current);
-      }
+      // Note: No timeout cleanup needed since visual displays immediately
     };
   }, [processBufferItems, sessionId]);
 
@@ -304,7 +330,7 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
     switch (item.type) {
       case 'heading':
         return (
-          <h2 className={`text-2xl font-bold mb-4 text-primary ${
+          <h2 className={`text-2xl font-bold mb-4 text-primary overflow-wrap-anywhere word-break-break-word max-w-full ${
             isCurrentlySpoken ? 'bg-blue-50 dark:bg-blue-950/50 px-3 py-2 rounded-lg' : ''
           }`}>
             {item.content}
@@ -313,7 +339,7 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
 
       case 'text':
         return (
-          <p className={`text-base leading-relaxed mb-3 ${
+          <p className={`text-base leading-relaxed mb-3 overflow-wrap-anywhere word-break-break-word hyphens-auto max-w-full ${
             isCurrentlySpoken ? 'bg-blue-50 dark:bg-blue-950/50 px-3 py-2 rounded-lg' : ''
           }`}>
             {item.content}
@@ -322,11 +348,11 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
 
       case 'math':
         return (
-          <div className={`my-4 py-4 px-6 ${
+          <div className={`my-4 py-4 px-6 overflow-x-auto overflow-y-hidden max-w-full ${
             isCurrentlySpoken ? 'bg-blue-50 dark:bg-blue-950/50 rounded-lg' : ''
           }`}>
             <div
-              className="katex-display text-center text-lg"
+              className="katex-display text-center text-lg min-w-0"
               dangerouslySetInnerHTML={{ __html: renderMath(item.content) }}
             />
           </div>
@@ -338,19 +364,19 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
             isCurrentlySpoken ? 'bg-green-50 dark:bg-green-950/50 px-3 py-2 rounded-lg' : ''
           }`}>
             <span className="text-green-600 font-bold">•</span>
-            <p className="text-base">{item.content}</p>
+            <p className="text-base overflow-wrap-anywhere word-break-break-word max-w-full">{item.content}</p>
           </div>
         );
 
       default:
-        return <p className="text-base mb-3">{item.content}</p>;
+        return <p className="text-base mb-3 overflow-wrap-anywhere word-break-break-word max-w-full">{item.content}</p>;
     }
   };
 
   return (
     <div className={`h-full bg-background ${className}`}>
       <ScrollArea ref={scrollAreaRef} className="h-full">
-        <div className="px-6 pt-6 pb-24 max-w-4xl mx-auto">
+        <div className="px-6 pt-6 pb-24 max-w-4xl mx-auto overflow-hidden">
           {error ? (
             <div className="text-center text-red-600 py-12">
               <p className="text-lg font-medium mb-2">Error</p>
@@ -368,7 +394,7 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
               </p>
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-2 overflow-x-hidden overflow-y-auto">
               {content.map((item) => (
                 <div key={item.id} className="animate-in fade-in-0 duration-300">
                   {renderContent(item)}
