@@ -133,23 +133,10 @@ html, body {
       transform: translateX(-50%);
     }
   }
-
-  /* Custom animation to prevent white flash in TeachingBoard */
-  @keyframes slideInSmooth {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
+  @keyframes marquee {
+  to {
+    transform: translateX(-50%);
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Utility class for smooth content appearance */
-  .animate-slide-in-smooth {
-    animation: slideInSmooth 0.15s ease-out forwards;
-    animation-fill-mode: both;
   }
 }
 
