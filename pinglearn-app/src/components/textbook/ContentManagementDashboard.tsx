@@ -96,8 +96,6 @@ export function ContentManagementDashboard({
   const [activeTab, setActiveTab] = useState('overview');
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-
-  // Mock data - replace with actual API calls
   const [stats, setStats] = useState<ContentStats>({
     totalSeries: 0,
     totalBooks: 0,
@@ -106,6 +104,46 @@ export function ContentManagementDashboard({
     recentlyAdded: 0,
     needsReview: 0
   });
+  const [growth, setGrowth] = useState({
+    series: 0,
+    books: 0,
+    chapters: 0,
+    sections: 0
+  });
+
+  // Fetch real statistics from database
+  useEffect(() => {
+    fetchStatistics();
+  }, []);
+
+  const fetchStatistics = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('/api/textbooks/statistics');
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch statistics');
+      }
+
+      const result = await response.json();
+      const data = result.data;
+
+      setStats({
+        totalSeries: data.totalSeries,
+        totalBooks: data.totalBooks,
+        totalChapters: data.totalChapters,
+        totalSections: data.totalSections,
+        recentlyAdded: data.recentlyAdded,
+        needsReview: data.needsReview
+      });
+
+      setGrowth(data.growth);
+    } catch (error) {
+      console.error('Error fetching statistics:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const [series, setSeries] = useState<SeriesWithBooks[]>([]);
   const [filters, setFilters] = useState<FilterState>({
@@ -121,59 +159,34 @@ export function ContentManagementDashboard({
   // DATA LOADING
   // ==================================================
 
-  useEffect(() => {
-    loadDashboardData();
-  }, []);
-
-  const loadDashboardData = async () => {
-    setIsLoading(true);
-
+  const loadSeriesData = async () => {
     try {
-      // TODO: Replace with actual API calls
-      // This would typically fetch from your Supabase database
-      await loadContentStats();
-      await loadSeriesData();
+      const response = await fetch('/api/textbooks/hierarchy');
+      if (!response.ok) throw new Error('Failed to fetch series data');
+
+      const result = await response.json();
+      if (result.data) {
+        // Transform the data to match our interface
+        const transformedSeries: SeriesWithBooks[] = result.data.map((s: any) => ({
+          ...s,
+          books_extended: s.books || [],
+          bookCount: s.books?.length || 0,
+          chapterCount: s.books?.reduce((total: number, book: any) =>
+            total + (book.chapters?.length || 0), 0) || 0,
+          lastUpdated: new Date(s.updated_at)
+        }));
+        setSeries(transformedSeries);
+      }
     } catch (error) {
-      console.error('Failed to load dashboard data:', error);
-    } finally {
-      setIsLoading(false);
+      console.error('Failed to load series data:', error);
+      setSeries([]);
     }
   };
 
-  const loadContentStats = async () => {
-    // Mock implementation - replace with actual Supabase query
-    setStats({
-      totalSeries: 12,
-      totalBooks: 45,
-      totalChapters: 342,
-      totalSections: 1284,
-      recentlyAdded: 8,
-      needsReview: 3
-    });
-  };
-
-  const loadSeriesData = async () => {
-    // Mock implementation - replace with actual Supabase query
-    const mockSeries: SeriesWithBooks[] = [
-      {
-        id: '1',
-        series_name: 'NCERT Mathematics',
-        publisher: 'National Council of Educational Research and Training',
-        curriculum_standard: 'NCERT',
-        grade: 10,
-        subject: 'Mathematics',
-        description: 'Complete Mathematics curriculum for Grade 10',
-        created_at: '2024-01-01T00:00:00Z',
-        updated_at: '2024-09-15T00:00:00Z',
-        books_extended: [],
-        bookCount: 3,
-        chapterCount: 24,
-        lastUpdated: new Date('2024-09-15')
-      }
-    ];
-
-    setSeries(mockSeries);
-  };
+  // Load series data when component mounts
+  useEffect(() => {
+    loadSeriesData();
+  }, []);
 
   // ==================================================
   // FILTERING AND SEARCH
@@ -211,7 +224,7 @@ export function ContentManagementDashboard({
         <CardContent>
           <div className="text-2xl font-bold">{stats.totalSeries}</div>
           <p className="text-xs text-muted-foreground">
-            +2 from last month
+            {growth.series > 0 ? `+${growth.series}` : growth.series} from last month
           </p>
         </CardContent>
       </Card>
@@ -224,7 +237,7 @@ export function ContentManagementDashboard({
         <CardContent>
           <div className="text-2xl font-bold">{stats.totalBooks}</div>
           <p className="text-xs text-muted-foreground">
-            +5 from last month
+            {growth.books > 0 ? `+${growth.books}` : growth.books} from last month
           </p>
         </CardContent>
       </Card>
@@ -237,7 +250,7 @@ export function ContentManagementDashboard({
         <CardContent>
           <div className="text-2xl font-bold">{stats.totalChapters}</div>
           <p className="text-xs text-muted-foreground">
-            +28 from last month
+            {growth.chapters > 0 ? `+${growth.chapters}` : growth.chapters} from last month
           </p>
         </CardContent>
       </Card>
@@ -250,7 +263,7 @@ export function ContentManagementDashboard({
         <CardContent>
           <div className="text-2xl font-bold">{stats.totalSections}</div>
           <p className="text-xs text-muted-foreground">
-            +156 from last month
+            {growth.sections > 0 ? `+${growth.sections}` : growth.sections} from last month
           </p>
         </CardContent>
       </Card>

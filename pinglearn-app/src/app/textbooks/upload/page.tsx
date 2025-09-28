@@ -62,8 +62,8 @@ export default function TextbookUploadPage() {
   }
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl">
-      <Card>
+    <div className="container mx-auto px-4 py-8">
+      <Card className="max-w-4xl mx-auto">
         <CardHeader>
           <CardTitle>Upload Textbook Chapters</CardTitle>
           <CardDescription>

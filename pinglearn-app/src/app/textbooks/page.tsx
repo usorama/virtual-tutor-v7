@@ -29,21 +29,19 @@ export default async function TextbooksPage() {
   const { data: textbooks } = await getTextbooks()
   
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
-      <div className="container mx-auto px-4 py-8">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold">Textbook Library</h1>
-          <p className="text-muted-foreground mt-2">
-            Upload and manage your study materials
-          </p>
-        </header>
-        
-        <TextbooksClientEnhanced
-          initialTextbooks={textbooks || []}
-          userGrade={profile.grade}
-          userSubjects={profile.preferred_subjects || []}
-        />
-      </div>
+    <div className="container mx-auto px-4 py-8">
+      <header className="mb-8">
+        <h1 className="text-3xl font-bold">Textbook Library</h1>
+        <p className="text-muted-foreground mt-2">
+          Upload and manage your study materials
+        </p>
+      </header>
+
+      <TextbooksClientEnhanced
+        initialTextbooks={textbooks || []}
+        userGrade={profile.grade}
+        userSubjects={profile.preferred_subjects || []}
+      />
     </div>
   )
 }

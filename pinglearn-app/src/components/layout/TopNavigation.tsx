@@ -13,7 +13,8 @@ import {
   HelpCircle,
   ScrollText,
   Menu,
-  X
+  X,
+  Library
 } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -23,6 +24,7 @@ const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: Home },
   { href: '/wizard', label: 'Setup', icon: BookOpen },
   { href: '/classroom', label: 'Classroom', icon: Mic },
+  { href: '/textbooks', label: 'Textbooks', icon: Library },
   { href: '/sessions', label: 'Past Lessons', icon: Clock },
   { href: '/notes', label: 'Notes', icon: FileText },
   { href: '/help', label: 'Help', icon: HelpCircle },
