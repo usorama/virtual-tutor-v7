@@ -11,29 +11,49 @@ export async function getCurriculumData(grade: number): Promise<{
 }> {
   try {
     const supabase = await createClient()
-    
+
     console.log('🔍 getCurriculumData called with grade:', grade)
-    
-    const { data, error } = await supabase
-      .from('curriculum_data')
-      .select('*')
+
+    // FIXED: Query textbooks with chapters to build curriculum data
+    const { data: textbooks, error } = await supabase
+      .from('textbooks')
+      .select(`
+        id,
+        title,
+        grade,
+        subject,
+        chapters:chapters(
+          id,
+          title,
+          topics
+        )
+      `)
       .eq('grade', grade)
+      .eq('status', 'ready')
       .order('subject')
 
-    console.log('📚 Curriculum data response:', { data, error })
+    console.log('📚 Textbook data response:', { textbooks, error })
 
     if (error) {
-      console.error('Error fetching curriculum data:', error)
+      console.error('Error fetching textbook data:', error)
       return { data: null, error: error.message }
     }
 
+    // Transform textbook data into curriculum format
+    const curriculumData: CurriculumData[] = textbooks?.map(textbook => ({
+      id: textbook.id,
+      grade: textbook.grade,
+      subject: textbook.subject,
+      topics: textbook.chapters?.flatMap(chapter => chapter.topics || []) || []
+    })) || []
+
     // Log first item to debug structure
-    if (data && data.length > 0) {
-      console.log('📖 First curriculum item:', data[0])
-      console.log('📝 First subject topics count:', data[0].topics?.length)
+    if (curriculumData.length > 0) {
+      console.log('📖 First curriculum item:', curriculumData[0])
+      console.log('📝 First subject topics count:', curriculumData[0].topics?.length)
     }
 
-    return { data, error: null }
+    return { data: curriculumData, error: null }
   } catch (error) {
     console.error('Unexpected error in getCurriculumData:', error)
     return { data: null, error: 'Failed to fetch curriculum data' }
@@ -126,10 +146,12 @@ export async function getAvailableGrades(): Promise<{
 }> {
   try {
     const supabase = await createClient()
-    
+
+    // FIXED: Query textbooks table instead of curriculum_data
     const { data, error } = await supabase
-      .from('curriculum_data')
+      .from('textbooks')
       .select('grade')
+      .eq('status', 'ready') // Only include processed textbooks
 
     if (error) {
       console.error('Error fetching available grades:', error)
@@ -139,6 +161,8 @@ export async function getAvailableGrades(): Promise<{
     // Extract unique grades and sort them
     const grades: number[] = data?.map((item: { grade: number }) => item.grade) || []
     const uniqueGrades: number[] = Array.from(new Set(grades)).sort((a, b) => a - b)
+
+    console.log('📚 Available grades from textbooks:', uniqueGrades)
 
     return { data: uniqueGrades, error: null }
   } catch (error) {
