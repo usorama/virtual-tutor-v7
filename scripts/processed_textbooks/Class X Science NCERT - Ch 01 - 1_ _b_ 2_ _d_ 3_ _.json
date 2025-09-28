@@ -1,0 +1,113 @@
+{
+  "textbook": {
+    "id": "26c50dc8-5715-41f8-9945-af8442267da0",
+    "file_name": "Class X Science NCERT - Ch 01 - 1. (b) 2. (d) 3. (c) 4. (c).pdf",
+    "title": "1. (b) 2. (d) 3. (c) 4. (c)",
+    "grade": 10,
+    "subject": "Class X Science NCERT",
+    "total_pages": 3,
+    "file_size_mb": 0.22336483001708984,
+    "status": "ready",
+    "processed_at": "2025-09-28T10:54:38.596402",
+    "original_path": "/Users/umasankrudhya/Projects/pinglearn/text-books/Class X Science NCERT/Class X Science NCERT - Ch 01 - 1. (b) 2. (d) 3. (c) 4. (c).pdf"
+  },
+  "chapters": [
+    {
+      "id": "8d8a1174-05a4-41a7-bcaa-ecf8c5f94cda",
+      "textbook_id": "26c50dc8-5715-41f8-9945-af8442267da0",
+      "chapter_number": 2,
+      "title": "9. Yes",
+      "topics": [],
+      "start_page": 1,
+      "end_page": 1,
+      "content": "10. 16.7 cm from the lens on the other side; 3.3 cm, reduced; real, inverted.\n11. 30 cm\n12. 6.0 cm, behind the mirror; virtual, erect"
+    },
+    {
+      "id": "2766108c-793a-4961-bbcc-5e01f3b58d5d",
+      "textbook_id": "26c50dc8-5715-41f8-9945-af8442267da0",
+      "chapter_number": 3,
+      "title": "13. m = 1 indicates that image formed by a plane mirror is of the same size as the object.",
+      "topics": [],
+      "start_page": 1,
+      "end_page": 1,
+      "content": "Further, the positive sign of m indicates that the image is virtual and erect.\n14. 8.6 cm, behind the mirror; virtual, erect; 2.2 cm, reduced.\n15. 54 cm on the object side; 14 cm, magnified; real, inverted.\n16. –0.50 m; concave lens\n17. + 0.67 m; converging lens\n2024-25\n\n--- Page 2 ---\nAnswers 219\nChapter 10\n1. (b) 2. (d) 3. (c) 4. (c)\n5. (i) –0.18 m; (ii) +0.67 m"
+    },
+    {
+      "id": "39595728-d649-4623-a562-ed1d75d8e542",
+      "textbook_id": "26c50dc8-5715-41f8-9945-af8442267da0",
+      "chapter_number": 5,
+      "title": "7. Convex lens; +3.0 D",
+      "topics": [],
+      "start_page": 1,
+      "end_page": 1,
+      "content": "Chapter 11\n1. (d) 2.  (b) 3.  (d) 4.  (c)"
+    },
+    {
+      "id": "e20cd24e-a667-40a5-b2c0-924a324c009a",
+      "textbook_id": "26c50dc8-5715-41f8-9945-af8442267da0",
+      "chapter_number": 6,
+      "title": "5. Parallel 6. 122.7 m; ¼ times",
+      "topics": [],
+      "start_page": 1,
+      "end_page": 2,
+      "content": "7. 3.33 Ω 8. 4.8 kΩ 9. 0.67 A\n10. 4 resistors 12. 110 bulbs\n13. 9.2 A, 4.6 A, 18.3 A\n14. (i) 8 W; (ii) 8 W\n15. 0.73 A\n16. 250 W TV set in 1 hour\n17. 1100 W\n18. (b) High resistivity of alloys\n(d) inversely.\nChapter 12\n1. (d) 2. (c)\n3. (a) True (b) False"
+    },
+    {
+      "id": "a6492841-89d7-474f-9c97-abf6a8c0fe27",
+      "textbook_id": "26c50dc8-5715-41f8-9945-af8442267da0",
+      "chapter_number": 7,
+      "title": "6. vertically downwards",
+      "topics": [],
+      "start_page": 2,
+      "end_page": 2,
+      "content": "7. (i) Right-hand thumb rule, (ii) Fleming’s left-hand rule\nChapter 13\n1. (a), (c), (d) 2.   (b) 3.   (d)\n2024-25\n\n--- Page 3 ---\nScience220\nNOTES\n2024-25\n"
+    }
+  ],
+  "chunks": [
+    {
+      "id": "33ff94d9-cc7f-41d1-93ff-e8d96611c57f",
+      "chapter_id": "8d8a1174-05a4-41a7-bcaa-ecf8c5f94cda",
+      "chunk_index": 0,
+      "content": "10. 16.7 cm from the lens on the other side; 3.3 cm, reduced; real, inverted.\n11. 30 cm\n12. 6.0 cm, behind the mirror; virtual, erect",
+      "content_type": "text",
+      "token_count": 33,
+      "page_number": 1
+    },
+    {
+      "id": "edcb3718-3679-476c-9feb-f964efdfc6de",
+      "chapter_id": "2766108c-793a-4961-bbcc-5e01f3b58d5d",
+      "chunk_index": 0,
+      "content": "Further, the positive sign of m indicates that the image is virtual and erect.\n14. 8.6 cm, behind the mirror; virtual, erect; 2.2 cm, reduced.\n15. 54 cm on the object side; 14 cm, magnified; real, inverted.\n16. –0.50 m; concave lens\n17. + 0.67 m; converging lens\n2024-25\n\n--- Page 2 ---\nAnswers 219\nChapter 10\n1. (b) 2. (d) 3. (c) 4. (c)\n5. (i) –0.18 m; (ii) +0.67 m",
+      "content_type": "text",
+      "token_count": 91,
+      "page_number": 1
+    },
+    {
+      "id": "46e3e128-e0c2-4630-9604-9adfa8415582",
+      "chapter_id": "39595728-d649-4623-a562-ed1d75d8e542",
+      "chunk_index": 0,
+      "content": "Chapter 11\n1. (d) 2.  (b) 3.  (d) 4.  (c)",
+      "content_type": "text",
+      "token_count": 10,
+      "page_number": 1
+    },
+    {
+      "id": "621fc111-41a7-46cb-9d73-dd2f2ad0f97f",
+      "chapter_id": "e20cd24e-a667-40a5-b2c0-924a324c009a",
+      "chunk_index": 0,
+      "content": "7. 3.33 Ω 8. 4.8 kΩ 9. 0.67 A\n10. 4 resistors 12. 110 bulbs\n13. 9.2 A, 4.6 A, 18.3 A\n14. (i) 8 W; (ii) 8 W\n15. 0.73 A\n16. 250 W TV set in 1 hour\n17. 1100 W\n18. (b) High resistivity of alloys\n(d) inversely.\nChapter 12\n1. (d) 2. (c)\n3. (a) True (b) False",
+      "content_type": "text",
+      "token_count": 63,
+      "page_number": 2
+    },
+    {
+      "id": "2cd50238-e8ca-48a8-b275-b6f63e3b42d6",
+      "chapter_id": "a6492841-89d7-474f-9c97-abf6a8c0fe27",
+      "chunk_index": 0,
+      "content": "7. (i) Right-hand thumb rule, (ii) Fleming’s left-hand rule\nChapter 13\n1. (a), (c), (d) 2.   (b) 3.   (d)\n2024-25\n\n--- Page 3 ---\nScience220\nNOTES\n2024-25",
+      "content_type": "text",
+      "token_count": 38,
+      "page_number": 2
+    }
+  ]
+}

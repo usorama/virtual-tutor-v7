@@ -1,0 +1,113 @@
+{
+  "textbook": {
+    "id": "e5cb3b46-d690-4db4-875d-44ddd45c84fd",
+    "file_name": "Class X Health and PE - Ch 00 - Health and Physical.pdf",
+    "title": "Health and Physical",
+    "grade": 10,
+    "subject": "Class X Health and PE",
+    "total_pages": 12,
+    "file_size_mb": 0.9499673843383789,
+    "status": "ready",
+    "processed_at": "2025-09-28T10:55:22.538971",
+    "original_path": "/Users/umasankrudhya/Projects/pinglearn/text-books/Class X Health and PE/Class X Health and PE - Ch 00 - Health and Physical.pdf"
+  },
+  "chapters": [
+    {
+      "id": "18981bde-243e-42c8-b792-fa2a386baa69",
+      "textbook_id": "e5cb3b46-d690-4db4-875d-44ddd45c84fd",
+      "chapter_number": 1,
+      "title": "Chapter 1 Physical Education:",
+      "topics": [],
+      "start_page": 7,
+      "end_page": 7,
+      "content": "  Relation with other Subjects .............................1 - 10"
+    },
+    {
+      "id": "d210299d-2268-429f-9eb0-cd3785baba6b",
+      "textbook_id": "e5cb3b46-d690-4db4-875d-44ddd45c84fd",
+      "chapter_number": 2,
+      "title": "Chapter 2 Effects of Physical Activities",
+      "topics": [],
+      "start_page": 7,
+      "end_page": 7,
+      "content": "  on Human Body ..............................................11 - 22"
+    },
+    {
+      "id": "40fb4404-d53a-460c-a2eb-a0079ad0a6f3",
+      "textbook_id": "e5cb3b46-d690-4db4-875d-44ddd45c84fd",
+      "chapter_number": 3,
+      "title": "Chapter 3 Growth and Development",
+      "topics": [],
+      "start_page": 7,
+      "end_page": 7,
+      "content": "  during Adolescence .........................................23 - 34"
+    },
+    {
+      "id": "4dee9725-6b16-40a9-8593-e372d6db9d98",
+      "textbook_id": "e5cb3b46-d690-4db4-875d-44ddd45c84fd",
+      "chapter_number": 9,
+      "title": "Chapter 9 Dietary Considerations",
+      "topics": [],
+      "start_page": 8,
+      "end_page": 8,
+      "content": "  and Food Quality ........................................165 - 180"
+    },
+    {
+      "id": "58389511-17b7-47a7-8826-797678dca0bd",
+      "textbook_id": "e5cb3b46-d690-4db4-875d-44ddd45c84fd",
+      "chapter_number": 13,
+      "title": "Chapter 13 Agencies and Awards Promoting",
+      "topics": [],
+      "start_page": 8,
+      "end_page": 8,
+      "content": "  Health, Sports and Yoga .............................215 - 223\nPrelims_X.indd   11 8/24/2020   1:15:11 PM\n2024-25\n\n--- Page 12 ---\nlisT oF useFul websiTes\nNote: Please refer to the home websites of the recognised federations \nof the various sports for updated information about rules and \nregulations.\n • https://www.ioc.org\n • https://www.arisf.sports\n • https://www.iaaf.org (Athletics)\n • https://www.BWFBadminton.org (Badminton)\n • https://www.fiba.basketball (Basketball)\n • https://www.fifa.com (Football)\n • https://www. gymnastics.sports (Gymnastics)\n • https://www.IHF.info (Handball)\n • https://www.Fih.ch (Hockey)\n • https://www.ijf.org (Judo)\n • https://www.fina.org (Swimming)\n • https://www.ittf.com (Table Tennis)\n • https://www.itftennis.com (Tennis)\n • https://www.fivb.com (Volleyball)\n • https://www.unitedworldwrestling.org (Wrestling)\n • https://www.mohfw.gov.in\n • https://main.mohfw.gov.in/sites/default/files/schooladvisory.\npdf\nNote: For updation of every game and sport, you can consult or \nrefer to rule books of various sport’s federations.\nPrelims_X.indd   12 8/24/2020   1:15:11 PM\n2024-25\n"
+    }
+  ],
+  "chunks": [
+    {
+      "id": "6bdfbbf3-0bcf-4d6d-9495-db6370b572db",
+      "chapter_id": "18981bde-243e-42c8-b792-fa2a386baa69",
+      "chunk_index": 0,
+      "content": "Relation with other Subjects .............................1 - 10",
+      "content_type": "text",
+      "token_count": 16,
+      "page_number": 7
+    },
+    {
+      "id": "f7fac1c5-55f2-443e-9a20-5fa65b0e1aad",
+      "chapter_id": "d210299d-2268-429f-9eb0-cd3785baba6b",
+      "chunk_index": 0,
+      "content": "on Human Body ..............................................11 - 22",
+      "content_type": "text",
+      "token_count": 16,
+      "page_number": 7
+    },
+    {
+      "id": "8877d3aa-3fce-4574-ab7a-a20a94be483c",
+      "chapter_id": "40fb4404-d53a-460c-a2eb-a0079ad0a6f3",
+      "chunk_index": 0,
+      "content": "during Adolescence .........................................23 - 34",
+      "content_type": "text",
+      "token_count": 16,
+      "page_number": 7
+    },
+    {
+      "id": "3466e436-f216-4f2b-b34d-a517c10480f6",
+      "chapter_id": "4dee9725-6b16-40a9-8593-e372d6db9d98",
+      "chunk_index": 0,
+      "content": "and Food Quality ........................................165 - 180",
+      "content_type": "text",
+      "token_count": 16,
+      "page_number": 8
+    },
+    {
+      "id": "93a0ba14-677f-4561-94fb-a8e6a183280c",
+      "chapter_id": "58389511-17b7-47a7-8826-797678dca0bd",
+      "chunk_index": 0,
+      "content": "Health, Sports and Yoga .............................215 - 223\nPrelims_X.indd   11 8/24/2020   1:15:11 PM\n2024-25\n\n--- Page 12 ---\nlisT oF useFul websiTes\nNote: Please refer to the home websites of the recognised federations \nof the various sports for updated information about rules and \nregulations.\n • https://www.ioc.org\n • https://www.arisf.sports\n • https://www.iaaf.org (Athletics)\n • https://www.BWFBadminton.org (Badminton)\n • https://www.fiba.basketball (Basketball)\n • https://www.fifa.com (Football)\n • https://www. gymnastics.sports (Gymnastics)\n • https://www.IHF.info (Handball)\n • https://www.Fih.ch (Hockey)\n • https://www.ijf.org (Judo)\n • https://www.fina.org (Swimming)\n • https://www.ittf.com (Table Tennis)\n • https://www.itftennis.com (Tennis)\n • https://www.fivb.com (Volleyball)\n • https://www.unitedworldwrestling.org (Wrestling)\n • https://www.mohfw.gov.in\n • https://main.mohfw.gov.in/sites/default/files/schooladvisory.\npdf\nNote: For updation of every game and sport, you can consult or \nrefer to rule books of various sport’s federations.\nPrelims_X.indd   12 8/24/2020   1:15:11 PM\n2024-25",
+      "content_type": "text",
+      "token_count": 279,
+      "page_number": 8
+    }
+  ]
+}

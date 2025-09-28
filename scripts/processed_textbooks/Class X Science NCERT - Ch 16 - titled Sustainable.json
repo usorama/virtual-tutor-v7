@@ -1,0 +1,75 @@
+{
+  "textbook": {
+    "id": "11a42edb-c1cd-4927-8e2a-b277fbd99548",
+    "file_name": "Class X Science NCERT - Ch 16 - titled Sustainable.pdf",
+    "title": "titled Sustainable",
+    "grade": 10,
+    "subject": "Class X Science NCERT",
+    "total_pages": 12,
+    "file_size_mb": 1.1746788024902344,
+    "status": "ready",
+    "processed_at": "2025-09-28T10:54:52.378393",
+    "original_path": "/Users/umasankrudhya/Projects/pinglearn/text-books/Class X Science NCERT/Class X Science NCERT - Ch 16 - titled Sustainable.pdf"
+  },
+  "chapters": [
+    {
+      "id": "57b0920d-9b79-4cf9-a7de-aadb6a66783d",
+      "textbook_id": "11a42edb-c1cd-4927-8e2a-b277fbd99548",
+      "chapter_number": 13,
+      "title": "Chapter 13 Our Environment 208",
+      "topics": [],
+      "start_page": 7,
+      "end_page": 8,
+      "content": "Answers 218-219\nCONTENTS\n2024-25\n\n--- Page 12 ---\n(xii)\nWE, THE PEOPLE OF INDIA,\n[SOVEREIGN SOCIALIST SECULAR\nDEMOCRATIC REPUBLIC]\nJUSTICE,\nLIBERTY\nEQUALITY\nFRATERNITY\nIN OUR CONSTITUENT ASSEMBLY\nHEREBY ADOPT, ENACT AND GIVE TO\nOURSELVES THIS CONSTITUTION.\nhaving\nsolemnly resolved to constitute India into a\nand to secure\nto all its citizens :\nsocial, economic and\npolitical;\nof thought, expression, belief,\nfaith and worship;\nof status and of opportunity;\nand to promote among them all\nassuring the dignity of\nthe individual and the [unity and\nintegrity of the Nation];\nthis twenty-sixth day of November, 1949 do\n1\n2"
+    },
+    {
+      "id": "75b1ab3e-3fcd-480a-b1e0-268fd6ea30bd",
+      "textbook_id": "11a42edb-c1cd-4927-8e2a-b277fbd99548",
+      "chapter_number": 14,
+      "title": "1. Subs. by the Constitution (Forty-second Amendment) Act, 1976, Sec.2,",
+      "topics": [],
+      "start_page": 8,
+      "end_page": 8,
+      "content": "for \"Sovereign Democratic Republic\" (w.e.f. 3.1.1977)"
+    },
+    {
+      "id": "80396c54-d33d-4ac6-8c1b-8ca582232649",
+      "textbook_id": "11a42edb-c1cd-4927-8e2a-b277fbd99548",
+      "chapter_number": 15,
+      "title": "2. Subs. by the Constitution (Forty-second Amendment) Act, 1976, Sec.2,",
+      "topics": [],
+      "start_page": 8,
+      "end_page": 8,
+      "content": "for \"Unity of the Nation\" (w.e.f. 3.1.1977)\nTHE CONSTITUTION OF\nINDIA\nPREAMBLE\n2024-25\n"
+    }
+  ],
+  "chunks": [
+    {
+      "id": "78e8748c-2b76-4c50-bbb8-708e54fd4beb",
+      "chapter_id": "57b0920d-9b79-4cf9-a7de-aadb6a66783d",
+      "chunk_index": 0,
+      "content": "Answers 218-219\nCONTENTS\n2024-25\n\n--- Page 12 ---\n(xii)\nWE, THE PEOPLE OF INDIA,\n[SOVEREIGN SOCIALIST SECULAR\nDEMOCRATIC REPUBLIC]\nJUSTICE,\nLIBERTY\nEQUALITY\nFRATERNITY\nIN OUR CONSTITUENT ASSEMBLY\nHEREBY ADOPT, ENACT AND GIVE TO\nOURSELVES THIS CONSTITUTION.\nhaving\nsolemnly resolved to constitute India into a\nand to secure\nto all its citizens :\nsocial, economic and\npolitical;\nof thought, expression, belief,\nfaith and worship;\nof status and of opportunity;\nand to promote among them all\nassuring the dignity of\nthe individual and the [unity and\nintegrity of the Nation];\nthis twenty-sixth day of November, 1949 do\n1\n2",
+      "content_type": "exercise",
+      "token_count": 154,
+      "page_number": 8
+    },
+    {
+      "id": "b8e35bf8-d38c-4aaf-95dd-c53c680dba8e",
+      "chapter_id": "75b1ab3e-3fcd-480a-b1e0-268fd6ea30bd",
+      "chunk_index": 0,
+      "content": "for \"Sovereign Democratic Republic\" (w.e.f. 3.1.1977)",
+      "content_type": "text",
+      "token_count": 13,
+      "page_number": 8
+    },
+    {
+      "id": "3597b1bb-7147-45c1-9bd3-02fbfb9907fc",
+      "chapter_id": "80396c54-d33d-4ac6-8c1b-8ca582232649",
+      "chunk_index": 0,
+      "content": "for \"Unity of the Nation\" (w.e.f. 3.1.1977)\nTHE CONSTITUTION OF\nINDIA\nPREAMBLE\n2024-25",
+      "content_type": "text",
+      "token_count": 21,
+      "page_number": 8
+    }
+  ]
+}

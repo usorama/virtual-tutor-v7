@@ -319,9 +319,19 @@ export class SessionOrchestrator {
   }
 
   addTranscriptionItem(item: { type: 'text' | 'math' | 'code' | 'diagram' | 'image'; content: string; speaker?: 'student' | 'teacher' | 'ai'; confidence?: number }): string {
-    if (!this.currentSession || this.currentSession.status !== 'active') {
+    // PC-012 FIX: Allow transcripts during 'initializing' and 'active' states
+    // This enables capturing early transcripts that arrive before full session activation
+    if (!this.currentSession) {
+      console.warn('[PC-012] No active session - transcript rejected');
       return '';
     }
+
+    if (this.currentSession.status !== 'active' && this.currentSession.status !== 'initializing') {
+      console.warn('[PC-012] Session not ready for transcripts - status:', this.currentSession.status);
+      return '';
+    }
+
+    console.log('[PC-012] Transcript accepted - session status:', this.currentSession.status);
 
     this.displayBuffer.addItem({
       type: item.type,
@@ -341,7 +351,20 @@ export class SessionOrchestrator {
 
     // Return the last item's ID for logging purposes
     const lastItem = this.displayBuffer.getLastItem();
-    return lastItem?.id || '';
+    const itemId = lastItem?.id || '';
+
+    // PC-012: Log successful transcript addition
+    if (itemId) {
+      console.log('[PC-012] Transcript successfully added to DisplayBuffer:', {
+        id: itemId,
+        type: item.type,
+        speaker: item.speaker || 'teacher',
+        contentLength: item.content.length,
+        sessionStatus: this.currentSession.status
+      });
+    }
+
+    return itemId;
   }
 
   private setupTranscriptionHandlers(): void {

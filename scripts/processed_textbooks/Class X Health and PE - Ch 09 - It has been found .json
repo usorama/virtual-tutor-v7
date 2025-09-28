@@ -1,0 +1,113 @@
+{
+  "textbook": {
+    "id": "319fd680-0ad1-41fb-bb3f-c34f71355f51",
+    "file_name": "Class X Health and PE - Ch 09 - It has been found that these asanas develop.pdf",
+    "title": "It has been found that these asanas develop",
+    "grade": 10,
+    "subject": "Class X Health and PE",
+    "total_pages": 12,
+    "file_size_mb": 1.6821374893188477,
+    "status": "ready",
+    "processed_at": "2025-09-28T10:55:28.352372",
+    "original_path": "/Users/umasankrudhya/Projects/pinglearn/text-books/Class X Health and PE/Class X Health and PE - Ch 09 - It has been found that these asanas develop.pdf"
+  },
+  "chapters": [
+    {
+      "id": "f85b3abf-af74-411c-a1e2-5417f178b11b",
+      "textbook_id": "319fd680-0ad1-41fb-bb3f-c34f71355f51",
+      "chapter_number": 1,
+      "title": "1. Give one example to show that organ systems work in unison.",
+      "topics": [],
+      "start_page": 11,
+      "end_page": 11,
+      "content": "You may mention two or more organ systems to support your \npoint."
+    },
+    {
+      "id": "6405f9c2-dc14-4ad6-90ef-be85f0f45ac7",
+      "textbook_id": "319fd680-0ad1-41fb-bb3f-c34f71355f51",
+      "chapter_number": 2,
+      "title": "2. Ravi is a good athlete. Give one permanent effect of being an atlete",
+      "topics": [],
+      "start_page": 11,
+      "end_page": 11,
+      "content": "on of systems his muscular system, and respiratory system.\n 3. “Physical activities are necessary for developing a healthy \nbody and healthy mind.” Give two examples in support of this \nstatement."
+    },
+    {
+      "id": "6a67a90d-d5c4-45a2-8b13-bfd59199b5cd",
+      "textbook_id": "319fd680-0ad1-41fb-bb3f-c34f71355f51",
+      "chapter_number": 3,
+      "title": "4. Complete the sentence —",
+      "topics": [],
+      "start_page": 11,
+      "end_page": 11,
+      "content": "  The respiratory system gets positively affected by undertaking \nyoga exercises regularly because __________________. "
+    },
+    {
+      "id": "36fc7bf0-369a-4bf8-9ddb-04c634baff76",
+      "textbook_id": "319fd680-0ad1-41fb-bb3f-c34f71355f51",
+      "chapter_number": 4,
+      "title": "5. Mention two changes that take place in each of the circulatory",
+      "topics": [],
+      "start_page": 11,
+      "end_page": 11,
+      "content": "and respiratory systems due to regular physical activities. "
+    },
+    {
+      "id": "ba309706-c7b0-4c1e-8a33-8980ff640800",
+      "textbook_id": "319fd680-0ad1-41fb-bb3f-c34f71355f51",
+      "chapter_number": 5,
+      "title": "6. Some of your friends avoid physical activity. Other friends are",
+      "topics": [],
+      "start_page": 11,
+      "end_page": 12,
+      "content": "always eager to participate in physical activities. Prepare a health \nprofile of your friends who indulge in games and yoga regularly. \nIndicate what physical activities they undertake regularly. What \nis the time duration?  How do those who are physically active \nget motivation to play some games or exercise regularly? Present \nyour findings in class and allow your peers in the classroom to \nadd to the profiles you prepared.\nChap-2.indd   22 8/24/2020   1:09:29 PM\n2024-25\n"
+    }
+  ],
+  "chunks": [
+    {
+      "id": "a36477b2-f412-40da-9fc7-6bd8b70fb083",
+      "chapter_id": "f85b3abf-af74-411c-a1e2-5417f178b11b",
+      "chunk_index": 0,
+      "content": "You may mention two or more organ systems to support your \npoint.",
+      "content_type": "text",
+      "token_count": 16,
+      "page_number": 11
+    },
+    {
+      "id": "2fb677db-c774-47b3-9ced-8f9de625f4a5",
+      "chapter_id": "6405f9c2-dc14-4ad6-90ef-be85f0f45ac7",
+      "chunk_index": 0,
+      "content": "on of systems his muscular system, and respiratory system.\n 3. “Physical activities are necessary for developing a healthy \nbody and healthy mind.” Give two examples in support of this \nstatement.",
+      "content_type": "example",
+      "token_count": 49,
+      "page_number": 11
+    },
+    {
+      "id": "1f23fcff-58ef-4248-a5ce-18cf3b3a4934",
+      "chapter_id": "6a67a90d-d5c4-45a2-8b13-bfd59199b5cd",
+      "chunk_index": 0,
+      "content": "The respiratory system gets positively affected by undertaking \nyoga exercises regularly because __________________.",
+      "content_type": "exercise",
+      "token_count": 29,
+      "page_number": 11
+    },
+    {
+      "id": "51ed547e-db7f-4065-8f58-5abf25931178",
+      "chapter_id": "36fc7bf0-369a-4bf8-9ddb-04c634baff76",
+      "chunk_index": 0,
+      "content": "and respiratory systems due to regular physical activities.",
+      "content_type": "text",
+      "token_count": 14,
+      "page_number": 11
+    },
+    {
+      "id": "979595c4-19cf-49c5-b542-cdc9f67e880f",
+      "chapter_id": "ba309706-c7b0-4c1e-8a33-8980ff640800",
+      "chunk_index": 0,
+      "content": "always eager to participate in physical activities. Prepare a health \nprofile of your friends who indulge in games and yoga regularly. \nIndicate what physical activities they undertake regularly. What \nis the time duration?  How do those who are physically active \nget motivation to play some games or exercise regularly? Present \nyour findings in class and allow your peers in the classroom to \nadd to the profiles you prepared.\nChap-2.indd   22 8/24/2020   1:09:29 PM\n2024-25",
+      "content_type": "exercise",
+      "token_count": 119,
+      "page_number": 12
+    }
+  ]
+}
