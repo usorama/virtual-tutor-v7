@@ -1,0 +1,136 @@
+{
+  "orchestration_version": "1.0",
+  "change_record": "PC-014",
+  "total_issues": 15,
+  "total_stories": 53,
+  "status": {
+    "completed": 0,
+    "in_progress": 0,
+    "pending": 53,
+    "blocked": 0,
+    "failed": 0
+  },
+  "progress_percentage": 0,
+  "estimated_completion": "2025-10-26",
+  "last_updated": "2025-09-28T15:00:00Z",
+  "started_at": null,
+  "completed_at": null,
+  "categories": {
+    "security": {
+      "total": 12,
+      "completed": 0,
+      "stories": ["SEC-001", "SEC-002", "SEC-003", "SEC-004", "SEC-005", "SEC-006", "SEC-007", "SEC-008", "SEC-009", "SEC-010", "SEC-011", "SEC-012"]
+    },
+    "typescript": {
+      "total": 18,
+      "completed": 0,
+      "stories": ["TS-001", "TS-002", "TS-003", "TS-004", "TS-005", "TS-006", "TS-007", "TS-008", "TS-009", "TS-010", "TS-011", "TS-012", "TS-013", "TS-014", "TS-015", "TS-016", "TS-017", "TS-018"]
+    },
+    "error_handling": {
+      "total": 9,
+      "completed": 0,
+      "stories": ["ERR-001", "ERR-002", "ERR-003", "ERR-004", "ERR-005", "ERR-006", "ERR-007", "ERR-008", "ERR-009"]
+    },
+    "architecture": {
+      "total": 8,
+      "completed": 0,
+      "stories": ["ARCH-001", "ARCH-002", "ARCH-003", "ARCH-004", "ARCH-005", "ARCH-006", "ARCH-007", "ARCH-008"]
+    },
+    "testing": {
+      "total": 6,
+      "completed": 0,
+      "stories": ["TEST-001", "TEST-002", "TEST-003", "TEST-004", "TEST-005", "TEST-006"]
+    }
+  },
+  "active_agents": [],
+  "story_details": [
+    {
+      "id": "TS-001",
+      "title": "Fix TypeScript compilation error in hierarchy route",
+      "parent_issue": "ISS-001",
+      "category": "typescript",
+      "status": "pending",
+      "assigned_agent": null,
+      "priority": "P0",
+      "estimated_hours": 1,
+      "actual_hours": null,
+      "started_at": null,
+      "completed_at": null,
+      "verification_status": null,
+      "dependencies": [],
+      "blockers": [],
+      "git_checkpoint": null
+    },
+    {
+      "id": "TS-002",
+      "title": "Add missing EnhancedTextbookProcessor import",
+      "parent_issue": "ISS-001",
+      "category": "typescript",
+      "status": "pending",
+      "assigned_agent": null,
+      "priority": "P0",
+      "estimated_hours": 0.5,
+      "actual_hours": null,
+      "started_at": null,
+      "completed_at": null,
+      "verification_status": null,
+      "dependencies": [],
+      "blockers": [],
+      "git_checkpoint": null
+    },
+    {
+      "id": "TS-003",
+      "title": "Fix property 'split' type error in enhanced-processor",
+      "parent_issue": "ISS-001",
+      "category": "typescript",
+      "status": "pending",
+      "assigned_agent": null,
+      "priority": "P0",
+      "estimated_hours": 1,
+      "actual_hours": null,
+      "started_at": null,
+      "completed_at": null,
+      "verification_status": null,
+      "dependencies": [],
+      "blockers": [],
+      "git_checkpoint": null
+    }
+  ],
+  "checkpoints": {
+    "pre_remediation": null,
+    "phase_1": null,
+    "phase_2": null,
+    "phase_3": null,
+    "phase_4": null,
+    "final": null
+  },
+  "metrics": {
+    "velocity": {
+      "target_stories_per_day": 2.5,
+      "actual_stories_per_day": 0,
+      "trend": "not_started"
+    },
+    "quality": {
+      "first_time_success_rate": 0,
+      "rework_rate": 0,
+      "verification_pass_rate": 0
+    },
+    "efficiency": {
+      "agent_utilization": 0,
+      "blocking_time_percentage": 0,
+      "parallel_execution_rate": 0
+    }
+  },
+  "risk_register": [
+    {
+      "risk": "TypeScript compilation blocking all development",
+      "severity": "critical",
+      "mitigation": "Prioritize TS-001, TS-002, TS-003 for immediate execution"
+    },
+    {
+      "risk": "Database schema conflicts causing data corruption",
+      "severity": "high",
+      "mitigation": "Create backup before ARCH-004 execution"
+    }
+  ]
+}

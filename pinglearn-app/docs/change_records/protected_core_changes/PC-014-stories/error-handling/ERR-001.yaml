@@ -1,0 +1,166 @@
+# Error Handling Story: Add Error Boundaries to React Components
+story_id: ERR-001
+parent_issue: ISS-011
+category: error_handling
+priority: P1-HIGH
+
+metadata:
+  title: "Implement React Error Boundaries for Component Crash Prevention"
+  description: |
+    Multiple React components lack error boundaries, causing entire app crashes
+    when component errors occur. Must add error boundaries at strategic points
+    to gracefully handle failures and maintain UX.
+  created: 2025-09-28T15:00:00Z
+  estimated_hours: 4
+  risk_level: medium
+  affects_protected_core: false
+
+current_situation:
+  problem: "Unhandled errors crash entire React app"
+  frequency: "Multiple times per day in production"
+  user_impact: "Complete loss of functionality, requires page reload"
+  affected_components:
+    - ContentManagementDashboard
+    - EnhancedUploadFlow
+    - VoiceSessionComponent
+    - TranscriptionDisplay
+
+required_implementation:
+  error_boundaries:
+    - AppErrorBoundary (top-level)
+    - FeatureErrorBoundary (feature-level)
+    - ComponentErrorBoundary (critical components)
+
+code_template: |
+  ```typescript
+  // src/components/error-boundaries/AppErrorBoundary.tsx
+  import React, { Component, ErrorInfo, ReactNode } from 'react';
+  import { toast } from 'sonner';
+
+  interface Props {
+    children: ReactNode;
+    fallback?: ReactNode;
+  }
+
+  interface State {
+    hasError: boolean;
+    error: Error | null;
+    errorInfo: ErrorInfo | null;
+  }
+
+  export class AppErrorBoundary extends Component<Props, State> {
+    constructor(props: Props) {
+      super(props);
+      this.state = {
+        hasError: false,
+        error: null,
+        errorInfo: null
+      };
+    }
+
+    static getDerivedStateFromError(error: Error): State {
+      return {
+        hasError: true,
+        error,
+        errorInfo: null
+      };
+    }
+
+    componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+      // Log to error reporting service
+      console.error('Error Boundary Caught:', error, errorInfo);
+
+      // Send to monitoring
+      if (typeof window !== 'undefined') {
+        // Report to analytics/monitoring service
+      }
+
+      // User notification
+      toast.error('Something went wrong. The team has been notified.');
+
+      this.setState({
+        error,
+        errorInfo
+      });
+    }
+
+    render() {
+      if (this.state.hasError) {
+        return (
+          <div className="error-boundary-fallback">
+            <h2>Oops! Something went wrong</h2>
+            <details style={{ whiteSpace: 'pre-wrap' }}>
+              {this.state.error && this.state.error.toString()}
+              <br />
+              {this.state.errorInfo && this.state.errorInfo.componentStack}
+            </details>
+            <button onClick={() => window.location.reload()}>
+              Reload Page
+            </button>
+          </div>
+        );
+      }
+
+      return this.props.children;
+    }
+  }
+  ```
+
+integration_points:
+  - app_layout: Wrap entire app in AppErrorBoundary
+  - dashboard: Add FeatureErrorBoundary around dashboard
+  - upload_flow: Wrap file processing in ComponentErrorBoundary
+  - voice_session: Isolate voice components with boundaries
+
+dependencies:
+  hard: ["TS-004", "TS-005"]  # Need TypeScript fixes first
+  soft: ["ERR-002", "ERR-003"]  # Related error handling
+  peer: []
+
+implementation_steps:
+  1. Create error boundary components hierarchy
+  2. Add AppErrorBoundary to _app.tsx
+  3. Wrap feature components with FeatureErrorBoundary
+  4. Add granular boundaries to high-risk components
+  5. Implement error logging service integration
+  6. Create fallback UI components
+  7. Add recovery mechanisms
+  8. Test error scenarios
+
+verification_requirements:
+  - component_crashes_handled: true
+  - app_remains_functional: true
+  - errors_logged: true
+  - user_notified: true
+  - recovery_possible: true
+  - no_infinite_loops: true
+
+testing_scenarios:
+  - Throw error in child component
+  - Async error in useEffect
+  - Error during render
+  - Network failure simulation
+  - State corruption scenario
+
+agent_assignment:
+  recommended: frontend-developer
+  alternative: react-specialist
+  estimated_duration: 4_hours
+
+success_criteria:
+  - No full app crashes from component errors
+  - Graceful degradation of functionality
+  - Clear user feedback on errors
+  - Error tracking in place
+  - Recovery without full reload (where possible)
+
+rollback_procedure:
+  - Error boundaries are additive (low risk)
+  - Can remove boundaries without breaking functionality
+  - Test in staging environment first
+
+notes: |
+  Error boundaries are a critical safety feature missing from the app.
+  This implementation will prevent cascading failures and improve user
+  experience significantly. Focus on strategic placement - not every
+  component needs its own boundary.

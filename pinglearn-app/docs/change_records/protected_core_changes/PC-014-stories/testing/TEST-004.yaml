@@ -1,0 +1,197 @@
+# Testing Story: End-to-End Testing Suite Implementation
+story_id: TEST-004
+parent_issue: ISS-005
+category: testing
+priority: P2-HIGH
+
+metadata:
+  title: "Create comprehensive E2E test suite for critical user journeys"
+  description: |
+    Implement Playwright-based E2E tests covering all critical user paths.
+    These tests will serve as the final validation gate before production
+    deployment, ensuring the entire system works from user perspective.
+  created: 2025-09-28T15:30:00Z
+  estimated_hours: 10
+  risk_level: medium
+  affects_protected_core: false
+
+critical_user_journeys:
+  1_student_onboarding:
+    - Register new account
+    - Complete profile
+    - Select curriculum
+    - Start first session
+
+  2_voice_learning_session:
+    - Join voice room
+    - Interact with AI tutor
+    - View real-time transcription
+    - See math equations render
+
+  3_textbook_management:
+    - Upload textbook PDF
+    - Monitor processing status
+    - View extracted content
+    - Navigate chapters
+
+  4_dashboard_interaction:
+    - View statistics
+    - Access recent sessions
+    - Download materials
+    - Track progress
+
+test_implementation: |
+  ```typescript
+  // tests/e2e/voice-session.spec.ts
+  import { test, expect } from '@playwright/test';
+  import { setupTestUser, cleanupTestData } from './helpers';
+
+  test.describe('Voice Learning Session', () => {
+    let testUser;
+
+    test.beforeEach(async ({ page }) => {
+      testUser = await setupTestUser();
+      await page.goto('/');
+      await page.fill('[data-testid="email"]', testUser.email);
+      await page.fill('[data-testid="password"]', testUser.password);
+      await page.click('[data-testid="login-button"]');
+      await expect(page).toHaveURL('/dashboard');
+    });
+
+    test.afterEach(async () => {
+      await cleanupTestData(testUser);
+    });
+
+    test('should complete full voice learning session', async ({ page }) => {
+      // Start new session
+      await page.click('[data-testid="new-session-button"]');
+      await page.selectOption('[data-testid="subject-select"]', 'mathematics');
+      await page.selectOption('[data-testid="topic-select"]', 'algebra');
+      await page.click('[data-testid="start-session"]');
+
+      // Wait for voice connection
+      await expect(page.locator('[data-testid="voice-status"]'))
+        .toHaveText('Connected', { timeout: 10000 });
+
+      // Verify transcription appears
+      await page.click('[data-testid="ask-question-button"]');
+      await page.fill('[data-testid="question-input"]', 'What is x + 2 = 5?');
+      await page.click('[data-testid="submit-question"]');
+
+      // Check AI response and math rendering
+      const transcription = page.locator('[data-testid="transcription-display"]');
+      await expect(transcription).toContainText('solve for x', { timeout: 15000 });
+
+      // Verify KaTeX math rendering
+      const mathElement = page.locator('.katex-display');
+      await expect(mathElement).toBeVisible();
+      await expect(mathElement).toContainText('x = 3');
+
+      // End session gracefully
+      await page.click('[data-testid="end-session"]');
+      await expect(page.locator('[data-testid="session-summary"]')).toBeVisible();
+    });
+
+    test('should handle network disconnection gracefully', async ({ page, context }) => {
+      await page.click('[data-testid="new-session-button"]');
+
+      // Simulate network offline
+      await context.setOffline(true);
+
+      await expect(page.locator('[data-testid="connection-lost-banner"]'))
+        .toBeVisible({ timeout: 5000 });
+
+      // Restore network
+      await context.setOffline(false);
+
+      await expect(page.locator('[data-testid="connection-restored-banner"]'))
+        .toBeVisible({ timeout: 10000 });
+    });
+  });
+  ```
+
+test_scenarios:
+  happy_path:
+    - Complete student registration
+    - Successfully upload and process textbook
+    - Complete voice learning session
+    - View progress in dashboard
+
+  error_handling:
+    - Network disconnection during voice session
+    - Invalid file upload attempt
+    - Session timeout handling
+    - Browser refresh during active session
+
+  edge_cases:
+    - Multiple tabs open simultaneously
+    - Quick navigation between features
+    - Large PDF upload (>50MB)
+    - 1-hour continuous session
+
+  accessibility:
+    - Keyboard navigation
+    - Screen reader compatibility
+    - High contrast mode
+    - Mobile responsiveness
+
+dependencies:
+  hard: ["TEST-001", "ERR-001", "ERR-003"]
+  soft: ["TEST-002", "TEST-003"]
+  peer: ["TEST-005", "TEST-006"]
+
+infrastructure_requirements:
+  - Playwright configuration
+  - Test data seeding scripts
+  - CI/CD integration
+  - Test environment setup
+  - Parallel execution support
+
+verification_requirements:
+  - all_journeys_tested: true
+  - tests_run_in_ci: true
+  - parallel_execution: true
+  - screenshot_on_failure: true
+  - video_recording: optional
+  - test_reports: html_and_json
+
+execution_matrix:
+  browsers:
+    - chromium
+    - firefox
+    - webkit (Safari)
+
+  viewports:
+    - desktop: 1920x1080
+    - tablet: 768x1024
+    - mobile: 375x667
+
+  environments:
+    - local: http://localhost:3006
+    - staging: https://staging.pinglearn.com
+    - production_smoke: https://pinglearn.com
+
+agent_assignment:
+  recommended: qa-engineer
+  alternative: test-writer-fixer
+  collaboration: frontend-developer
+  estimated_duration: 10_hours
+
+success_criteria:
+  - All critical paths covered
+  - Tests execute in <5 minutes
+  - Zero flaky tests
+  - Clear failure messages
+  - Integrated with CI/CD
+  - Runs on every PR
+
+rollback_procedure:
+  - E2E tests are non-destructive
+  - Can disable failing tests temporarily
+  - Maintain smoke test subset for quick validation
+
+notes: |
+  E2E tests are the final safety net before production. They should
+  test from the user's perspective, not implementation details.
+  Focus on critical business flows that would cause user impact
+  if broken. These tests will run on every PR and before deployment.

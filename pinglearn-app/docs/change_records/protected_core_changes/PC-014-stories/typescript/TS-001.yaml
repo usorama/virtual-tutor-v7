@@ -1,0 +1,79 @@
+# TypeScript Story: Fix Compilation Error in Hierarchy Route
+story_id: TS-001
+parent_issue: ISS-001
+category: typescript
+priority: P0-BLOCKING
+
+metadata:
+  title: "Fix TypeScript compilation error - Parameter 'ch' implicitly has 'any' type"
+  description: |
+    The hierarchy route has a TypeScript compilation error where parameter 'ch'
+    in a map function lacks proper type annotation. This blocks all builds.
+  created: 2025-09-28T15:00:00Z
+  estimated_hours: 1
+  risk_level: low
+  affects_protected_core: false
+
+location:
+  file: src/app/api/textbooks/hierarchy/route.ts
+  line: 148
+  column: 51
+
+current_code: |
+  ```typescript
+  // Line 148
+  .map(ch => ({
+    id: ch.id,
+    // ...
+  }))
+  ```
+
+required_fix: |
+  ```typescript
+  // Add proper type annotation
+  .map((ch: BookChapter) => ({
+    id: ch.id,
+    // ...
+  }))
+  ```
+
+dependencies:
+  hard: []  # No dependencies - can start immediately
+  soft: []
+  peer: ["TS-002", "TS-003"]  # Other compilation fixes
+
+implementation_steps:
+  1. Open src/app/api/textbooks/hierarchy/route.ts
+  2. Navigate to line 148
+  3. Identify the type of the array being mapped
+  4. Add explicit type annotation to parameter 'ch'
+  5. Verify no other implicit any types in the function
+  6. Run npm run typecheck to confirm fix
+
+verification_requirements:
+  - typescript_compilation: must_pass
+  - specific_error_gone: "Parameter 'ch' implicitly has 'any' type"
+  - no_new_errors: true
+  - tests_pass: true
+  - functionality_preserved: true
+
+agent_assignment:
+  recommended: typescript-specialist
+  alternative: code-optimizer
+  estimated_duration: 1_hour
+
+success_criteria:
+  - File compiles without errors
+  - Type safety maintained throughout function
+  - No regression in functionality
+  - Code follows existing patterns
+
+rollback_procedure:
+  - Git checkpoint before changes
+  - If verification fails, reset to checkpoint
+  - Document failure reason for reassignment
+
+notes: |
+  This is a P0 blocking issue preventing all builds. Must be resolved
+  immediately as part of Week 1 compilation fixes. The fix is straightforward
+  but critical for unblocking development.

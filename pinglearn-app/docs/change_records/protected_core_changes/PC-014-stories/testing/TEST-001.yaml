@@ -1,0 +1,153 @@
+# Testing Story: Establish Unit Test Coverage Foundation
+story_id: TEST-001
+parent_issue: ISS-005
+category: testing
+priority: P1-HIGH
+
+metadata:
+  title: "Create unit test foundation and increase coverage from 5% to 40%"
+  description: |
+    Current test coverage is critically low at 5% (11 tests for 219 files).
+    This story establishes the testing foundation and writes tests for the
+    most critical business logic components.
+  created: 2025-09-28T15:30:00Z
+  estimated_hours: 8
+  risk_level: low
+  affects_protected_core: true
+
+current_state:
+  coverage_percentage: 5
+  total_tests: 11
+  total_source_files: 219
+  test_framework: vitest
+  critical_untested:
+    - VoiceService
+    - TranscriptionService
+    - SessionOrchestrator
+    - Dashboard components
+    - API endpoints
+
+target_state:
+  coverage_percentage: 40
+  new_tests_required: ~80
+  focus_areas:
+    - Protected core services
+    - Critical user paths
+    - Data processing logic
+    - Error handling paths
+
+implementation_plan:
+  phase_1_foundation:
+    - Setup test utilities and helpers
+    - Create mock factories for common entities
+    - Establish testing patterns
+    - Configure coverage reporting
+
+  phase_2_protected_core:
+    - VoiceService.test.ts (15 tests)
+    - TranscriptionService.test.ts (12 tests)
+    - SessionOrchestrator.test.ts (10 tests)
+    - WebSocketManager.test.ts (8 tests)
+
+  phase_3_api_endpoints:
+    - textbooks/hierarchy route tests (6 tests)
+    - textbooks/statistics route tests (4 tests)
+    - voice session endpoints (8 tests)
+
+  phase_4_react_components:
+    - ContentManagementDashboard tests (5 tests)
+    - EnhancedUploadFlow tests (6 tests)
+    - Error boundary tests (4 tests)
+
+test_template: |
+  ```typescript
+  // Example: src/protected-core/voice-engine/__tests__/VoiceService.test.ts
+  import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+  import { VoiceService } from '../VoiceService';
+  import { createMockStudent, createMockSession } from '@/test/factories';
+
+  describe('VoiceService', () => {
+    let service: VoiceService;
+
+    beforeEach(() => {
+      service = new VoiceService();
+      vi.clearAllMocks();
+    });
+
+    afterEach(() => {
+      service.cleanup();
+    });
+
+    describe('startSession', () => {
+      it('should initialize a new voice session', async () => {
+        const student = createMockStudent();
+        const session = await service.startSession(student.id, 'mathematics');
+
+        expect(session).toBeDefined();
+        expect(session.status).toBe('active');
+        expect(session.studentId).toBe(student.id);
+      });
+
+      it('should handle network failures gracefully', async () => {
+        vi.spyOn(global, 'fetch').mockRejectedValueOnce(new Error('Network error'));
+
+        await expect(service.startSession('123', 'math'))
+          .rejects
+          .toThrow('Failed to start voice session');
+      });
+
+      it('should prevent duplicate sessions for same student', async () => {
+        const studentId = '123';
+        await service.startSession(studentId, 'math');
+
+        await expect(service.startSession(studentId, 'science'))
+          .rejects
+          .toThrow('Session already active');
+      });
+    });
+  });
+  ```
+
+dependencies:
+  hard: ["ERR-003"]  # Need error handling fixed first
+  soft: ["TS-004", "TS-005"]  # Better with TypeScript fixes
+  peer: ["TEST-002", "TEST-003"]
+
+verification_requirements:
+  - coverage_improved: from 5% to minimum 40%
+  - all_tests_pass: true
+  - no_flaky_tests: true
+  - ci_integration: true
+  - protected_core_tested: true
+
+testing_standards:
+  - Each test should be independent
+  - Use factories for test data
+  - Mock external dependencies
+  - Test both success and failure paths
+  - Include edge cases
+  - Maintain test readability
+
+deliverables:
+  - Test files for all critical components
+  - Test utilities and helpers
+  - Mock factories
+  - Updated coverage reports
+  - CI pipeline configuration
+
+agent_assignment:
+  recommended: qa-engineer
+  alternative: test-writer-fixer
+  estimated_duration: 8_hours
+
+success_criteria:
+  - Coverage reaches 40%
+  - All new tests pass
+  - No reduction in performance
+  - Tests run in <30 seconds
+  - Clear documentation of testing patterns
+
+notes: |
+  This is the foundation for our testing strategy. Focus on high-value
+  tests that catch real bugs, not just coverage numbers. Establish
+  patterns that other developers can follow.

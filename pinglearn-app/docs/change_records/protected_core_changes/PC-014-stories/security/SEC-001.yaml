@@ -1,0 +1,120 @@
+# Security Story: Add Input Validation to Transcription Pipeline
+story_id: SEC-001
+parent_issue: ISS-001
+category: security
+priority: P0-CRITICAL
+
+metadata:
+  title: "Implement input validation for transcription pipeline"
+  description: |
+    The transcription pipeline accepts unvalidated user input, creating
+    potential for injection attacks and data corruption. Must add comprehensive
+    input sanitization and validation.
+  created: 2025-09-28T15:00:00Z
+  estimated_hours: 3
+  risk_level: high
+  affects_protected_core: true
+
+location:
+  files:
+    - src/protected-core/transcription/service.ts
+    - src/protected-core/transcription/processors/
+    - src/features/notes/NotesGenerationService.ts
+
+vulnerability_details:
+  type: "Input Validation Bypass"
+  severity: "High"
+  cwe_id: "CWE-20"
+  potential_impact:
+    - XSS attacks through math rendering
+    - SQL injection via unsanitized text
+    - Command injection in LaTeX processing
+
+required_implementation:
+  validation_layers:
+    1. Input sanitization at API boundary
+    2. Type validation before processing
+    3. Math expression validation
+    4. Output encoding for display
+
+code_changes:
+  - file: src/protected-core/contracts/transcription-contract.ts
+    change: |
+      ```typescript
+      export interface TranscriptionValidation {
+        validateInput(text: string): ValidationResult;
+        sanitizeForProcessing(text: string): string;
+        validateMathExpression(latex: string): boolean;
+        encodeForDisplay(html: string): string;
+      }
+      ```
+
+  - file: src/protected-core/transcription/validators/input-validator.ts
+    change: |
+      ```typescript
+      export class InputValidator implements TranscriptionValidation {
+        private readonly MAX_LENGTH = 50000;
+        private readonly ALLOWED_MATH_COMMANDS = [/* whitelist */];
+
+        validateInput(text: string): ValidationResult {
+          // Length check
+          // Character validation
+          // Pattern detection
+          // Return detailed result
+        }
+
+        sanitizeForProcessing(text: string): string {
+          // Remove dangerous patterns
+          // Escape special characters
+          // Normalize whitespace
+          // Return safe text
+        }
+      }
+      ```
+
+dependencies:
+  hard: ["TS-001", "TS-002", "TS-003"]  # Must compile first
+  soft: ["SEC-002"]  # Related security fix
+  peer: []
+
+implementation_steps:
+  1. Create validation contract interface
+  2. Implement InputValidator class
+  3. Add validation to transcription entry points
+  4. Create sanitization utilities
+  5. Add math expression whitelist
+  6. Implement output encoding
+  7. Add security tests
+  8. Update documentation
+
+verification_requirements:
+  - security_scan: must_pass
+  - penetration_test: required
+  - input_fuzzing: 1000_cases
+  - no_bypasses: true
+  - performance_impact: < 5ms
+  - backwards_compatible: true
+
+agent_assignment:
+  recommended: security-engineer
+  alternative: backend-architect
+  estimated_duration: 3_hours
+
+test_cases:
+  - XSS payloads must be neutralized
+  - SQL injection attempts blocked
+  - LaTeX command injection prevented
+  - Unicode attacks handled
+  - Buffer overflow attempts caught
+
+rollback_procedure:
+  - Protected core changes require special care
+  - Create detailed checkpoint
+  - Test rollback procedure before implementation
+  - Have monitoring ready for production
+
+notes: |
+  CRITICAL SECURITY FIX. This vulnerability could allow attackers to execute
+  arbitrary code or access unauthorized data. Implementation must follow
+  OWASP guidelines and include comprehensive testing. Coordinate with
+  protected core maintainers before making changes.
