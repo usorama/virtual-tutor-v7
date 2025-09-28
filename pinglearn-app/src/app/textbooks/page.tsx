@@ -2,7 +2,8 @@ import { redirect } from 'next/navigation'
 import { getUser } from '@/lib/auth/actions'
 import { getUserProfile, checkWizardCompletion } from '@/lib/wizard/actions'
 import { getTextbooks } from '@/lib/textbook/actions'
-import { TextbooksClient } from './textbooks-client'
+// Use the enhanced client with hierarchical system integration
+import { TextbooksClientEnhanced } from './textbooks-client-enhanced'
 
 export default async function TextbooksPage() {
   const user = await getUser()
@@ -37,7 +38,7 @@ export default async function TextbooksPage() {
           </p>
         </header>
         
-        <TextbooksClient
+        <TextbooksClientEnhanced
           initialTextbooks={textbooks || []}
           userGrade={profile.grade}
           userSubjects={profile.preferred_subjects || []}
