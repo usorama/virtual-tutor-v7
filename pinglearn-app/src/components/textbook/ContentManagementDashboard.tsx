@@ -8,7 +8,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import useSWR from 'swr';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';

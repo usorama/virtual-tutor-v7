@@ -29,30 +29,93 @@ import type {
 export class BookGroupDetector {
   /**
    * Analyzes uploaded files and groups them into logical book collections
+   * FIXED: Now respects folder structure - each folder = one textbook
    */
   async detectBookGroups(files: UploadedFile[]): Promise<FileGroup[]> {
     const groups: FileGroup[] = [];
-    const ungroupedFiles: UploadedFile[] = [...files];
 
-    // Pattern-based grouping
-    const patternGroups = this.groupByPatterns(files);
+    // CRITICAL FIX: Group by folder path, not by pattern
+    const folderGroups = this.groupByFolderStructure(files);
 
-    for (const patternGroup of patternGroups) {
-      if (patternGroup.files.length > 1) {
+    // If files don't have folder info, fall back to pattern-based grouping
+    if (folderGroups.length === 0) {
+      const patternGroups = this.groupByPatterns(files);
+
+      for (const patternGroup of patternGroups) {
         groups.push(patternGroup);
-        // Remove grouped files from ungrouped list
-        patternGroup.files.forEach(file => {
-          const index = ungroupedFiles.findIndex(f => f.id === file.id);
-          if (index !== -1) ungroupedFiles.splice(index, 1);
-        });
       }
+    } else {
+      groups.push(...folderGroups);
     }
 
-    // Content-based grouping for remaining files
-    const contentGroups = await this.groupByContent(ungroupedFiles);
-    groups.push(...contentGroups);
-
     return groups;
+  }
+
+  /**
+   * Groups files by their folder structure
+   * Each folder represents ONE textbook, files within are chapters
+   */
+  private groupByFolderStructure(files: UploadedFile[]): FileGroup[] {
+    const folderMap = new Map<string, UploadedFile[]>();
+
+    files.forEach(file => {
+      // Extract folder from file path or use parent directory info
+      const folderPath = this.extractFolderPath(file);
+
+      if (!folderMap.has(folderPath)) {
+        folderMap.set(folderPath, []);
+      }
+      folderMap.get(folderPath)!.push(file);
+    });
+
+    return Array.from(folderMap.entries()).map(([folder, files]) => {
+      const folderName = folder.split('/').pop() || folder;
+
+      return {
+        id: `folder-${folder}`,
+        name: this.formatFolderAsTitle(folderName),
+        files,
+        suggestedSeries: this.formatFolderAsTitle(folderName),
+        suggestedPublisher: this.extractPublisherFromFolder(folderName),
+        confidence: 1.0, // High confidence for folder-based grouping
+        isUserCreated: false,
+        isFolderBased: true // Mark as folder-based group
+      };
+    });
+  }
+
+  private extractFolderPath(file: UploadedFile): string {
+    // If file has path info, extract folder
+    if ('path' in file && file.path) {
+      const pathParts = file.path.split('/');
+      pathParts.pop(); // Remove filename
+      return pathParts.join('/');
+    }
+
+    // Try to infer from filename patterns
+    if (file.name.includes(' - Ch ')) {
+      // Extract subject/book name before chapter info
+      const parts = file.name.split(' - Ch ');
+      return parts[0];
+    }
+
+    return 'ungrouped';
+  }
+
+  private formatFolderAsTitle(folder: string): string {
+    return folder
+      .replace(/-/g, ' ')
+      .replace(/_/g, ' ')
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  }
+
+  private extractPublisherFromFolder(folder: string): string {
+    if (folder.toLowerCase().includes('ncert')) return 'NCERT';
+    if (folder.toLowerCase().includes('cbse')) return 'CBSE';
+    if (folder.toLowerCase().includes('nabh')) return 'NABH';
+    return 'Unknown Publisher';
   }
 
   private groupByPatterns(files: UploadedFile[]): FileGroup[] {

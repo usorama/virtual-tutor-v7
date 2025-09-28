@@ -60,6 +60,19 @@ vi.mock('@/lib/supabase/client', () => ({
       eq: vi.fn().mockReturnThis(),
       single: vi.fn().mockResolvedValue({ data: null, error: null }),
     }),
+    // Mock realtime functionality
+    channel: vi.fn().mockReturnValue({
+      on: vi.fn().mockReturnValue({
+        on: vi.fn().mockReturnValue({
+          on: vi.fn().mockReturnValue({
+            on: vi.fn().mockReturnValue({
+              subscribe: vi.fn()
+            })
+          })
+        })
+      })
+    }),
+    removeChannel: vi.fn(),
   })),
 }));
 

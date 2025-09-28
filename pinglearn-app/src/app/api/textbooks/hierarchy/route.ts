@@ -123,31 +123,49 @@ export async function POST(request: NextRequest) {
       // Note: Not rolling back series and book as they might be useful even without chapters
     }
 
-    // Create textbook entries for backward compatibility
-    // This maintains compatibility with the existing flat textbook system
-    for (const chapter of formData.chapterOrganization.chapters) {
-      const chapterData = chapter as any; // Type issues with ChapterInfo interface
-      const fileName = chapterData.fileName || chapter.sourceFile || '';
-      const uploadedFile = uploadedFiles.find(f => f.name === fileName);
+    // Create a SINGLE textbook entry for the entire book (not per chapter!)
+    // FIXED: One textbook per book, not one per chapter
+    const { data: textbook, error: textbookError } = await supabase
+      .from('textbooks')
+      .insert({
+        title: formData.bookDetails.volumeTitle || formData.seriesInfo.seriesName,
+        file_name: `${formData.seriesInfo.seriesName.toLowerCase().replace(/\s+/g, '-')}.pdf`,
+        grade: formData.seriesInfo.grade,
+        subject: formData.seriesInfo.subject,
+        total_pages: formData.bookDetails.totalPages || (chapters.length * 25),
+        status: 'processing',
+        upload_status: 'completed',
+        // Note: We're creating ONE textbook for the entire book
+        // The chapters are stored separately in the chapters table
+      })
+      .select()
+      .single();
 
-      if (uploadedFile) {
-        await supabase
-          .from('textbooks')
-          .insert({
-            title: `${formData.seriesInfo.seriesName} - ${chapterData.chapterTitle || chapter.title || ''}`,
-            file_name: fileName,
-            file_path: uploadedFile.path,
-            file_size_mb: uploadedFile.size / (1024 * 1024),
-            grade: formData.seriesInfo.grade,
-            subject: formData.seriesInfo.subject,
-            chapter_number: chapter.chapterNumber,
-            total_pages: 25,
-            status: 'processing',
-            user_id: user.id,
-            // Add reference to the hierarchical structure
-            book_id: book.id,
-            series_id: series.id
-          });
+    if (textbookError) {
+      console.error('Textbook creation error:', textbookError);
+    } else if (textbook) {
+      // Link chapters to the textbook
+      const chapterUpdates = createdChapters?.map(ch => ({
+        id: ch.id,
+        textbook_id: textbook.id
+      })) || [];
+
+      if (chapterUpdates.length > 0) {
+        // Update chapters with textbook reference
+        for (const update of chapterUpdates) {
+          await supabase
+            .from('chapters')
+            .insert({
+              textbook_id: textbook.id,
+              title: formData.chapterOrganization.chapters.find(
+                (_, idx) => idx === chapterUpdates.indexOf(update)
+              )?.title || 'Chapter',
+              chapter_number: chapterUpdates.indexOf(update) + 1,
+              topics: [],
+              page_start: 0,
+              page_end: 50
+            });
+        }
       }
     }
 

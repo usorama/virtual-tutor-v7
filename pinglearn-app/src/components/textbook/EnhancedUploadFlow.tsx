@@ -39,8 +39,9 @@ import { toast } from 'sonner';
 // Import our new components
 import { MetadataWizard } from './MetadataWizard';
 import { BulkUploadInterface } from './BulkUploadInterface';
-import { EnhancedTextbookProcessor } from '@/lib/textbook/enhanced-processor';
+import { BookGroupDetector } from '@/lib/textbook/enhanced-processor';
 import { PDFMetadataExtractor } from '@/lib/textbook/pdf-metadata-extractor';
+import { Folder, FolderOpen, Info } from 'lucide-react';
 
 import type {
   UploadedFile,
@@ -98,6 +99,7 @@ export function EnhancedUploadFlow({
   const [extractedMetadata, setExtractedMetadata] = useState<Partial<TextbookWizardState['formData']>>();
   const [processingSteps, setProcessingSteps] = useState<ProcessingStep[]>([]);
   const [currentProgress, setCurrentProgress] = useState(0);
+  const [folderStructure, setFolderStructure] = useState<Map<string, UploadedFile[]>>(new Map());
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const processor = new EnhancedTextbookProcessor();
