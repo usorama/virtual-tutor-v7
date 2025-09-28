@@ -1,7 +1,6 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { featureFlags } from '@/config/feature-flags';
 
 type Theme = 'light' | 'dark' | 'system';
 
@@ -14,13 +13,9 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Check feature flag first
-  if (!featureFlags.enableDarkTheme) {
-    return <>{children}</>;
-  }
-
-  const [theme, setTheme] = useState<Theme>('system');
-  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
+  // Theme provider always active - app defaults to dark theme
+  const [theme, setTheme] = useState<Theme>('dark');
+  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('dark');
 
   useEffect(() => {
     // Load saved preference

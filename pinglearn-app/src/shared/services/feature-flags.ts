@@ -16,6 +16,9 @@ export interface FeatureFlags {
   enableMonitoring: boolean;
   enableRollback: boolean;
   enablePerformanceOptimization: boolean;
+  enableShowThenTell: boolean;        // FC-010: 400ms visual lead time feature
+  enableFC010: boolean;               // Show-Then-Tell methodology toggle
+  enableShowThenTellTiming: boolean;  // Real-time timing measurement and validation
 }
 
 export class FeatureFlagService {

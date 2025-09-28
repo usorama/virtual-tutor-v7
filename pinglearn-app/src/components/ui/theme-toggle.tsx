@@ -9,14 +9,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useTheme } from '@/contexts/ThemeContext';
-import { featureFlags } from '@/config/feature-flags';
 
 export function ThemeToggle() {
-  // Don't render if feature flag is off
-  if (!featureFlags.enableDarkTheme) {
-    return null;
-  }
-
+  // Theme toggle always available - app is dark theme by default
   const { theme, setTheme, resolvedTheme } = useTheme();
 
   return (

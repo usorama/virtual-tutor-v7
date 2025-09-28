@@ -85,33 +85,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="dark">
+      <head>
+        {/* Critical CSS to prevent white flash */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            html {
+              background-color: #000000 !important;
+              height: 100%;
+            }
+            body {
+              background-color: #000000 !important;
+              min-height: 100vh;
+            }
+          `
+        }} />
+      </head>
       <body
         className={`${inter.variable} font-sans antialiased min-h-screen text-foreground`}
+        style={{ backgroundColor: '#000000', minHeight: '100vh' }}
       >
-        {/* Inline script to prevent white flash during initial render */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              // Immediately set dark background to prevent white flash
-              // This runs before React hydration, eliminating the FOUC
-              (function() {
-                // Set black background immediately
-                document.documentElement.style.backgroundColor = '#000000';
-                document.body.style.backgroundColor = '#000000';
-
-                // Add dark theme class if needed
-                if (!document.documentElement.classList.contains('dark')) {
-                  document.documentElement.classList.add('dark');
-                }
-
-                // Ensure proper viewport settings
-                document.documentElement.style.height = '100%';
-                document.body.style.minHeight = '100vh';
-              })();
-            `,
-          }}
-        />
         <ThemeProvider>
           <AuthProvider>
             {children}

@@ -1,0 +1,2358 @@
+{
+  "textbook": {
+    "id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+    "file_name": "Dental-Accreditation-Standards NABH MANUAL.pdf",
+    "title": "NABH Dental Accreditation Standards Manual",
+    "grade": 0,
+    "subject": "Healthcare Administration",
+    "total_pages": 66,
+    "file_size_mb": 0.2356109619140625,
+    "status": "ready",
+    "processed_at": "2025-09-28T10:31:20.678535"
+  },
+  "chapters": [
+    {
+      "id": "38bc5470-e940-451b-9193-77064f91f921",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 1,
+      "title": "Accreditation Standards for Dental",
+      "topics": [],
+      "start_page": 1,
+      "end_page": 1
+    },
+    {
+      "id": "0c34b689-c043-4af0-bc4f-250e2b3bb1ba",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 2,
+      "title": "NATIONAL ACCREDITATION BOARD FOR",
+      "topics": [],
+      "start_page": 1,
+      "end_page": 1
+    },
+    {
+      "id": "8928fbf5-2031-4d0c-90d2-4601144a3fd3",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 3,
+      "title": "HOSPITALS AND HEALTHCARE PROVIDERS",
+      "topics": [],
+      "start_page": 1,
+      "end_page": 1
+    },
+    {
+      "id": "3e14a612-86c7-4197-9281-68b1e62ff674",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 4,
+      "title": "Patient Centered Standards",
+      "topics": [],
+      "start_page": 1,
+      "end_page": 1
+    },
+    {
+      "id": "d4dcd6f9-c24c-450c-aed4-ecfbcae4c26f",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 5,
+      "title": "01. Access, Assessment and Continuity of Care (AAC) 03",
+      "topics": [],
+      "start_page": 1,
+      "end_page": 1
+    },
+    {
+      "id": "0cbe4061-12f7-42ea-b4f0-c4fa10bf2199",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 6,
+      "title": "02. Care of Patients (COP) 11",
+      "topics": [],
+      "start_page": 1,
+      "end_page": 1
+    },
+    {
+      "id": "44df4c61-ac9b-4709-aea3-5042b55c2840",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 7,
+      "title": "03. Management of M edication (MOM) 18",
+      "topics": [],
+      "start_page": 2,
+      "end_page": 2
+    },
+    {
+      "id": "e2ae77bb-c5e4-4325-9d24-20c7fe8e3746",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 8,
+      "title": "04. Patient Rights and Education (PRE) 22",
+      "topics": [],
+      "start_page": 2,
+      "end_page": 2
+    },
+    {
+      "id": "b60aa23e-d6ef-4e21-b717-8354a5808747",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 9,
+      "title": "05. Hospital Infection Control (HIC)  25",
+      "topics": [],
+      "start_page": 2,
+      "end_page": 2
+    },
+    {
+      "id": "3e2db1ff-7e96-498a-87a5-ae17f74fe223",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 10,
+      "title": "Organization Centered Standards",
+      "topics": [],
+      "start_page": 2,
+      "end_page": 2
+    },
+    {
+      "id": "24b13a80-6a14-41c6-b4d6-ab56bcc42c22",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 11,
+      "title": "06. Continuous Quality Improvement (CQI) 30",
+      "topics": [],
+      "start_page": 2,
+      "end_page": 2
+    },
+    {
+      "id": "ecc64dfa-247a-4ff6-a9c5-7233f18edbba",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 12,
+      "title": "07. Responsibilities of Management (ROM) 34",
+      "topics": [],
+      "start_page": 2,
+      "end_page": 2
+    },
+    {
+      "id": "4d5c88c3-424b-4146-9286-49f857028273",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 13,
+      "title": "08. Facility Management and Safety (FMS) 37",
+      "topics": [],
+      "start_page": 2,
+      "end_page": 2
+    },
+    {
+      "id": "e2e00523-dc4a-4b7c-8550-3d2f942953cb",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 14,
+      "title": "09. Human Resource Management (HRM) 42",
+      "topics": [],
+      "start_page": 2,
+      "end_page": 2
+    },
+    {
+      "id": "7833c1ce-aa58-4108-9798-7f9e22618896",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 15,
+      "title": "10. Information Management System (IMS) 47",
+      "topics": [],
+      "start_page": 2,
+      "end_page": 2
+    },
+    {
+      "id": "d036a315-90a3-4b0b-9e85-416535e31088",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 16,
+      "title": "NEED OF THE STANDARDS",
+      "topics": [
+        "quality management",
+        "quality \ntreatment"
+      ],
+      "start_page": 2,
+      "end_page": 2
+    },
+    {
+      "id": "ab0dd5ad-cbbc-4ba4-80fb-1e72bf43da47",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 17,
+      "title": "INTRODUCTION OF NABH",
+      "topics": [
+        "environment \nsafety",
+        "patient care",
+        "quality \ncommittee",
+        "quality manual",
+        "quality improvement"
+      ],
+      "start_page": 2,
+      "end_page": 3
+    },
+    {
+      "id": "10c489d9-d5be-49f5-ace3-7705944d11c8",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 18,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "patient \nunderstands"
+      ],
+      "start_page": 3,
+      "end_page": 4
+    },
+    {
+      "id": "00fd20eb-5679-4cbc-bad7-5bc958f8bbd2",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 19,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "patient who"
+      ],
+      "start_page": 4,
+      "end_page": 5
+    },
+    {
+      "id": "e9349e7c-bdef-40c1-8234-4dd9dd43dcb0",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 20,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "patient care"
+      ],
+      "start_page": 5,
+      "end_page": 7
+    },
+    {
+      "id": "23d23470-e6a0-4243-b0d2-22e7f5023a0e",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 21,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "patient care",
+        "patient requirements",
+        "clinical \ncare",
+        "Clinical Laboratory"
+      ],
+      "start_page": 7,
+      "end_page": 9
+    },
+    {
+      "id": "45b9c096-e691-4fcd-bf44-f224d7f781f3",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 22,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "ensure safety",
+        "laboratory safety",
+        "patient \nconcerned",
+        "quality \nassurance",
+        "Quality assurance",
+        "quality assurance"
+      ],
+      "start_page": 9,
+      "end_page": 10
+    },
+    {
+      "id": "45b22429-f212-4cd3-8755-2300833c0be5",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 23,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "and management",
+        "laboratory safety",
+        "appropriate safety",
+        "Adequate safety"
+      ],
+      "start_page": 11,
+      "end_page": 11
+    },
+    {
+      "id": "b3609cc8-16fa-4a2c-8290-b3cfdd238e23",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 24,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "radiation safety",
+        "appropriate safety",
+        "hospital safety",
+        "patient care",
+        "quality assurance",
+        "Quality assurance"
+      ],
+      "start_page": 11,
+      "end_page": 14
+    },
+    {
+      "id": "b4eddef9-77b4-4368-bbca-7cbb627d9430",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 25,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "patient care",
+        "patient card",
+        "Patient \ncard"
+      ],
+      "start_page": 14,
+      "end_page": 15
+    },
+    {
+      "id": "ab7b79dc-feed-48e4-b463-28800b5f3555",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 26,
+      "title": "Objective Element Guidance",
+      "topics": [],
+      "start_page": 15,
+      "end_page": 16
+    },
+    {
+      "id": "ff9e09fb-70ca-4bbc-a3ca-58e8c64d80a8",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 27,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "in \nmanagement",
+        "patient could",
+        "patient care",
+        "clinical practice",
+        "clinical protocols"
+      ],
+      "start_page": 16,
+      "end_page": 17
+    },
+    {
+      "id": "9ea77172-66ef-4d9d-80b1-b8478ecd3226",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 28,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "or management",
+        "patient \narriving"
+      ],
+      "start_page": 17,
+      "end_page": 18
+    },
+    {
+      "id": "34f85156-cbcc-4dfc-a9b1-800912a4464b",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 29,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "patient \ncare"
+      ],
+      "start_page": 18,
+      "end_page": 19
+    },
+    {
+      "id": "dddf673b-6a88-4669-8113-809a3147d00a",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 30,
+      "title": "Objective Element Guidance",
+      "topics": [],
+      "start_page": 19,
+      "end_page": 20
+    },
+    {
+      "id": "2bdf4e82-06fa-42d2-949b-edbf870aa2f4",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 31,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "Safety Management",
+        "documented safety",
+        "organisations safety",
+        "provided safety",
+        "Quality assurance",
+        "quality assurance"
+      ],
+      "start_page": 20,
+      "end_page": 22
+    },
+    {
+      "id": "a17d8dd3-f175-4592-9b6f-0c20bb708fbb",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 32,
+      "title": "Objective Element Guidance",
+      "topics": [],
+      "start_page": 22,
+      "end_page": 22
+    },
+    {
+      "id": "d74fb870-0fe9-49fb-9596-b2a568fb6fb5",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 33,
+      "title": "Objective Element Guidance",
+      "topics": [],
+      "start_page": 22,
+      "end_page": 23
+    },
+    {
+      "id": "ac653433-5022-4668-bbc2-4a8ca51a0403",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 34,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "patient \nrecovers",
+        "patient from",
+        "clinical practices"
+      ],
+      "start_page": 23,
+      "end_page": 24
+    },
+    {
+      "id": "1e0bded9-f2d9-4d9b-87e4-4aee7959c139",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 35,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "pain management",
+        "patient and",
+        "patient from",
+        "patient before",
+        "quality assurance"
+      ],
+      "start_page": 24,
+      "end_page": 26
+    },
+    {
+      "id": "eb17a06a-b5bc-41b3-991f-884a40109c49",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 36,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "the \nmanagement",
+        "and management"
+      ],
+      "start_page": 27,
+      "end_page": 27
+    },
+    {
+      "id": "b90a097c-4517-4d55-bedc-183c2139cedf",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 37,
+      "title": "Objective Element Guidance",
+      "topics": [],
+      "start_page": 27,
+      "end_page": 28
+    },
+    {
+      "id": "34d6c05c-2c61-4d65-a7c1-320a04af7ee8",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 38,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "clinical \ndepartments"
+      ],
+      "start_page": 28,
+      "end_page": 30
+    },
+    {
+      "id": "4c289ccf-10b9-4749-a935-6f784b8fc0e3",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 39,
+      "title": "Objective Element Guidance",
+      "topics": [],
+      "start_page": 30,
+      "end_page": 31
+    },
+    {
+      "id": "b24ac78e-7152-4000-bc29-65ce92a145d6",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 40,
+      "title": "Objective Element Guidance",
+      "topics": [],
+      "start_page": 31,
+      "end_page": 31
+    },
+    {
+      "id": "8700bc32-98f4-49de-affd-e4af0b658486",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 41,
+      "title": "Objective Element Guidance",
+      "topics": [],
+      "start_page": 31,
+      "end_page": 32
+    },
+    {
+      "id": "ea702217-ba41-4198-8571-fe6394e09ac5",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 42,
+      "title": "Objective Element Guidance",
+      "topics": [],
+      "start_page": 33,
+      "end_page": 33
+    },
+    {
+      "id": "de196803-7c1a-4c3e-87cd-67ddae90ac16",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 43,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "Appropriate safety",
+        "Patient Rights",
+        "patient and"
+      ],
+      "start_page": 33,
+      "end_page": 34
+    },
+    {
+      "id": "42976c8f-33d2-4ed9-ae48-ed29306d98d3",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 44,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "Patient and",
+        "patient rights",
+        "Patient rights",
+        "patient and"
+      ],
+      "start_page": 34,
+      "end_page": 35
+    },
+    {
+      "id": "8d3d488e-376e-4804-bab2-0d75660fa1e0",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 45,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "During management",
+        "Patient and",
+        "Patient rights",
+        "patient care",
+        "patient information",
+        "Patient has",
+        "patient has",
+        "patient and",
+        "clinical \npractice",
+        "clinical \nrecords"
+      ],
+      "start_page": 35,
+      "end_page": 37
+    },
+    {
+      "id": "156bb6f5-a1f9-4c6c-8980-54f173a217a8",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 46,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "patient \nenters",
+        "Patient and",
+        "patient and",
+        "patient understands"
+      ],
+      "start_page": 37,
+      "end_page": 38
+    },
+    {
+      "id": "c5d73736-63ac-49f3-af5a-94746e338719",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 47,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "patient \nand"
+      ],
+      "start_page": 38,
+      "end_page": 39
+    },
+    {
+      "id": "5e2167b5-0ac5-4524-b351-829c9e774e81",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 48,
+      "title": "Objective Element Guidance",
+      "topics": [],
+      "start_page": 39,
+      "end_page": 40
+    },
+    {
+      "id": "258c55ef-9c28-4397-8c7b-383cfba713b2",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 49,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "linen management"
+      ],
+      "start_page": 40,
+      "end_page": 41
+    },
+    {
+      "id": "db226fef-4509-49cf-b039-6c06fb624d8f",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 50,
+      "title": "Objective Element Guidance",
+      "topics": [],
+      "start_page": 41,
+      "end_page": 42
+    },
+    {
+      "id": "c395f8ea-c308-4f8f-a99a-7d27caab5ce6",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 51,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "patient care"
+      ],
+      "start_page": 42,
+      "end_page": 43
+    },
+    {
+      "id": "4796e8af-fdc3-4210-9294-a97ba9665fab",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 52,
+      "title": "Objective Element Guidance",
+      "topics": [],
+      "start_page": 43,
+      "end_page": 43
+    },
+    {
+      "id": "01248c4e-3310-4fee-aa56-0dad2915f5f1",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 53,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "the \nmanagement",
+        "hospital management",
+        "patient care"
+      ],
+      "start_page": 43,
+      "end_page": 45
+    },
+    {
+      "id": "de4db90d-bb28-4af8-b5a7-a7eb28b4fbf1",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 54,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "Hospital management",
+        "Quality Improvement",
+        "quality improvement"
+      ],
+      "start_page": 45,
+      "end_page": 47
+    },
+    {
+      "id": "42db3f66-73c3-4300-9d6f-ee0bc62189b8",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 55,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "from \nmanagement",
+        "risk management",
+        "clinical and",
+        "clinical structures",
+        "quality improvement",
+        "quality policy",
+        "quality \nobjectives",
+        "quality \nassurance",
+        "quality assurance",
+        "quality improve"
+      ],
+      "start_page": 47,
+      "end_page": 49
+    },
+    {
+      "id": "0df66b19-8937-4389-9d06-d6c4af802e24",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 56,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "patient assessment",
+        "clinical \nresearch",
+        "quality \ncontrol"
+      ],
+      "start_page": 49,
+      "end_page": 50
+    },
+    {
+      "id": "5d061cad-568b-4777-9e3a-0f73ab3fe989",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 57,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "risk \nmanagement",
+        "risk management",
+        "the management",
+        "patient needs",
+        "patient \nsatisfaction",
+        "quality improvement"
+      ],
+      "start_page": 50,
+      "end_page": 51
+    },
+    {
+      "id": "89cb4150-18e8-477c-a1ad-883f89bf4328",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 58,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "Hospital management",
+        "and \nmanagement",
+        "patient care",
+        "quality \nimprovement"
+      ],
+      "start_page": 51,
+      "end_page": 52
+    },
+    {
+      "id": "14de148e-a4bf-4dd9-bf29-4410ace4c2a8",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 59,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "Patient and"
+      ],
+      "start_page": 52,
+      "end_page": 52
+    },
+    {
+      "id": "06100920-4b4a-42fe-8c24-cc171412ecfb",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 60,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "of Management",
+        "the management"
+      ],
+      "start_page": 52,
+      "end_page": 53
+    },
+    {
+      "id": "17c2a885-425e-4cc9-877c-efb412b1c9db",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 61,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "The management",
+        "quality \nimprovement"
+      ],
+      "start_page": 53,
+      "end_page": 54
+    },
+    {
+      "id": "eb958a69-12dd-4e22-8ead-d69058cc879f",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 62,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "quality improvement"
+      ],
+      "start_page": 54,
+      "end_page": 54
+    },
+    {
+      "id": "21369337-c241-4796-9940-dc732eef93ab",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 63,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "ethical \nmanagement"
+      ],
+      "start_page": 54,
+      "end_page": 55
+    },
+    {
+      "id": "94edf319-9eae-4150-983b-7c643f98d783",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 64,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "risk management",
+        "hospital management",
+        "patient safety",
+        "patient care"
+      ],
+      "start_page": 55,
+      "end_page": 56
+    },
+    {
+      "id": "6579b6c3-7aae-4698-a1ef-5a60182e3e53",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 65,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "3 Management",
+        "of Management",
+        "wide \nsafety"
+      ],
+      "start_page": 56,
+      "end_page": 56
+    },
+    {
+      "id": "fd700790-3aed-4d18-a049-8d0d991f3340",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 66,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "The management",
+        "designated management",
+        "ensure safety"
+      ],
+      "start_page": 56,
+      "end_page": 57
+    },
+    {
+      "id": "294c1a17-3f14-4dfe-bf4e-8418c27b749f",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 67,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "facility management",
+        "equipment \nmanagement",
+        "potential safety",
+        "clinical and"
+      ],
+      "start_page": 57,
+      "end_page": 58
+    },
+    {
+      "id": "619ed4d8-b441-4fea-916c-626400109f33",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 68,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "by management"
+      ],
+      "start_page": 58,
+      "end_page": 59
+    },
+    {
+      "id": "3a956f75-7dc9-4e45-9c0c-5aeef0413633",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 69,
+      "title": "Objective Element Guidance",
+      "topics": [],
+      "start_page": 59,
+      "end_page": 60
+    },
+    {
+      "id": "c2fd1ee3-3165-4587-b7f7-5a8b421f6a35",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 70,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "for management",
+        "patient care",
+        "patient from"
+      ],
+      "start_page": 60,
+      "end_page": 62
+    },
+    {
+      "id": "04a8e9fb-166e-4024-b3df-c1242b7621e1",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 71,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "for management"
+      ],
+      "start_page": 62,
+      "end_page": 62
+    },
+    {
+      "id": "fa203f61-79ea-4a2d-8562-264d9e25280c",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 72,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "potential safety",
+        "Patient Safety",
+        "ensure safety",
+        "patient \nare",
+        "patient care"
+      ],
+      "start_page": 62,
+      "end_page": 63
+    },
+    {
+      "id": "1e7d2f03-3a65-44c0-88c8-885d09723661",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 73,
+      "title": "Chapter 9: Human Resource Management",
+      "topics": [],
+      "start_page": 63,
+      "end_page": 64
+    },
+    {
+      "id": "a2f982b7-0822-4d90-82b0-2bf73fdfa005",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 74,
+      "title": "Objective Element Guidance",
+      "topics": [],
+      "start_page": 64,
+      "end_page": 64
+    },
+    {
+      "id": "cc1b785e-b586-4399-a099-dbd9331936e2",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 75,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "patient rights"
+      ],
+      "start_page": 64,
+      "end_page": 65
+    },
+    {
+      "id": "9d771773-02f0-4e73-a428-2edb8e432834",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 76,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "resource management",
+        "patient and"
+      ],
+      "start_page": 65,
+      "end_page": 66
+    },
+    {
+      "id": "540ac084-e98d-46a8-9b6b-803effecbac9",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 77,
+      "title": "Objective Element Guidance",
+      "topics": [],
+      "start_page": 66,
+      "end_page": 67
+    },
+    {
+      "id": "26e63f0d-c6fb-4334-ab01-4b2eafc703a9",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 78,
+      "title": "Objective Element Guidance",
+      "topics": [],
+      "start_page": 67,
+      "end_page": 67
+    },
+    {
+      "id": "f505fc76-f4fa-4e99-8014-bf1f8b51c3cb",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 79,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "patient care",
+        "clinical practices"
+      ],
+      "start_page": 67,
+      "end_page": 68
+    },
+    {
+      "id": "f44822df-5405-4b60-a3ab-4bb5d8e5434b",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 80,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "patient care"
+      ],
+      "start_page": 68,
+      "end_page": 69
+    },
+    {
+      "id": "90186828-457d-4c3c-b4ef-6cb5b98e09e1",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 81,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "patient \ncare",
+        "patient care",
+        "clinical services"
+      ],
+      "start_page": 69,
+      "end_page": 70
+    },
+    {
+      "id": "6b22b56b-33bc-43d2-aea5-e5c22f435bc1",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 82,
+      "title": "Objective Element Guidance",
+      "topics": [],
+      "start_page": 70,
+      "end_page": 71
+    },
+    {
+      "id": "7b1f62cf-6b38-4d91-93e1-8c64a08870ea",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 83,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "clinical work"
+      ],
+      "start_page": 71,
+      "end_page": 71
+    },
+    {
+      "id": "f7bb8d22-a436-4f01-ad04-3018c69edfc9",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 84,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "Information Management",
+        "clinical work"
+      ],
+      "start_page": 71,
+      "end_page": 72
+    },
+    {
+      "id": "9f1cd7d2-739e-4dfb-b4e7-34bdedab52d8",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 85,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "or Management",
+        "effective management"
+      ],
+      "start_page": 72,
+      "end_page": 73
+    },
+    {
+      "id": "d4f32e0e-0c3e-4523-9177-6c5bda958088",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 86,
+      "title": "Objective Element Guidance",
+      "topics": [],
+      "start_page": 73,
+      "end_page": 74
+    },
+    {
+      "id": "9fa415c5-84a7-4861-830f-88a1f15dcb81",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 87,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "patient care"
+      ],
+      "start_page": 74,
+      "end_page": 75
+    },
+    {
+      "id": "4f9bfb80-5f70-4f5e-a581-446c0b1106d6",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 88,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "patient before",
+        "clinical condition"
+      ],
+      "start_page": 75,
+      "end_page": 76
+    },
+    {
+      "id": "20b038c9-00e9-43ea-877b-2128bf17336c",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 89,
+      "title": "Objective Element Guidance",
+      "topics": [],
+      "start_page": 76,
+      "end_page": 77
+    },
+    {
+      "id": "6690d607-19d5-4647-8ff2-c47f83757ef2",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 90,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "clinical \nrecords"
+      ],
+      "start_page": 77,
+      "end_page": 78
+    },
+    {
+      "id": "832102fe-732e-45c1-86c3-d33403bb9439",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 91,
+      "title": "Objective Element Guidance",
+      "topics": [
+        "clinical and"
+      ],
+      "start_page": 78,
+      "end_page": 79
+    },
+    {
+      "id": "1a94fcff-22e2-42f6-a5ee-7b220175b721",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 92,
+      "title": "GLOSSARY",
+      "topics": [],
+      "start_page": 79,
+      "end_page": 79
+    },
+    {
+      "id": "3d6bf64c-0deb-4cdb-9187-e60b12b17340",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 93,
+      "title": "1. A process of external review of the quality of the health care being",
+      "topics": [],
+      "start_page": 79,
+      "end_page": 79
+    },
+    {
+      "id": "fa887cd0-3fd8-4493-83b8-87af0b60c8da",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 94,
+      "title": "2. It also represents the outcome of the review and the decision that an",
+      "topics": [
+        "airway \nmanagement",
+        "patient carrying",
+        "patient cannot",
+        "CLINICAL PEDODONTICS",
+        "clinical \nstatus"
+      ],
+      "start_page": 79,
+      "end_page": 81
+    },
+    {
+      "id": "5e23134e-32bc-4cc8-926b-0daa5f01160a",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 95,
+      "title": "2. A surgical procedure performed after death to examine body tissues and",
+      "topics": [
+        "internal management",
+        "on management",
+        "patient airway",
+        "patient transport",
+        "patient care",
+        "clinical aspects",
+        "Clinical practice",
+        "clinical care",
+        "clinical conditions"
+      ],
+      "start_page": 81,
+      "end_page": 83
+    },
+    {
+      "id": "d2f9ffbe-4bef-4312-8792-cd8e86e8328a",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 96,
+      "title": "1.   Willingness of a party to undergo examination/procedure/ treatment by",
+      "topics": [
+        "patient registering",
+        "patient about"
+      ],
+      "start_page": 83,
+      "end_page": 83
+    },
+    {
+      "id": "4e5a5d3e-e75f-416d-a046-eeef12390621",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 97,
+      "title": "2.    In law, it means active acquiescence or silent compliance by a person",
+      "topics": [
+        "patient record",
+        "clinical observations",
+        "clinical findings"
+      ],
+      "start_page": 83,
+      "end_page": 85
+    },
+    {
+      "id": "6d63e4ee-5946-4cdf-9a1a-dd8d104f730a",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 98,
+      "title": "2. It also implies making medical decisions and applying the same to",
+      "topics": [
+        "patient but",
+        "patient loses",
+        "clinical expertise"
+      ],
+      "start_page": 85,
+      "end_page": 87
+    },
+    {
+      "id": "4f1f89ee-bd9c-46a8-9f70-003059850b14",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 99,
+      "title": "Intent  A brief explanation of the rational, meaning and significance of the",
+      "topics": [],
+      "start_page": 87,
+      "end_page": 87
+    },
+    {
+      "id": "2c0da84d-d71d-4058-9f20-78bd4c78eb0d",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 100,
+      "title": "2. A summary of the most important features of a job, including the",
+      "topics": [],
+      "start_page": 87,
+      "end_page": 88
+    },
+    {
+      "id": "01103b4e-5aa1-4619-9d93-f5d0d056bde7",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 101,
+      "title": "2. A statement of the minimum acceptable qualifications that an",
+      "topics": [
+        "patient care"
+      ],
+      "start_page": 88,
+      "end_page": 90
+    },
+    {
+      "id": "1e047768-7bf9-4fd1-bd36-efcf724883d5",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 102,
+      "title": "Objective element It is that component of standard which can be measured objectively on a",
+      "topics": [
+        "Patient care",
+        "Patient record",
+        "patient undergoes",
+        "patient care",
+        "Clinical  \nPeriodontology",
+        "clinical \nrecord",
+        "clinical services",
+        "quality \nrelated"
+      ],
+      "start_page": 90,
+      "end_page": 91
+    },
+    {
+      "id": "9f801754-ba36-463a-872b-cb8804a543bd",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 103,
+      "title": "2. A series of activities for carrying out work which when observed by all",
+      "topics": [],
+      "start_page": 91,
+      "end_page": 92
+    },
+    {
+      "id": "aa880e1a-af17-4520-b313-b2ce472203aa",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 104,
+      "title": "2.     Degree of adherence to pre-established criteria or standards.",
+      "topics": [
+        "quality management",
+        "Risk management",
+        "ensure safety",
+        "patient which",
+        "patient \ndepartment",
+        "Clinical and",
+        "clinical and",
+        "Quality assurance",
+        "quality \nrequirements"
+      ],
+      "start_page": 92,
+      "end_page": 94
+    },
+    {
+      "id": "f5e67e83-1229-47e6-a063-1016ce5d3678",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 105,
+      "title": "Standard",
+      "topics": [],
+      "start_page": 94,
+      "end_page": 94
+    },
+    {
+      "id": "d6e1cbe1-5e30-4f2c-a79e-cec1c51a5658",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 106,
+      "title": "1. A method of infection control in which all human blood and other bodily",
+      "topics": [
+        "patient history"
+      ],
+      "start_page": 94,
+      "end_page": 94
+    },
+    {
+      "id": "0dffc537-c682-4534-8aca-91f3d6b5b532",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 107,
+      "title": "2. A set of guidelines protecting first aiders or healthcare professionals",
+      "topics": [],
+      "start_page": 94,
+      "end_page": 94
+    },
+    {
+      "id": "d988b88d-d8b8-4e9a-a913-c5cd5ad35805",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 108,
+      "title": "Standard Precautions  apply to Blood, all body fluids, secretions, and",
+      "topics": [],
+      "start_page": 94,
+      "end_page": 94
+    },
+    {
+      "id": "499f70f0-d310-42e9-a21a-dfffbaefc661",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 109,
+      "title": "Standards  A statement of expectation that defines the structures and process that",
+      "topics": [
+        "patient whose"
+      ],
+      "start_page": 94,
+      "end_page": 95
+    },
+    {
+      "id": "b58fb044-dc41-4131-8ade-0a00b5744b2a",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 110,
+      "title": "1. Confirmation through the provision of objective evidence  that the",
+      "topics": [],
+      "start_page": 95,
+      "end_page": 95
+    },
+    {
+      "id": "2966cd32-d9e9-432c-a13f-05bd3f40ad67",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 111,
+      "title": "Objective Evidence  – Data supporting the existence or variety of",
+      "topics": [],
+      "start_page": 95,
+      "end_page": 95
+    },
+    {
+      "id": "d15d02f9-a9eb-4bcb-9a2f-705f46af3d3b",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 112,
+      "title": "2. The checking of data for correction or for compliance with applicable",
+      "topics": [
+        "patient Those"
+      ],
+      "start_page": 95,
+      "end_page": 96
+    },
+    {
+      "id": "913a4c65-ab14-401f-a0d6-de141861db39",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 113,
+      "title": "REFERENCE GUIDE ON SENTINEL EVENTS",
+      "topics": [],
+      "start_page": 96,
+      "end_page": 96
+    },
+    {
+      "id": "b892a364-3236-4ffa-a873-90f3b392eff7",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 114,
+      "title": "1. Surgical events",
+      "topics": [
+        "patient discovered",
+        "Patient death"
+      ],
+      "start_page": 96,
+      "end_page": 96
+    },
+    {
+      "id": "87303aa5-522f-4af4-a179-2ff94695c5af",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 115,
+      "title": "2. Device or product events Patient death or serious disability associated with:",
+      "topics": [],
+      "start_page": 96,
+      "end_page": 96
+    },
+    {
+      "id": "a1a96f12-fff1-4b82-898f-c79b0ab92209",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 116,
+      "title": "3. Patient protection events",
+      "topics": [
+        "Patient death",
+        "Patient suicide"
+      ],
+      "start_page": 96,
+      "end_page": 96
+    },
+    {
+      "id": "f418c175-61be-4449-b4de-962e7f733bee",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 117,
+      "title": "o Intentional injury to a patient by a staff member, another patient, visitor, or other",
+      "topics": [
+        "patient and",
+        "patient death"
+      ],
+      "start_page": 96,
+      "end_page": 97
+    },
+    {
+      "id": "bdecc75b-50fe-4361-85a7-46b8ed038393",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 118,
+      "title": "4. Environmental events",
+      "topics": [
+        "Patient death"
+      ],
+      "start_page": 97,
+      "end_page": 97
+    },
+    {
+      "id": "e7df8295-f4bb-4896-98f3-1171bcae23f2",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 119,
+      "title": "5. Care management events",
+      "topics": [
+        "Patient death",
+        "patient due",
+        "patient error"
+      ],
+      "start_page": 97,
+      "end_page": 97
+    },
+    {
+      "id": "325afc4a-1dca-4318-849d-f8502bc473aa",
+      "textbook_id": "7208beb9-43d9-4577-a063-95437b8f3fa2",
+      "chapter_number": 120,
+      "title": "6. Criminal events",
+      "topics": [
+        "patient within",
+        "clinical \nmember"
+      ],
+      "start_page": 97,
+      "end_page": 98
+    }
+  ],
+  "chunks": [
+    {
+      "id": "1f26a600-068f-4ee0-8e00-386efb2bf6d0",
+      "chapter_id": "38bc5470-e940-451b-9193-77064f91f921",
+      "chunk_index": 0,
+      "content": "Institutions/ Hospitals/ Centres",
+      "content_type": "text",
+      "token_count": 8,
+      "page_number": 1
+    },
+    {
+      "id": "a0a6c0e5-6c96-45e1-945c-b5327998c0f1",
+      "chapter_id": "8928fbf5-2031-4d0c-90d2-4601144a3fd3",
+      "chunk_index": 0,
+      "content": "Table of Contents \nSr. No. Particulars Page No. \n Introduction  01",
+      "content_type": "text",
+      "token_count": 16,
+      "page_number": 1
+    },
+    {
+      "id": "eece1b24-0054-4cf2-8549-1de3ff631e3e",
+      "chapter_id": "7833c1ce-aa58-4108-9798-7f9e22618896",
+      "chunk_index": 0,
+      "content": "Glossary 51 \n Reference Guide on Sentinel Events  63 \n© National Accreditation Board for Hospitals and Healthcare Providers 1",
+      "content_type": "text",
+      "token_count": 31,
+      "page_number": 2
+    },
+    {
+      "id": "673d35f7-818a-46b6-9cb9-cedea9e6b334",
+      "chapter_id": "d036a315-90a3-4b0b-9e85-416535e31088",
+      "chunk_index": 0,
+      "content": "Quality is the need of the present time with development of technology and availability of new \nequipment, Dentistry is becoming more and more effective but along with that unsafe. If as \nprofessionals we stick to basic standards we can have safe practices and deliver high quality \ntreatment. Introducing quality management syst ems are very important and the standards help \nus to achieve it.",
+      "content_type": "text",
+      "token_count": 98,
+      "page_number": 2
+    },
+    {
+      "id": "3e60c4ad-3bb5-46cd-8631-3b7443cafb5a",
+      "chapter_id": "ab0dd5ad-cbbc-4ba4-80fb-1e72bf43da47",
+      "chunk_index": 0,
+      "content": "The NABH standards have been laid down keeping the Indian ethos and working environment \nin mind. The main focus of the standards is on patient, employee, visitor and environment \nsafety. These standards are applicable to multidisciplinary Dental hospitals and single specialty \nhospitals providing secondary, tertiary and quaternary levels of dental care. All the standards \nare core standards and no optional standards have been laid down. . The compliance with \nthese standards will indicate that the hospital is patient, staff and environment friendly.  \nThe standards are deceptively simple. On going through the details during the phase of \nimplementation of the standards one would realiz e that extra efforts and resources are indeed \nrequired for ensuring compliance with the standards. It may also be observed, at the time of \nimplementation, that there may be some duplication at a few places. Duplication is a necessity \nsince it will ensure compliance with the said standards and also emphasize the importance of \nthe standards and the objective elements. \nWe are aware that apart from extra resources needed for implementation, a few guidelines are \nequally necessary for easy comprehension and correct implementation. The ensuing guidelines, \nchapter-wise in tabulated form, have been laid down for easy comprehension, better \nunderstanding of the standards and the objective elements, removing and clarifying ambiguities \nuniform application of standards across the organization, and smoother and more efficient \nimplementation. The best way to implement the standards is to have an in-house quality \ncommittee/team that will be responsible for making the quality manual based on the NABH \nstandards, the initial implementation of the standards and the subsequent monitoring of the \nsame. While there might be initial expenses for ensuring implementation and monitoring of the \nstandards, in the long term these costs will be recovered by the organization owing to the better \nand more efficient and effective quality of patient care. Finally it must also be understood that \naccreditation is an ongoing process. Each time one has to raise the bar and hence the \n© National Accreditation Board for Hospitals and Healthcare Providers 2 \nimportance of continual quality improvement. Accreditation is thus a journey and not a \ndestination. \nDental institution/ hospital/ centre is referred as Dental Facility in this standard.  \n© National Accreditation Board for Hospitals and Healthcare Providers 3 \nCHAPTER-1 Access, Assessment and Continuity of Care (AAC) \nAAC.1. The organization defines and displays the services that it can provide.",
+      "content_type": "text",
+      "token_count": 663,
+      "page_number": 2
+    },
+    {
+      "id": "745f5786-c723-4f73-a030-657097ade9d3",
+      "chapter_id": "10c489d9-d5be-49f5-ace3-7705944d11c8",
+      "chunk_index": 0,
+      "content": "1.1  The services being provided \nare clearly defined and are \ninconsonance with the needs of \nthe community.\nA policy to be framed clearly stating the services the \ndental facility can provide. \n1.2  The defined services are \nprominently displayed.\nThe services so defined should be displayed \nprominently in an area visible to all patients entering \nthe organization. The display could be in the form of \nboards, citizen’s charter, scrolling messages, etc. \nCare should be taken to ensure that these are \ndisplayed in the language (s) the patient \nunderstands.\n1.3  The staff is oriented to these \nservices\nAll the staff in the dental facility mainly in the \nreception/registration, OPD, IPD is oriented to these \nfacts through training program regularly or through \nmanuals.\nAAC.2.The organization has a well documented registration, admission and transfer or \nreferral process.",
+      "content_type": "text",
+      "token_count": 220,
+      "page_number": 3
+    },
+    {
+      "id": "5bbb1439-18bd-4651-8d3f-aa9ebb58387b",
+      "chapter_id": "00fd20eb-5679-4cbc-bad7-5bc958f8bbd2",
+      "chunk_index": 0,
+      "content": "2.1 Processes addresses \nregistering and admitting out \npatients, inpatients and \nemergency patients \nDental facility has prepared document (s) detailing \nthe policies and procedures for registration, \nadmission of patient\n2.2  Patients are accepted only if \nthe organization can provide \nthe required service\nThe staff handling admission and registration needs \nto be aware of the services that the organization can \nprovide. It is also advisable to have a system wherein \nthe staff is aware as to whom to contact if they need \nany clarification on the services provided.\n2.3 The policies and procedures \nalso address managing \npatients during  non-availability \nof beds\nThe dental facility is aware of the availability of \nalternate facilities where the patients may be directed \nin case of non-availability of beds.\n2.4  The staff is aware of these \nprocesses \nAll the staff handling these activities should be \noriented to these policies and procedures. \nOrientation can be provided by documentation/ \ntraining.\n© National Accreditation Board for Hospitals and Healthcare Providers 4 \n2.5 Processes addresses \nmechanism for transfer or \nreferral of patient who do not \nmatch the organizational \nresources \nThe documented policy and procedure should \naddress the methodology of safe transfer of the \npatient in a life threatening situation to another dental \nfacility. Availability of an appropriate ambulance fitted \nwith life support facilities and accompanied by trained \npersonnel \nThe dental facility gives a case summary mentioning \nthe significant findings and treatment given in case of \npatients who are being transferred from emergency. \nFor admitted patients a discharge summary has to be \ngiven (refer AAC9).The same shall also be given to \npatients going against medical advice. \nAAC.3. Patients cared for by the organization undergo an established initial assessment",
+      "content_type": "text",
+      "token_count": 470,
+      "page_number": 4
+    },
+    {
+      "id": "67816adf-03e4-4eff-9ef9-5063b86a8b1e",
+      "chapter_id": "e9349e7c-bdef-40c1-8234-4dd9dd43dcb0",
+      "chunk_index": 0,
+      "content": "3.1  The organization defines the \ncontent of the assessments for \nthe out-patients, in-patients and \nemergency patients.\nThe hospital shall have a protocol/policy by which a \nstandardized initial assessment of patients is done in \nthe OPD, emergency and IPD. The initial assessment \ncould be standardized across the hospital or it could \nbe modified depending on the need of the \ndepartment. However, it shall be the same in that \nparticular area. The organization can have different \nassessment criteria for the first visit and for \nsubsequent visits. In emergency department this \nshall include recording the vital parameters.\n3.2  The organization determines \nwho can perform the \nassessments. \nThe assessment can be done by the treating doctor \nor junior doctor under supervision of treating doctor \nor a dental hygienist under supervision of treating \ndoctor. The organization shall determine who can do \nwhat assessment and it should be the same across \nthe hospital.\n3.3  The organization defines the \ntime frame within which the \ninitial assessment is completed.\nThe dental facility has defined and documented the \ntime frame within which the initial assessment is to \nbe completed with respect to emergency/indoor \npatients. \n3.4  Initial assessment for OPD and \nEmergency cases is done and \ndocumented within a \nreasonable timeframe\nIf required treatment is done  in the  same OPD visit. \nWaiting time is monitored to make it minimum  \n3.5  The initial assessment for in-\npatients is documented within \n24 hours or earlier as per the \npatient’s condition or hospital \npolicy.\nThe facility’s documented protocol mentions that the \ninitial assessment is to be completed within 24 hours \nor earlier depending upon the patient’s condition. \nThis should also cover history, progress notes, \ninvestigation ordered and treatment ordered and all \nthese are to be authenticated by treating doctor.\n© National Accreditation Board for Hospitals and Healthcare Providers 5 \n3.6  The initial assessment results \nin a documented plan of care \nand includes preventive aspect \nof the care.\nThis shall be documented by the treating \ndoctor/dental surgeon or by a member of his team in \nthe case sheet.  \nThe documented plan of care should cover \npreventive actions as necessary in the case and \nshould include diet, drugs, etc.\nAAC.4. patients care is a continuous process and all patient care for by the organization \nundergo a regular reassessment",
+      "content_type": "text",
+      "token_count": 610,
+      "page_number": 5
+    },
+    {
+      "id": "ccbdaca7-c4cd-4e3b-8540-07294d1f3dde",
+      "chapter_id": "23d23470-e6a0-4243-b0d2-22e7f5023a0e",
+      "chunk_index": 0,
+      "content": "4.1 During all phases of care, there \nis a qualified individual \nresponsible for the patient care \nwho co-ordinates the care in all \nthe setting with-in the \norganization \nThe facility to ensure that the care of patients is \nalways given by appropriately qualified dental \npersonnel (resident doctor, surgeon, consultant \nand/or nurse). \nCare of patients is coordinated among various care \nproviders in a given setting viz OPD, emergency, IP \netc. The organization shall ensure that there is \neffective communication of patient requirements \namongst the care providers in all settings. \n4.2  All patients are reassessed at \nappropriate intervals.\nAfter the initial assessment, the patient is reassessed \nperiodically and this is documented in the case sheet. \nThe frequency may be different for different areas \nbased on the setting and the patient's condition.\n4.3  Staff involved in direct clinical \ncare documents \nreassessments\nActions taken under reassessment are documented. \nThe staff could be the treating doctor or any member \nof the team. The nursing staff and trained dental \nhygienist where available can document patient’s \nvitals.\n4.4  Patients are reassessed to \ndetermine their response to \ntreatment and to plan further \ntreatment or discharge.\nSelf explanatory \n© National Accreditation Board for Hospitals and Healthcare Providers 6 \nAAC.5. Clinical Laboratory services are provided as per the requirements of the patients",
+      "content_type": "text",
+      "token_count": 360,
+      "page_number": 7
+    },
+    {
+      "id": "05a1d9be-77b5-40ec-a199-e7b37c83eec3",
+      "chapter_id": "45b9c096-e691-4fcd-bf44-f224d7f781f3",
+      "chunk_index": 0,
+      "content": "5.1  Scope of the laboratory \nservices are commensurate to \nthe services provided by the \norganization.\nThe facility should ensure availability of laboratory \nservices commensurate with the health care services \noffered by it. See also (5.5) below for outsourced lab \nfacilities.\n5.2  Adequately qualified and \ntrained personnel perform \nand/or supervise the \ninvestigations.\nThe staff employed in the lab should be suitably \nqualified (appropriate degree) and trained to carry out \nthe tests under supervision of specialist.\n5.3  Policies and procedures guide \ncollection, identification, \nhandling, safe transportation \nand disposal of specimens.\nThe facility has documented procedures for \ncollection, identification, handling, safe \ntransportation, processing and disposal of \nspecimens, to ensure safety of the specimen till the \ntests and retests (if required) are completed.\n 5.4  Laboratory results are available \nwithin a defined time frame. \nCritical results are intimated \nimmediately to the concerned \npersonnel\nThe facility shall define the turnaround time for all \ntests. The facility should ensure availability of \nadequate staff, materials and equipment to make the \nlaboratory results available within the defined time \nframe. \n5.5  Laboratory tests not available \nin the organization are \noutsourced to organization(s) \nbased on their quality \nassurance system.\nThe facility has documented procedure for \noutsourcing tests for which it has no facilities. This \nshould include: a) list of tests for outsourcing b) \nidentity of personnel in the outsourced facilities to \nensure safe transportation of specimens and \ncompleting of tests as per requirements of the patient \nconcerned and receipt of results at facility c) manner \nof packaging of the specimens and their labeling for \nidentification and this package should contain the test \nrequisition with all details as required for testing. A \nmethodology to check the performance of service \nrendered by the outsourced laboratory as per the \nrequirements of the facility.\n5.6  Quality assurance for \nlaboratory should be as per \naccepted practices and also \ninclude periodic calibration and \nmaintenance of all the \nequipments. \nThe facility has a documented quality assurance \nprogram. The laboratory in-charge shall periodically \nsurvey tests results. The program includes the \ndocumentation of corrected and preventive action. \n© National Accreditation Board for Hospitals and Healthcare Providers 7 \nAAC.6. There is an established laboratory safety program.",
+      "content_type": "text",
+      "token_count": 632,
+      "page_number": 9
+    },
+    {
+      "id": "9f868ef5-0772-420c-9240-069a889a84eb",
+      "chapter_id": "45b22429-f212-4cd3-8755-2300833c0be5",
+      "chunk_index": 0,
+      "content": "6.1  The laboratory safety program \nis documented. \nA well documented lab safety manual is available in \nthe lab. This takes care of the safety of the workforce \nas well as the equipment available in the lab. \n6.2  This program is integrated with \nthe organization’s safety \nprogram \nLab safety program is incorporated in the safety \nprogram of the hospital. \n6.3  Written policies and procedures \nguide the handling and disposal \nof infectious and hazardous \nmaterials.\nThe lab staff should follow standard precautions .The \ndisposal of waste is according to biomedical handling \nand management rules, 1998.\n6.4  Laboratory personnel are \nappropriately trained in safe \npractice are   provided with \nappropriate safety \nequipment/devices\nAll the lab staff undergoes training regarding safe \npractices in the lab. Adequate safety devices are \navailable in the lab e.g. fire extinguishers, dressing \nmaterials, standard precautions, disinfectants, etc \nAAC.7. Imaging services are provided as per the requirements of the patients",
+      "content_type": "text",
+      "token_count": 257,
+      "page_number": 11
+    },
+    {
+      "id": "dc9e7f6a-9929-4318-8203-2ff1d395bd8a",
+      "chapter_id": "b3609cc8-16fa-4a2c-8290-b3cfdd238e23",
+      "chunk_index": 0,
+      "content": "7.1  Imaging services comply with legal \nand other requirements\nThe facility is aware of the legal and other \nrequirements of imaging services and the same \nare documented for information and compliance \nby all concerned in the facility. The facility \nmaintains and updates its compliance status of \nlegal and other requirements in a regular manner.\n7.2  Scope of the imaging services are \ncommensurate to the services \nprovided by the organization.\nSelf explanatory \n7.3  Adequately qualified and trained \npersonnel perform and/or \nsupervise the investigations.\nAs per AERB guidelines \n7.4  Policies and procedures guide \nidentification and safe \ntransportation of patients to \nimaging services.\nThe facility has documented policies and \nprocedures for informing the patients about the \nimaging activities, their identification and safe \ntransportation to the imaging services. This should \nalso address transfer of unstable patients to \nimaging services.\n© National Accreditation Board for Hospitals and Healthcare Providers 8 \n7.5  Imaging results are available \nwithin a defined time frame. \nCritical results are intimated \nimmediately to the concerned \npersonnel \nThe organization shall document turnaround time \nof imaging results.\nCritical results are intimated immediately to the \nconcerned personnel \n7.6  Imaging tests not available in the \norganization are outsourced to \norganization(s) based on their \nquality assurance system.\nThe facility has documented procedure for \noutsourcing tests for which it has no facilities. This \nshould include: a) list of tests for outsourcing b) \nidentity of personnel in the outsourced facilities to \nensure safe transportation of specimens and \ncompleting of imaging tests, c) the manner of \nidentification of patients and the test requisition \nwith all details as required for testing and d) a \nmethodology to check the selection and \nperformance of service rendered by the \noutsourced imaging facility as per the \nrequirements of the facility.\n7.7 Quality assurance for radiology \nservices should be as per \naccepted practices and also \ninclude periodic calibration and \nmaintenance of all equipments \nRefer to AERB guidelines. \nDocuments for verification and validation of \nimaging methods shall be available. \nHOD shall periodically survey the imaging results. \nCalibration and maintenance of all equipment \nshall be carried out by competent persons. \n7.8 Imaging personnel are trained in \nradiation safety and are provided \nwith appropriate safety equipment \ndevices \nRefer to AERB guidelines \nThe safety program of the imaging department \nhas reference in the hospital safety manual. \nProtective devices e.g. lead aprons should be \nexposed to X-ray for verification of cracks and \ndamages. \n7.9 Imaging  signage are prominently \ndisplayed in all appropriate \nlocations \nSelf explanatory \n© National Accreditation Board for Hospitals and Healthcare Providers 9 \nAAC.8. The organization has a documented process for generating and maintains OPD \nrecords of patient care",
+      "content_type": "text",
+      "token_count": 755,
+      "page_number": 11
+    },
+    {
+      "id": "38f985d7-ce34-44fc-ad81-363fae8ca8b9",
+      "chapter_id": "b4eddef9-77b4-4368-bbca-7cbb627d9430",
+      "chunk_index": 0,
+      "content": "8.1  Policy and procedures are in \nplace to maintain OPD records \nof patient care\nFacility devise OPD   dental records which has \npatient card and   institutional OPD folder. Patient \ncard contains OPD registration number, diagnosis, \nprocedure done, treatment prescribed, advice given \nand appointment.  Institutional OPD folder contains \nhistory, examination, diagnosis investigations, \nprocedures done, treatment prescribed and \nappointment.     \n8.2  The record contains the \ndiagnosis and plan of treatment\n8.3  The record contains \ninvestigations ordered and the \nresults thereof. \n8.4  The record contains the \ntreatment received and \nprocedures conducted on the \npatient\n8.5 Patients take home OPD \nCard/slip contains procedural \nsummary, medications, \ninstruction and follow up \nappointment. \nOrganization defines the time \nframe for which these records \nare retained \nThe organization decides the contents of the \nProcedural Summary \nAAC.9. The organization has a documented discharge process and contents of discharge \nsummary",
+      "content_type": "text",
+      "token_count": 259,
+      "page_number": 14
+    },
+    {
+      "id": "0f670cee-65f5-4925-b20e-45c40e2f6c5b",
+      "chapter_id": "ab7b79dc-feed-48e4-b463-28800b5f3555",
+      "chunk_index": 0,
+      "content": "9.1  Process addresses discharge \nof all patients including medico-\nlegal patients leaving against \nmedical advice \nSelf explanatory \n9.2  A discharge summary is given \nto all the patients leaving the \norganization (including patients \nleaving against medical advice) \nThe facility hands over the discharge papers to the \npatient/attendant in all cases and copy retained. In \nLAMA cases, the declaration of the patient/attendant \nis to be recorded on proper format \n© National Accreditation Board for Hospitals and Healthcare Providers 10 \n9.3  Discharge summary contains \nthe reasons for admission, \nsignificant findings and \ndiagnosis, investigation results, \nprocedure performed treatment \ngiven and the patient’s \ncondition at the time of \ndischarge. \nSelf explanatory \n9.4  Discharge summary contains \nfollow-up advice medications \nfollow up instructions in an \nunderstandable manner \nSelf explanatory \n9.5  Discharge summary \nincorporates instructions about \nwhen and how to obtain urgent \ncare \nSelf explanatory \n9.6  In case of death the summary \nof the case also includes the \ncause of death \n© National Accreditation Board for Hospitals and Healthcare Providers 11 \nChapter 2. Care of Patients  \nCOP.1. Uniform care of patients is provided in all settings of the organization and is \nguided by the applicable laws, regulations and guidelines.",
+      "content_type": "text",
+      "token_count": 338,
+      "page_number": 15
+    },
+    {
+      "id": "43290a9e-8b97-4e50-9087-1cfd8b2bd0d7",
+      "chapter_id": "ff9e09fb-70ca-4bbc-a3ca-58e8c64d80a8",
+      "chunk_index": 0,
+      "content": "1.1 Care delivery is uniform when \nsimilar care is provided in more \nthan one setting \nThe organization shall ensure that patients with the \nsame health problems and care needs receive the \nsame quality of healthcare throughout the \norganization irrespective of the category of ward. \n1.2 Uniform care is guided by \npolicies and procedures which \nreflect applicable laws and \nregulations \nSelf explanatory \n1.3 The care and treatment orders \nare signed, named, timed and \ndated by the concerned doctor \nand countersigned by \nconsultant I/C of case \nThe treatment of patient could be initiated by a junior \ndental surgeon or student trainee but same should be \ncountersigned and authorized by the treating \nconsultant of the case within 24 hours. \n1.4 Evidence based dentistry and \nacceptable clinical practice \nguidelines are adopted to guide \npatient care whenever possible \nThe organization could develop clinical protocols \nbased on these and the same could be followed in \nmanagement of patients.   \nCOP.2. Emergency services are guided by policies, procedures, applicable laws and \nregulations",
+      "content_type": "text",
+      "token_count": 274,
+      "page_number": 16
+    },
+    {
+      "id": "cd46c9a4-9d86-41c4-9666-def1c5411ec5",
+      "chapter_id": "9ea77172-66ef-4d9d-80b1-b8478ecd3226",
+      "chunk_index": 0,
+      "content": "2.1 Documented procedure \naddresses care of patient \narriving in  emergency including \nthe medico-legal cases\nThese could include SOPs/protocols to provide either \ngeneral emergency care or management of specific \nconditions The policy shall be in line with statutory \nrequirements\n2.2  Policies and procedures guide \nthe triage of patients for \ninitiation of appropriate care\n2.3  Staff is familiar with the policies \nand trained on the procedures \nfor care of emergency patients\nAll the staff working in the dental casualty where \nfunctioning should be oriented to the policies and \npractices through training/documents. Staff should \npreferably be trained/well versed in ACLS and BCLS\n2.4  Admission or discharge to home \nor transfer to another \norganization is also \ndocumented\nAll the staff working in the dental casualty where \nfunctioning should be oriented to the policies and \npractices through training/documents. Staff should \npreferably be trained/well versed in ACLS and BCLS.\n© National Accreditation Board for Hospitals and Healthcare Providers 12 \n2.5  The ambulance is appropriately \nequipped and manned by \ntrained personnel \nAmbulance should have at least equipment for basic \nlife support and manned by a trained driver. \n2.6  In the ambulance, there is a \ncheck-list of all equipments and \nemergency medications on \nregular basis \nCOP.3. Policies and procedures guide the care of patients requiring cardio-pulmonary \nresuscitation",
+      "content_type": "text",
+      "token_count": 362,
+      "page_number": 17
+    },
+    {
+      "id": "df7ae00d-9b93-4324-b16b-261258f7fbdd",
+      "chapter_id": "34f85156-cbcc-4dfc-a9b1-800912a4464b",
+      "chunk_index": 0,
+      "content": "3.1  Documented procedures guide \nthe uniform use of resuscitation \nthroughout the organization\nThe organization shall document the procedure for the \nsame. This shall be in consonance with accepted \npractices. \n3.2  Staff  providing direct patient \ncare is trained and periodically \nupdated in cardio-pulmonary \nresuscitation\nThese aspects shall be covered by hands-on training. \nIf the organization has a CPR team (e.g. code blue \nteam) it shall ensure that they are all trained in ALS \nand are present in all shifts.\n3.3  The events during a cardio-\npulmonary resuscitation are \nrecorded\nIn the actual event of a CPR or a mock drill of the \nsame, all the activities along with the personnel \nattended should be recorded. \nCOP.4 Policies and procedures define rational use of blood and blood products",
+      "content_type": "text",
+      "token_count": 200,
+      "page_number": 18
+    },
+    {
+      "id": "24cbd20d-0993-4f7f-95e3-9e2cddde1442",
+      "chapter_id": "dddf673b-6a88-4669-8113-809a3147d00a",
+      "chunk_index": 0,
+      "content": "4.1  Documented policies and \nprocedures are used to guide \nrational use of blood and blood \nproducts\nThis shall address the conditions where blood and \nblood products can be used.\n4.2  Informed consent is obtained for \ntransfusion of blood and blood \nproducts\nSelf explanatory. Also refer to PRE3.4 and 3.5. \n4.3  Procedure addresses \ndocumenting and reporting of \nTransfusion reaction.\nThe organization shall ensure that any transfusion \nreaction is reported. These are then analyzed (by \nindividual/committee as decided by the organization) \nand appropriate corrective/preventive action is taken. \nThe organization shall maintain a record of \ntransfusion reactions.\n© National Accreditation Board for Hospitals and Healthcare Providers 13 \nCOP.5. Policies and procedures guide the dental laboratory services",
+      "content_type": "text",
+      "token_count": 202,
+      "page_number": 19
+    },
+    {
+      "id": "64832a3b-3b0c-48af-8f1a-f317612df72f",
+      "chapter_id": "2bdf4e82-06fa-42d2-949b-edbf870aa2f4",
+      "chunk_index": 0,
+      "content": "5.1  The scope of the dental \nlaboratory services are \ncommensurate to the services \nprovided by the hospital \nDental facility should ensure availability dental lab \nfacilities commensurate with the services offered by it. \nSee (5.7) also for the outsourced Lab facilities. \n5.2  Adequately qualified and trained \npersonnel perform and \nsupervise the work \n5.3  Policies and Procedures guide \nthe identification, disinfection \nhandling, processing, safe \ntransportation of the models \nand prosthesis as well as safe \ndisposal of the waste \nThe impressions and models need to be disinfected \nproperly \n The model should be accompanied by a properly \ncompleted authorization form duly signed by treating \ndental surgeon/ dental specialist.  \n5.4  All models and prosthesis are \navailable within a defined time \nframe. \n5.5  Quality assurance for dental lab \nshould be as per accepted \npractices and also includes \nperiodic calibration and \nmaintenance of all equipments \n5.6  Corrections and alterations are \nattended to through a structured \nand time based programme. \n5.7  Lab jobs not available in the \norganisation are out sourced to \norganisations based on their \nquality assurance programme \n5.8  Lab has a documented safety \nprogramme which is integrated \nwith the organisations safety \nprogram.  All personnel are \ntrained  in lab safety and are \nprovided safety  equipment and \ndevices \nA well documented dental Lab safety manual is \navailable which take care of all staff as well all \nequipment available in the Lab. This could be as per \nOccupational health & Safety Management System-\nOSHAS 1800.  \n© National Accreditation Board for Hospitals and Healthcare Providers 14 \nCOP.6. Policies and procedures guide the care of vulnerable patients (elderly, children, \nphysically and/or mentally challenged)",
+      "content_type": "text",
+      "token_count": 452,
+      "page_number": 20
+    },
+    {
+      "id": "47027301-df81-497f-bf04-40bdc82f6780",
+      "chapter_id": "a17d8dd3-f175-4592-9b6f-0c20bb708fbb",
+      "chunk_index": 0,
+      "content": "6.1  Policies and procedures are \ndocumented and are in \naccordance with the prevailing \nlaws and the national and \ninternational guidelines\nSelf explanatory.  \n6.2  Care is organized and delivered \nin accordance with the policies \nand procedures\nFacility develops SOP's for delivery of care. \n6.3  The organization provides for a \nsafe and secure environment \nfor this vulnerable group\nThe organization shall provide proper environment \ntaking into account the requirement of the vulnerable \ngroup \nCOP.7. Policies and procedures guide the care of pediatric dental patients",
+      "content_type": "text",
+      "token_count": 143,
+      "page_number": 22
+    },
+    {
+      "id": "76044fa5-06b6-420c-84ed-2ca191922e30",
+      "chapter_id": "d74fb870-0fe9-49fb-9596-b2a568fb6fb5",
+      "chunk_index": 0,
+      "content": "7.1  The organization defines and \ndisplays the scope of its \npediatric dental services \n7.2  Those who care for children \nhave age-specific competency \nThese shall not just be for doctors but shall include \nhygienist and nursing staff also. The competency shall \nbe based on qualification, experience and training.\n7.3  Provisions are made for special \ncare of children\nAdequate amenities for the care of children to be \navailable in the hospital.\n7.4  The children’s family members \nare educated about oral \nhygiene and safe parenting and \nthis is documented in  the \nmedical record\nSelf explanatory \nCOP.8. Policies and procedures guide the administration of anesthesia",
+      "content_type": "text",
+      "token_count": 168,
+      "page_number": 22
+    },
+    {
+      "id": "13e15ef1-7fa3-48fe-aa91-7bc302207e5e",
+      "chapter_id": "ac653433-5022-4668-bbc2-4a8ca51a0403",
+      "chunk_index": 0,
+      "content": "9.1  There is a documented policy \nand procedure for the \nadministration of local and \nregional anesthesia. \nFacility shall document on the indications, the type of \nanesthesia and procedure for the same. Authorization \nfor administration of local & regional anesthesia in \ndental clinics is defined \n© National Accreditation Board for Hospitals and Healthcare Providers 15 \n9.2  An immediate preoperative \nreevaluation is documented. \nThis shall be done by an anesthesiologist just before \nthe patient is wheeled in to the respective OT. \n9.3  Informed consent for \nadministration of anesthesia is \nobtained by the anesthetist \nSelf explanatory.  \n9.4  During anesthesia monitoring \nincludes regular and periodic \nrecording of heart rate, cardiac \nrhythm, respiratory rate, blood \npressure, oxygen saturation, \nairway security and potency and \nlevel of anesthesia \nSelf explanatory \n9.5  Each patient’s post-anesthesia \nstatus is monitored and \ndocumented \nThis shall be done in the recovery area/OT and at \nleast include monitoring of vitals till the patient \nrecovers completely from anesthesia and shall be \ndone by an anesthesiologist. If the patient’s condition \nis unstable and he/she requires ICU care the same \nshall be monitored there. \n9.6  A qualified individual applies \ndefined criteria to transfer the \npatient from the recovery area \nThis shall be done by a designated individual as \ndecided by the facility and shall be in consonance with \nbest clinical practices. \n9.7  All adverse anesthesia events \nare recorded and monitored\nSelf explanatory \nCOP.10. Policies and procedures guide the care of patients undergoing surgical \nprocedures",
+      "content_type": "text",
+      "token_count": 413,
+      "page_number": 23
+    },
+    {
+      "id": "7f5823e6-81c5-47d3-9db8-34ca210651f0",
+      "chapter_id": "1e0bded9-f2d9-4d9b-87e4-4aee7959c139",
+      "chunk_index": 0,
+      "content": "10.1  The policies and procedures are \ndocumented\nThis shall include the list of surgical procedures as \nwell as competency level for performing these \nprocedures. \n10.2  Surgical patients have a \npreoperative assessment and a \nprovisional  diagnosis \ndocumented prior to surgery\nAll patients undergoing surgery are assessed \npreoperatively and a provisional diagnosis is made \nwhich is documented. This shall be applicable for both \nroutine and emergency cases\n10.3  An informed consent is obtained \nby a surgeon prior to the \nprocedure\nSelf explanatory \n© National Accreditation Board for Hospitals and Healthcare Providers 16 \n10.4  Documented policies and \nprocedures exist to prevent \nadverse  events like  wrong site, \nwrong patient and wrong \nsurgery\nPolicies should be available for preventing adverse \nevents like wrong patients, wrong site, and wrong \nteeth by a suitable mechanism.\n10.5  Persons qualified by law are \npermitted to perform the \nprocedures that they are \nentitled to perform\nThe facility identifies the individuals who have the \nrequired qualification (s), training and experience to \nperform procedures in consonance with the law.\n10.6  A brief operative note and \npostoperative plan of care is \ndocumented prior to transfer out \nof patient from recovery area/ \ndetention area\nThis note provides information about the procedure \nperformed, post operative diagnosis and the status of \nthe patient before shifting and shall be documented by \nthe surgeon/member of the surgical team. \n10.7  The operating surgeon \ndocuments the post-operative \nplan of care\nSelf explanatory \n10.8  A quality assurance program is \nfollowed for the surgical \nservices and all procedures on \nthe dental chair\nThis shall be an integral part of the facility's overall \nquality assurance program. It shall focus on post \noperative complications e.g. bleeding, rational use of \nantibiotics, etc.\n10.9  The quality assurance program \nincludes surveillance of the \noperation theatre environment \nand dental clinic\nSurveillance activities include monitoring the quality of \nair provided, rate of air exchange , cleaning and \ndisinfection processes, etc. \n10.1 The plan also includes \nmonitoring of surgical site \ninfection rates\nSelf explanatory \nCOP.11 Policies and procedures guide appropriate pain management",
+      "content_type": "text",
+      "token_count": 577,
+      "page_number": 24
+    },
+    {
+      "id": "e28651c3-ddf6-474e-8c54-8c8b9afdb1ee",
+      "chapter_id": "eb17a06a-b5bc-41b3-991f-884a40109c49",
+      "chunk_index": 0,
+      "content": "11.1 Documented policies and \nprocedures guide the \nmanagement of pain\nThe facility shall define the group of patients for whom \nthis is applicable. A good reference point for defining \nthese patients could be those having pain as the \npredominant debilitating symptom.\n11.2 The organization respects and \nsupports the appropriate \nassessment and management \nof pain for all patients\nSelf explanatory \n© National Accreditation Board for Hospitals and Healthcare Providers 17 \nCOP.12. Policies and procedures guide all research activities",
+      "content_type": "text",
+      "token_count": 134,
+      "page_number": 27
+    },
+    {
+      "id": "8ac76a52-460f-4d07-96ab-3d7589fcda6f",
+      "chapter_id": "b90a097c-4517-4d55-bedc-183c2139cedf",
+      "chunk_index": 0,
+      "content": "12.1 Documented policies and \nprocedures guide all research \nactivities in compliance with \nnational and international \nguidelines\nSelf explanatory \n12.2 The organization has an ethics \ncommittee to oversee all \nresearch activities\nAn ethics committee should be framed in the hospital \nto monitor activities undertaken by various providers.  \nAny research undertaken in the hospital falls under its \nambit.\n12.3 The committee has the powers \nto discontinue a research trial \nwhen  risks outweigh the \npotential benefits\nSelf explanatory \n12.4 Patient’s informed consent is \nobtained before entering them \nin research protocols\nSelf explanatory \n12.5 Patients are informed of their \nright to withdraw from the \nresearch at any stage and also \nof the consequences (if any)  of \nsuch withdrawal \nSelf explanatory \n12.6 Patients  are assured that their \nrefusal to participate  or \nwithdrawal from participation \nwill  not compromise their \naccess to the organization’s \nservices \nSelf explanatory \n© National Accreditation Board for Hospitals and Healthcare Providers 18 \nChapter 3. Management of Medication (MOM) \nMOM.1. Policies and procedures guide the organization of pharmacy services, usage of \nmedication and usage of dental materials",
+      "content_type": "text",
+      "token_count": 309,
+      "page_number": 27
+    },
+    {
+      "id": "2454463c-a82a-4aec-9a4a-fd8e347bcf61",
+      "chapter_id": "34d6c05c-2c61-4d65-a7c1-320a04af7ee8",
+      "chunk_index": 0,
+      "content": "1.1 There is a documented policy \nand procedure for pharmacy \nservices, medication and dental \nmaterials usage \nThe policies and procedures shall address the issues \nrelated to procurement, storage, formulary, \nprescription, dispensing, administration, monitoring \nand use of medications and dental materials. \n1.2 These comply with the \napplicable laws and regulations \nSelf explanatory. \n1.3 1.3 a multi disciplinary \ncommittee guides the \nformulation and implementation \nof these policies and procedure \nThere shall be representative of major clinical \ndepartments, administration and shall include a \npharmacist \n1.4 A list of medication and dental \nmaterials appropriate for the \npatients and organization’s \nresources is developed \nThe hospital formulary shall be prepared and be \npreferably updated at regular intervals. \n1.5 There is a defined process for \nacquisition of these medications \nand dental materials \nThe process should preferably address the issues of \nvendor selection, vendor evaluation, and generation \nof purchase order and receipt of goods as per rules. \n1.6 Documented policies and \nprocedures exist for storage of \nmedication and dental materials \nThese should address issues pertaining to \ntemperature (refrigeration), light, ventilation, \npreventing entry of pests/rodents and worms. \nThe organization shall also ensure that the storage \nrequirements of the drug and dental materials as \nspecified by the manufacturer are adhered to. If the \nrecommendations are conflicting in nature, the \norganization shall follow the manufacturer’s \nrecommendation. This shall be applicable to all areas \nwhere medications are stored including dental clinics, \nOT and wards. \n1.7 Beyond expiry date medications \nand dental materials are not \nstored/ used \nSelf explanatory.  \n1.8 Sound-alike and look-alike \nmedication/ dental materials are \nstored separately \nMany drugs in ampoules, vials or tablets may look-\nalike or sound-alike.  They should be segregated and \nstored separately. \n1.9 Emergency medications are \navailable all the time and \nreplenished in a timely manner \nwhen used \nAdequate amount of emergency medicines should be \nstocked at all times.  Re-order level at definite quantity \nshould be done. \n© National Accreditation Board for Hospitals and Healthcare Providers 19 \nMOM.2 Policies and procedures guide the prescription of medications",
+      "content_type": "text",
+      "token_count": 593,
+      "page_number": 28
+    },
+    {
+      "id": "5608091e-5a4e-43d1-9a17-6d1c7221e268",
+      "chapter_id": "4c289ccf-10b9-4749-a935-6f784b8fc0e3",
+      "chunk_index": 0,
+      "content": "2.1 The organization determines \nwho can write orders \nThis shall be done by the treating dental \nsurgeon/specialist. \n2.2 Orders are written in a uniform \nlocation in the medical records \nAll the orders for medicines are recorded on a uniform \nlocation of the case sheet. Electronic orders when \ntyped shall again follow the same principles. \n2.3 Medication orders are clear, \nlegible, dated, named and \nsigned \nSelf explanatory.  \n2.4 The organization defines a list \nof high risk medication \nThe organization shall develop the list taking into \nconsideration statutory requirements e.g. NDPS Act   \n2.5 Use of consumable dental \nmaterials are recorded along \nwith justification of use \nMOM.3 Policies and procedures guide the safe dispensing of medications",
+      "content_type": "text",
+      "token_count": 189,
+      "page_number": 30
+    },
+    {
+      "id": "8ca8ba62-90fb-4e04-95f4-0ae82483aef3",
+      "chapter_id": "b24ac78e-7152-4000-bc29-65ce92a145d6",
+      "chunk_index": 0,
+      "content": "3.1 Documented policies and \nprocedures guide the safe \ndispensing of medications and \ndental materials \nClear policies to be laid down for dispensing of \nmedication e.g. route of administration, dosage, rate \nof administration, expiry date, etc. \n3.2 Expiry dates are checked prior \nto dispensing \nSelf explanatory \n3.3 Labeling requirements are \ndocumented and implemented \nby the organization \nAt a minimum, labels must include the drug name, \nstrength and frequency of administration. \nMOM.4. There are defined procedures for medication administration  and for   \nmonitoring adverse drug event",
+      "content_type": "text",
+      "token_count": 149,
+      "page_number": 31
+    },
+    {
+      "id": "b356c81a-f095-4557-8fee-4c94a67f0417",
+      "chapter_id": "8700bc32-98f4-49de-affd-e4af0b658486",
+      "chunk_index": 0,
+      "content": "4.1 Medications are administered \nby those who are permitted by \nlaw to do so \nSelf explanatory \n4.2 Patient is identified prior to \nadministration \nSelf explanatory \n© National Accreditation Board for Hospitals and Healthcare Providers 20 \n4.3 Medication dosage, route and \ntimings are verified from the \norder prior to administration \nStaff administering medications should go through the \ntreatment orders before administration of the \nmedication and then only administer them. It is \npreferable that they also check the general \nappearance of the medication (e.g melting, clumping, \netc.) before dispensing.  \n4.4 Medication administration is \ndocumented \nThe organization shall ensure that this is done in a \nuniform location and it shall include the name of the \nmedication, dosage, route of administration, timing \nand the name and signature of the person who has \nadministered the medication \n4.5 A proper record is kept of usage \nadministration safe storage and \ndisposal of narcotics and \npsychotropic medication \nThis is in context of narcotic drugs and psychotropic \nsubstance act These shall be kept in accordance with \nthe statutory requirements. \n4.6 Adverse drug events are \ndefined, documented and \nreported within specific time \nThe organization shall define as to what constitutes \nan adverse drug event. This shall be in consonance \nwith best practices.  \n4.7 Adverse drug events are \ncollected and analyzed, if \nnecessary modify practices to \nreduce the same \nAll the adverse drug reactions are analyzed regularly \nby the multi-disciplinary committee (Refer to MOM \n1.3). \nMOM.5. Policies and procedures guide the use of implantable prosthesis",
+      "content_type": "text",
+      "token_count": 416,
+      "page_number": 31
+    },
+    {
+      "id": "372803ce-df59-4112-8155-04c1173e3262",
+      "chapter_id": "ea702217-ba41-4198-8571-fe6394e09ac5",
+      "chunk_index": 0,
+      "content": "5.1 Documented policies and \nprocedures govern procurement \nand usage of implantable \nprosthesis\nSelf explanatory \n5.2 Selection of implantable \nprosthesis is based on scientific \ncriteria and internationally \nrecognized standards\nThe organization shall ensure that relevant and \nsufficient scientific data are available before selection. \nIt shall also look for international  (e.g.US-FDA) or \nnational notification (Drugs and Cosmetics Act \nnotification October 2005) for approval of the \nparticular product \n5.3 The batch and serial number of \nthe implantable prosthesis are \nrecorded in the patient’s \nmedical record and the master \nlogbook\nSelf explanatory \n© National Accreditation Board for Hospitals and Healthcare Providers 21 \nMOM.6. Policies and procedures guide the use of medical gases",
+      "content_type": "text",
+      "token_count": 199,
+      "page_number": 33
+    },
+    {
+      "id": "7030b1db-0b9a-4295-8221-d88c34a3a5f2",
+      "chapter_id": "de196803-7c1a-4c3e-87cd-67ddae90ac16",
+      "chunk_index": 0,
+      "content": "6.1 Documented policies and \nprocedures govern \nprocurement, handling, storage, \ndistribution, usage and \nreplenishment of medical \ngases.\nThis shall be applicable to all gases used in the \norganization. It shall also address the issue of \nstatutory requirements and approvals wherever \napplicable. It shall follow the international color coding \nsystem.\n6.2 Procedures address the safety \nissues at all levels \nThis shall include from the point of storage/source \narea, gas supply lines and the end user area. \nAppropriate safety measures shall be developed and \nimplemented for all levels.\n6.3 Appropriate records are \nmaintained in accordance with \nprocedures and legal \nrequirements. \nThis is the context of the Indian explosives act of \n1884, Gas cylinder rules 1981 and Static and mobile \npressure vessels (unfired) 1981\n© National Accreditation Board for Hospitals and Healthcare Providers 22 \nChapter 4. Patient Rights and Education (PRE) \nPRE.1. The organization protects patient and family rights and informs them about their \nresponsibilities during care",
+      "content_type": "text",
+      "token_count": 266,
+      "page_number": 33
+    },
+    {
+      "id": "9a27d86b-38ef-44d4-87f5-a1c978d0d918",
+      "chapter_id": "42976c8f-33d2-4ed9-ae48-ed29306d98d3",
+      "chunk_index": 0,
+      "content": "1.1 Patient and family rights and \nresponsibilities are documented \nHospital should respect patients’ rights.  All the rights \nof the patients should be displayed in the form of a \ncitizens’ charter which should also give information of \nthe charges and grievance redressal mechanism. \n1.2 Patients and families are \ninformed of their rights in a \nformat and language that they \ncan understand \nSelf explanatory \n1.3 Staff is aware of their \nresponsibility in protecting \npatients rights \nTraining and sensitization programs shall be \nconducted to create awareness among the staff. \n1.4 Violation of patient rights is \nrecorded , reviewed and \ncorrective/preventive measures \ntaken by the organizations \nleader \nWhere patients' rights have been infringed upon, \nmanagement must keep records of such violations, as \nalso a record of the consequences, e.g. corrective \nactions to prevent recurrences. \nPRE.2. Patient rights support individual beliefs values and involve the patient and family \nin decision making processes",
+      "content_type": "text",
+      "token_count": 255,
+      "page_number": 34
+    },
+    {
+      "id": "9e196a16-eebd-4c4d-b3ab-4c7a5b569424",
+      "chapter_id": "8d3d488e-376e-4804-bab2-0d75660fa1e0",
+      "chunk_index": 0,
+      "content": "2.1 Patient and family rights \naddress any special \npreferences, spiritual and \ncultural needs \nSelf explanatory \n2.2 Patient rights include respect for \npersonal dignity and privacy \nduring examination, procedures \nand treatment \nDuring all stages of patient care, be it in examination \nor carrying out a procedure, hospital staff shall ensure \nthat patient’s privacy and dignity is maintained. The \norganization shall develop the necessary guidelines \nfor the same.  During procedures the organization \nshall ensure that the patient is explained just before \nthe actual procedure is undertaken. With regards to \nphotographs/recording procedures; the organization \nshall ensure that consent is taken and that the \npatient’s identity is not revealed. \n2.3 Patient rights include protection \nfrom physical abuse or neglect \nSelf explanatory. Special precautions shall be taken \nespecially w.r.t vulnerable patients e.g. elderly.. \n2.4 Patient rights include treating \npatient information as \nconfidential \nSelf explanatory. Statutory requirements w.r.t. \nprivileged communication shall be followed at all \ntimes. \n© National Accreditation Board for Hospitals and Healthcare Providers 23 \n2.5 Patient rights include refusal of \ntreatment \nDuring management, the patients should be given the \nchoice of treatment. The treating doctor shall discuss \nall the available options and allow the patient to make \nan informed choice including the option of refusal.  \n2.6 Patient rights include informed \nconsent before anesthesia, \nblood and blood product \ntransfusions and any \ninvasive/high risk \nprocedures/treatment \nSelf explanatory \n2.7 Patient rights include \ninformation and consent before \nany research protocol is \ninitiated \nThe organization shall ensure that International \nconference on harmonization (ICH) of good clinical \npractice (GCP) and declaration of Helsinki Somerset \n(1996) and ICMR requirements are followed. \n2.8 Patient rights include \ninformation on how to voice a \ncomplaint \nGrievance redressal mechanism must be accessible \nand transparent. Displayed information must be \nclearly available on how to voice a complaint.  \n2.9 Patient rights include \ninformation on the expected \ncost of the treatment or user \ncharges \nRefer AAC4d \n2.10 Patient has a right to have an \naccess to his/her clinical \nrecords \nThe organization shall ensure that every patient has \naccess to his/her record. This shall be in consonance \nwith The code of medical ethics and statutory \nrequirements. \nPRE.3. A documented process for obtaining patient and/or families consent exists for \ninformed decision making about their care",
+      "content_type": "text",
+      "token_count": 656,
+      "page_number": 35
+    },
+    {
+      "id": "a9eef962-5717-4ff0-876b-4dba535e5c9a",
+      "chapter_id": "156bb6f5-a1f9-4c6c-8980-54f173a217a8",
+      "chunk_index": 0,
+      "content": "3.1 General consent for treatment is \nobtained when the patient \nenters the organization \nSelf explanatory \n3.2 Patient and/or his family \nmembers are informed of the \nscope of such general consent \nThe organization shall define as to what is the scope \nof this consent and the same shall be communicated \nto the patient and/or his family members.  \n3.3 The organization has listed \nthose procedures and treatment \nwhere informed consent is \nrequired \nA list of procedures should be made for which \ninformed consent should be taken. \n3.4 Informed consent includes \ninformation on risks , benefits, \nalternatives and as to who will \nperform the requisite procedure \nin a language that they can \nunderstand \nSelf explanatory. The consent shall have the name of \nthe doctor performing the procedure. If it is a “doctor \nunder training” the same shall be specified, however \nthe name of the qualified doctor supervising the \nprocedure shall also be mentioned. Consent form \nshall be in the language that the patient understands. \n© National Accreditation Board for Hospitals and Healthcare Providers 24 \n3.5 The policy describes who can \ngive consent when patient is \nincapable of independent \ndecision making. \nSelf explanatory. The organization shall take into \nconsideration the statutory norms. \nPRE.4 Patient and families have a right to information on expected costs",
+      "content_type": "text",
+      "token_count": 342,
+      "page_number": 37
+    },
+    {
+      "id": "4ee4513a-f395-46a6-9fee-4c1939d88bf0",
+      "chapter_id": "c5d73736-63ac-49f3-af5a-94746e338719",
+      "chunk_index": 0,
+      "content": "4.1 There is uniform pricing policy \nin a given setting (out-patient \nand ward category) \nThere should be a billing policy which defines the user \ncharges to be levied for various activities \n4.2 The user charges list is made \nknown to patients \nThe organization shall ensure that there is an updated \nuser charges list and that this information is available \nto patients when required. The organization shall \ncharge as per the list. Any additional charge should \nalso be enumerated in the tariff and the same \ncommunicated to the patients. The user charges \nshould be uniform and transparent \n4.3 Patients are educated about the \nestimated costs of treatment \n© National Accreditation Board for Hospitals and Healthcare Providers 25 \nChapter 5. Hospital Infection Control (HIC) \nHIC 1 The organization has a well-designed, comprehensive and coordinated Hospital \nInfection Control (HIC) programme aimed at  reducing/ eliminating risks to patients, \nvisitors and providers of care.",
+      "content_type": "text",
+      "token_count": 245,
+      "page_number": 38
+    },
+    {
+      "id": "3f4e2566-59a3-46ae-b172-9e4f22c8ee48",
+      "chapter_id": "5e2167b5-0ac5-4524-b351-829c9e774e81",
+      "chunk_index": 0,
+      "content": "1.1 The hospital infection control \nprogramme is documented \nwhich aims at preventing and \nreducing risk of nosocomial \ninfections. \nSelf explanatory \n1.2 The hospital has a multi-\ndisciplinary infection control \ncommittee. \nSelf explanatory. This shall preferably have \nadministrator, microbiologist, physician, surgeon and \nthe hospital infection control nurse. \n1.3 The hospital has an infection \ncontrol team. \nThe team is responsible for day-to-day functioning of \ninfection control program. They shall support \nsurveillance process and detect outbreaks. They shall \nalso participate in audit activity and in infection \nprevention and control on a day-to-day basis.  \n1.4 The hospital has designated \nand qualified infection control \nnurse(s)/assistant for this \nactivity \nThe qualification shall be either a graduate nurse or \nqualified nurse with competence gained by \nexperience \nHIC 2 The hospital has an infection control manual, which is periodically updated.\n(and conducts surveillance activities",
+      "content_type": "text",
+      "token_count": 252,
+      "page_number": 39
+    },
+    {
+      "id": "f494a46f-276e-4356-bec3-02b77cdfc1ee",
+      "chapter_id": "258c55ef-9c28-4397-8c7b-383cfba713b2",
+      "chunk_index": 0,
+      "content": "2.1 The manual identifies the \nvarious high-risk areas and \nprocedures\nThe manual should clearly identify the high risk areas \nof the hospital e.g. OT, specialized dental clinics, \nradiology department and dental labs.\n2.2 It outlines methods of \nsurveillance in the identified \nhigh-risk areas.\nIt shall define the frequency and mode of surveillance.   \n2.3 It focuses on adherence to \nstandard precautions at all \ntimes.\nSelf explanatory \n2.4 Equipment cleaning and \nsterilization practices are \nincluded. \nIt shall address this at all levels e.g. ward, OT and \nCSSD. It is preferable that the organization follow a \nuniform policy across different departments within the \norganization.  \n© National Accreditation Board for Hospitals and Healthcare Providers 26 \n2.5 An appropriate antibiotic policy \nis established and implemented.  \nThe facility shall develop a system of monitoring drug \nsusceptibility (based on culture sensitivity) and \naccordingly develop its antibiotic policy. which shall be \nreviewed at periodic intervals (may be once in 3 \nmonths) for its continuing applicability.   \n2.6 Laundry and linen management \nprocesses are also included. \nSelf explanatory. If outsourced the organization shall \nensure that it establishes adequate controls to ensure \ninfection control.\n2.7 Engineering controls to prevent \ninfections are included \nEngineering controls shall address air changes, air \nconditioning, replacement of filters, seepage leading \nto fungal colonization, etc. \n2.8 The organization defines the \nperiodicity of updating the \ninfection control manual.\nSelf Explanatory \n2.9 Surveillance activities are \nappropriately directed towards \nthe identified high risk areas \nand surveillance data is \ncollected,  verified,analysed  \nThe organization shall ensure that it has a process in \nplace to collect surveillance data and also to ensure \nthat it is able to capture all such data which is verified \n,analysed and take suitable steps to control infection \nHIC 3 The hospital takes actions to prevent or reduce the risks of Hospital Associated \nInfections (HAI) in patients and employees.",
+      "content_type": "text",
+      "token_count": 528,
+      "page_number": 40
+    },
+    {
+      "id": "274674cc-ed68-4499-a62a-bd9eecf67fa9",
+      "chapter_id": "db226fef-4509-49cf-b039-6c06fb624d8f",
+      "chunk_index": 0,
+      "content": "3.1 The organization monitors \nsurgical site infections. \nThis shall be done by sending pus/swab for culture. \n3.2 Appropriate feedback regarding \nHAI rates are provided on a \nregular basis to dental and \nnursing staff.\nThe feedback shall include the rates, trends and \nopportunities for improvement. It could also provide \nspecific inputs to reduce the HAI rate.\nHIC 4 Proper facilities and adequate resources are provided to support the infection \ncontrol program",
+      "content_type": "text",
+      "token_count": 116,
+      "page_number": 41
+    },
+    {
+      "id": "05092801-5b64-4cc1-acb5-e946019a9b68",
+      "chapter_id": "c395f8ea-c308-4f8f-a99a-7d27caab5ce6",
+      "chunk_index": 0,
+      "content": "4.1 Hand washing facilities in all \npatient care areas are \naccessible to health care \nproviders.\nThe organization shall ensure that it provides \nnecessary infrastructure to carry out the same.\n4.2 Compliance with proper hand \nwashing is monitored regularly. \nThe organization shall preferably display the \nnecessary instructions near every hand washing area. \nCompliance could be verified by random checking, \nobservation, etc.\n© National Accreditation Board for Hospitals and Healthcare Providers 27 \n4.3 Adequate gloves, masks, \nsoaps, and disinfectants are \navailable and used correctly.\nSelf explanatory. They should be available at the point \nof use and the organization shall ensure that it \nmaintains an adequate inventory.\nHIC 5 There are documented procedures for sterilization activities in the hospital.",
+      "content_type": "text",
+      "token_count": 203,
+      "page_number": 42
+    },
+    {
+      "id": "6ada15e2-e887-49a9-912d-921654c98a5a",
+      "chapter_id": "4796e8af-fdc3-4210-9294-a97ba9665fab",
+      "chunk_index": 0,
+      "content": "5.1 There  is adequate space \navailable for sterilization \nactivities \nSelf explanatory \n5.2 Regular validation tests for \nsterilization are carried out and \ndocumented. \nThis shall be done by accepted methods e.g. \nbacteriologic, strips, etc. \n5.3 There is an established recall \nprocedure when breakdown in \nthe sterilization system is \nidentified.\nThe organization shall ensure that the sterilization \nprocedure is regularly monitored and in the \neventuality of a breakdown it has a procedure for \nwithdrawal of such items.\nHIC 6  Statutory provisions with regard to bio-medical waste (BMW) management and \nhandling, 1998 are complied with.",
+      "content_type": "text",
+      "token_count": 160,
+      "page_number": 43
+    },
+    {
+      "id": "82ceac2a-7a52-4f04-b4de-df845055e15e",
+      "chapter_id": "01248c4e-3310-4fee-aa56-0dad2915f5f1",
+      "chunk_index": 0,
+      "content": "6.1 The hospital is authorized by \nprescribed authority for the \nmanagement and handling of \nbio-medical waste.\nThe occupier shall apply in the prescribed form and \nget approval from the prescribed authority e.g. \npollution control board/committee \n6.2 Proper segregation and \ncollection of bio-medical waste \nfrom all patient care areas of \nthe hospital is implemented and \nmonitored.\nWastes to be segregated and collected in different \ncolor coded bags and containers as per statutory \nprovisions. Monitoring shall be done by members of \nthe committee\n6.3 The organization ensures that \nbio-medical waste is stored and \ntransported to the site of \ntreatment and disposal in \nproper covered vehicles within \nstipulated time limits in a secure \nmanner.\nThe waste is transported to the pre-defined site at \ndefinite time intervals (maximum within 48 hours) \nthrough proper transport vehicles in a safe manner. If \nthis activity is outsourced the organization shall \nensure that it is done to an authorized contractor.\n6.4 Bio-medical waste treatment \nfacility is managed as per \nstatutory provisions (if in-house) \nor outsourced to authorized \ncontractor(s).\nIf the hospital has waste treatment facility within its \npremises then they have to be in accordance with \nstatutory provisions or they can outsource it to a \ncentral facility.\n© National Accreditation Board for Hospitals and Healthcare Providers 28 \n6.5 Requisite fees, documents and \nreports are submitted to \ncompetent authorities on \nstipulated dates.\nThe facility facility ensure that the fees are deposited \nin a timely manner. In addition, the annual reports \nhave to be submitted by the 31st of January of every \nyear and accident reporting has to be carried out in \nthe prescribed form.\n6.6 Appropriate personal protective \nmeasures are used by all \ncategories of staff handling bio-\nmedical waste. \nSelf explanatory \n6.7 Policy and procedure for proper \nstorage, handling and disposal \nof mercury and mercury \nwaste/amalgam \n There needs to be provision of Mercury spill kit and a \nSOP  for mercury spills\nHIC 7 The infection control program is supported by hospital management and includes \ntraining of staff and employee health.",
+      "content_type": "text",
+      "token_count": 549,
+      "page_number": 43
+    },
+    {
+      "id": "e9fc4be1-8772-448f-87ce-a52b0dc7d6aa",
+      "chapter_id": "de4db90d-bb28-4af8-b5a7-a7eb28b4fbf1",
+      "chunk_index": 0,
+      "content": "7.1 Hospital management makes \navailable resources required for \nthe infection control program \nThe facility shall ensure that the resources required by \nthe personnel should be available in a sustained \nmanner. This includes both men and materials. \n7.2 The hospital regularly earmarks \nadequate funds from its annual \nbudget in this regard. \nThere shall be a separate budget demarcated for HIC \nactivity. This shall be prepared taking into \nconsideration the scope of the activity and previous \nyears’ experience. \n7.3 It conducts regular pre-induction \ntraining for appropriate \ncategories of staff before joining \nconcerned department(s). \nSelf explanatory \n7.4 It also conducts regular “in-\nservice” training sessions for all \nconcerned categories of staff at \nleast once in a year. \nSelf explanatory \n7.5 Appropriate pre and post \nexposure prophylaxis is \nprovided to all   concerned staff \nmembers. \nSelf explanatory \n7.6 There needs to be \nImplementation of Engineering \nsystems to reduce dust, \naerosol/splash contamination \n The Dental  \nchairs must \nhave an in built \nhi-vacuum \nsuction system \nto prevent \naerosol \ncontamination \nAerosol/Dust \nEvacuation \nHood in Dental  \nLaboratory \nSplash guard for \nlathe and table \ntop rotary \ndevices \n© National Accreditation Board for Hospitals and Healthcare Providers 29 \n7.7 These Engineering controls \nshould be examined and tested \nperiodically and the same \nshould be documented \nMaintenance records  \n7.8 All personnel handling patients \nare provided with specific \npersonal protective equipment \nand eye shield, mask, apron, \ngloves and shoe cover, etc. \nSelf explanatory \n© National Accreditation Board for Hospitals and Healthcare Providers 30 \nChapter 6. Continuous Quality Improvement (CQI) \nCQI 1.  There is a structured quality improvement and continuous monitoring program in \nthe organization.",
+      "content_type": "text",
+      "token_count": 465,
+      "page_number": 45
+    },
+    {
+      "id": "4b529fda-b6f7-4a83-b11b-440704ba4b9d",
+      "chapter_id": "42db3f66-73c3-4300-9d6f-ee0bc62189b8",
+      "chunk_index": 0,
+      "content": "1.1 The quality improvement \nprogram is developed, \nimplemented and maintained by \na multi-disciplinary committee.  \nThis committee shall have representation from \nmanagement, various clinical and support \ndepartments of the facility. This program shall be \ndeveloped, implemented and maintained in a \nstructured manner. \n1.2 The quality improvement  \nprogramme is documented. \nThis could be documented as a manual. This shall \nincorporate the mission, vision, quality policy, quality \nobjectives, service standards, etc. The manual could \nbe stand alone or it could have cross linkages with \nother manuals. \n1.3 There is a designated individual \nfor coordinating and \nimplementing the quality \nassurance program   \nThis should preferably be a person having a good \nknowledge of accreditation standards, statutory \nrequirements, hospital quality assurance principles \nand evaluation methodologies, hospital functioning \nand operations. \n1.4 The quality improvement \nprogram is comprehensive and \ncovers all the major elements \nrelated to quality assurance and \nrisk management. \nThis shall preferably cover all aspects including \ndocumentation of the program, monitoring it, data \ncollection, review of policy and corrective action. Also \nrefer to CQI 1b \n1.5 The designated program is \ncommunicated and coordinated \namongst all the employees of \nthe organization through proper \ntraining mechanism. \nSelf explanatory \n1.6 The quality improve mental \nprogram is reviewed at \npredefined intervals and \nopportunities for improvement \nare identified. \nAs quality improvement is a dynamic process, it \nneeds to be reviewed at regular pre-defined intervals \n(as defined by the facility in the quality assurance \nmanual) by the multi-disciplinary committee. The \nreview shall also include analysis of key indicators as \ndefined by the standards. Refer to CQI 2 and CQI 3. \n1.7 The quality improvement \nprogram is a continuous \nprocess and updated at least \nonce in a year. \nSelf explanatory. The inputs for updating could be \nbased on the review carried out by the quality \nassurance committee.  \n© National Accreditation Board for Hospitals and Healthcare Providers 31 \nCQI  2.  The organization identifies key indicators to monitor the clinical structures, \nprocesses and outcomes which are used as tools for continual improvement.",
+      "content_type": "text",
+      "token_count": 581,
+      "page_number": 47
+    },
+    {
+      "id": "b4e21f16-ee63-4731-a863-37544a3ce189",
+      "chapter_id": "0df66b19-8937-4389-9d06-d6c4af802e24",
+      "chunk_index": 0,
+      "content": "2.1 Monitoring includes appropriate \npatient assessment. \nSelf explanatory. The facility shall develop appropriate \nkey performance indicators suitable to it. The data \npertaining to the identified indicators shall be captured \nfrom all patients; however, monitoring could be done \nusing suitable samples. Certain illustrative examples \nare given in the remarks column. \n2.2 Monitoring includes diagnostic \nservices’ safety and quality \ncontrol programs. \nAs stated in the remarks column \n2.3 Monitoring includes all invasive \nprocedures. \nAs stated in the remarks column \n2.4 Monitoring includes adverse \ndrug events. \nAs stated in the remarks column \n2.5 Monitoring includes use of \nanesthesia. \nAs stated in the remarks column \n2.6 Monitoring includes use of \nblood and blood products. \nAs stated in the remarks column \n2.7 Monitoring includes availability \nand content of medical records. \nAs stated in the remarks column \n2.8 Monitoring includes infection \ncontrol activities. \nAs stated in the remarks column \n2.9 Monitoring includes clinical \nresearch. \nAs stated in the remarks column \n2.10 Monitoring includes data \ncollection to support further \nimprovements \n2.11 Monitoring includes data \ncollection to support evaluation \nof these improvements. \nCQI 3.  The organization identifies key indicators to monitor the managerial structures, \nprocesses and outcomes which are used as tools for continual improvement.",
+      "content_type": "text",
+      "token_count": 355,
+      "page_number": 49
+    },
+    {
+      "id": "ff22e440-b0f7-40db-8ab8-73e4cd184428",
+      "chapter_id": "5d061cad-568b-4777-9e3a-0f73ab3fe989",
+      "chunk_index": 0,
+      "content": "3.1 Monitoring includes \nprocurement of medication and \ndental materials essential to \nmeet patient needs. \nSelf explanatory. \n© National Accreditation Board for Hospitals and Healthcare Providers 32 \n3.2 Monitoring includes reporting of \nactivities as required by laws \nand regulations. \nThe facility shall identify all these requirements and \naccordingly report them  as laid down by the \nlaw/regulation  \n3.3 Monitoring includes risk \nmanagement. \nRefer to glossary for definition of \"risk management\" \n3.4 Monitoring includes utilization of \nspace, manpower and \nequipment. \nSelf explanatory. \n3.5 Monitoring includes patient \nsatisfaction which also \nincorporates waiting time for \nservices. \nSelf explanatory. \n3.6 Monitoring includes employee \nsatisfaction. \nSelf explanatory. \n3.7 Monitoring includes adverse \nevents and near misses. \nSelf explanatory. The organization shall define \n\"adverse events\" and capture the same. \n3.8 Monitoring includes data \ncollection to support further \nstudy for improvements. \nThis shall include any data as deemed fit by the \nfacility and should enable it to improve its services.  \n3.9 Monitoring includes data \ncollection to support evaluation \nof the improvements. \nAll improvement activities carried out by the facility \nshall have an evaluable outcome. The same shall be \ncaptured and analyzed.  \nCQI 4. The quality improvement program is supported by the management.",
+      "content_type": "text",
+      "token_count": 353,
+      "page_number": 50
+    },
+    {
+      "id": "cb86dad3-8ebb-414f-ba99-392663c058a3",
+      "chapter_id": "89cb4150-18e8-477c-a1ad-883f89bf4328",
+      "chunk_index": 0,
+      "content": "4.1 Hospital management makes \navailable adequate resources \nrequired for quality \nimprovement program. \nThis shall include the  men, material, machine and \nmethod. These should be in steady supply so as to \nensure that the program functions smoothly \n4.2 Hospital earmarks adequate \nfunds from its annual budget in \nthis regard. \nAppropriate fund allocation is done by the \norganization for the smooth functioning of the \nprogram. \n4.3 Appropriate statistical and \nmanagement tools are applied \nwhenever required. \nSelf explanatory \n© National Accreditation Board for Hospitals and Healthcare Providers 33 \nCQI 5. There is an established system for audit of patient care services.",
+      "content_type": "text",
+      "token_count": 170,
+      "page_number": 51
+    },
+    {
+      "id": "37089b75-1d57-4508-a80b-baf25f034c3e",
+      "chapter_id": "14de148e-a4bf-4dd9-bf29-4410ace4c2a8",
+      "chunk_index": 0,
+      "content": "5.1 Dental staff participates in this \nsystem. \nThe facility shall identify such personnel. It could be a \nmix of clinicians, administrators and nurses.\n5.2 The parameters to be audited \nare defined by the organization.\nAs medical audits are retrospective/concurrent in \nnature, it is imperative that this be done using \npredefined parameters so that there is no bias.\n5.3 Patient and clinician anonymity \nis maintained.\nSelf explanatory. \n5.4 All audits are documented. Self explanatory. \n5.5 Remedial measures are \nimplemented\nSelf explanatory. \nCQI 6. Sentinel events are intensively analyzed.",
+      "content_type": "text",
+      "token_count": 149,
+      "page_number": 52
+    },
+    {
+      "id": "2f7199d2-ddb7-43a4-bf9c-b815babba5c2",
+      "chapter_id": "06100920-4b4a-42fe-8c24-cc171412ecfb",
+      "chunk_index": 0,
+      "content": "6.1 The organization has defined \nsentinel events. \nSelf explanatory \n6.2 The organization has \nestablished processes for \nintense analysis of such events \nwhen occurs \nSelf explanatory \n6.3 Corrective and preventive \nactions are taken upon findings \nof such analysis. \nThis should be done based on root cause analysis so \nas to prevent recurrences. \n© National Accreditation Board for Hospitals and Healthcare Providers 34 \nChapter 7. Responsibility of Management (ROM) \nROM 1 The responsibilities of the management are defined",
+      "content_type": "text",
+      "token_count": 132,
+      "page_number": 52
+    },
+    {
+      "id": "8643ed9d-9d84-4e17-b055-97514ed5366f",
+      "chapter_id": "17c2a885-425e-4cc9-877c-efb412b1c9db",
+      "chunk_index": 0,
+      "content": "1.1 The organization has a \ndocumented organogram  \nThe shall have an organization structure/chart and \nthis shall clearly document the hierarchy line of control \nand function \n1.2 Those responsible for \ngovernance appoint the senior \nleaders in the organization \nSelf explanatory \n1.3 Those responsible for \ngovernance support research \nactivities and quality \nimprovement plans. \nSelf explanatory \n1.4 The organization complies with \nthe laid down and applicable \nlegislations and regulations \nSelf explanatory \n1.5 Those responsible  for \ngovernance address the \norganization’s social \nresponsibility \nThe facility shall develop social responsibility policy \nand accordingly address it.  \n1.6 The management defines the \nrights and responsibilities of \nemployees \nROM 2 The services provided by each department are documented",
+      "content_type": "text",
+      "token_count": 207,
+      "page_number": 53
+    },
+    {
+      "id": "b4442183-a46d-4653-8ad1-9b27b0319400",
+      "chapter_id": "eb958a69-12dd-4e22-8ead-d69058cc879f",
+      "chunk_index": 0,
+      "content": "2.1 Each organizational program, \nservice, site or department has \neffective leadership  \nThe organization of hospital is usually a matrix one.  \nThere needs to be an effective leadership style by \nwhich it is governed. \n2.2 Scope of services of each \ndepartment is defined \nEach department's activity is to be predefined. This \ncould be documented either at individual department \nlevel or the facility could have a brochure detailing the \nscope of each department.  \n2.3 Administrative policies and \nprocedures for each department \nis maintained \nThis shall include administrative procedures like \nattendance, leave, conduct, etc. \n2.4 Departmental leaders are \ninvolved in quality improvement \nSelf explanatory \n© National Accreditation Board for Hospitals and Healthcare Providers 35 \nROM 3  The organization is managed by the leaders in an ethical manner.",
+      "content_type": "text",
+      "token_count": 215,
+      "page_number": 54
+    },
+    {
+      "id": "5eafe085-23df-44d5-aaeb-71badfc06d8f",
+      "chapter_id": "21369337-c241-4796-9940-dc732eef93ab",
+      "chunk_index": 0,
+      "content": "3.1 The leaders make public the \nmission statement of the \norganization \nThe facility shall have a mission statement and the \nsame shall be displayed prominently. \n3.2 The leaders establish the \norganization’s ethical \nmanagement \nThe facility shall function in an ethical manner. \n3.3 The organization discloses its \nownership \nThe ownership of the hospital e.g. trust, private, public \nhas to be disclosed \n3.4 The organization honestly \nportrays the services which it \ncan and cannot provide \nSelf explanatory \n3.5 The organization honestly \nportrays its affiliations and \naccreditations. \n3.6 The organization accurately bills \nfor its services based upon a \nstandard billing tariff/ user \ncharges. \nSelf explanatory \nROM 4   A suitably qualified and experienced individual heads the organization",
+      "content_type": "text",
+      "token_count": 200,
+      "page_number": 54
+    },
+    {
+      "id": "b1f7a3fb-6994-4460-9cf9-bf23c33d3aa1",
+      "chapter_id": "94edf319-9eae-4150-983b-7c643f98d783",
+      "chunk_index": 0,
+      "content": "4.1 The designated individual has \nrequisite and appropriate \nadministrative qualifications  \nSelf explanatory. \n4.2 The designated individual has \nrequisite and appropriate \nadministrative experience  \nSelf explanatory. \nROM 5 Leaders ensure that patient safety aspects and risk management issues are an \nintegral part of patient care and hospital management",
+      "content_type": "text",
+      "token_count": 89,
+      "page_number": 55
+    },
+    {
+      "id": "5b579c5c-eb7b-4b58-820e-20300bb50745",
+      "chapter_id": "6579b6c3-7aae-4698-a1ef-5a60182e3e53",
+      "chunk_index": 0,
+      "content": "5.1 The organization has an \ninterdisciplinary group assigned \nto oversee the hospital wide \nsafety program. \nSelf explanatory \n© National Accreditation Board for Hospitals and Healthcare Providers 36 \n5.2 The scope of the program is \ndefined to include adverse \nevents ranging from “no harm” \nto “sentinel events”.  \nSelf explanatory \n5.3 Management ensures \nimplementation of systems for \ninternal and external reporting \nof system and process failures.  \nThe facility has a system in place for internal and \nexternal reporting of system and process failures in \nthe context of adverse events as defined above. \n© National Accreditation Board for Hospitals and Healthcare Providers 37 \nChapter 8. Facility of Management and Safety (FMS) \nFMS.1. The organization is aware of and complies with the relevant rules and regulations, \nlaws and byelaws and requisite facility inspection requirements.",
+      "content_type": "text",
+      "token_count": 223,
+      "page_number": 56
+    },
+    {
+      "id": "72d2cc7b-f1cb-400f-9b1a-c30cebaa8be0",
+      "chapter_id": "fd700790-3aed-4d18-a049-8d0d991f3340",
+      "chunk_index": 0,
+      "content": "1.1 The management is conversant \nwith the laws and regulations \nand knows their applicability to \nthe organization and regularly \nupdates  \nA designated management functionary has been \ngiven the responsibility to enlist the laws and \nregulation as applicable to the. This functionary has \nidentified the appropriate personnel in the facility who \nare supposed to implement the respective laws and \nregulations. \n1.2 The management ensures \nimplementation of these \nrequirements. \nSelf explanatory \n1.3 There is a mechanism to \nregularly update licenses/ \nregistrations/certifications. \nSelf explanatory \nFMS.2. The organization’s environment and facilities operate to ensure safety of patients, \ntheir families, staff and visitors.",
+      "content_type": "text",
+      "token_count": 183,
+      "page_number": 56
+    },
+    {
+      "id": "6f7df413-2aa8-4d9e-a5a0-a9f7ed8e0a21",
+      "chapter_id": "294c1a17-3f14-4dfe-bf4e-8418c27b749f",
+      "chunk_index": 0,
+      "content": "2.1 There is a documented \noperational and maintenance \n(preventive and breakdown) \nplan. \nSelf explanatory \n2.2 Up-to-date drawings are \nmaintained which        detail the \nsite layout, floor plans and fire \nescape routes. \nDesignated personnel maintain the drawings. \n2.3 There is internal and external \nsign posting in the organization \nin language understood by \npatient, families and community \n2.4 The provision of space shall be \nin accordance  with the \navailable literature on good \npractices (Indian or International \nstandards) and directives from \ngovernment agencies \nSelf explanatory \n© National Accreditation Board for Hospitals and Healthcare Providers 38 \n2.5 There are designated \nindividuals responsible for the \nmaintenance of all the facilities. \nA person in the facility management is designated to \nbe in-charge of maintenance of facilities. The facility \nhas the required number of supervision and \ntradesmen to manage the facilities.  \n2.6 Maintenance staff is contactable \nround the   clock for emergency \nrepairs. \nA complaint attendance register is to be maintained to \nindicate the date and time of receipt of complaint, \nallotment of job and completion of job \n2.7 The organization has a system \nto identify the potential safety \nand security risks includes the \nhazardous material \nFMS.3  The organization has a program for clinical and support service equipment \nmanagement.",
+      "content_type": "text",
+      "token_count": 351,
+      "page_number": 57
+    },
+    {
+      "id": "440c838e-ffd6-4121-b6fc-6ccd131831e6",
+      "chapter_id": "619ed4d8-b441-4fea-916c-626400109f33",
+      "chunk_index": 0,
+      "content": "3.1 The organization plans for \nequipment in accordance with \nits services and strategic plan \nSelf explanatory. This shall also take into \nconsideration future requirementsans has a \ncollaborated process where equipment selection is \ndone end user and by management.. \n3.2 All equipment is inventoried and \nproper     logs are maintained \nas required. \nSelf explanatory. \n3.3 Qualified and trained personnel \noperate and maintain the \nequipment \nSelf explanatory. \n3.4 Equipment is periodically \ninspected and calibrated for \ntheir proper functioning. \nThe facility has weekly/monthly/ annual schedules of \ninspection and calibration of equipment which involve \nmeasurement, in an appropriate manner. The facility \neither calibrates the equipment in-house or out \nsources; maintaining traceability.   \n3.5 There is a documented \noperational and maintenance \n(preventive and breakdown) \nplan \nSelf explanatory. \n© National Accreditation Board for Hospitals and Healthcare Providers 39 \nFMS.4  The organization has provisions for safe water, electricity, medical gases and \nvacuum system.",
+      "content_type": "text",
+      "token_count": 271,
+      "page_number": 58
+    },
+    {
+      "id": "31074a0d-172d-4e0f-a429-23c2254dc0e2",
+      "chapter_id": "3a956f75-7dc9-4e45-9c0c-5aeef0413633",
+      "chunk_index": 0,
+      "content": "4.1 Potable water and electricity are \navailable round the clock \nThe facility shall make arrangements for supply of \nadequate potable water and electricity. \n4.2 Alternate sources are provided \nfor in case of failure. \nAlternate electric supply could be from DG sets, solar \nenergy, UPS and any other suitable source.   \n4.3 The organization regularly tests \nthe   alternate sources. \nSelf explanatory \n4.4 There is a maintenance plan for \npiped medical gas and vacuum \ninstallation \nSelf explanatory \nFMS.5 The organization has plans for fire and non-fire emergencies within the facilities.",
+      "content_type": "text",
+      "token_count": 148,
+      "page_number": 59
+    },
+    {
+      "id": "095addc5-fa71-4355-bf82-a1ed5343e264",
+      "chapter_id": "c2fd1ee3-3165-4587-b7f7-5a8b421f6a35",
+      "chunk_index": 0,
+      "content": "5.1 The organization has plans and \nprovisions for early detection, \nabatement and containment of \nfire and non-fire emergences \nincluding community \nemergencies \nThe facility has a fire and non-fire emergency \ncommittee (FNEC) to review the facility’s \npreparedness. The facility has conducted an exercise \nof hazard identification and risk analysis (HIRA) and \naccordingly taken all necessary steps to eliminate or \nreduce such hazards and associated risks. The facility \nhas:  \na) fire plan covering fire arising out of burning of \ninflammable items, explosion, electric short \ncircuiting or act of negligence or due to \nincompetence of the staff on duty. \nb)\n  deployed adequate and qualified personnel for this \nc)  acquired adequate fire-fighting equipment for this \nwhich records are kept up-to-date.  \nd)  adequate training plans  \ne)  scheduled for conduct of mock fire drills \nf) \n mock drill records \ng)  exit plans well displayed  \nThe facility has a dedicated emergency illumination \nsystem which comes into effect in case of a fire. The \nfacility takes care of non-fire emergency situations by \nidentifying them and by deciding appropriate course of \naction. These may include: \na)   terrorist attack \nb)   invasion of swarms of insects and pests \nc)   earthquake \n© National Accreditation Board for Hospitals and Healthcare Providers 40 \nd)   invasion of stray animals \ne)   hysteric fits of patients and/or relatives \nf)    civil disorders effecting the facility \ng)   anti-social behavior by patients/ relatives \nh)\n temperamental disorders of staff causing  \ndeterioration in patient care \ni) spillage of hazardous (acids, mercury, etc,  \ninfected materials (used gloves, syringes, tubing, \nsharps, etc) medical wastes (blood, pus, amniotic \nfluid, vomits, etc)  \nj)   building or structural collapse \nk)  fall  or slips (from height or on floor) or collision of \npersonnel in passageway \nl)    fall of patient from bed  \nm)  bursting of pipe lines \nn)  sudden flooding of areas like basements due to \nclogging in pipe lines \no) \n Sudden failure of supply of electricity, gas, \nvacuum, etc. \np)  Bursting of boilers and/or autoclavesThe facility \nhas established liaison with civil and police \nauthorities and fire brigade as required by law for \nenlisting their help and support in case of an \nemergency. \n5.2 The organization has a \ndocumented safe exit plan in \ncase of fire and non-fire \nemergencies.\nFire exit plan shall be displayed on each floor \nparticularly close to the lifts. Exist doors should \nremain open on the time.\n5.3 Staff is trained for their role in \ncase of such emergencies \nIn case of fire designated person are assigned \nparticular work.\n5.4 Mock drills are held at least \ntwice in a year \nSelf explanatory \nFMS 6 The organization has a plan for management of hazardous materials",
+      "content_type": "text",
+      "token_count": 705,
+      "page_number": 60
+    },
+    {
+      "id": "f149736e-a5f8-4b18-aa63-405dc9617820",
+      "chapter_id": "04a8e9fb-166e-4024-b3df-c1242b7621e1",
+      "chunk_index": 0,
+      "content": "6.1 Hazardous materials are \nidentified within the organization \nSpecial attention to be given  for management of \nMercury spill and amalgam. \n6.2 The hospital implements \nprocesses for sorting, handling, \nstorage, transporting and \ndisposal of hazardous material.\n© National Accreditation Board for Hospitals and Healthcare Providers 41 \n6.3 There is a plan for managing \nspills of hazardous materials \n6.4 Staff is educated and trained for \nhandling such materials. \nFMS 7. The organization has system in place to provide a safe and secure \nenvironment",
+      "content_type": "text",
+      "token_count": 138,
+      "page_number": 62
+    },
+    {
+      "id": "49b3ac15-8cb0-4e2a-a8fc-0c6fc1dedd54",
+      "chapter_id": "fa203f61-79ea-4a2d-8562-264d9e25280c",
+      "chunk_index": 0,
+      "content": "7.1 The hospital has a safety \ncommittee to identify the \npotential safety and security \nrisks.\nFacility should have a RO system to supply safe water \nfor dental chairs to prevent infection \n7.2 This committee coordinates \ndevelopment, implementation, \nand monitoring of the safety \nplan and policies.\n7.3 Patient Safety devices are \ninstalled across the organization \nand inspected periodically\n7.4 Facility inspection rounds to \nensure safety are conducted at \nleast twice in a year in patient \nare areas and at least once in a \nyear in non-patient care areas. \n7.5 Inspection reports are \ndocumented and corrective and \npreventive measures are \nundertaken.\n7.6  There is a safety education \nprogramme for all staff \n© National Accreditation Board for Hospitals and Healthcare Providers 42",
+      "content_type": "text",
+      "token_count": 197,
+      "page_number": 62
+    },
+    {
+      "id": "6073fc4a-ba0d-4fc9-9c5b-e78f2f44ec4e",
+      "chapter_id": "1e7d2f03-3a65-44c0-88c8-885d09723661",
+      "chunk_index": 0,
+      "content": "HRM.1 The Organization has a documented system of human resource planning.",
+      "content_type": "text",
+      "token_count": 18,
+      "page_number": 63
+    },
+    {
+      "id": "e617635d-6af7-4aa3-89f3-5da9e8bab6f5",
+      "chapter_id": "a2f982b7-0822-4d90-82b0-2bf73fdfa005",
+      "chunk_index": 0,
+      "content": "1.1 The organization maintains an \nadequate number and mix of \nstaff to meet the care, treatment \nand service needs of the \npatient.\nSelf explanatory \n1.2 The required job specifications \nand job description are well \ndefined for each category of \nstaff\nSelf explanatory \n1.3 The organization verifies the \nantecedents of the potential \nemployee with regards to \ncriminal/negligence \nbackground.\nSelf explanatory \nHRM.2 The staff joining the organization is socialized and oriented to the hospital \nenvironment.",
+      "content_type": "text",
+      "token_count": 127,
+      "page_number": 64
+    },
+    {
+      "id": "477d51a3-d466-42de-9415-70c3f59bcde4",
+      "chapter_id": "cc1b785e-b586-4399-a099-dbd9331936e2",
+      "chunk_index": 0,
+      "content": "2.1  Each staff member, employee \nstudent and voluntary worker is \nappropriately oriented to the \norganization’s mission and \npolicies and procedure\nSelf explanatory \n2.2 Each staff member is made \naware of his/her rights and \nresponsibilities\nThe facility shall define the same in consonance with \nstatutory requirements and the same shall be \ncommunicated to the employees.\n2.3 All employees are educated \nwith regard to patients’ rights \nand responsibilities.\nFor patient rights refer to PRE 2. \nHRM.3 There is an ongoing program for professional training and development of the \nstaff.",
+      "content_type": "text",
+      "token_count": 147,
+      "page_number": 64
+    },
+    {
+      "id": "22d7266e-fb44-4d29-924c-17225f7242d2",
+      "chapter_id": "9d771773-02f0-4e73-a428-2edb8e432834",
+      "chunk_index": 0,
+      "content": "3.1 A documented training and \ndevelopment policy exists for \nthe staff.\nSelf explanatory \n© National Accreditation Board for Hospitals and Healthcare Providers 43 \n3.2 Training also occurs when job \nresponsibilities change/new \nequipment is introduced.\nSelf explanatory \n3.3 Feedback mechanisms for \nassessment of training and \ndevelopment program exist\nSelf explanatory \n3.4 All staff is trained on the risks \nwithin the   hospital \nenvironment.\nThe facility shall define such risks which shall include \nboth patient and employee related.\n3.5 Staff members can demonstrate \nand take actions to report, \neliminate/ minimize risks. \nSelf explanatory \n3.6 Reporting processes for \ncommon problems, failures and \nuser errors exist\nThe facility has a defined procedure for reporting of \nthese events.\nHRM.4 An appraisal system for evaluating the performance of an employee exists as an \nintegral part of the human resource management process.",
+      "content_type": "text",
+      "token_count": 234,
+      "page_number": 65
+    },
+    {
+      "id": "6608724c-23b6-4ea3-ad62-0cfb5e806f7c",
+      "chapter_id": "540ac084-e98d-46a8-9b6b-803effecbac9",
+      "chunk_index": 0,
+      "content": "4.1 A well-documented \nperformance appraisal system \nexists in the organization. \nSelf explanatory \n4.2 The employees are made \naware of the system of \nappraisal at the time of \ninduction\nSelf explanatory \n4.3 Performance is evaluated \nbased on the performance \nexpectations described in job \ndescription.\nSelf explanatory \n4.4 Performance appraisal is \ncarried out at pre defined \nintervals and is documented. \nSelf explanatory \nHRM.5 The organization has a well-documented disciplinary and grievance handling \nmechanism procedure.",
+      "content_type": "text",
+      "token_count": 133,
+      "page_number": 66
+    },
+    {
+      "id": "dfb34b43-dabd-4111-a30c-548da2c8b075",
+      "chapter_id": "26e63f0d-c6fb-4334-ab01-4b2eafc703a9",
+      "chunk_index": 0,
+      "content": "5.1 Documented procedures with \nregards to disciplinary action \nand grievances handling exist in \nSelf explanatory\n© National Accreditation Board for Hospitals and Healthcare Providers 44 \nthe organization \n5.2 The policy and procedure is \nknown to all categories of \nemployees of the organization. \nThis implies that both parties (employee and \nemployer) are given an opportunity to present their \ncase and decision is taken accordingly\n5.3 The disciplinary procedure is in \nconsonance with the prevailing \nlaws.\nSelf explanatory \n5.4 There is a provision for appeals \nin all disciplinary cases. \nThe facilityc designate an appellate authority to \nconsider appeals in disciplinary cases.\n5.5 Actions are taken to redress the \ngrievance \nSelf explantory \nHRM.6 The organization addresses the health needs of the employees.",
+      "content_type": "text",
+      "token_count": 205,
+      "page_number": 67
+    },
+    {
+      "id": "6dcbff5b-23e9-421d-94a0-6cd7a4c04a92",
+      "chapter_id": "f505fc76-f4fa-4e99-8014-bf1f8b51c3cb",
+      "chunk_index": 0,
+      "content": "6.1 A pre-employment medical \nexamination is conducted on all \nthe employees\nSelf explanatory. This shall however be in \nconsonance with the law of the land\n6.2 Health problems of the \nemployees are taken care of in \naccordance with the \norganization’s policy.\nSelf explanatory. This shall  be in consonance with \nthe law of the land and good clinical practices. \n6.3 Regular health checks of staff \ndealing with direct patient care \nare done at-least once a year \nand the findings/ results are \ndocumented. \nSelf explanatory. The results should be documented \nin the personal file.\n6.4 Occupational health hazards \nare adequately addressed. \nSelf explanatory \nHRM.7 There is a documented personal record for each staff member.",
+      "content_type": "text",
+      "token_count": 181,
+      "page_number": 67
+    },
+    {
+      "id": "f2070bc0-0540-460a-8d4b-c3e594daf528",
+      "chapter_id": "f44822df-5405-4b60-a3ab-4bb5d8e5434b",
+      "chunk_index": 0,
+      "content": "7.1 Personal files are maintained in \nrespect of all employees. \nSelf explanatory \n7.2 The personal files contain \npersonal information regarding \nthe employees qualification, \ndisciplinary background and \nhealth status.\nSelf explanatory \n© National Accreditation Board for Hospitals and Healthcare Providers 45 \n7.3 All records of in-service training \nand education are contained in \nthe personal files.\nSelf explanatory \n7.4 Personal files contain results of \nall evaluations. \nEvaluations would include performance appraisals, \ntraining assessment and outcome of health checks.\nHRM.8  There is a process for collecting, verifying and evaluating the credentials \n(education, registration, training and experience) of medical and Dental professionals \npermitted to provide patient care without supervision.",
+      "content_type": "text",
+      "token_count": 201,
+      "page_number": 68
+    },
+    {
+      "id": "d51514b6-9846-4607-ac48-6d20d76bc0dc",
+      "chapter_id": "90186828-457d-4c3c-b4ef-6cb5b98e09e1",
+      "chunk_index": 0,
+      "content": "8.1 Medical/ Dental professionals \npermitted by law, regulation and \nthe hospital to provide patient \ncare without supervision is \nidentified.\nThe facility identifies the individuals who have the \nrequired qualification (s), training and experience to \nprovide patient care in consonance with the law.\n8.2 The education, registration, \ntraining and experience of the \nidentified medical professionals \nis documented and updated \nperiodically.\nSelf explanatory. Updating is done after acquisition of \nnew skills and/or qualification\n8.3 All such information pertaining \nto the medical/ Dental \nprofessionals is appropriately \nverified when possible.\nThe facility shall do the same by verifying the \ncredentials from the organization which has awarded \nthe qualification/ training\nHRM.9 There is a process for authorizing all medical and Dental professionals to admit \nand treat patients and provide other clinical services commensurate with their \nqualifications.",
+      "content_type": "text",
+      "token_count": 240,
+      "page_number": 69
+    },
+    {
+      "id": "35d6f9bc-91d0-40b9-97c8-1fbe91ee458d",
+      "chapter_id": "6b22b56b-33bc-43d2-aea5-e5c22f435bc1",
+      "chunk_index": 0,
+      "content": "9.1 Dental professionals admit and \ncare for patients as per the laid \ndown policies and authorization \nprocedures of the organization.\nThe facility shall identify as to what each medical \nprofessional is authorized to do.\n9.2 The services provided by the \nDental professionals are in \nconsonance with their \nqualification, training and \nregistration.\nSelf explanatory \n© National Accreditation Board for Hospitals and Healthcare Providers 46 \n9.3 The requisite services to be \nprovided by the Dental \nprofessionals are known to \nthem as well as the various \ndepartments/units of the \nhospital. \nSelf explanatory \nHRM.10  There is a process for collecting, verifying and evaluating the credentials \n(education, registration, training and experience) of nursing staff/Dental Hygienist, Dental \nTechnician and Dental Assistant",
+      "content_type": "text",
+      "token_count": 206,
+      "page_number": 70
+    },
+    {
+      "id": "bca5f462-7a3b-439e-bd94-325ce201c81c",
+      "chapter_id": "7b1f62cf-6b38-4d91-93e1-8c64a08870ea",
+      "chunk_index": 0,
+      "content": "10.1 The education, registration, \ntraining and experience of \nnursing staff/ dental Hygienist, \ndental, technician and dental \nAssistant is documented and \nupdated periodically.\nThe facility identifies the individuals who have the \nrequired qualification (s), training and experience to \nprovide nursing care to patients in consonance with \nthe law. Updating is done after acquisition of new \nskills and/or qualification\n10.2 All such information pertaining \nto the nursing/ Dental Hygienist, \ndental technician and Dental \nAssistant staff is appropriately \nverified when possible.\nThe facility shall do the same by verifying the \ncredentials from the organization which has awarded \nthe qualification/training\nHRM.11 There is a process to identify job responsibilities and make clinical work \nassignments to all nursing staff Dental Hygienist, Dental Technician/ Dental Mechanic \nand Dental Assistant  commensurate with their qualifications and any other regulatory \nrequirements.",
+      "content_type": "text",
+      "token_count": 245,
+      "page_number": 71
+    },
+    {
+      "id": "ad9f1af1-2bf6-42eb-81f6-83f981031ffe",
+      "chapter_id": "f7bb8d22-a436-4f01-ad04-3018c69edfc9",
+      "chunk_index": 0,
+      "content": "11.1 The clinical work assigned to \nnursing staff, dental hygienist, \ndental mechanics and assistant \nis in consonance with their \nqualification, training and \nregistration.\nThe facility shall identify as to what each nurse is \nauthorized to do.\n11.2 The services provided by \nnursing staff, dental hygienist, \ndental mechanics and \nassistants are in accordance \nwith the prevailing laws and \nregulations. \nSelf explanatory \n© National Accreditation Board for Hospitals and Healthcare Providers 47 \nChapter 10. Information Management System (IMS) \nIMS.1.Documented Policies and procedures exist to meet the information needs of the \ncare providers, management of the organization as well as other agencies that require \ndate and information from the organization.",
+      "content_type": "text",
+      "token_count": 190,
+      "page_number": 71
+    },
+    {
+      "id": "8658960a-adff-4676-b54e-891f96d8f643",
+      "chapter_id": "9f1cd7d2-739e-4dfb-b4e7-34bdedab52d8",
+      "chunk_index": 0,
+      "content": "1.1 The information needs of the \norganization are identified and \nare appropriate to the scope of \nthe services being provided by \nthe organization and the \ncomplexity of the organization.\nThe facility has manual and/or electronic Hospital \nInformation System and/or Management Information \nSystem which provides relevant information to all \nconcerned stakeholders.\n1.2 Policies and procedures to meet \nthe information needs are \ndocumented.\nA policy document is available where the HIS/MIS is \ndescribed\n1.3 These policies and procedures \nare in compliance with the \nprevailing laws and regulations.\nSelf explanatory \n1.4 The organization contributes to \nexternal databases in \naccordance with the law and \nregulations.\nSelf explanatory \nIMS.2. The organization has processes in place for effective management of data.",
+      "content_type": "text",
+      "token_count": 205,
+      "page_number": 72
+    },
+    {
+      "id": "30ec7716-66c5-4753-aa6b-880af7b2ef9a",
+      "chapter_id": "d4f32e0e-0c3e-4523-9177-6c5bda958088",
+      "chunk_index": 0,
+      "content": "2.1 Formats for data collection are \nstandardized. \nMIS/HIS data is collected in standardized format from \nall areas/services in the facility.\n2.2 Necessary resources are \navailable for analyzing data. \nThis could be men, material, space and budget. \n2.3 Documented procedures are \nlaid down for timely and \naccurate dissemination of data. \nSelf explanatory \n2.4 Documented procedures exist \nfor storing and retrieving data. \nSelf explanatory \n© National Accreditation Board for Hospitals and Healthcare Providers 48 \nIMS.3. The organization has a complete and accurate medical record for every in patient.",
+      "content_type": "text",
+      "token_count": 151,
+      "page_number": 73
+    },
+    {
+      "id": "c9ba3d18-651e-4487-8dfc-9ddf77e87403",
+      "chapter_id": "9fa415c5-84a7-4861-830f-88a1f15dcb81",
+      "chunk_index": 0,
+      "content": "3.1 Every medical record has a \nunique identifier. \nThis shall also apply to records on digital media \n3.2 Organization policy identifies \nthose authorized to make \nentries in medical record.\nFacility has a written policy stating who all can make \nentries.\n3.3 Every medical record entry is \ndated and timed. \nSelf explanatory \n3.4 The author of the entry can be \nidentified. \nThis could be by writing the full name or by \nmentioning the employee code number, with the help \nof stamp, etc. In case of electronic based records, \nauthorized e-signature provision as per statutory \nrequirements must be kept.\n3.5 The contents of medical record \nare identified and documented. \nThe facility identifies which documents form part of \nthe medical records, documents and implements the \nsame \n3.6 The record provides an up-to-\ndate and chronological account \nof patient care.\nThe facility decides the format (POMR/SOMR/IMR) \nfor maintaining medical records.\nIMS.4. The medical record reflects continuity of care.",
+      "content_type": "text",
+      "token_count": 251,
+      "page_number": 74
+    },
+    {
+      "id": "b093a076-3379-4e8d-bcea-727336c22341",
+      "chapter_id": "4f9bfb80-5f70-4f5e-a581-446c0b1106d6",
+      "chunk_index": 0,
+      "content": "4.1 The medical record contains \ninformation regarding reasons \nfor admission, diagnosis and \nplan of care. \nSelf explanatory \n4.2 Operative and other procedures \nperformed are incorporated in \nthe medical record. \nSelf explanatory \n4.3 When patient is transferred to \nanother hospital, the medical \nrecord contains the date of \ntransfer, the reason for the \ntransfer and the name of the \nreceiving hospital. \nSelf explanatory. It is mandatory to mention the \nclinical condition of the patient before transfer is \neffected \n4.4 The medical record contains a \ncopy of the discharge note duly \nsigned by appropriate and \nqualified personnel.  \nSelf explanatory. Discharge note is the same as \ndischarge summary \n© National Accreditation Board for Hospitals and Healthcare Providers 49 \n4.5 In case of death, the medical \nrecord contains a copy of the \ndeath certificate indicating the \ncause, date and time of death. \nSelf explanatory. The facility provides the death \ncertificate as per the International Certification of \ncause of death \n4.6 Care providers have access to \ncurrent and past medical \nrecord. \nThe facility provides access to medical records to \ndesignated health care providers (those who are \ninvolved in the care of that patient). \nIMS.5. Policies and procedures are in place for maintaining confidentiality, integrity and \nsecurity of information.",
+      "content_type": "text",
+      "token_count": 341,
+      "page_number": 75
+    },
+    {
+      "id": "895e46c1-2be1-4fdc-9478-ba25c57cb97c",
+      "chapter_id": "20b038c9-00e9-43ea-877b-2128bf17336c",
+      "chunk_index": 0,
+      "content": "5.1 Documented policies and \nprocedures exist for maintaining \nconfidentiality, security and \nintegrity of information\nSelf explanatory. This is applicable for both manual \nand electronic\n5.2 Policies and procedures are in \nconsonance with the applicable \nlaws.\nThis is in the context of Indian Evidence Act, Indian \nPenal Code of medical Ethics and code of dental \nethics\n5.3 The policies and procedures \nincorporate safeguarding of \ndata/record against loss, \ndestruction and tampering. \nFor physical records the facility shall ensure that there \nis adequate pest and rodent control measures. For \nelectronic data there should be protection against \nvirus/Trojans and also a proper backup procedure. To \nprevent tampering, for physical records access shall \nbe limited only to the concerned health care provider. \nIn electronic format this could be done by adequate \npasswords.\n5.4 Privileged health information is \nused for the purposes identified \nor as required by law and not \ndisclosed without the patient’s \nauthorization.\nSelf explanatory \n5.5 A documented procedure exists \non how to respond to \npatients/physicians and other \npublic agencies requests for \naccess to information in the \nmedical record in accordance \nwith the local and national law.\nSelf explanatory. In this context the release of \ninformation in accordance with the Code of Medical \nEthics 2002 and Code of Dental Ethics should be kept \nin mind.\n© National Accreditation Board for Hospitals and Healthcare Providers 50 \nIMS.6. Policies and procedures exist for retention time of records, data and information.",
+      "content_type": "text",
+      "token_count": 397,
+      "page_number": 76
+    },
+    {
+      "id": "9f327df3-52c6-4a45-8ccc-d41a179bf65f",
+      "chapter_id": "6690d607-19d5-4647-8ff2-c47f83757ef2",
+      "chunk_index": 0,
+      "content": "6.1 Documented policies and \nprocedures are in place on \nretaining the patient’s clinical \nrecords, data and information.\nSelf explanatory \n6.2 The policies and procedures are \nin consonance with the local \nand national laws and \nregulations. \nSome of the related laws in this context are Code of \nMedical Ethics 2002, Code of Dental Ethics, \nConsumer protection act 1987 and relevant state \nlegislation, if any.\n6.3 The destruction of medical \nrecords, data and information is \nin accordance with the laid \ndown policy.\nDestruction can be done after the retention period is \nover and after taking approval of the competent \nauthority.\nIMS.7. The organization regularly carries out review of medical records and Dental \nrecords",
+      "content_type": "text",
+      "token_count": 181,
+      "page_number": 77
+    },
+    {
+      "id": "a9d663d6-96b6-4c1e-a59d-6041e44d5b47",
+      "chapter_id": "832102fe-732e-45c1-86c3-d33403bb9439",
+      "chunk_index": 0,
+      "content": "7.1 The medical records are \nreviewed periodically. \nSelf explanatory \n7.2 The review uses a \nrepresentative sample based on \nstatistical principles.\nSelf explanatory. The review could be based on \nconditions of clinical and/or community importance \n7.3 The review is conducted by \nidentified care providers. \nSelf explanatory \n7.4 The review focuses on the \ntimeliness, legibility and \ncompleteness of the medical \nrecords.\nSelf explanatory \n7.5 The review process includes \nrecords of both active and \ndischarged patients. \nSelf explanatory \n7.6 The review points out and \ndocuments any deficiencies in \nrecords. \nSelf explanatory \n7.7 Appropriate corrective and \npreventive measures \nundertaken are documented. \nSelf explanatory \n© National Accreditation Board for Hospitals and Healthcare Providers 51",
+      "content_type": "text",
+      "token_count": 201,
+      "page_number": 78
+    },
+    {
+      "id": "f5e55b4c-d5ea-4fa4-8d0a-8df531641675",
+      "chapter_id": "1a94fcff-22e2-42f6-a5ee-7b220175b721",
+      "chunk_index": 0,
+      "content": "The commonly used terminologies in the NABH standards are briefly described and explained \nherein to remove any ambiguity regarding their comprehension. The definitions narrated have \nbeen taken from various authentic sources as stated where ever possible. Notwithstanding the \naccuracy of the explanations given, in the event of any discrepancy with a legal requirement \nenshrined in the law of the land, the provisions of the latter shall apply.  \nAccreditation",
+      "content_type": "text",
+      "token_count": 115,
+      "page_number": 79
+    },
+    {
+      "id": "16923488-7419-40fe-87e2-066785aee1fd",
+      "chapter_id": "3d6bf64c-0deb-4cdb-9187-e60b12b17340",
+      "chunk_index": 0,
+      "content": "provided by a health care organization. This is generally carried out by \na non-governmental organization",
+      "content_type": "text",
+      "token_count": 26,
+      "page_number": 79
+    },
+    {
+      "id": "8601638d-b072-47a9-b5a5-cad45d170f03",
+      "chapter_id": "fa887cd0-3fd8-4493-83b8-87af0b60c8da",
+      "chunk_index": 0,
+      "content": "eligible organization meets an applicable set of standards. \nAccreditation \nsurvey \nThe evaluation process for assessing the compliance of an organization \nwith the applicable standards for determining its accreditation status.\nNABH survey includes the following: \na) Documentation review. \nb) Facility tour  \nc) Interview of staff, patients and visitors \nd) On-site observations by surveyors \ne) Education about standards compliance       \nAdvance life \nsupport \nEmergency medical care for sustaining life, including defibrillation, airway \nmanagement, and drugs and medications. \nThe main algorithm of ALS, which is invoked when actual cardiac arrest has \nbeen established, relies on the monitoring of the electrical activity of the \nheart on a cardiac monitor. Depending on the type of cardiac arrhythmia , \ndefibrillation is applied, and medication  is administered. Oxygen  is \nadministered and endotracheal intubation  may be attempted to secure the \nairway. At regular intervals, the effect of the treatment on the heart rhythm, \nas well as the presence of cardiac output, is assessed. \nMedication that may be administered may include adrenaline  (epinephrine), \namiodarone, atropine , bicarbonate , calcium , potassium  and magnesium . \nSaline or colloids may be administered to increase the circulating volume. \n© National Accreditation Board for Hospitals and Healthcare Providers 52 \n While CPR is given (either manually, or through automated equipment such \nas AutoPulse ), members of the team consider eight forms of potentially \nreversible causes for cardiac arrest, commonly abbreviated as \"4H4T\": \n• Hypoxia (low oxygen levels in the blood)  \n• Hypovolemia (low amount of circulating blood, either absolutely due to \nblood loss or relatively due to vasodilatation)  \n• Hyperkalemia or hypokalemia (disturbances in the level of potassium in \nthe blood) and related disturbances of calcium  or magnesium  levels \nand hypoglycaemia (low glucose levels).  \n• Hypothermia (under-cooling)  \n• Tension pneumo-thorax (tear in the lung leading to collapsed lung and \ntwisting of the large blood vessels)  \n• Tamponade (fluid or blood in the pericardium, compressing the heart)  \n• Toxic and/or therapeutic (chemicals, whether medication or poisoning)  \n• Thrombo-embolism and related mechanical obstruction (blockage of \nthe blood vessels to the lungs or the heart by a blood clot  or other \nmaterial)  \nAmalgam This is a mixture of silver alloy and mercury to prepare a restorative \nmaterial used in the cavities of teeth. The union of mercury with an alloy of \nother metals is accomplished by the process of amalgamation. Silver alloy \nis a mixture of silver And tin with small amounts of copper and zinc. \n(CLINICAL PEDODONTICS FINN) \nAmbulance A patient carrying vehicle having facilities to provide unless otherwise \nindicated at least basic life support during the process of transportation of \npatient. There are various types of ambulances that provide special \nservices viz. coronary care ambulance, trauma ambulance, air ambulance, \netc. \nAnaesthesia It consists of general anaesthesia and spinal or major regional anaesthesia \nand does not include local anaesthesia. General anaesthesia is a drug-\ninduced loss of consciousness during which patient cannot be aroused \neven by painful stimulation. The ability to independently maintain ventilatory \nfunction is often impaired. \nAssessment \nAll activities including history taking, physical examination, laboratory \ninvestigations that contribute towards determining the prevailing clinical \nstatus of the patient. \nAutopsy \n1 An examination of a cadaver in order to determine the cause of death or \nto study pathologic changes.",
+      "content_type": "text",
+      "token_count": 923,
+      "page_number": 79
+    },
+    {
+      "id": "29b5e4d2-097d-4342-b242-d21d38dcce07",
+      "chapter_id": "5e23134e-32bc-4cc8-926b-0daa5f01160a",
+      "chunk_index": 0,
+      "content": "determine the cause of death \n© National Accreditation Board for Hospitals and Healthcare Providers 53 \nBarrier nursing \nType of nursing for Immuno-compromised patients with a view to prevent \nany secondary infections e.g. use of gloves, masks and relatively \ndisinfected environment. \nBasic life support Emergency procedures performed to sustain life that include \ncardiopulmonary resuscitation, control of bleeding, treatment of shock, \nstabilization of injuries and wounds and first, aid. Basic life support consists \nof a number of life-saving techniques which are focused on the \"ABC\"s of \npre-hospital emergency care: \n• Airway: the protection and maintenance of patient airway including the \nuse of airway adjuncts such as an oral or nasal airway  \n• Breathing: the actual flow of air through respiration, natural or artificial \nrespiration, often assisted by emergency oxygen  \n• Circulation: the movement of blood through the beating of the heart or \nthe emergency measure of CPR  \nBLS may also include considerations of patient transport such as the \nprotection of the cervical spine and avoiding additional injuries through \nsplinting and immobilization. \nBylaws \nA rule governing the internal management of an organization. It can \nsupplement or complement the government law but cannot countermand it. \ne.g. municipal bylaws for construction of hospitals/nursing homes, for \ndisposal of hazardous and/or  infectious waste \nCast In Dentistry should always imply that it is an accurate reproduction of the \ntissues being studied or on which restoration may be fabricated. \n(McCracken’s removable partial Prosthodontics) \nClincal audit \nAnalysis of clinical aspects of patient care for improving the quality of health \ncare services e.g. tissue audit, X-Ray audit, lab investigation audit, etc.  \nClinical practice \nguidelines \nGuidelines that assist practitioners to provide appropriate clinical care for \nspecific clinical conditions, for example recommendation on management of \ncerebral malaria.  The guidelines include relevant history taking, physical \nsigns to look for, lab investigations to be carried out and treatment to be \nprescribed. \nCompetence Demonstrated ability to apply knowledge and skills.\nKnowledge is the understanding of facts and procedures.  Skill is the ability \nto perform specific action. For example, a competent gynaecologist knows \nabout the patho-physiology of the female genitalia and can conduct both \nnormal as well as abnormal deliveries.  \nConfidentiality \nRestricted access to information to individuals who have a need, a reason \nand permission for such access.  It also includes an individual’s right to \npersonal privacy as well as privacy of information related to his/her  health \ncare records. \n© National Accreditation Board for Hospitals and Healthcare Providers 54 \nConsent",
+      "content_type": "example",
+      "token_count": 708,
+      "page_number": 81
+    },
+    {
+      "id": "0c448694-d7ce-41f9-ae68-2903c53d9f2d",
+      "chapter_id": "d2f9ffbe-4bef-4312-8792-cd8e86e8328a",
+      "chunk_index": 0,
+      "content": "a health care provider.  It may be implied (e.g. patient registering in \nOPD), expressed which may be written or verbal.  Informed consent is \na type of consent in which the health care provider has a duty to inform \nhis/her patient about the procedure, its potential risk and benefits, \nalternative procedure with their risk and benefits so as to enable the \npatient to take an informed decision of his/her health care.",
+      "content_type": "example",
+      "token_count": 105,
+      "page_number": 83
+    },
+    {
+      "id": "96ca315d-574b-417c-9579-e0b95f88cae1",
+      "chapter_id": "4e5a5d3e-e75f-416d-a046-eeef12390621",
+      "chunk_index": 0,
+      "content": "legally capable of consenting. In India legal age of consent is 18 years. \nIt may be evidenced by words or acts or by silence when silence \nimplies concurrence. Actual or implied consent is necessarily an \nelement in every contract\n and every agreement. \nCredentialing The process of obtaining, verifying and assessing the qualification of a \nhealth care provider.   \nData Raw facts, clinical observations, or measurements collected during an \nassessment activity.  \nDental Laboratory: \nLaboratory \nProcedure \nAuthorizations \nThe written instructions sent to commercial laboratories. It serves two \nprimary functions (1) it identifies the laboratory procedures delegated to the \ntechnician, the materials to be used and any special instructions requested \nby the dentist that differ from customary laboratory procedures and, (2) it is \na legal document that may be used in arbitration between the dentist & \nlaboratory technician or in cases of alleged illegal practice of dentistry. \nThe laboratory procedure authorization should contain the following \ninformation: \n1) name& address of the dental laboratory to which the work is sent \n2) name& address of the dentist delegating the laboratory work \n3) the date of the work authorization \n4) identification of the patient \n5) specific instructions for the work to be performed by the laboratory \ntechnicians \n6) desired date the work is to be completed  \n7) signature of the dentist; and \n8) the registered licence number of the dentist \nLaboratory Procedure Authorizations are prepared in duplicate .The original \ncopy is sent to the laboratory. The copy is retained in the dentist’s file. It \nshould be retained by the dentist & laboratory for atleast two years.  (John \nE.Ward, Essentials of complete denture prosthodontics  Sheldon Winkler \nPg 292-293) \nDischarge \nsummary\nA part of a patient record that summarizes the reasons for admission, \nsignificant clinical findings, procedures performed, treatment rendered, \npatient’s condition on discharge and any specific instructions given to the \npatient or family (for example follow-up medications). \n© National Accreditation Board for Hospitals and Healthcare Providers 55 \nDisciplinary \nproceedings \nSequence of activities to be carried out when staff does not conform to the \nlaid down norms, rules and regulations of the health care organization. \nEmployees \nAll members of the health care organization who are employed full time and \nare paid suitable remuneration for their services as per the laid down policy. \nEnd of life  Period of time marked by disability or disease that is progressively worse \nuntil death. \nEthics \nMedical ethics is the discipline of evaluating the merits, risks, and social \nconcerns of activities in the field of medicine.( en.wikipedia.org/wiki/Medical \nethics) \nEvidence   \nbased medicine \n1.It is the conscientious, explicit and judicious use of current best evidence \nin making decisions about the care of individual patient",
+      "content_type": "example",
+      "token_count": 741,
+      "page_number": 83
+    },
+    {
+      "id": "bce8f8fd-5912-4d52-9bbe-4c5bce1d5639",
+      "chapter_id": "6d63e4ee-5946-4cdf-9a1a-dd8d104f730a",
+      "chunk_index": 0,
+      "content": "patients based on the best external evidence combined with the physician’s \nclinical expertise and the patient’s desires.   \nFamily The person(s) with a significant role in the patients’ life. It mainly includes \nspouse, children, and parents. It may also include a person(s) not legally \nrelated to the patient but can make health care decisions for a patient if the \npatient loses decision making ability. \nFormulary An approved list of prescription drug s that a health care facility may provide \nto their clientele. Some plans restrict prescriptions to those contained on the \nformulary and others also provide non-formulary prescriptions. Drugs \ncontained on the formulary are generally those that are determined to be \ncost effective and medically effective. \nThe list is compiled by professionals and physicians in the field and is \nupdated preferably each year Changes may be made depending on \navailability or market. \nGrievance \nhandling \nprocedures \nSequence of activities carried out to address the grievances of patients, \nvisitors, relatives and staff.  \nHazardous \nmaterials \nSubstances dangerous to human and other living organisms.  They include \nradioactive or chemical materials.  \nHazardous waste  Waste materials dangerous to living organisms. Such materials require \nspecial precautions for disposal .They include biologic waste that can \ntransmit disease (for example, blood, tissues) radioactive materials, and \ntoxic chemicals. Other examples are infectious waste such as used \nneedles, used bandages and fluid soaked items. \nHealth care \norganization \nGeneric term is used to describe the various types of organization that \nprovide health care services.  This includes ambulatory care centres, \nhospitals, laboratories, etc. \n© National Accreditation Board for Hospitals and Healthcare Providers 56 \nHigh dependency \nunit \nA high dependency unit (HDU) is an area for patients who require more \nintensive observation, treatment and nursing care than are usually provided \nfor in a general ward. It is a standard of care between the general ward and \nfull intensive care. \nImpression Defined as an imprint or negative likeness of the teeth, of the edentulous \nareas where the teeth have been removed, or of both, made in a plastic \nmaterial that becomes relatively hard or set while in contact with these \ntissues. (George E. Smutko Essentials of complete denture prosthodontics  \nSheldon Winkler Pg 88). \nIn service \neducation/ training\nOrganized education/ training usually provided in the workplace for \nenhancing the skills of staff members or for teaching them new skills \nrelevant to their jobs/ tasks.  \nIndicator A statistical measure of the performance of functions, systems or processes \novertime. For example, hospital acquired infection rate, mortality rate, \ncaesarean section rate, absence rate, etc. \nInformation  Processed data which lends meaning to the raw data.",
+      "content_type": "text",
+      "token_count": 726,
+      "page_number": 85
+    },
+    {
+      "id": "9b76d342-ddaf-4fd3-b6f9-eadb1fef6270",
+      "chapter_id": "4f1f89ee-bd9c-46a8-9f70-003059850b14",
+      "chunk_index": 0,
+      "content": "standards laid down in a particular chapter. \nInventory control The method of supervising the intake, use and disposal of various goods in \nhands. It relates to supervision of the supply, storage and accessibility of \nitems in order to ensure adequate supply without stock outs/excessive \nstorage. It is also the process of balancing ordering costs against carrying \ncosts of the inventory so as to minimise total costs.   \nIsolation \nSeparation of an ill person who has a communicable disease (e.g., \nMeasles, chicken pox, mumps, SARS) from those who are healthy. \nIsolation prevents transmission of infection to others and also allows the \nfocused delivery of specialized health care to ill patients. The period of \nisolation varies from disease to diseas e. Isolation facilities can also be \nextended to patients for fulfilling their individual, unique needs. \nJob description 1. It entails an explanation pertaining to duties, responsibilities and \nconditions required to perform a job.",
+      "content_type": "text",
+      "token_count": 247,
+      "page_number": 87
+    },
+    {
+      "id": "64f202eb-d032-4bbe-920a-5afa10d9832f",
+      "chapter_id": "2c0da84d-d71d-4058-9f20-78bd4c78eb0d",
+      "chunk_index": 0,
+      "content": "general nature of the work performed (duties and responsibilities) and \nlevel (i.e., skill, effort, responsibility and working conditions) of the work \nperformed. It typically includes job s pecifications that include employee \ncharacteristics required for competent performance of the job. A job \ndescription should describe and focus on the job itself and not on any \nspecific individual who might fill the job.\n© National Accreditation Board for Hospitals and Healthcare Providers 57 \nJob specification  1. The qualifications/physical requirements, experience and skills \nrequired to perform a particular job/task.",
+      "content_type": "text",
+      "token_count": 154,
+      "page_number": 87
+    },
+    {
+      "id": "016a5675-ae82-411c-b0dc-9b50c5442a90",
+      "chapter_id": "01103b4e-5aa1-4619-9d93-f5d0d056bde7",
+      "chunk_index": 0,
+      "content": "incumbent must possess to perform a given job successfully. \nLaws \nLegal document setting forth the rules of governing a particular kind of \nactivity e.g. organ transplantation act which governs the rules for \nundertaking organ transplantation. \nMedical audit  \nA peer review carried out by analysis of medical records with a view to \nimprove the quality of the patient care \nMedical equipment Any fixed or portable non drug item or apparatus used for diagnosis, \ntreatment, monitoring and direct care of patient. \nMission  A written expression that sets forth the purpose of the organization.  It \nusually precedes the formation of goals and objectives. \nModel Term used to only designate a reproduction for display or demonstration \npurpose. A model of a dental arch or any portion thereof may be made of \ndurable and attractive material. it need not be an accurate reproduction but \nshould be a reasonable facsimile of the original.(McCracken’s removable \npartial prosthodontics) \nMonitoring  The performance and analysis of routine measurements aimed at \nidentifying and detecting changes in the health status or the environment, \ne.g. monitoring of growth and nutritional status, air quality in operation \ntheatre. It requires careful planning and use of standardised procedures \nand methods of data collection. \nMulti-disciplinary A generic term which includes representatives from various disciplines, \nprofessions or service areas. \nNosocomial/ \nhospital acquired/ \nhospital associated \ninfection (s)\nAn infection occurring in a patient in a hospital or other healthcare facility in \nwhom it was not present or incubating at the time of admission; or the \nresidual of an infection acquired during a previous admission. Includes \ninfections acquired in the hospital but appearing after discharge, and also \nsuch infections among the staff of the facility (Synonym: hospital-acquired-\ninfection).(www.hardydiagnostics.com/\n Glossary N.html) \n© National Accreditation Board for Hospitals and Healthcare Providers 58 \nNotifiable disease Certain specified diseases which are required by law to be notified to the \npublic health authorities.  Under the international health regulation the \nfollowing diseases are notifiable to WHO:-\n(a) Cholera \n(b) Plague \n(c) Yellow fever \nIn India the following diseases are also notifiable and may vary from state to \nstate:\n(a) Polio \n(b) Influenza \n(c) Malaria \n(d) Rabies \n(e) HIV/AIDS \n(f) Louse-borne typhus \n(g) Tuberculosis \n(h) Leprosy \n(i) Leptospirosis \n(j) Viral hepatitis \n(k) Dengue fever \nThe various diseases notifiable under the factories act are lead poisoning, \nbysinnosis, anthrax, asbestosis and silicosis.",
+      "content_type": "text",
+      "token_count": 666,
+      "page_number": 88
+    },
+    {
+      "id": "9b8dcbbc-55a5-48e4-b259-2106b2a55af2",
+      "chapter_id": "1e047768-7bf9-4fd1-bd36-efcf724883d5",
+      "chunk_index": 0,
+      "content": "rating scale.  The acceptable compliance with the measureable elements \nwill determine the overall compliance with the standard. \nOcclusion It refers to the contact relationship of the teeth resulting from neuro-\nmuscular control of the masticatory system (musculature, \ntemporomandibular joints, mandible and the periodontium). Clinical  \nPeriodontology Carranza Newman. \nOccupational \nhealth hazard \nThe hazards to which an individual is exposed during the course of \nperformance of his job.  These include physical, chemical, biological, \nmechanical and psychosocial hazards. \nOrganogram A graphic representation of reporting relationship in an organization. \nOutsourcing \nHiring of services and facilities from other organization based upon ones \nown requirement in areas where such facilities are either not available or \nelse are not cost-effective. e.g. outsourcing of house keeping, security, \nlaboratory/certain special diagnostic facilities with other institutions after \ndrawing a memorandum of understanding that clearly lays down the \nobligations of both the organizations, the one which is outsourcing and the \none which is providing the outsourced facility. It also addresses the quality \nrelated aspects. \n© National Accreditation Board for Hospitals and Healthcare Providers 59 \nPatient care setting \nThe location where a patient is provided health care as per his needs e.g. \nICU, speciality ward, private ward and general ward. \nPatient record/ \nmedical \nrecord/clinical \nrecord\nA document which contains the chronological sequence of events that a \npatient undergoes during his stay in the health care organization.  It \nincludes demographic data of the patient, assessment findings, diagnosis, \nconsultations, procedures undergone, progress notes and discharge \nsummary. (Death certificate where required). \nPerformance \nappraisal \nIt is the process of evaluating the performance of employees during a \ndefined period of time with the aim of ascertaining their suitability for the \njob, potential for growth as well as determining training needs.  \nPlan of care A plan that identifies patient care needs, lists the strategy to meet those \nneeds, documents treatment goals and objectives, outlines the criteria for \nending interventions, and documents the individual’s progress in meeting \nspecified goals and objectives.  The format of the plan may be guided by \nspecific policies and procedures, protocols, practice guidelines or a \ncombination of these. It includes preventive, promotive, curative and \nrehabilitative aspects of care. \nPolicies They are the guidelines for decision making, e.g. admission, discharge \npolicies, antibiotic policy, etc. \nPrivileging \nIt is the process for authorising all medical professionals to admit and treat \npatients and provide other clinical services commensurate with their \nqualifications and skills. \nProcedure 1. A specified way to carry out an activity or a process.",
+      "content_type": "text",
+      "token_count": 733,
+      "page_number": 90
+    },
+    {
+      "id": "32213e12-faec-4d06-bea5-5bd351aa06a7",
+      "chapter_id": "9f801754-ba36-463a-872b-cb8804a543bd",
+      "chunk_index": 0,
+      "content": "help to ensure the maximum use of resources and efforts to achieve the \ndesired output. \nProcess A set of interrelated or interacting activities which transforms inputs into \noutputs \nProgram \nA sequence of activities designed to implement policies and accomplish \nobjectives \nProtocol A plan or a set of steps to be followed in a study, an investigation or an \nintervention. \nQuality 1.  Degree to which a set of inherent characteristics fulfil requirements; \nCharacteristics imply a distinguishing feature; Requirements are a \nneed or expectation that is stated, generally implied or obligatory.",
+      "content_type": "text",
+      "token_count": 149,
+      "page_number": 91
+    },
+    {
+      "id": "e7304936-5915-4e09-8206-c9a2849c5ea4",
+      "chapter_id": "aa880e1a-af17-4520-b313-b2ce472203aa",
+      "chunk_index": 0,
+      "content": "Quality assurance Part of quality management focussed on providing confidence that quality \nrequirements will be fulfilled.\n© National Accreditation Board for Hospitals and Healthcare Providers 60 \nRe-assessment It implies continuous and on-going assessment of the patient which are \nrecorded in the medical records as progress notes. \nResources It Implies all inputs in terms of men, material, money, machines, minutes \n(time), methods, meters (space), skills, knowledge and information that are \nneeded for efficient and effective functioning of an organization.  \nRestraints Devices used to ensure safety by restricting and controlling a person’s \nmovement. Many facilities are “restraint free” or use alternative methods to \nhelp modify behaviour. \nRisk management Clinical and administrative activities to identify, evaluate and reduce the risk \nof injury.  \nSafe transfer In these standards refers to Transfer of the patients who are in In-patient \ndepartment and those who have any kind of complications on the Dental \nchair. \nSafety The degree to which the risk of an intervention/ procedure, in the care \nenvironment are reduced for a patient, visitors and health care providers. \nScope of services Range of clinical and supportive activities that are provided by a health care \norganization. \nSecurity Protection from loss, destruct ion, tampering, and unauthorized access or \nuse. \nSedation The administration to an individual , in any setting for any purpose, by any \nroute, moderate or deep sedation. There are three levels of sedation: \nMinimal sedation (anxiolysis) A drug induced state during which patients \nrespond normally to verbal commands. Although cognitive function and \ncoordination may be impaired, vertilatory and cardiovascular functions are \nnot affected.  \nModerate sedation / analgesia (Conscious sedation) – A drug induced \ndepression of consciousness during which patients respond purposefully to \nverbal commands either alone or accompanied by light tactile stimulation. \nNo interventions are needed to maintain a patent airway. \nDeep sedation/Analgesia – A drug induced depression of consciousness \nduring which patients cannot be easily aroused but respond purposefully \nafter repeated or painful stimulation. Patients may need help in maintaining \na patent airway. \n© National Accreditation Board for Hospitals and Healthcare Providers 61 \nSentinel events \nA relatively infrequent, unexpected incident, related to system or process \ndeficiencies, which leads to death or major and enduring loss of \nfunction* for a recipient of health care services \n* Major and enduring loss of function  refers to sensory, motor, \nphysiological, or psychological impairment not present at the time services \nwere sought or begun. The impairment lasts for a minimum period of two \nweeks and is not related to an underlying condition \nSocial \nrresponsibility\nA balanced approach for organization to address economic, social and \nenvironmental issues in a way that aims to benefit people, communities and \nsociety, e.g. adoption of villages for providing health care, holding of \nmedical camps and proper disposal of hospital wastes. \nStaff \nAll personnel working in the organization either as full paid employees or as \nconsultants on honorarium basis.",
+      "content_type": "text",
+      "token_count": 818,
+      "page_number": 92
+    },
+    {
+      "id": "60c75069-6069-48af-9411-ee5db821bd06",
+      "chapter_id": "f5e67e83-1229-47e6-a063-1016ce5d3678",
+      "chunk_index": 0,
+      "content": "precautions",
+      "content_type": "text",
+      "token_count": 2,
+      "page_number": 94
+    },
+    {
+      "id": "d092de54-afef-4c82-bfbf-559b494a5004",
+      "chapter_id": "d6e1cbe1-5e30-4f2c-a79e-cec1c51a5658",
+      "chunk_index": 0,
+      "content": "fluids are considered infectious for HIV, HBV and other blood-borne \npathogens, regardless of patient history. It encompasses a variety of \npractices to prevent occupational exposure, such as the use of \npersonal protective equipment (PPE), disposal of sharps and safe \nhousekeeping",
+      "content_type": "example",
+      "token_count": 70,
+      "page_number": 94
+    },
+    {
+      "id": "45108fcf-cad5-4085-9d7e-5e744fcc7d63",
+      "chapter_id": "0dffc537-c682-4534-8aca-91f3d6b5b532",
+      "chunk_index": 0,
+      "content": "from pathogens. The main message is \"Don't touch or use anything \nthat has the victim's body fluid on it without a barrier.\" It also assumes \nthat all body fluid of a patient is infectious, and must be treated \naccordingly",
+      "content_type": "text",
+      "token_count": 55,
+      "page_number": 94
+    },
+    {
+      "id": "4e3a5cee-a439-48dc-8a65-419592b0f519",
+      "chapter_id": "d988b88d-d8b8-4e9a-a913-c5cd5ad35805",
+      "chunk_index": 0,
+      "content": "excretions (except sweat) regardless of whether or not they contain visible \nblood, non-intact skin and mucous membranes.",
+      "content_type": "text",
+      "token_count": 30,
+      "page_number": 94
+    },
+    {
+      "id": "aa5acb04-8583-4902-8d0d-109fcbb1231a",
+      "chapter_id": "499f70f0-d310-42e9-a21a-dfffbaefc661",
+      "chunk_index": 0,
+      "content": "must be substantially in place in an organization to enhance the qualify of \ncare.  \nSterilization \nIt is the process of killing or removing microorganisms including their spores \nby thermal, chemical or irradiation means. \nSurveillance  The continuous scrutiny of factors that determines the occurrence and \ndistribution of diseases and other conditions of ill health. It implies watching \nover with great attention, authority and often with suspicion.  It requires \nprofessional analysis and sophisticated interpretation of data leading to \nrecommendations for control activities. \nUnstable patient A patient whose vital parameters need external assistance for their \nmaintenance.  \n© National Accreditation Board for Hospitals and Healthcare Providers 62 \nValidation",
+      "content_type": "text",
+      "token_count": 192,
+      "page_number": 94
+    },
+    {
+      "id": "5d610d01-43e4-4c35-92bc-55fbee2c0da0",
+      "chapter_id": "b58fb044-dc41-4131-8ade-0a00b5744b2a",
+      "chunk_index": 0,
+      "content": "requirements for a specific intended use or application have been \nfulfilled",
+      "content_type": "text",
+      "token_count": 19,
+      "page_number": 95
+    },
+    {
+      "id": "31ed0afa-40c3-47c7-bb8a-e95322b9de41",
+      "chapter_id": "2966cd32-d9e9-432c-a13f-05bd3f40ad67",
+      "chunk_index": 0,
+      "content": "something",
+      "content_type": "text",
+      "token_count": 2,
+      "page_number": 95
+    },
+    {
+      "id": "1f72cbed-8a75-4faf-bfa3-cd08b1064c56",
+      "chapter_id": "d15d02f9-a9eb-4bcb-9a2f-705f46af3d3b",
+      "chunk_index": 0,
+      "content": "standards, rules or conventions. These are the tests to determine \nwhether an implemented system fulfils its requirements. It also refers to \nwhat extent does a test accurately measures what it purports to \nmeasure.\nVulnerable patient Those patients who are prone to injury and disease by virtue of their age, \nsex, physical, mental and immunological status, e.g. infants, elderly, \nphysically and mentally challenged those on immunosuppressive and/or \nchemotherapeutic agents. \n© National Accreditation Board for Hospitals and Healthcare Providers 63",
+      "content_type": "text",
+      "token_count": 137,
+      "page_number": 95
+    },
+    {
+      "id": "09209dee-faba-49e7-80a1-d9104d2d565c",
+      "chapter_id": "913a4c65-ab14-401f-a0d6-de141861db39",
+      "chunk_index": 0,
+      "content": "Definition: \nAn unexpected incident, related to system or process deficiencies, which leads to death or \nmajor and enduring loss of function* for a recipient of health care services. \nMajor and enduring loss of function refers to sensory, motor, physiological, or psychological \nimpairment not present at the time services were sought or begun. The impairment lasts for a \nminimum period of two weeks and is not related to an underlying condition. \nEvent type description",
+      "content_type": "text",
+      "token_count": 117,
+      "page_number": 96
+    },
+    {
+      "id": "766a01b4-fb47-486a-8e18-3c6be9d5a67d",
+      "chapter_id": "b892a364-3236-4ffa-a873-90f3b392eff7",
+      "chunk_index": 0,
+      "content": "o Surgery performed on the wrong body part \no Surgery performed on the wrong patient \no Wrong surgical procedure performed on the wrong patient \no Retained instruments in patient discovered after surgery/procedure \no Patient death during or immediately post surgical procedure \no Anesthesia related event",
+      "content_type": "text",
+      "token_count": 76,
+      "page_number": 96
+    },
+    {
+      "id": "9a7ec57f-eb0e-4d9f-84c5-2b2220fd07d8",
+      "chapter_id": "87303aa5-522f-4af4-a179-2ff94695c5af",
+      "chunk_index": 0,
+      "content": "o the use of contaminated drugs, devices, products supplied by the organization \no the use or function of a device in a manner other than the device’s intended use \no the failure or breakdown of a device or medical equipment \no intravascular air embolism",
+      "content_type": "text",
+      "token_count": 63,
+      "page_number": 96
+    },
+    {
+      "id": "4605f7f4-ddcf-44c8-89e3-8258c40fc3c7",
+      "chapter_id": "a1a96f12-fff1-4b82-898f-c79b0ab92209",
+      "chunk_index": 0,
+      "content": "o Discharge of an infant to the wrong person \no Patient death or serious disability associated with elopement from the health care facility \no Patient suicide, attempted suicide, or deli berate self-harm resulting in serious disability",
+      "content_type": "text",
+      "token_count": 58,
+      "page_number": 96
+    },
+    {
+      "id": "bc0511cf-3f4c-4f16-923d-528048b2ab25",
+      "chapter_id": "f418c175-61be-4449-b4de-962e7f733bee",
+      "chunk_index": 0,
+      "content": "o Any incident in which a line designated for oxygen or other came to be delivered to a \npatient and contains the wrong gas or is contaminated by toxic substances \no Nosocomial infection or disease causing patient death or serious disability",
+      "content_type": "text",
+      "token_count": 60,
+      "page_number": 96
+    },
+    {
+      "id": "77cd8dbb-be9b-4a96-a4b8-4423b43a3e96",
+      "chapter_id": "bdecc75b-50fe-4361-85a7-46b8ed038393",
+      "chunk_index": 0,
+      "content": "Patient death or serious disability while being cared for in a health care facility \nassociated with: \no a burn incurred from any source \no a slip, trip, or fall \no an electric shock \no the use of restraints or bedrails \n© National Accreditation Board for Hospitals and Healthcare Providers 64",
+      "content_type": "text",
+      "token_count": 73,
+      "page_number": 97
+    },
+    {
+      "id": "d4df24f4-6e32-4ac0-ba43-ce64a9c64f8e",
+      "chapter_id": "e7df8295-f4bb-4896-98f3-1171bcae23f2",
+      "chunk_index": 0,
+      "content": "o Patient death or serious disability associated with a hemolytic reaction due to the \nadministration of ABO-incompatible blood or blood products \no Maternal death or serious disability associated with labor or delivery in a low-risk \npregnancy \no Medication error leading to the death or serious disability of patient due to incorrect \nadministration of drugs, for example: \no omission error \no dosage error \no dose preparation error \no wrong time error \no wrong rate of administration error \no wrong administrative technique error \no wrong patient error \nPatient death or serious disability associated with an avoidable delay in treatment or \nresponse to abnormal test results",
+      "content_type": "example",
+      "token_count": 169,
+      "page_number": 97
+    },
+    {
+      "id": "4dc94feb-8208-40d7-a65a-cbf039a50cc1",
+      "chapter_id": "325afc4a-1dca-4318-849d-f8502bc473aa",
+      "chunk_index": 0,
+      "content": "o Any instance of care ordered by or provided by an individual impersonating a clinical \nmember of staff \no Abduction of a patient \no Sexual assault on a patient within or on the grounds of the health care facility \no Death or significant injury of a patient or staff member resulting from a physical assault \nor other crime that occurs within or on the grounds of the health care facility.",
+      "content_type": "text",
+      "token_count": 97,
+      "page_number": 97
+    }
+  ]
+}

@@ -3,6 +3,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { Room, RoomEvent, RemoteTrack, RemoteTrackPublication } from 'livekit-client';
 import { EventEmitter } from 'events';
+import performanceMonitor from '@/lib/performance/performance-monitor';
+import { FeatureFlagService } from '@/shared/services/feature-flags';
 
 // Create shared event bus for LiveKit data communication
 export const liveKitEventBus = new EventEmitter();
@@ -32,6 +34,15 @@ export function LiveKitRoom({
   // FC-010: Show-Then-Tell is now handled server-side
   // The Python agent sends transcripts 400ms before audio
   // No client-side delay needed
+
+  // Enable performance monitoring for show-then-tell timing
+  useEffect(() => {
+    const timingEnabled = FeatureFlagService.isEnabled('enableShowThenTellTiming');
+    if (timingEnabled) {
+      performanceMonitor.enable();
+      console.log('[LiveKitRoom] Show-Then-Tell timing measurement enabled');
+    }
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -102,11 +113,72 @@ export function LiveKitRoom({
       if (track.kind === 'audio' && audioElementRef.current) {
         console.log('[LiveKitRoom] Audio track received - attaching immediately');
 
+        // 🎯 SHOW-THEN-TELL TIMING MEASUREMENT: Record audio attachment time
+        const audioTimestamp = performance.now();
+
         // FC-010: Attach audio immediately
         // The server-side transcript advance creates the Show-Then-Tell effect
         // Transcripts are sent 400ms before audio from the Python agent
         track.attach(audioElementRef.current);
         console.log('[LiveKitRoom] Audio track attached - Show-Then-Tell timing handled server-side');
+
+        // Record show-then-tell audio timing metric
+        performanceMonitor.addMetric({
+          name: 'show-then-tell-audio-attachment',
+          value: audioTimestamp,
+          unit: 'ms',
+          timestamp: Date.now(),
+          category: 'user-interaction'
+        });
+
+        // Add audio playback event listener for precise timing
+        if (audioElementRef.current) {
+          const audioElement = audioElementRef.current;
+
+          const handleAudioStart = () => {
+            const audioStartTimestamp = performance.now();
+            console.log('[LiveKitRoom] Audio playback started');
+
+            // Record actual audio start timing
+            performanceMonitor.addMetric({
+              name: 'show-then-tell-audio-start',
+              value: audioStartTimestamp,
+              unit: 'ms',
+              timestamp: Date.now(),
+              category: 'user-interaction'
+            });
+
+            // Calculate and record show-then-tell lead time
+            const lastTextMetric = performanceMonitor.generateReport().metrics
+              .filter(m => m.name === 'show-then-tell-text-arrival')
+              .slice(-1)[0];
+
+            if (lastTextMetric) {
+              const leadTime = audioStartTimestamp - lastTextMetric.value;
+              console.log(`[SHOW-THEN-TELL] Visual lead time: ${leadTime.toFixed(1)}ms`);
+
+              performanceMonitor.addMetric({
+                name: 'show-then-tell-lead-time',
+                value: leadTime,
+                unit: 'ms',
+                timestamp: Date.now(),
+                category: 'user-interaction'
+              });
+
+              // Validate timing is within expected range
+              if (leadTime >= 300 && leadTime <= 500) {
+                console.log('✅ Show-Then-Tell timing is within optimal range (300-500ms)');
+              } else {
+                console.warn(`⚠️ Show-Then-Tell timing drift detected: ${leadTime.toFixed(1)}ms`);
+              }
+            }
+
+            // Clean up listener
+            audioElement.removeEventListener('playing', handleAudioStart);
+          };
+
+          audioElement.addEventListener('playing', handleAudioStart);
+        }
       }
     };
 
@@ -139,10 +211,22 @@ export function LiveKitRoom({
         if (data.type === 'transcript') {
           console.log('[LiveKitRoom] Transcript received, emitting to SessionOrchestrator');
 
+          // 🎯 SHOW-THEN-TELL TIMING MEASUREMENT: Record text arrival time
+          const textTimestamp = performance.now();
+
           // FC-010: The server sends transcripts 400ms before audio
           // The showThenTell flag indicates this is an advanced transcript
           if (data.showThenTell) {
             console.log('[LiveKitRoom] Show-Then-Tell transcript received (400ms before audio)');
+
+            // Record show-then-tell text timing metric
+            performanceMonitor.addMetric({
+              name: 'show-then-tell-text-arrival',
+              value: textTimestamp,
+              unit: 'ms',
+              timestamp: Date.now(),
+              category: 'user-interaction'
+            });
           }
 
           // Emit event for SessionOrchestrator
@@ -151,7 +235,8 @@ export function LiveKitRoom({
             speaker: data.speaker || 'teacher',
             timestamp: Date.now(),
             showThenTell: data.showThenTell || false,
-            audioDelay: data.audioDelay || 0
+            audioDelay: data.audioDelay || 0,
+            textTimestamp // Pass timing for further analysis
           });
         }
       } catch (error) {

@@ -18,6 +18,7 @@ import { SessionOrchestrator } from '@/protected-core';
 import { ResizableSplit } from '@/components/ui/resizable-split';
 import { TabsContainer } from '@/components/classroom/TabsContainer';
 import { FloatingControls } from '@/components/classroom/FloatingControls';
+import { ShowThenTellTimingToggle } from '@/components/dev/ShowThenTellTimingDashboard';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -592,6 +593,9 @@ export default function ClassroomPage() {
             </Alert>
           )}
         </div>
+
+        {/* Development Timing Dashboard */}
+        <ShowThenTellTimingToggle />
       </div>
     );
   }

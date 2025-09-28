@@ -1,0 +1,59 @@
+# Rule set for NCERT Class X English First Flight (Book 1)
+# Folder pattern this rule applies to (regex or literal substring)
+folder_match: "Class X ENG Book 1"
+
+chapters:
+  - number: 1
+    title: "A Letter to God"
+    keywords:
+      - "Letter to God"
+      - "Lencho"
+  - number: 2
+    title: "Nelson Mandela: Long Walk to Freedom"
+    keywords:
+      - "Nelson Mandela"
+      - "Long Walk to Freedom"
+  - number: 3
+    title: "Two Stories about Flying"
+    keywords:
+      - "Two Stories about Flying"
+      - "His First Flight"
+      - "Black Aeroplane"
+  - number: 4
+    title: "From the Diary of Anne Frank"
+    keywords:
+      - "Diary of Anne Frank"
+      - "Anne Frank"
+  - number: 5
+    title: "The Hundred Dresses – I"
+    keywords:
+      - "The Hundred Dresses"
+  - number: 6
+    title: "The Hundred Dresses – II"
+    keywords:
+      - "The Hundred Dresses"
+  - number: 7
+    title: "Glimpses of India"
+    keywords:
+      - "Glimpses of India"
+      - "A Baker from Goa"
+      - "Coorg"
+      - "Tea from Assam"
+  - number: 8
+    title: "Mijbil the Otter"
+    keywords:
+      - "Mijbil the Otter"
+      - "Mijbil"
+  - number: 9
+    title: "Madam Rides the Bus"
+    keywords:
+      - "Madam Rides the Bus"
+  - number: 10
+    title: "The Sermon at Benares"
+    keywords:
+      - "Sermon at Benares"
+      - "Buddha"
+  - number: 11
+    title: "The Proposal"
+    keywords:
+      - "The Proposal"

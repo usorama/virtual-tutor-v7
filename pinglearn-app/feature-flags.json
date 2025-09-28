@@ -8,5 +8,8 @@
   "enableAdvancedProtection": false,
   "enableMonitoring": false,
   "enableRollback": false,
-  "enablePerformanceOptimization": false
+  "enablePerformanceOptimization": false,
+  "enableShowThenTell": true,
+  "enableFC010": true,
+  "enableShowThenTellTiming": true
 }
