@@ -117,7 +117,7 @@ export interface EnhancedContentChunk {
   page_number?: number;
   token_count?: number;
   mathematical_content: boolean;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
   created_at: string;
 
   // Relations (optional for different query contexts)
@@ -431,7 +431,7 @@ export interface ApiResponse<T> {
   error?: {
     message: string;
     code: string;
-    details?: any;
+    details?: Record<string, unknown>;
   };
   success: boolean;
   timestamp: string;
