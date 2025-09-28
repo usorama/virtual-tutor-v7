@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { Room, RoomEvent, RemoteTrack, RemoteTrackPublication } from 'livekit-client';
 import { EventEmitter } from 'events';
 import performanceMonitor from '@/lib/performance/performance-monitor';
-import { FeatureFlagService } from '@/shared/services/feature-flags';
+import { FEATURES } from '@/config/features';
 
 // Create shared event bus for LiveKit data communication
 export const liveKitEventBus = new EventEmitter();
@@ -37,7 +37,7 @@ export function LiveKitRoom({
 
   // Enable performance monitoring for show-then-tell timing
   useEffect(() => {
-    const timingEnabled = FeatureFlagService.isEnabled('enableShowThenTellTiming');
+    const timingEnabled = FEATURES.showThenTellTiming;
     if (timingEnabled) {
       performanceMonitor.enable();
       console.log('[LiveKitRoom] Show-Then-Tell timing measurement enabled');

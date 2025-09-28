@@ -6,7 +6,7 @@
 
 import { useEffect, useCallback, useRef } from 'react';
 import performanceMonitor, { type PerformanceMetric, type VitalMetrics } from '@/lib/performance/performance-monitor';
-import { useFeatureFlag } from '@/lib/feature-flags';
+import { FEATURES } from '@/config/features';
 
 export interface UsePerformanceMonitoringOptions {
   autoStart?: boolean;
@@ -37,7 +37,7 @@ export function usePerformanceMonitoring(
     trackEffects = true,
   } = options;
 
-  const isMonitoringEnabled = useFeatureFlag('performance_monitoring');
+  const isMonitoringEnabled = FEATURES.performanceOptimization;
   const renderCountRef = useRef(0);
   const mountTimeRef = useRef<number | null>(null);
 

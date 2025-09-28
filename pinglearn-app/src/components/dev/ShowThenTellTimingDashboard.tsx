@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import performanceMonitor from '@/lib/performance/performance-monitor';
-import { FeatureFlagService } from '@/shared/services/feature-flags';
+import { FEATURES } from '@/config/features';
 
 interface TimingMetric {
   name: string;
@@ -30,7 +30,7 @@ export function ShowThenTellTimingDashboard() {
   // Only show in development with timing enabled
   useEffect(() => {
     const isDev = process.env.NODE_ENV === 'development';
-    const timingEnabled = FeatureFlagService.isEnabled('enableShowThenTellTiming');
+    const timingEnabled = FEATURES.showThenTellTiming;
     setIsVisible(isDev && timingEnabled);
   }, []);
 
@@ -263,7 +263,7 @@ export function ShowThenTellTimingToggle() {
 
   useEffect(() => {
     const isDev = process.env.NODE_ENV === 'development';
-    const timingEnabled = FeatureFlagService.isEnabled('enableShowThenTellTiming');
+    const timingEnabled = FEATURES.showThenTellTiming;
     setIsVisible(isDev && timingEnabled);
   }, []);
 

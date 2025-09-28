@@ -5,7 +5,6 @@ import "../styles/katex.css";
 import "../styles/marketing.css";
 import "../styles/glass-morphism.css";
 import { AuthProvider } from '@/lib/auth/auth-provider';
-import Navigation from '@/components/marketing/sections/Navigation';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 
 const inter = Inter({
@@ -85,25 +84,40 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
+    <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Critical CSS to prevent white flash */}
-        <style dangerouslySetInnerHTML={{
-          __html: `
-            html {
-              background-color: #000000 !important;
-              height: 100%;
-            }
-            body {
-              background-color: #000000 !important;
-              min-height: 100vh;
-            }
-          `
-        }} />
+        {/* Prevent FOUC with inline script */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const storedTheme = localStorage.getItem('theme');
+                  const theme = storedTheme || 'system';
+
+                  let resolved;
+                  if (theme === 'system') {
+                    resolved = window.matchMedia('(prefers-color-scheme: dark)').matches
+                      ? 'dark'
+                      : 'light';
+                  } else {
+                    resolved = theme;
+                  }
+
+                  document.documentElement.classList.add(resolved);
+                  document.documentElement.style.colorScheme = resolved;
+                } catch (e) {
+                  // Fallback to dark theme if anything fails
+                  document.documentElement.classList.add('dark');
+                  document.documentElement.style.colorScheme = 'dark';
+                }
+              })();
+            `,
+          }}
+        />
       </head>
       <body
-        className={`${inter.variable} font-sans antialiased min-h-screen text-foreground`}
-        style={{ backgroundColor: '#000000', minHeight: '100vh' }}
+        className={`${inter.variable} font-sans antialiased min-h-screen bg-background text-foreground`}
       >
         <ThemeProvider>
           <AuthProvider>
