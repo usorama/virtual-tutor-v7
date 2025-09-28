@@ -40,11 +40,11 @@ export async function getCurriculumData(grade: number): Promise<{
     }
 
     // Transform textbook data into curriculum format
-    const curriculumData: CurriculumData[] = textbooks?.map(textbook => ({
+    const curriculumData: CurriculumData[] = textbooks?.map((textbook: any) => ({
       id: textbook.id,
       grade: textbook.grade,
       subject: textbook.subject,
-      topics: textbook.chapters?.flatMap(chapter => chapter.topics || []) || []
+      topics: textbook.chapters?.flatMap((chapter: any) => chapter.topics || []) || []
     })) || []
 
     // Log first item to debug structure
