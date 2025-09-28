@@ -39,7 +39,7 @@ import { toast } from 'sonner';
 // Import our new components
 import { MetadataWizard } from './MetadataWizard';
 import { BulkUploadInterface } from './BulkUploadInterface';
-import { BookGroupDetector } from '@/lib/textbook/enhanced-processor';
+import { BookGroupDetector, EnhancedTextbookProcessor } from '@/lib/textbook/enhanced-processor';
 import { PDFMetadataExtractor } from '@/lib/textbook/pdf-metadata-extractor';
 import { Folder, FolderOpen, Info } from 'lucide-react';
 
