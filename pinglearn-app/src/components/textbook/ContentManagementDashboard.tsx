@@ -9,6 +9,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import useSWR from 'swr';
+import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -74,6 +76,38 @@ interface FilterState {
   status: 'all' | 'completed' | 'processing' | 'failed' | 'pending';
 }
 
+// Supabase realtime payload type
+interface SupabasePayload {
+  eventType: 'INSERT' | 'UPDATE' | 'DELETE';
+  new?: Record<string, unknown>;
+  old?: Record<string, unknown>;
+  schema: string;
+  table: string;
+}
+
+// API response types
+interface ApiSeriesData {
+  id: string;
+  series_name: string;
+  publisher: string;
+  subject: string;
+  grade: number;
+  curriculum_standard: CurriculumStandard;
+  description?: string;
+  updated_at: string;
+  books?: ApiBookData[];
+}
+
+interface ApiBookData {
+  chapters?: { length: number }[];
+}
+
+// ==================================================
+// SWR FETCHER FUNCTION
+// ==================================================
+
+const fetcher = (url: string) => fetch(url).then(res => res.json())
+
 // ==================================================
 // MAIN DASHBOARD COMPONENT
 // ==================================================
@@ -94,56 +128,98 @@ export function ContentManagementDashboard({
   // ==================================================
 
   const [activeTab, setActiveTab] = useState('overview');
-  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [stats, setStats] = useState<ContentStats>({
+  // SWR hook for fetching statistics with auto-refresh capabilities
+  const { data: statsResponse, isLoading, mutate } = useSWR(
+    '/api/textbooks/statistics',
+    fetcher,
+    {
+      revalidateOnFocus: true,
+      revalidateOnMount: true,
+      revalidateOnReconnect: true,
+      refreshInterval: 0 // Manual refresh only via Supabase realtime
+    }
+  );
+
+  // Derive stats and growth from SWR response
+  const stats = statsResponse?.data || {
     totalSeries: 0,
     totalBooks: 0,
     totalChapters: 0,
     totalSections: 0,
     recentlyAdded: 0,
     needsReview: 0
-  });
-  const [growth, setGrowth] = useState({
+  };
+  const growth = statsResponse?.data?.growth || {
     series: 0,
     books: 0,
     chapters: 0,
     sections: 0
-  });
-
-  // Fetch real statistics from database
-  useEffect(() => {
-    fetchStatistics();
-  }, []);
-
-  const fetchStatistics = async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetch('/api/textbooks/statistics');
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch statistics');
-      }
-
-      const result = await response.json();
-      const data = result.data;
-
-      setStats({
-        totalSeries: data.totalSeries,
-        totalBooks: data.totalBooks,
-        totalChapters: data.totalChapters,
-        totalSections: data.totalSections,
-        recentlyAdded: data.recentlyAdded,
-        needsReview: data.needsReview
-      });
-
-      setGrowth(data.growth);
-    } catch (error) {
-      console.error('Error fetching statistics:', error);
-    } finally {
-      setIsLoading(false);
-    }
   };
+
+  // Supabase Realtime subscription for automatic refresh
+  useEffect(() => {
+    const supabase = createClient();
+
+    // Subscribe to changes in textbook-related tables
+    const subscription = supabase
+      .channel('textbook-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*', // Listen to all events (INSERT, UPDATE, DELETE)
+          schema: 'public',
+          table: 'textbooks'
+        },
+        (payload: SupabasePayload) => {
+          console.log('Textbooks table changed:', payload);
+          mutate(); // Refresh stats data
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'book_series'
+        },
+        (payload: SupabasePayload) => {
+          console.log('Book series table changed:', payload);
+          mutate(); // Refresh stats data
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'books'
+        },
+        (payload: SupabasePayload) => {
+          console.log('Books table changed:', payload);
+          mutate(); // Refresh stats data
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'book_chapters'
+        },
+        (payload: SupabasePayload) => {
+          console.log('Book chapters table changed:', payload);
+          mutate(); // Refresh stats data
+        }
+      )
+      .subscribe();
+
+    // Cleanup subscription on unmount
+    return () => {
+      console.log('Unsubscribing from textbook changes');
+      supabase.removeChannel(subscription);
+    };
+  }, [mutate]);
 
   const [series, setSeries] = useState<SeriesWithBooks[]>([]);
   const [filters, setFilters] = useState<FilterState>({
@@ -167,11 +243,11 @@ export function ContentManagementDashboard({
       const result = await response.json();
       if (result.data) {
         // Transform the data to match our interface
-        const transformedSeries: SeriesWithBooks[] = result.data.map((s: any) => ({
+        const transformedSeries: SeriesWithBooks[] = result.data.map((s: ApiSeriesData) => ({
           ...s,
           books_extended: s.books || [],
           bookCount: s.books?.length || 0,
-          chapterCount: s.books?.reduce((total: number, book: any) =>
+          chapterCount: s.books?.reduce((total: number, book: ApiBookData) =>
             total + (book.chapters?.length || 0), 0) || 0,
           lastUpdated: new Date(s.updated_at)
         }));
