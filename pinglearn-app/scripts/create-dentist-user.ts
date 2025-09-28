@@ -24,7 +24,7 @@ async function createDentistUser() {
   try {
     // Step 1: Create the user in Auth
     console.log('Step 1: Creating user in Supabase Auth...')
-    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+    let { data: authData, error: authError } = await supabase.auth.admin.createUser({
       email: 'dentist@dental.com',
       password: 'password123',
       email_confirm: true, // Auto-confirm email
@@ -47,7 +47,7 @@ async function createDentistUser() {
         const existingUser = users.find(u => u.email === 'dentist@dental.com')
         if (!existingUser) throw new Error('Could not find existing user')
 
-        authData.user = existingUser
+        authData = { user: existingUser }
         console.log('✅ Found existing user:', existingUser.id)
       } else {
         throw authError
