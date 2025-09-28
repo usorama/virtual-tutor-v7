@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { PDFMetadataExtractor } from '@/lib/textbook/pdf-metadata-extractor';
+import { RealPDFProcessor } from '@/lib/textbook/pdf-processor';
 import type {
   BookSeries,
   Book,
@@ -150,15 +151,15 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Process PDFs in the background (trigger processing job)
-    // In a real implementation, this would trigger a background job
-    // For now, we'll just update the status after a delay
-    setTimeout(async () => {
-      await supabase
-        .from('textbooks')
-        .update({ status: 'ready' })
-        .eq('series_id', series.id);
-    }, 5000);
+    // Process PDFs in the background using real PDF processing
+    // Trigger actual PDF processing for uploaded files
+    processTextbooksAsync(series.id, uploadedFiles)
+      .then(() => {
+        console.log(`✅ Background processing completed for series ${series.id}`);
+      })
+      .catch((error) => {
+        console.error(`❌ Background processing failed for series ${series.id}:`, error);
+      });
 
     return NextResponse.json({
       success: true,
@@ -175,6 +176,103 @@ export async function POST(request: NextRequest) {
       { error: 'Internal server error' },
       { status: 500 }
     );
+  }
+}
+
+/**
+ * Background processing function for textbooks
+ * Processes PDFs asynchronously after the API response is sent
+ */
+async function processTextbooksAsync(
+  seriesId: string,
+  uploadedFiles: Array<{ name: string; path: string; size: number }>
+): Promise<void> {
+  const supabase = await createClient();
+  const processor = new RealPDFProcessor();
+
+  try {
+    console.log(`🔄 Starting background processing for series ${seriesId}...`);
+
+    // Get all textbooks for this series that need processing
+    const { data: textbooks, error: fetchError } = await supabase
+      .from('textbooks')
+      .select('id, title, file_path, file_name')
+      .eq('series_id', seriesId)
+      .eq('status', 'processing');
+
+    if (fetchError) {
+      throw new Error(`Failed to fetch textbooks: ${fetchError.message}`);
+    }
+
+    if (!textbooks || textbooks.length === 0) {
+      console.log(`ℹ️ No textbooks found for processing in series ${seriesId}`);
+      return;
+    }
+
+    console.log(`📚 Processing ${textbooks.length} textbooks...`);
+
+    // Process each textbook
+    for (const textbook of textbooks) {
+      try {
+        console.log(`📄 Processing: ${textbook.title}`);
+
+        // Find the corresponding uploaded file
+        const uploadedFile = uploadedFiles.find(f => f.name === textbook.file_name);
+        if (!uploadedFile) {
+          console.error(`❌ File not found for textbook: ${textbook.title}`);
+          continue;
+        }
+
+        // Process the PDF
+        await processor.processPDFFile(
+          uploadedFile.path,
+          textbook.id,
+          (status, progress) => {
+            console.log(`  ${status} (${progress}%)`);
+          }
+        );
+
+        // Mark as ready
+        await supabase
+          .from('textbooks')
+          .update({
+            status: 'ready',
+            processing_status: 'completed'
+          })
+          .eq('id', textbook.id);
+
+        console.log(`✅ Completed processing: ${textbook.title}`);
+
+      } catch (textbookError) {
+        console.error(`❌ Failed to process textbook ${textbook.title}:`, textbookError);
+
+        // Mark as error
+        await supabase
+          .from('textbooks')
+          .update({
+            status: 'error',
+            processing_status: 'failed',
+            error_message: textbookError instanceof Error ? textbookError.message : 'Processing failed'
+          })
+          .eq('id', textbook.id);
+      }
+    }
+
+    console.log(`🎉 Background processing completed for series ${seriesId}`);
+
+  } catch (error) {
+    console.error(`💥 Background processing failed for series ${seriesId}:`, error);
+
+    // Mark all textbooks in series as error
+    await supabase
+      .from('textbooks')
+      .update({
+        status: 'error',
+        processing_status: 'failed',
+        error_message: error instanceof Error ? error.message : 'Background processing failed'
+      })
+      .eq('series_id', seriesId)
+      .eq('status', 'processing');
   }
 }
 
