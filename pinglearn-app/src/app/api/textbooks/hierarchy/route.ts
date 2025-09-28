@@ -145,7 +145,7 @@ export async function POST(request: NextRequest) {
       console.error('Textbook creation error:', textbookError);
     } else if (textbook) {
       // Link chapters to the textbook
-      const chapterUpdates = createdChapters?.map(ch => ({
+      const chapterUpdates = createdChapters?.map((ch: { id: string }) => ({
         id: ch.id,
         textbook_id: textbook.id
       })) || [];
