@@ -85,9 +85,16 @@ export class BookGroupDetector {
   }
 
   private extractFolderPath(file: UploadedFile): string {
-    // If file has path info, extract folder
-    if ('path' in file && file.path) {
-      const pathParts = file.path.split('/');
+    // Check if the File object has webkitRelativePath (for folder uploads)
+    if (file.file && 'webkitRelativePath' in file.file && file.file.webkitRelativePath) {
+      const pathParts = file.file.webkitRelativePath.split('/');
+      pathParts.pop(); // Remove filename
+      return pathParts.join('/');
+    }
+
+    // For backwards compatibility, check if file has a path property with proper type checking
+    if ('path' in file && typeof (file as any).path === 'string') {
+      const pathParts = (file as any).path.split('/');
       pathParts.pop(); // Remove filename
       return pathParts.join('/');
     }
