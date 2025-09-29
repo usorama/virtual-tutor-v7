@@ -4,10 +4,16 @@
  * Handles the creation and management of book series, books, and chapters
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { PDFMetadataExtractor } from '@/lib/textbook/pdf-metadata-extractor';
 import { RealPDFProcessor } from '@/lib/textbook/pdf-processor';
+import {
+  handleAPIError,
+  createErrorContext,
+  createAPIError
+} from '@/lib/errors/api-error-handler';
+import { ErrorCode, ErrorSeverity } from '@/lib/errors/error-types';
 import type {
   BookSeries,
   Book,
@@ -20,34 +26,82 @@ import type {
  * Create a new book series with books and chapters
  */
 export async function POST(request: NextRequest) {
+  const requestId = crypto.randomUUID();
+
   try {
     const supabase = await createClient();
 
     // Get user session
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
+      const error = createAPIError(
+        new Error('Authentication required'),
+        requestId,
+        'Please sign in to continue',
+        ErrorCode.AUTHENTICATION_ERROR
+      );
+
+      return handleAPIError(
+        error,
+        requestId,
+        createErrorContext(
+          { url: request.url, method: 'POST' },
+          undefined,
+          ErrorSeverity.MEDIUM
+        )
       );
     }
 
-    // Parse request body
-    const body = await request.json();
-    const { formData, uploadedFiles } = body as {
+    // Parse request body with validation
+    let body: {
       formData: TextbookWizardState['formData'];
       uploadedFiles: Array<{ name: string; path: string; size: number }>;
     };
 
-    // Validate required fields
-    if (!formData.seriesInfo || !formData.bookDetails || !formData.chapterOrganization) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
+    try {
+      body = await request.json();
+    } catch (parseError) {
+      const error = createAPIError(
+        parseError,
+        requestId,
+        'Invalid request body format',
+        ErrorCode.VALIDATION_ERROR
+      );
+
+      return handleAPIError(
+        error,
+        requestId,
+        createErrorContext(
+          { url: request.url, method: 'POST' },
+          { id: user.id },
+          ErrorSeverity.LOW
+        )
       );
     }
 
-    // Create book series
+    const { formData, uploadedFiles } = body;
+
+    // Validate required fields
+    if (!formData.seriesInfo || !formData.bookDetails || !formData.chapterOrganization) {
+      const error = createAPIError(
+        new Error('Missing required fields: seriesInfo, bookDetails, or chapterOrganization'),
+        requestId,
+        'Please provide all required information',
+        ErrorCode.MISSING_REQUIRED_FIELD
+      );
+
+      return handleAPIError(
+        error,
+        requestId,
+        createErrorContext(
+          { url: request.url, method: 'POST' },
+          { id: user.id },
+          ErrorSeverity.LOW
+        )
+      );
+    }
+
+    // Create book series with proper error handling
     const { data: series, error: seriesError } = await supabase
       .from('book_series')
       .insert({
@@ -63,14 +117,26 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (seriesError || !series) {
-      console.error('Series creation error:', seriesError);
-      return NextResponse.json(
-        { error: 'Failed to create book series' },
-        { status: 500 }
+      const error = createAPIError(
+        seriesError || new Error('Unknown database error'),
+        requestId,
+        'Failed to create book series',
+        ErrorCode.DATABASE_ERROR,
+        { originalError: seriesError }
+      );
+
+      return handleAPIError(
+        error,
+        requestId,
+        createErrorContext(
+          { url: request.url, method: 'POST' },
+          { id: user.id },
+          ErrorSeverity.HIGH
+        )
       );
     }
 
-    // Create book
+    // Create book with proper error handling
     const { data: book, error: bookError } = await supabase
       .from('books')
       .insert({
@@ -88,16 +154,29 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (bookError || !book) {
-      console.error('Book creation error:', bookError);
       // Cleanup series if book creation failed
       await supabase.from('book_series').delete().eq('id', series.id);
-      return NextResponse.json(
-        { error: 'Failed to create book' },
-        { status: 500 }
+
+      const error = createAPIError(
+        bookError || new Error('Unknown database error'),
+        requestId,
+        'Failed to create book',
+        ErrorCode.DATABASE_ERROR,
+        { originalError: bookError, cleanupAction: 'series_deleted' }
+      );
+
+      return handleAPIError(
+        error,
+        requestId,
+        createErrorContext(
+          { url: request.url, method: 'POST' },
+          { id: user.id },
+          ErrorSeverity.HIGH
+        )
       );
     }
 
-    // Create chapters
+    // Create chapters with error handling
     const chapters = formData.chapterOrganization.chapters.map((chapter, index) => {
       const chapterData = chapter as any; // Type issues with ChapterInfo interface
       return {
@@ -119,12 +198,20 @@ export async function POST(request: NextRequest) {
       .select();
 
     if (chaptersError) {
-      console.error('Chapters creation error:', chaptersError);
-      // Note: Not rolling back series and book as they might be useful even without chapters
+      // Log error but don't fail the request - chapters are optional
+      const error = createAPIError(
+        chaptersError,
+        requestId,
+        'Failed to create chapters',
+        ErrorCode.DATABASE_ERROR,
+        { originalError: chaptersError, severity: 'warning' }
+      );
+
+      // Log as warning, don't return error response
+      console.warn('Chapters creation failed (non-critical):', error);
     }
 
-    // Create a SINGLE textbook entry for the entire book (not per chapter!)
-    // FIXED: One textbook per book, not one per chapter
+    // Create textbook entry
     const { data: textbook, error: textbookError } = await supabase
       .from('textbooks')
       .insert({
@@ -135,20 +222,19 @@ export async function POST(request: NextRequest) {
         total_pages: formData.bookDetails.totalPages || (chapters.length * 25),
         status: 'processing',
         upload_status: 'completed',
-        // Note: We're creating ONE textbook for the entire book
-        // The chapters are stored separately in the chapters table
       })
       .select()
       .single();
 
     if (textbookError) {
-      console.error('Textbook creation error:', textbookError);
-    } else if (textbook) {
+      // Log error but don't fail - textbook entry is for compatibility
+      console.warn('Textbook entry creation failed (non-critical):', textbookError);
+    } else if (textbook && createdChapters) {
       // Link chapters to the textbook
-      const chapterUpdates = createdChapters?.map((ch: { id: string }) => ({
+      const chapterUpdates = createdChapters.map((ch: { id: string }) => ({
         id: ch.id,
         textbook_id: textbook.id
-      })) || [];
+      }));
 
       if (chapterUpdates.length > 0) {
         // Update chapters with textbook reference
@@ -170,8 +256,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Process PDFs in the background using real PDF processing
-    // Trigger actual PDF processing for uploaded files
-    processTextbooksAsync(series.id, uploadedFiles)
+    processTextbooksAsync(series.id, uploadedFiles, requestId)
       .then(() => {
         console.log(`✅ Background processing completed for series ${series.id}`);
       })
@@ -179,20 +264,36 @@ export async function POST(request: NextRequest) {
         console.error(`❌ Background processing failed for series ${series.id}:`, error);
       });
 
-    return NextResponse.json({
+    // Return successful response
+    return new Response(JSON.stringify({
       success: true,
       data: {
         seriesId: series.id,
         bookId: book.id,
         chaptersCreated: createdChapters?.length || 0
+      },
+      metadata: {
+        timestamp: new Date().toISOString(),
+        requestId,
+        version: '1.0'
+      }
+    }), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Request-ID': requestId
       }
     });
 
   } catch (error) {
-    console.error('API error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+    return handleAPIError(
+      error,
+      requestId,
+      createErrorContext(
+        { url: request.url, method: 'POST' },
+        undefined,
+        ErrorSeverity.CRITICAL
+      )
     );
   }
 }
@@ -203,7 +304,8 @@ export async function POST(request: NextRequest) {
  */
 async function processTextbooksAsync(
   seriesId: string,
-  uploadedFiles: Array<{ name: string; path: string; size: number }>
+  uploadedFiles: Array<{ name: string; path: string; size: number }>,
+  parentRequestId: string
 ): Promise<void> {
   const supabase = await createClient();
   const processor = new RealPDFProcessor();
@@ -219,7 +321,12 @@ async function processTextbooksAsync(
       .eq('status', 'processing');
 
     if (fetchError) {
-      throw new Error(`Failed to fetch textbooks: ${fetchError.message}`);
+      throw createAPIError(
+        fetchError,
+        `${parentRequestId}-bg`,
+        'Failed to fetch textbooks',
+        ErrorCode.DATABASE_ERROR
+      );
     }
 
     if (!textbooks || textbooks.length === 0) {
@@ -237,8 +344,12 @@ async function processTextbooksAsync(
         // Find the corresponding uploaded file
         const uploadedFile = uploadedFiles.find(f => f.name === textbook.file_name);
         if (!uploadedFile) {
-          console.error(`❌ File not found for textbook: ${textbook.title}`);
-          continue;
+          throw createAPIError(
+            new Error(`File not found for textbook: ${textbook.title}`),
+            `${parentRequestId}-bg-${textbook.id}`,
+            'File not found for processing',
+            ErrorCode.FILE_PROCESSING_ERROR
+          );
         }
 
         // Process the PDF
@@ -262,7 +373,8 @@ async function processTextbooksAsync(
         console.log(`✅ Completed processing: ${textbook.title}`);
 
       } catch (textbookError) {
-        console.error(`❌ Failed to process textbook ${textbook.title}:`, textbookError);
+        const error = createAPIError(textbookError, `${parentRequestId}-bg-${textbook.id}`);
+        console.error(`❌ Failed to process textbook ${textbook.title}:`, error);
 
         // Mark as error
         await supabase
@@ -270,7 +382,7 @@ async function processTextbooksAsync(
           .update({
             status: 'error',
             processing_status: 'failed',
-            error_message: textbookError instanceof Error ? textbookError.message : 'Processing failed'
+            error_message: error.message
           })
           .eq('id', textbook.id);
       }
@@ -279,7 +391,8 @@ async function processTextbooksAsync(
     console.log(`🎉 Background processing completed for series ${seriesId}`);
 
   } catch (error) {
-    console.error(`💥 Background processing failed for series ${seriesId}:`, error);
+    const bgError = createAPIError(error, `${parentRequestId}-bg`);
+    console.error(`💥 Background processing failed for series ${seriesId}:`, bgError);
 
     // Mark all textbooks in series as error
     await supabase
@@ -287,7 +400,7 @@ async function processTextbooksAsync(
       .update({
         status: 'error',
         processing_status: 'failed',
-        error_message: error instanceof Error ? error.message : 'Background processing failed'
+        error_message: bgError.message
       })
       .eq('series_id', seriesId)
       .eq('status', 'processing');
@@ -299,15 +412,29 @@ async function processTextbooksAsync(
  * Get all book series for the current user
  */
 export async function GET(request: NextRequest) {
+  const requestId = crypto.randomUUID();
+
   try {
     const supabase = await createClient();
 
     // Get user session
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
+      const error = createAPIError(
+        authError || new Error('Authentication required'),
+        requestId,
+        'Please sign in to continue',
+        ErrorCode.AUTHENTICATION_ERROR
+      );
+
+      return handleAPIError(
+        error,
+        requestId,
+        createErrorContext(
+          { url: request.url, method: 'GET' },
+          undefined,
+          ErrorSeverity.MEDIUM
+        )
       );
     }
 
@@ -325,23 +452,50 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false });
 
     if (seriesError) {
-      console.error('Failed to fetch series:', seriesError);
-      return NextResponse.json(
-        { error: 'Failed to fetch book series' },
-        { status: 500 }
+      const error = createAPIError(
+        seriesError,
+        requestId,
+        'Failed to fetch book series',
+        ErrorCode.DATABASE_ERROR,
+        { originalError: seriesError }
+      );
+
+      return handleAPIError(
+        error,
+        requestId,
+        createErrorContext(
+          { url: request.url, method: 'GET' },
+          { id: user.id },
+          ErrorSeverity.MEDIUM
+        )
       );
     }
 
-    return NextResponse.json({
+    return new Response(JSON.stringify({
       success: true,
-      data: series
+      data: series,
+      metadata: {
+        timestamp: new Date().toISOString(),
+        requestId,
+        version: '1.0'
+      }
+    }), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Request-ID': requestId
+      }
     });
 
   } catch (error) {
-    console.error('API error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+    return handleAPIError(
+      error,
+      requestId,
+      createErrorContext(
+        { url: request.url, method: 'GET' },
+        undefined,
+        ErrorSeverity.CRITICAL
+      )
     );
   }
 }
