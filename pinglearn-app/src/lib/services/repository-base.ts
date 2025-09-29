@@ -10,6 +10,7 @@
 
 import { Repository, Entity } from '../../types/advanced';
 import { ErrorSeverity } from '../errors/error-types';
+import { RepositoryTypes } from '../types/inference-optimizations';
 
 /**
  * Repository error types
@@ -29,7 +30,7 @@ export class RepositoryError extends Error {
 /**
  * Query options for repository operations with optimized inference
  */
-export interface QueryOptions<T extends Entity = Entity> {
+export interface QueryOptions<T extends RepositoryTypes.BaseEntity = RepositoryTypes.BaseEntity> {
   limit?: number;
   offset?: number;
   orderBy?: Array<RepositoryTypes.SortConfig<T>>;
@@ -53,7 +54,7 @@ export interface RepositoryResult<T> {
 /**
  * Abstract base repository class with advanced generic constraints and optimized inference
  */
-export abstract class BaseRepository<T extends Entity> implements Repository<T> {
+export abstract class BaseRepository<T extends RepositoryTypes.BaseEntity> implements Repository<T> {
   protected tableName: string;
   protected primaryKey: keyof T = 'id' as keyof T;
 
@@ -114,7 +115,10 @@ export abstract class BaseRepository<T extends Entity> implements Repository<T> 
         {
           limit: options.limit,
           offset: options.offset,
-          orderBy: options.orderBy ? [options.orderBy] : undefined,
+          orderBy: options.orderBy ? [{
+            field: options.orderBy.field as any,
+            direction: options.orderBy.direction
+          }] : undefined,
         }
       );
 
@@ -161,7 +165,7 @@ export abstract class BaseRepository<T extends Entity> implements Repository<T> 
       }
 
       // Execute post-creation hooks
-      await this.afterCreate(result);
+      await this.afterCreate(result as Partial<T>);
 
       return result;
     } catch (error) {
@@ -199,7 +203,7 @@ export abstract class BaseRepository<T extends Entity> implements Repository<T> 
       }
 
       // Validate update data
-      await this.validateEntity(data, 'update');
+      await this.validateEntity(data as Partial<T>, 'update');
 
       // Add update timestamp
       const updateData = {
@@ -219,7 +223,7 @@ export abstract class BaseRepository<T extends Entity> implements Repository<T> 
       }
 
       // Execute post-update hooks
-      await this.afterUpdate(result, existing);
+      await this.afterUpdate(result as Partial<T>, existing);
 
       return result;
     } catch (error) {
@@ -312,7 +316,7 @@ export abstract class BaseRepository<T extends Entity> implements Repository<T> 
 
       // Execute post-creation hooks for all items
       for (const result of results) {
-        await this.afterCreate(result);
+        await this.afterCreate(result as Partial<T>);
       }
 
       return results;
@@ -337,7 +341,7 @@ export abstract class BaseRepository<T extends Entity> implements Repository<T> 
     where?: Partial<Pick<T, Exclude<keyof T, 'created_at' | 'updated_at'>>>
   ): Promise<number> {
     try {
-      const query = this.buildCountQuery(where);
+      const query = this.buildCountQuery(where as Partial<T>);
       const result = await this.executeQuery<{ count: number }>(query);
 
       return result?.count || 0;
@@ -545,7 +549,7 @@ export interface QueryObject {
 /**
  * Example User entity with optimized inference
  */
-interface User extends Entity {
+interface User extends RepositoryTypes.BaseEntity {
   email: string;
   full_name: string;
   avatar_url?: string;
@@ -557,7 +561,7 @@ interface User extends Entity {
 /**
  * Example Supabase repository implementation with optimized inference
  */
-export class SupabaseRepository<T extends Entity> extends BaseRepository<T> {
+export class SupabaseRepository<T extends RepositoryTypes.BaseEntity> extends BaseRepository<T> {
   protected async executeQuery<TResult>(query: QueryObject): Promise<TResult> {
     // This would integrate with actual Supabase client
     console.log('Executing Supabase query:', query);
@@ -578,7 +582,7 @@ export class SupabaseRepository<T extends Entity> extends BaseRepository<T> {
       options: {
         ...options,
         include: select,
-        orderBy: options?.orderBy,
+        orderBy: options?.orderBy as any,
       },
     };
   }

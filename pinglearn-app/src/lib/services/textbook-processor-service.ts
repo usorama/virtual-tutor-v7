@@ -124,8 +124,8 @@ export class TextbookProcessorService implements TextbookProcessorContract {
         metadata: finalMetadata,
         processingStats: {
           duration: Date.now() - startTime,
-          chunksCreated: processedChapters.reduce((total, ch) => total + ch.contentChunks.length, 0),
-          topicsExtracted: processedChapters.reduce((total, ch) => total + ch.topics.length, 0),
+          chunksCreated: processedChapters.reduce((total, ch: any) => total + (ch.contentChunks?.length || 0), 0),
+          topicsExtracted: processedChapters.reduce((total, ch: any) => total + (ch.topics?.length || 0), 0),
         },
       };
 

@@ -330,15 +330,4 @@ export namespace PerformanceMonitoring {
 }
 
 // Export all optimization namespaces
-export type {
-  NominalTypes,
-  UnionOptimizations as PerfUnionOptimizations,
-  ConditionalOptimizations,
-  TemplateOptimizations,
-  GenericOptimizations,
-  CompilationOptimizations,
-  IDEOptimizations,
-  TypeLevelCache,
-  AdvancedGenerics,
-  PerformanceMonitoring
-};
+// Note: Exports are handled at the namespace level above

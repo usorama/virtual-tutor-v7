@@ -35,9 +35,9 @@ export namespace UnionDistribution {
   /**
    * Union to tuple conversion with optimization
    */
-  export type UnionToTuple<T> = UnionToTupleHelper<T, []>;
+  export type UnionToTuple<T extends PropertyKey> = UnionToTupleHelper<T, []>;
 
-  type UnionToTupleHelper<T, Acc extends readonly any[]> = {
+  type UnionToTupleHelper<T extends PropertyKey, Acc extends readonly any[]> = {
     [K in T]: Exclude<T, K> extends never
       ? [...Acc, K]
       : UnionToTupleHelper<Exclude<T, K>, [...Acc, K]>;
@@ -330,16 +330,7 @@ export namespace ComponentUnions {
 }
 
 // Export commonly used utilities (using type exports for isolatedModules)
-export type {
-  UnionDistribution,
-  LargeUnionHandling,
-  ConditionalUnions,
-  UnionValidation,
-  UnionTransformations,
-  PerformantUnionUtils,
-  ApplicationUnions,
-  ComponentUnions
-};
+// Note: Exports are handled at the namespace level above
 
 // Type-level performance testing
 export namespace UnionPerformanceTests {
@@ -351,7 +342,7 @@ export namespace UnionPerformanceTests {
     | 'item16' | 'item17' | 'item18' | 'item19' | 'item20';
 
   // Test performance of different approaches
-  export type TestDistribution = DistributeUnion<LargeUnion, string>;
+  export type TestDistribution = DistributeUnionType<LargeUnion, string>;
   export type TestMembership = IsMember<'item5', LargeUnion>;
   export type TestExclusion = EfficientExclude<LargeUnion, 'item1' | 'item2'>;
 }

@@ -106,7 +106,7 @@ export namespace RepositoryTypes {
    * Query filter type with optimized inference
    */
   export type QueryFilter<T extends BaseEntity> = {
-    [K in StringKeyOf<T>]?: T[K] | T[K][] | null;
+    [K in StringKeyOf<T>]?: T[K & keyof T] | T[K & keyof T][] | null;
   };
 
   /**
@@ -217,8 +217,8 @@ export namespace TypeUtils {
     direction: RepositoryTypes.SortDirection = 'asc'
   ): (a: T, b: T) => number {
     return (a: T, b: T) => {
-      const aVal = a[field];
-      const bVal = b[field];
+      const aVal = (a as any)[field];
+      const bVal = (b as any)[field];
 
       if (aVal < bVal) return direction === 'asc' ? -1 : 1;
       if (aVal > bVal) return direction === 'asc' ? 1 : -1;
@@ -318,7 +318,7 @@ export namespace MutabilityTypes {
 }
 
 // Export all optimization utilities
-export {
+export type {
   TypeCache,
   Memoize,
   OptimizedConditional,
@@ -331,7 +331,4 @@ export {
   InferenceHelper
 };
 
-// Export mutability utilities
-export type {
-  MutabilityTypes
-};
+// Export mutability utilities - handled at namespace level
