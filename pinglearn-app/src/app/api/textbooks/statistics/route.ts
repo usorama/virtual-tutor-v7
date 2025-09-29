@@ -2,10 +2,17 @@
  * API endpoint for fetching textbook statistics
  *
  * Returns real counts from the database for the dashboard
+ * Updated for TS-007: Now uses proper database types with runtime validation
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import {
+  isValidBookSeries,
+  isValidBook,
+  isValidBookChapter,
+  isValidTextbook
+} from '@/types/database';
 
 export async function GET(request: NextRequest) {
   try {
@@ -20,7 +27,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get counts from database
+    // Get counts from database with proper typing
     const [
       seriesCount,
       booksCount,
@@ -60,12 +67,20 @@ export async function GET(request: NextRequest) {
         .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
     ]);
 
-    // Get textbooks that need review (failed status)
-    const { count: needsReviewCount } = await supabase
+    // Get textbooks that need review (failed status) with validation
+    const { data: needsReviewData, count: needsReviewCount } = await supabase
       .from('textbooks')
       .select('*', { count: 'exact', head: true })
       .eq('user_id', user.id)
       .eq('status', 'failed');
+
+    // Validate data if returned for runtime safety
+    if (needsReviewData && Array.isArray(needsReviewData)) {
+      const validReviewData = needsReviewData.filter(isValidTextbook);
+      if (validReviewData.length !== needsReviewData.length) {
+        console.warn(`Found ${needsReviewData.length - validReviewData.length} invalid textbook records`);
+      }
+    }
 
     // Calculate sections count (estimate based on chapters * average sections per chapter)
     const sectionsCount = (chaptersCount.count || 0) * 4; // Assuming average 4 sections per chapter
@@ -102,21 +117,26 @@ export async function GET(request: NextRequest) {
       Promise.resolve({ count: (chaptersCount.count || 0) * 4 })
     ]);
 
+    // Validate counts to ensure they're numbers (runtime safety)
+    const safeCount = (count: number | null): number => {
+      return typeof count === 'number' && count >= 0 ? count : 0;
+    };
+
     const statistics = {
-      totalSeries: seriesCount.count || 0,
-      totalBooks: booksCount.count || 0,
-      totalChapters: chaptersCount.count || 0,
+      totalSeries: safeCount(seriesCount.count),
+      totalBooks: safeCount(booksCount.count),
+      totalChapters: safeCount(chaptersCount.count),
       totalSections: sectionsCount,
-      totalTextbooks: textbooksCount.count || 0, // For backward compatibility
-      recentlyAdded: recentTextbooks.count || 0,
-      needsReview: needsReviewCount || 0,
+      totalTextbooks: safeCount(textbooksCount.count), // For backward compatibility
+      recentlyAdded: safeCount(recentTextbooks.count),
+      needsReview: safeCount(needsReviewCount),
 
       // Growth from last month
       growth: {
-        series: lastMonthSeries.count || 0,
-        books: lastMonthBooks.count || 0,
-        chapters: lastMonthChapters.count || 0,
-        sections: (lastMonthChapters.count || 0) * 4
+        series: safeCount(lastMonthSeries.count),
+        books: safeCount(lastMonthBooks.count),
+        chapters: safeCount(lastMonthChapters.count),
+        sections: safeCount(lastMonthChapters.count) * 4
       }
     };
 

@@ -2,6 +2,7 @@
  * API endpoints for hierarchical textbook processing
  *
  * Handles the creation and management of book series, books, and chapters
+ * Updated for TS-007: Now uses proper database types with runtime validation
  */
 
 import { NextRequest } from 'next/server';
@@ -20,6 +21,20 @@ import type {
   BookChapter,
   TextbookWizardState
 } from '@/types/textbook-hierarchy';
+import type {
+  BookSeriesInsert,
+  BookInsert,
+  BookChapterInsert,
+  TextbookInsert,
+  ChapterInsert,
+  BookChapter as DBBookChapter
+} from '@/types/database';
+import {
+  isValidBookSeries,
+  isValidBook,
+  isValidBookChapter,
+  isValidTextbook
+} from '@/types/database';
 
 /**
  * POST /api/textbooks/hierarchy
@@ -101,18 +116,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create book series with proper error handling
+    // Create book series with proper typing
+    const seriesData: BookSeriesInsert = {
+      series_name: formData.seriesInfo.seriesName,
+      publisher: formData.seriesInfo.publisher,
+      curriculum_standard: formData.seriesInfo.curriculumStandard,
+      grade: formData.seriesInfo.grade,
+      subject: formData.seriesInfo.subject,
+      description: `${formData.seriesInfo.publisher} ${formData.seriesInfo.subject} for Grade ${formData.seriesInfo.grade}`,
+      user_id: user.id
+    };
+
     const { data: series, error: seriesError } = await supabase
       .from('book_series')
-      .insert({
-        series_name: formData.seriesInfo.seriesName,
-        publisher: formData.seriesInfo.publisher,
-        curriculum_standard: formData.seriesInfo.curriculumStandard,
-        grade: formData.seriesInfo.grade,
-        subject: formData.seriesInfo.subject,
-        description: `${formData.seriesInfo.publisher} ${formData.seriesInfo.subject} for Grade ${formData.seriesInfo.grade}`,
-        user_id: user.id
-      })
+      .insert(seriesData)
       .select()
       .single();
 
@@ -136,20 +153,42 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create book with proper error handling
+    // Runtime validation of series data
+    if (!isValidBookSeries(series)) {
+      const error = createAPIError(
+        new Error('Invalid book series data returned from database'),
+        requestId,
+        'Data validation failed',
+        ErrorCode.VALIDATION_ERROR
+      );
+
+      return handleAPIError(
+        error,
+        requestId,
+        createErrorContext(
+          { url: request.url, method: 'POST' },
+          { id: user.id },
+          ErrorSeverity.HIGH
+        )
+      );
+    }
+
+    // Create book with proper typing
+    const bookData: BookInsert = {
+      series_id: series.id,
+      volume_number: formData.bookDetails.volumeNumber,
+      volume_title: formData.bookDetails.volumeTitle || formData.seriesInfo.seriesName,
+      isbn: formData.bookDetails.isbn,
+      edition: formData.bookDetails.edition,
+      publication_year: formData.bookDetails.publicationYear,
+      authors: formData.bookDetails.authors || [],
+      total_pages: formData.bookDetails.totalPages || 0,
+      user_id: user.id
+    };
+
     const { data: book, error: bookError } = await supabase
       .from('books')
-      .insert({
-        series_id: series.id,
-        volume_number: formData.bookDetails.volumeNumber,
-        volume_title: formData.bookDetails.volumeTitle || formData.seriesInfo.seriesName,
-        isbn: formData.bookDetails.isbn,
-        edition: formData.bookDetails.edition,
-        publication_year: formData.bookDetails.publicationYear,
-        authors: formData.bookDetails.authors,
-        total_pages: formData.bookDetails.totalPages || 0,
-        user_id: user.id
-      })
+      .insert(bookData)
       .select()
       .single();
 
@@ -176,25 +215,44 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create chapters with error handling
-    const chapters = formData.chapterOrganization.chapters.map((chapter, index) => {
-      const chapterData = chapter as any; // Type issues with ChapterInfo interface
+    // Runtime validation of book data
+    if (!isValidBook(book)) {
+      const error = createAPIError(
+        new Error('Invalid book data returned from database'),
+        requestId,
+        'Data validation failed',
+        ErrorCode.VALIDATION_ERROR
+      );
+
+      return handleAPIError(
+        error,
+        requestId,
+        createErrorContext(
+          { url: request.url, method: 'POST' },
+          { id: user.id },
+          ErrorSeverity.HIGH
+        )
+      );
+    }
+
+    // Create chapters with proper typing
+    const chaptersData: BookChapterInsert[] = formData.chapterOrganization.chapters.map((chapter, index) => {
       return {
         book_id: book.id,
         chapter_number: chapter.chapterNumber,
-        title: chapterData.chapterTitle || chapter.title || `Chapter ${chapter.chapterNumber}`,
+        title: chapter.title || `Chapter ${chapter.chapterNumber}`,
         content_summary: `Chapter ${chapter.chapterNumber}`,
         page_range_start: index === 0 ? 1 : 0,
         page_range_end: 25,
         total_pages: 25,
-        file_name: chapterData.fileName || chapter.sourceFile || '',
+        file_name: chapter.sourceFile || '',
         user_id: user.id
       };
     });
 
     const { data: createdChapters, error: chaptersError } = await supabase
       .from('book_chapters')
-      .insert(chapters)
+      .insert(chaptersData)
       .select();
 
     if (chaptersError) {
@@ -211,18 +269,42 @@ export async function POST(request: NextRequest) {
       console.warn('Chapters creation failed (non-critical):', error);
     }
 
-    // Create textbook entry
+    // Runtime validation of chapters data if created
+    if (createdChapters) {
+      for (const chapter of createdChapters) {
+        if (!isValidBookChapter(chapter)) {
+          console.warn(`Invalid chapter data returned: ${chapter.id}`);
+        }
+      }
+    }
+
+    // Create textbook entry with proper typing
+    const textbookData: TextbookInsert = {
+      title: formData.bookDetails.volumeTitle || formData.seriesInfo.seriesName,
+      file_name: `${formData.seriesInfo.seriesName.toLowerCase().replace(/\s+/g, '-')}.pdf`,
+      grade_level: formData.seriesInfo.grade,
+      subject: formData.seriesInfo.subject,
+      total_pages: formData.bookDetails.totalPages || (chaptersData.length * 25),
+      status: 'processing',
+      upload_status: 'completed',
+      processing_status: 'pending',
+      series_id: series.id,
+      user_id: user.id,
+      enhanced_metadata: {
+        isbn: formData.bookDetails.isbn || undefined,
+        publisher: formData.seriesInfo.publisher,
+        edition: formData.bookDetails.edition || undefined,
+        language: 'en',
+        curriculum_board: 'CBSE', // Default, should be from form data
+        difficulty_level: 'intermediate',
+        tags: [formData.seriesInfo.subject, `Grade ${formData.seriesInfo.grade}`],
+        description: `${formData.seriesInfo.publisher} ${formData.seriesInfo.subject} textbook for Grade ${formData.seriesInfo.grade}`
+      }
+    };
+
     const { data: textbook, error: textbookError } = await supabase
       .from('textbooks')
-      .insert({
-        title: formData.bookDetails.volumeTitle || formData.seriesInfo.seriesName,
-        file_name: `${formData.seriesInfo.seriesName.toLowerCase().replace(/\s+/g, '-')}.pdf`,
-        grade: formData.seriesInfo.grade,
-        subject: formData.seriesInfo.subject,
-        total_pages: formData.bookDetails.totalPages || (chapters.length * 25),
-        status: 'processing',
-        upload_status: 'completed',
-      })
+      .insert(textbookData)
       .select()
       .single();
 
@@ -230,27 +312,29 @@ export async function POST(request: NextRequest) {
       // Log error but don't fail - textbook entry is for compatibility
       console.warn('Textbook entry creation failed (non-critical):', textbookError);
     } else if (textbook && createdChapters) {
-      // Link chapters to the textbook
-      const chapterUpdates = createdChapters.map((ch: { id: string }) => ({
-        id: ch.id,
-        textbook_id: textbook.id
+      // Runtime validation of textbook data
+      if (!isValidTextbook(textbook)) {
+        console.warn('Invalid textbook data returned from database');
+      }
+
+      // Link chapters to the textbook with proper typing
+      const chapterLinkData: ChapterInsert[] = createdChapters.map((ch: DBBookChapter, idx: number) => ({
+        textbook_id: textbook.id,
+        title: formData.chapterOrganization.chapters[idx]?.title || 'Chapter',
+        chapter_number: idx + 1,
+        topics: [],
+        page_start: 0,
+        page_end: 50
       }));
 
-      if (chapterUpdates.length > 0) {
-        // Update chapters with textbook reference
-        for (const update of chapterUpdates) {
-          await supabase
-            .from('chapters')
-            .insert({
-              textbook_id: textbook.id,
-              title: formData.chapterOrganization.chapters.find(
-                (_, idx) => idx === chapterUpdates.indexOf(update)
-              )?.title || 'Chapter',
-              chapter_number: chapterUpdates.indexOf(update) + 1,
-              topics: [],
-              page_start: 0,
-              page_end: 50
-            });
+      if (chapterLinkData.length > 0) {
+        // Insert linked chapters for backward compatibility
+        const { error: linkError } = await supabase
+          .from('chapters')
+          .insert(chapterLinkData);
+
+        if (linkError) {
+          console.warn('Chapter linking failed (non-critical):', linkError);
         }
       }
     }
@@ -301,6 +385,7 @@ export async function POST(request: NextRequest) {
 /**
  * Background processing function for textbooks
  * Processes PDFs asynchronously after the API response is sent
+ * Updated with proper typing for TS-007
  */
 async function processTextbooksAsync(
   seriesId: string,
@@ -334,10 +419,19 @@ async function processTextbooksAsync(
       return;
     }
 
-    console.log(`📚 Processing ${textbooks.length} textbooks...`);
+    // Runtime validation of textbook data with proper typing
+    const validTextbooks = textbooks.filter((textbook: any) => {
+      if (!isValidTextbook(textbook)) {
+        console.warn(`Skipping invalid textbook data: ${textbook?.id}`);
+        return false;
+      }
+      return true;
+    });
 
-    // Process each textbook
-    for (const textbook of textbooks) {
+    console.log(`📚 Processing ${validTextbooks.length} valid textbooks...`);
+
+    // Process each valid textbook
+    for (const textbook of validTextbooks) {
       try {
         console.log(`📄 Processing: ${textbook.title}`);
 
@@ -361,7 +455,7 @@ async function processTextbooksAsync(
           }
         );
 
-        // Mark as ready
+        // Mark as ready with proper typing
         await supabase
           .from('textbooks')
           .update({
@@ -376,11 +470,11 @@ async function processTextbooksAsync(
         const error = createAPIError(textbookError, `${parentRequestId}-bg-${textbook.id}`);
         console.error(`❌ Failed to process textbook ${textbook.title}:`, error);
 
-        // Mark as error
+        // Mark as error with proper typing
         await supabase
           .from('textbooks')
           .update({
-            status: 'error',
+            status: 'failed',
             processing_status: 'failed',
             error_message: error.message
           })
@@ -394,11 +488,11 @@ async function processTextbooksAsync(
     const bgError = createAPIError(error, `${parentRequestId}-bg`);
     console.error(`💥 Background processing failed for series ${seriesId}:`, bgError);
 
-    // Mark all textbooks in series as error
+    // Mark all textbooks in series as error with proper typing
     await supabase
       .from('textbooks')
       .update({
-        status: 'error',
+        status: 'failed',
         processing_status: 'failed',
         error_message: bgError.message
       })
@@ -410,6 +504,7 @@ async function processTextbooksAsync(
 /**
  * GET /api/textbooks/hierarchy
  * Get all book series for the current user
+ * Updated with proper typing for TS-007
  */
 export async function GET(request: NextRequest) {
   const requestId = crypto.randomUUID();
@@ -438,7 +533,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Fetch all series with their books and chapters
+    // Fetch all series with their books and chapters with proper typing
     const { data: series, error: seriesError } = await supabase
       .from('book_series')
       .select(`
@@ -471,9 +566,18 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Runtime validation of series data with proper typing
+    const validatedSeries = (series || []).filter((seriesItem: any) => {
+      if (!isValidBookSeries(seriesItem)) {
+        console.warn(`Skipping invalid series data: ${seriesItem?.id}`);
+        return false;
+      }
+      return true;
+    });
+
     return new Response(JSON.stringify({
       success: true,
-      data: series,
+      data: validatedSeries,
       metadata: {
         timestamp: new Date().toISOString(),
         requestId,
