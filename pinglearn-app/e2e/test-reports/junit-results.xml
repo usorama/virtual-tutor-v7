@@ -1,0 +1,860 @@
+<testsuites id="" name="" tests="199" failures="0" skipped="199" errors="0" time="0.232503">
+<testsuite name="api-integration.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="chromium-desktop" tests="9" failures="0" skipped="9" time="0" errors="0">
+<testcase name="API Integration Testing › Authentication Endpoints" classname="api-integration.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="API Integration Testing › Session Management Endpoints" classname="api-integration.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="API Integration Testing › LiveKit Integration Endpoints" classname="api-integration.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="API Integration Testing › Transcription Service Endpoints" classname="api-integration.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="API Integration Testing › Textbook and Content Endpoints" classname="api-integration.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="API Integration Testing › Error Handling and Edge Cases" classname="api-integration.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="API Integration Testing › API Performance and Load Testing" classname="api-integration.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="API Integration Testing › Generate API Integration Report" classname="api-integration.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="API Integration Testing › WebSocket Connection Testing" classname="api-integration.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="auth.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="chromium-desktop" tests="7" failures="0" skipped="7" time="0" errors="0">
+<testcase name="Authentication Flow › should display login page" classname="auth.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication Flow › should display register page" classname="auth.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication Flow › should register a new user" classname="auth.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication Flow › should login with valid credentials" classname="auth.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication Flow › should show error for invalid credentials" classname="auth.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication Flow › should validate email format" classname="auth.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication Flow › should validate password requirements" classname="auth.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="classroom.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="chromium-desktop" tests="11" failures="0" skipped="11" time="0" errors="0">
+<testcase name="Audio AI Classroom › should navigate to classroom from dashboard" classname="classroom.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Audio AI Classroom › should request microphone permissions" classname="classroom.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Audio AI Classroom › should display session controls when connected" classname="classroom.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Audio AI Classroom › should toggle mute state" classname="classroom.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Audio AI Classroom › should end session and redirect" classname="classroom.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Audio AI Classroom › should display session quality indicators" classname="classroom.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Session Management › should display session history on dashboard" classname="classroom.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Session Management › should show quick start widget" classname="classroom.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Session Management › should navigate to classroom from quick start" classname="classroom.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility › classroom page should be accessible" classname="classroom.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility › should support keyboard shortcuts" classname="classroom.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="comprehensive-e2e-framework.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="chromium-desktop" tests="9" failures="0" skipped="9" time="0" errors="0">
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Complete E2E Workflow - Desktop-Chrome" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Complete E2E Workflow - Laptop" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Complete E2E Workflow - Tablet-Portrait" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Complete E2E Workflow - Tablet-Landscape" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Complete E2E Workflow - Mobile-Large" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Complete E2E Workflow - Mobile-iPhone" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Generate Final Report" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Cross-Browser Compatibility › Chromium Baseline Test" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="API Integration Testing › Critical API Endpoints" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="critical-path.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="chromium-desktop" tests="5" failures="0" skipped="5" time="0" errors="0">
+<testcase name="Critical Path E2E Testing › Complete User Journey: Landing → Auth → Dashboard → Classroom → Session" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Critical Path E2E Testing › Performance Benchmarking" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Critical Path E2E Testing › Accessibility Compliance Check" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Edge Case Testing › Network Resilience" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Edge Case Testing › Mobile Responsiveness" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="error-recovery-resilience.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="chromium-desktop" tests="7" failures="0" skipped="7" time="0" errors="0">
+<testcase name="Error Recovery and Resilience Testing › Network Failure Scenarios" classname="error-recovery-resilience.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Error Recovery and Resilience Testing › Authentication and Authorization Failures" classname="error-recovery-resilience.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Error Recovery and Resilience Testing › Resource Loading Failures" classname="error-recovery-resilience.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Error Recovery and Resilience Testing › User Input Validation and Error Handling" classname="error-recovery-resilience.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Error Recovery and Resilience Testing › Service Integration Failures" classname="error-recovery-resilience.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Error Recovery and Resilience Testing › Browser Compatibility and Edge Cases" classname="error-recovery-resilience.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Error Recovery and Resilience Testing › Generate Error Recovery Report" classname="error-recovery-resilience.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="livekit-voice-session.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="chromium-desktop" tests="5" failures="0" skipped="5" time="0" errors="0">
+<testcase name="PC-005 LiveKit Voice Session Integration › should successfully start a voice session" classname="livekit-voice-session.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="PC-005 LiveKit Voice Session Integration › should handle API errors gracefully" classname="livekit-voice-session.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="PC-005 LiveKit Voice Session Integration › should send transcriptions to webhook endpoints" classname="livekit-voice-session.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="PC-005 LiveKit Voice Session Integration › should display session metrics" classname="livekit-voice-session.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="PC-005 LiveKit Voice Session Integration › should verify all PC-005 endpoints are accessible" classname="livekit-voice-session.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="pc-010/debug-after-get-started.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="chromium-desktop" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="Debug what happens after Get Started" classname="pc-010/debug-after-get-started.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="pc-010/debug-homepage.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="chromium-desktop" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="Debug homepage to see what elements are available" classname="pc-010/debug-homepage.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="pc-010/final-transcription-test.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="chromium-desktop" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="PC-010 Final Transcription Pipeline Test › should complete full PC-010 transcription pipeline test" classname="pc-010/final-transcription-test.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="pc-010/transcription-pipeline-full.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="chromium-desktop" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="PC-010 Transcription Pipeline Test › should verify transcription pipeline in classroom" classname="pc-010/transcription-pipeline-full.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="pc-010/transcription-pipeline.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="chromium-desktop" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="PC-010 Transcription Pipeline Test › should verify transcription pipeline in classroom" classname="pc-010/transcription-pipeline.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="pc-010/transcription-session-test.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="chromium-desktop" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="PC-010 Transcription Pipeline - Voice Session Test › should test PC-010 transcription pipeline in voice session" classname="pc-010/transcription-session-test.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="performance-analysis.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="chromium-desktop" tests="8" failures="0" skipped="8" time="0" errors="0">
+<testcase name="Performance Analysis › Performance: Landing - Desktop" classname="performance-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Analysis › Performance: Login - Desktop" classname="performance-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Analysis › Performance: Classroom - Desktop" classname="performance-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Analysis › Performance: Landing - Mobile" classname="performance-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Analysis › Performance: Login - Mobile" classname="performance-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Analysis › Performance: Classroom - Mobile" classname="performance-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Analysis › Microphone Permission Testing" classname="performance-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Analysis › Generate Performance Report" classname="performance-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="show-then-tell-timing.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="chromium-desktop" tests="5" failures="0" skipped="5" time="0" errors="0">
+<testcase name="Show-Then-Tell Timing Validation › should measure 400ms visual lead time in show-then-tell" classname="show-then-tell-timing.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Show-Then-Tell Timing Validation › should maintain consistent timing over multiple interactions" classname="show-then-tell-timing.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Show-Then-Tell Timing Validation › should detect timing drift and log warnings" classname="show-then-tell-timing.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Show-Then-Tell Timing Validation › should measure actual browser rendering performance" classname="show-then-tell-timing.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Integration › should integrate with performance monitoring system" classname="show-then-tell-timing.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="textbook.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="chromium-desktop" tests="9" failures="0" skipped="9" time="0" errors="0">
+<testcase name="Textbook Upload and Processing › should display textbook management page" classname="textbook.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Textbook Upload and Processing › should open upload dialog" classname="textbook.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Textbook Upload and Processing › should validate upload form" classname="textbook.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Textbook Upload and Processing › should upload a textbook" classname="textbook.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Textbook Upload and Processing › should display uploaded textbooks" classname="textbook.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Textbook Upload and Processing › should filter textbooks by grade" classname="textbook.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Textbook Upload and Processing › should filter textbooks by subject" classname="textbook.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Textbook Upload and Processing › should show textbook processing status" classname="textbook.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Textbook Upload and Processing › should handle upload errors gracefully" classname="textbook.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="ui-analysis.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="chromium-desktop" tests="19" failures="0" skipped="19" time="0" errors="0">
+<testcase name="Comprehensive UI/UX Analysis › Desktop Analysis › Landing Page - Desktop" classname="ui-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Comprehensive UI/UX Analysis › Desktop Analysis › Login Page - Desktop" classname="ui-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Comprehensive UI/UX Analysis › Desktop Analysis › Classroom Page - Desktop" classname="ui-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Comprehensive UI/UX Analysis › Laptop Analysis › Landing Page - Laptop" classname="ui-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Comprehensive UI/UX Analysis › Laptop Analysis › Login Page - Laptop" classname="ui-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Comprehensive UI/UX Analysis › Laptop Analysis › Classroom Page - Laptop" classname="ui-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Comprehensive UI/UX Analysis › Tablet-Portrait Analysis › Landing Page - Tablet-Portrait" classname="ui-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Comprehensive UI/UX Analysis › Tablet-Portrait Analysis › Login Page - Tablet-Portrait" classname="ui-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Comprehensive UI/UX Analysis › Tablet-Portrait Analysis › Classroom Page - Tablet-Portrait" classname="ui-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Comprehensive UI/UX Analysis › Tablet-Landscape Analysis › Landing Page - Tablet-Landscape" classname="ui-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Comprehensive UI/UX Analysis › Tablet-Landscape Analysis › Login Page - Tablet-Landscape" classname="ui-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Comprehensive UI/UX Analysis › Tablet-Landscape Analysis › Classroom Page - Tablet-Landscape" classname="ui-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Comprehensive UI/UX Analysis › Mobile-iPhone Analysis › Landing Page - Mobile-iPhone" classname="ui-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Comprehensive UI/UX Analysis › Mobile-iPhone Analysis › Login Page - Mobile-iPhone" classname="ui-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Comprehensive UI/UX Analysis › Mobile-iPhone Analysis › Classroom Page - Mobile-iPhone" classname="ui-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Comprehensive UI/UX Analysis › Mobile-Large Analysis › Landing Page - Mobile-Large" classname="ui-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Comprehensive UI/UX Analysis › Mobile-Large Analysis › Login Page - Mobile-Large" classname="ui-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Comprehensive UI/UX Analysis › Mobile-Large Analysis › Classroom Page - Mobile-Large" classname="ui-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Comprehensive UI/UX Analysis › Generate Comprehensive Report" classname="ui-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="visual-regression.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="chromium-desktop" tests="8" failures="0" skipped="8" time="0" errors="0">
+<testcase name="Visual Regression Testing › Landing Page Visual Consistency" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Login Page Visual Consistency" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Classroom Page Visual Consistency" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Dashboard Page Visual Consistency (Authenticated)" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Mobile Responsive Layout Testing" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Dark Mode Visual Testing" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Generate Visual Regression Report" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Cross-Device Element Positioning" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="wizard.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="chromium-desktop" tests="5" failures="0" skipped="5" time="0" errors="0">
+<testcase name="Class Wizard Flow › should navigate through wizard steps" classname="wizard.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Class Wizard Flow › should allow navigation back and forth" classname="wizard.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Class Wizard Flow › should persist wizard state" classname="wizard.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Class Wizard Flow › should validate required selections" classname="wizard.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Class Wizard Flow › should show appropriate subjects for each grade" classname="wizard.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="comprehensive-e2e-framework.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="firefox-desktop" tests="9" failures="0" skipped="9" time="0" errors="0">
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Complete E2E Workflow - Desktop-Chrome" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Complete E2E Workflow - Laptop" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Complete E2E Workflow - Tablet-Portrait" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Complete E2E Workflow - Tablet-Landscape" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Complete E2E Workflow - Mobile-Large" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Complete E2E Workflow - Mobile-iPhone" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Generate Final Report" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Cross-Browser Compatibility › Chromium Baseline Test" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="API Integration Testing › Critical API Endpoints" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="critical-path.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="firefox-desktop" tests="5" failures="0" skipped="5" time="0" errors="0">
+<testcase name="Critical Path E2E Testing › Complete User Journey: Landing → Auth → Dashboard → Classroom → Session" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Critical Path E2E Testing › Performance Benchmarking" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Critical Path E2E Testing › Accessibility Compliance Check" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Edge Case Testing › Network Resilience" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Edge Case Testing › Mobile Responsiveness" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="comprehensive-e2e-framework.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="webkit-desktop" tests="9" failures="0" skipped="9" time="0" errors="0">
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Complete E2E Workflow - Desktop-Chrome" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Complete E2E Workflow - Laptop" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Complete E2E Workflow - Tablet-Portrait" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Complete E2E Workflow - Tablet-Landscape" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Complete E2E Workflow - Mobile-Large" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Complete E2E Workflow - Mobile-iPhone" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TEST-004: Comprehensive E2E Testing Framework › Generate Final Report" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Cross-Browser Compatibility › Chromium Baseline Test" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="API Integration Testing › Critical API Endpoints" classname="comprehensive-e2e-framework.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="critical-path.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="webkit-desktop" tests="5" failures="0" skipped="5" time="0" errors="0">
+<testcase name="Critical Path E2E Testing › Complete User Journey: Landing → Auth → Dashboard → Classroom → Session" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Critical Path E2E Testing › Performance Benchmarking" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Critical Path E2E Testing › Accessibility Compliance Check" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Edge Case Testing › Network Resilience" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Edge Case Testing › Mobile Responsiveness" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="critical-path.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="mobile-chrome" tests="5" failures="0" skipped="5" time="0" errors="0">
+<testcase name="Critical Path E2E Testing › Complete User Journey: Landing → Auth → Dashboard → Classroom → Session" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Critical Path E2E Testing › Performance Benchmarking" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Critical Path E2E Testing › Accessibility Compliance Check" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Edge Case Testing › Network Resilience" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Edge Case Testing › Mobile Responsiveness" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="visual-regression.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="mobile-chrome" tests="8" failures="0" skipped="8" time="0" errors="0">
+<testcase name="Visual Regression Testing › Landing Page Visual Consistency" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Login Page Visual Consistency" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Classroom Page Visual Consistency" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Dashboard Page Visual Consistency (Authenticated)" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Mobile Responsive Layout Testing" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Dark Mode Visual Testing" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Generate Visual Regression Report" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Cross-Device Element Positioning" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="critical-path.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="mobile-safari" tests="5" failures="0" skipped="5" time="0" errors="0">
+<testcase name="Critical Path E2E Testing › Complete User Journey: Landing → Auth → Dashboard → Classroom → Session" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Critical Path E2E Testing › Performance Benchmarking" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Critical Path E2E Testing › Accessibility Compliance Check" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Edge Case Testing › Network Resilience" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Edge Case Testing › Mobile Responsiveness" classname="critical-path.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="visual-regression.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="mobile-safari" tests="8" failures="0" skipped="8" time="0" errors="0">
+<testcase name="Visual Regression Testing › Landing Page Visual Consistency" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Login Page Visual Consistency" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Classroom Page Visual Consistency" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Dashboard Page Visual Consistency (Authenticated)" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Mobile Responsive Layout Testing" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Dark Mode Visual Testing" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Generate Visual Regression Report" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Cross-Device Element Positioning" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="visual-regression.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="tablet-chrome" tests="8" failures="0" skipped="8" time="0" errors="0">
+<testcase name="Visual Regression Testing › Landing Page Visual Consistency" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Login Page Visual Consistency" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Classroom Page Visual Consistency" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Dashboard Page Visual Consistency (Authenticated)" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Mobile Responsive Layout Testing" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Dark Mode Visual Testing" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Generate Visual Regression Report" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Visual Regression Testing › Cross-Device Element Positioning" classname="visual-regression.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="api-integration.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="api-testing" tests="9" failures="0" skipped="9" time="0" errors="0">
+<testcase name="API Integration Testing › Authentication Endpoints" classname="api-integration.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="API Integration Testing › Session Management Endpoints" classname="api-integration.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="API Integration Testing › LiveKit Integration Endpoints" classname="api-integration.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="API Integration Testing › Transcription Service Endpoints" classname="api-integration.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="API Integration Testing › Textbook and Content Endpoints" classname="api-integration.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="API Integration Testing › Error Handling and Edge Cases" classname="api-integration.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="API Integration Testing › API Performance and Load Testing" classname="api-integration.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="API Integration Testing › Generate API Integration Report" classname="api-integration.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="API Integration Testing › WebSocket Connection Testing" classname="api-integration.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="performance-analysis.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="performance-testing" tests="8" failures="0" skipped="8" time="0" errors="0">
+<testcase name="Performance Analysis › Performance: Landing - Desktop" classname="performance-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Analysis › Performance: Login - Desktop" classname="performance-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Analysis › Performance: Classroom - Desktop" classname="performance-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Analysis › Performance: Landing - Mobile" classname="performance-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Analysis › Performance: Login - Mobile" classname="performance-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Analysis › Performance: Classroom - Mobile" classname="performance-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Analysis › Microphone Permission Testing" classname="performance-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance Analysis › Generate Performance Report" classname="performance-analysis.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="error-recovery-resilience.spec.ts" timestamp="2025-09-29T16:28:28.898Z" hostname="error-recovery" tests="7" failures="0" skipped="7" time="0" errors="0">
+<testcase name="Error Recovery and Resilience Testing › Network Failure Scenarios" classname="error-recovery-resilience.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Error Recovery and Resilience Testing › Authentication and Authorization Failures" classname="error-recovery-resilience.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Error Recovery and Resilience Testing › Resource Loading Failures" classname="error-recovery-resilience.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Error Recovery and Resilience Testing › User Input Validation and Error Handling" classname="error-recovery-resilience.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Error Recovery and Resilience Testing › Service Integration Failures" classname="error-recovery-resilience.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Error Recovery and Resilience Testing › Browser Compatibility and Edge Cases" classname="error-recovery-resilience.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Error Recovery and Resilience Testing › Generate Error Recovery Report" classname="error-recovery-resilience.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+</testsuites>

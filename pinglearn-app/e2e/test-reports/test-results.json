@@ -1,0 +1,4584 @@
+{
+  "config": {
+    "configFile": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/playwright.config.ts",
+    "rootDir": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/e2e/config/global-setup.ts",
+    "globalTeardown": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/e2e/config/global-teardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {},
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "e2e/test-reports/playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "e2e/test-reports/test-results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "e2e/test-reports/junit-results.xml"
+        }
+      ],
+      [
+        "list",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {},
+        "id": "chromium-desktop",
+        "name": "chromium-desktop",
+        "testDir": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {},
+        "id": "firefox-desktop",
+        "name": "firefox-desktop",
+        "testDir": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/critical-path.spec.ts",
+          "**/comprehensive-e2e-framework.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {},
+        "id": "webkit-desktop",
+        "name": "webkit-desktop",
+        "testDir": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/critical-path.spec.ts",
+          "**/comprehensive-e2e-framework.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {},
+        "id": "mobile-chrome",
+        "name": "mobile-chrome",
+        "testDir": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/critical-path.spec.ts",
+          "**/visual-regression.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {},
+        "id": "mobile-safari",
+        "name": "mobile-safari",
+        "testDir": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/critical-path.spec.ts",
+          "**/visual-regression.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {},
+        "id": "tablet-chrome",
+        "name": "tablet-chrome",
+        "testDir": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/visual-regression.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {},
+        "id": "api-testing",
+        "name": "api-testing",
+        "testDir": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/api-integration.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {},
+        "id": "performance-testing",
+        "name": "performance-testing",
+        "testDir": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/performance-analysis.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {},
+        "id": "error-recovery",
+        "name": "error-recovery",
+        "testDir": "/Users/umasankrudhya/Projects/pinglearn/pinglearn-app/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/error-recovery-resilience.spec.ts"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 6,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:3006",
+      "reuseExistingServer": true,
+      "timeout": 120000,
+      "stdout": "ignore",
+      "stderr": "pipe"
+    }
+  },
+  "suites": [
+    {
+      "title": "api-integration.spec.ts",
+      "file": "api-integration.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "API Integration Testing",
+          "file": "api-integration.spec.ts",
+          "line": 370,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Authentication Endpoints",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6814873ab357f121eca0-707ac5a1ff078a1a2a26",
+              "file": "api-integration.spec.ts",
+              "line": 377,
+              "column": 7
+            },
+            {
+              "title": "Session Management Endpoints",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6814873ab357f121eca0-2caf3121be5fb5f54b1f",
+              "file": "api-integration.spec.ts",
+              "line": 422,
+              "column": 7
+            },
+            {
+              "title": "LiveKit Integration Endpoints",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6814873ab357f121eca0-7e5ea61049e9f1ee4199",
+              "file": "api-integration.spec.ts",
+              "line": 475,
+              "column": 7
+            },
+            {
+              "title": "Transcription Service Endpoints",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6814873ab357f121eca0-5978fdc7098eaf833766",
+              "file": "api-integration.spec.ts",
+              "line": 518,
+              "column": 7
+            },
+            {
+              "title": "Textbook and Content Endpoints",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6814873ab357f121eca0-f076623d20e6189627bc",
+              "file": "api-integration.spec.ts",
+              "line": 561,
+              "column": 7
+            },
+            {
+              "title": "Error Handling and Edge Cases",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6814873ab357f121eca0-cb7cf97702898843b883",
+              "file": "api-integration.spec.ts",
+              "line": 598,
+              "column": 7
+            },
+            {
+              "title": "API Performance and Load Testing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6814873ab357f121eca0-e1cabcad0f882943906d",
+              "file": "api-integration.spec.ts",
+              "line": 643,
+              "column": 7
+            },
+            {
+              "title": "Generate API Integration Report",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6814873ab357f121eca0-a7ffeb5d4bc3252e6f8b",
+              "file": "api-integration.spec.ts",
+              "line": 682,
+              "column": 7
+            },
+            {
+              "title": "WebSocket Connection Testing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6814873ab357f121eca0-aeb112c2660ddd621c2b",
+              "file": "api-integration.spec.ts",
+              "line": 704,
+              "column": 7
+            },
+            {
+              "title": "Authentication Endpoints",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api-testing",
+                  "projectName": "api-testing",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6814873ab357f121eca0-3f1a2351263e1f658888",
+              "file": "api-integration.spec.ts",
+              "line": 377,
+              "column": 7
+            },
+            {
+              "title": "Session Management Endpoints",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api-testing",
+                  "projectName": "api-testing",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6814873ab357f121eca0-67ad2ec245afa03ee0ad",
+              "file": "api-integration.spec.ts",
+              "line": 422,
+              "column": 7
+            },
+            {
+              "title": "LiveKit Integration Endpoints",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api-testing",
+                  "projectName": "api-testing",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6814873ab357f121eca0-fefefb5866fa7d0f07d3",
+              "file": "api-integration.spec.ts",
+              "line": 475,
+              "column": 7
+            },
+            {
+              "title": "Transcription Service Endpoints",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api-testing",
+                  "projectName": "api-testing",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6814873ab357f121eca0-043acae86bf99231adb3",
+              "file": "api-integration.spec.ts",
+              "line": 518,
+              "column": 7
+            },
+            {
+              "title": "Textbook and Content Endpoints",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api-testing",
+                  "projectName": "api-testing",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6814873ab357f121eca0-693c3cf9618969f394cb",
+              "file": "api-integration.spec.ts",
+              "line": 561,
+              "column": 7
+            },
+            {
+              "title": "Error Handling and Edge Cases",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api-testing",
+                  "projectName": "api-testing",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6814873ab357f121eca0-562ac77fb4d1f68ff020",
+              "file": "api-integration.spec.ts",
+              "line": 598,
+              "column": 7
+            },
+            {
+              "title": "API Performance and Load Testing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api-testing",
+                  "projectName": "api-testing",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6814873ab357f121eca0-e3aa09b90537887f12a8",
+              "file": "api-integration.spec.ts",
+              "line": 643,
+              "column": 7
+            },
+            {
+              "title": "Generate API Integration Report",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api-testing",
+                  "projectName": "api-testing",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6814873ab357f121eca0-e956d82d301af20415c3",
+              "file": "api-integration.spec.ts",
+              "line": 682,
+              "column": 7
+            },
+            {
+              "title": "WebSocket Connection Testing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api-testing",
+                  "projectName": "api-testing",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6814873ab357f121eca0-cc6fbe4ff559c2e4fd65",
+              "file": "api-integration.spec.ts",
+              "line": 704,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "auth.spec.ts",
+      "file": "auth.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Authentication Flow",
+          "file": "auth.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display login page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-d0a193e7c9784bb41da2",
+              "file": "auth.spec.ts",
+              "line": 4,
+              "column": 7
+            },
+            {
+              "title": "should display register page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-f4795fbe6a09a8d1ae91",
+              "file": "auth.spec.ts",
+              "line": 12,
+              "column": 7
+            },
+            {
+              "title": "should register a new user",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-8ecce1a99415b1a62e21",
+              "file": "auth.spec.ts",
+              "line": 21,
+              "column": 7
+            },
+            {
+              "title": "should login with valid credentials",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-aea4b7dcdd7f05966962",
+              "file": "auth.spec.ts",
+              "line": 41,
+              "column": 7
+            },
+            {
+              "title": "should show error for invalid credentials",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-5ebd4a0757d7e9bf31f0",
+              "file": "auth.spec.ts",
+              "line": 56,
+              "column": 7
+            },
+            {
+              "title": "should validate email format",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-f5c416513404f19b801b",
+              "file": "auth.spec.ts",
+              "line": 68,
+              "column": 7
+            },
+            {
+              "title": "should validate password requirements",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-fbc96105d5a8f7d6e712",
+              "file": "auth.spec.ts",
+              "line": 82,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "classroom.spec.ts",
+      "file": "classroom.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Audio AI Classroom",
+          "file": "classroom.spec.ts",
+          "line": 7,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should navigate to classroom from dashboard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ee123a1e90c2c71e0969-e788f5dad05f4f5ef57d",
+              "file": "classroom.spec.ts",
+              "line": 27,
+              "column": 7
+            },
+            {
+              "title": "should request microphone permissions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ee123a1e90c2c71e0969-89a3fa44e6dcaaee193d",
+              "file": "classroom.spec.ts",
+              "line": 39,
+              "column": 7
+            },
+            {
+              "title": "should display session controls when connected",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ee123a1e90c2c71e0969-795508364be3532ad067",
+              "file": "classroom.spec.ts",
+              "line": 52,
+              "column": 7
+            },
+            {
+              "title": "should toggle mute state",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ee123a1e90c2c71e0969-78618fd9864f4dc84fff",
+              "file": "classroom.spec.ts",
+              "line": 90,
+              "column": 7
+            },
+            {
+              "title": "should end session and redirect",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ee123a1e90c2c71e0969-9a559d33e8205666ec4d",
+              "file": "classroom.spec.ts",
+              "line": 124,
+              "column": 7
+            },
+            {
+              "title": "should display session quality indicators",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ee123a1e90c2c71e0969-afcf45dd9455aac56ff6",
+              "file": "classroom.spec.ts",
+              "line": 164,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Session Management",
+          "file": "classroom.spec.ts",
+          "line": 195,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display session history on dashboard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ee123a1e90c2c71e0969-adbad27a52ab30e3dfab",
+              "file": "classroom.spec.ts",
+              "line": 196,
+              "column": 7
+            },
+            {
+              "title": "should show quick start widget",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ee123a1e90c2c71e0969-ee61bbeab88f90d99ecf",
+              "file": "classroom.spec.ts",
+              "line": 220,
+              "column": 7
+            },
+            {
+              "title": "should navigate to classroom from quick start",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ee123a1e90c2c71e0969-1e5df0f60483e3cc2a38",
+              "file": "classroom.spec.ts",
+              "line": 241,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Accessibility",
+          "file": "classroom.spec.ts",
+          "line": 257,
+          "column": 6,
+          "specs": [
+            {
+              "title": "classroom page should be accessible",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ee123a1e90c2c71e0969-ae97877f2ec74c84b98b",
+              "file": "classroom.spec.ts",
+              "line": 258,
+              "column": 7
+            },
+            {
+              "title": "should support keyboard shortcuts",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ee123a1e90c2c71e0969-07e8389a6e9345caad8d",
+              "file": "classroom.spec.ts",
+              "line": 281,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "comprehensive-e2e-framework.spec.ts",
+      "file": "comprehensive-e2e-framework.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TEST-004: Comprehensive E2E Testing Framework",
+          "file": "comprehensive-e2e-framework.spec.ts",
+          "line": 749,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Complete E2E Workflow - Desktop-Chrome",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-3999029c82f0d81bd61d",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 768,
+              "column": 9
+            },
+            {
+              "title": "Complete E2E Workflow - Laptop",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-a4670665cc48119ee77a",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 768,
+              "column": 9
+            },
+            {
+              "title": "Complete E2E Workflow - Tablet-Portrait",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-04d8fd1f840824493b71",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 768,
+              "column": 9
+            },
+            {
+              "title": "Complete E2E Workflow - Tablet-Landscape",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-9ae0b04131a7014b1bcd",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 768,
+              "column": 9
+            },
+            {
+              "title": "Complete E2E Workflow - Mobile-Large",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-bcc2b6e4cadb085f4c93",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 768,
+              "column": 9
+            },
+            {
+              "title": "Complete E2E Workflow - Mobile-iPhone",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-68e0d41452c7a9f7b57e",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 768,
+              "column": 9
+            },
+            {
+              "title": "Generate Final Report",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-cd0de3ae82b3c47a6b48",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 805,
+              "column": 7
+            },
+            {
+              "title": "Complete E2E Workflow - Desktop-Chrome",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox-desktop",
+                  "projectName": "firefox-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-d66f9148d2fc2471b2bc",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 768,
+              "column": 9
+            },
+            {
+              "title": "Complete E2E Workflow - Laptop",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox-desktop",
+                  "projectName": "firefox-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-b6fb905d95640fefe6e7",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 768,
+              "column": 9
+            },
+            {
+              "title": "Complete E2E Workflow - Tablet-Portrait",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox-desktop",
+                  "projectName": "firefox-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-81520db09f0691be48fd",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 768,
+              "column": 9
+            },
+            {
+              "title": "Complete E2E Workflow - Tablet-Landscape",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox-desktop",
+                  "projectName": "firefox-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-2c960d67730178e1d575",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 768,
+              "column": 9
+            },
+            {
+              "title": "Complete E2E Workflow - Mobile-Large",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox-desktop",
+                  "projectName": "firefox-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-4b98dd9732a8182732ca",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 768,
+              "column": 9
+            },
+            {
+              "title": "Complete E2E Workflow - Mobile-iPhone",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox-desktop",
+                  "projectName": "firefox-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-d75bed7b03317628746f",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 768,
+              "column": 9
+            },
+            {
+              "title": "Generate Final Report",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox-desktop",
+                  "projectName": "firefox-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-1aff0aa9f69b59e7ab6b",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 805,
+              "column": 7
+            },
+            {
+              "title": "Complete E2E Workflow - Desktop-Chrome",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-desktop",
+                  "projectName": "webkit-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-4fae8641a29505b94e53",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 768,
+              "column": 9
+            },
+            {
+              "title": "Complete E2E Workflow - Laptop",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-desktop",
+                  "projectName": "webkit-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-3b82e5be68f1b40747d2",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 768,
+              "column": 9
+            },
+            {
+              "title": "Complete E2E Workflow - Tablet-Portrait",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-desktop",
+                  "projectName": "webkit-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-5db4c9ac890523bd1dd8",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 768,
+              "column": 9
+            },
+            {
+              "title": "Complete E2E Workflow - Tablet-Landscape",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-desktop",
+                  "projectName": "webkit-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-5033ed2b82474b22cfd7",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 768,
+              "column": 9
+            },
+            {
+              "title": "Complete E2E Workflow - Mobile-Large",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-desktop",
+                  "projectName": "webkit-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-6c7852a70e3305b8fa2a",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 768,
+              "column": 9
+            },
+            {
+              "title": "Complete E2E Workflow - Mobile-iPhone",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-desktop",
+                  "projectName": "webkit-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-76cb330d4363eb75c96b",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 768,
+              "column": 9
+            },
+            {
+              "title": "Generate Final Report",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-desktop",
+                  "projectName": "webkit-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-fcda42249e765949fc42",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 805,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Cross-Browser Compatibility",
+          "file": "comprehensive-e2e-framework.spec.ts",
+          "line": 815,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Chromium Baseline Test",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-54db7b73b79580985ebb",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 817,
+              "column": 7
+            },
+            {
+              "title": "Chromium Baseline Test",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox-desktop",
+                  "projectName": "firefox-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-82d60c7ec95dec4f91b6",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 817,
+              "column": 7
+            },
+            {
+              "title": "Chromium Baseline Test",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-desktop",
+                  "projectName": "webkit-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-87c14a9fbd1ed55c3a50",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 817,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "API Integration Testing",
+          "file": "comprehensive-e2e-framework.spec.ts",
+          "line": 828,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Critical API Endpoints",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-b32d8349cd6c552b5aef",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 829,
+              "column": 7
+            },
+            {
+              "title": "Critical API Endpoints",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox-desktop",
+                  "projectName": "firefox-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-9d471554b3628b119fd9",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 829,
+              "column": 7
+            },
+            {
+              "title": "Critical API Endpoints",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-desktop",
+                  "projectName": "webkit-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6ed103fca41dfe410ecb-98885ba9c4349c8b620e",
+              "file": "comprehensive-e2e-framework.spec.ts",
+              "line": 829,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "critical-path.spec.ts",
+      "file": "critical-path.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Critical Path E2E Testing",
+          "file": "critical-path.spec.ts",
+          "line": 353,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Complete User Journey: Landing → Auth → Dashboard → Classroom → Session",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-523d23e18112132c2a83",
+              "file": "critical-path.spec.ts",
+              "line": 375,
+              "column": 7
+            },
+            {
+              "title": "Performance Benchmarking",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-62f2b503a9c4ea90356a",
+              "file": "critical-path.spec.ts",
+              "line": 417,
+              "column": 7
+            },
+            {
+              "title": "Accessibility Compliance Check",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-e01f7823b747ddc300fa",
+              "file": "critical-path.spec.ts",
+              "line": 467,
+              "column": 7
+            },
+            {
+              "title": "Complete User Journey: Landing → Auth → Dashboard → Classroom → Session",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox-desktop",
+                  "projectName": "firefox-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-a98488bc446db54b25b9",
+              "file": "critical-path.spec.ts",
+              "line": 375,
+              "column": 7
+            },
+            {
+              "title": "Performance Benchmarking",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox-desktop",
+                  "projectName": "firefox-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-2cabc7970ab5f2d0921a",
+              "file": "critical-path.spec.ts",
+              "line": 417,
+              "column": 7
+            },
+            {
+              "title": "Accessibility Compliance Check",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox-desktop",
+                  "projectName": "firefox-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-9250d9dcf1602dcac01c",
+              "file": "critical-path.spec.ts",
+              "line": 467,
+              "column": 7
+            },
+            {
+              "title": "Complete User Journey: Landing → Auth → Dashboard → Classroom → Session",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-desktop",
+                  "projectName": "webkit-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-548b75a03f7de4cd300a",
+              "file": "critical-path.spec.ts",
+              "line": 375,
+              "column": 7
+            },
+            {
+              "title": "Performance Benchmarking",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-desktop",
+                  "projectName": "webkit-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-4d5551a24c77134f40c4",
+              "file": "critical-path.spec.ts",
+              "line": 417,
+              "column": 7
+            },
+            {
+              "title": "Accessibility Compliance Check",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-desktop",
+                  "projectName": "webkit-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-46f5dd607819bef3b3db",
+              "file": "critical-path.spec.ts",
+              "line": 467,
+              "column": 7
+            },
+            {
+              "title": "Complete User Journey: Landing → Auth → Dashboard → Classroom → Session",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-4f82fd08f07dae28a7c2",
+              "file": "critical-path.spec.ts",
+              "line": 375,
+              "column": 7
+            },
+            {
+              "title": "Performance Benchmarking",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-f685ac73579aea1f1ea7",
+              "file": "critical-path.spec.ts",
+              "line": 417,
+              "column": 7
+            },
+            {
+              "title": "Accessibility Compliance Check",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-0d55dfd55b2570255b64",
+              "file": "critical-path.spec.ts",
+              "line": 467,
+              "column": 7
+            },
+            {
+              "title": "Complete User Journey: Landing → Auth → Dashboard → Classroom → Session",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-safari",
+                  "projectName": "mobile-safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-2bea6ca7983c2865ca4f",
+              "file": "critical-path.spec.ts",
+              "line": 375,
+              "column": 7
+            },
+            {
+              "title": "Performance Benchmarking",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-safari",
+                  "projectName": "mobile-safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-76fe9c298c7956ce5253",
+              "file": "critical-path.spec.ts",
+              "line": 417,
+              "column": 7
+            },
+            {
+              "title": "Accessibility Compliance Check",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-safari",
+                  "projectName": "mobile-safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-970be745d80ff0dded22",
+              "file": "critical-path.spec.ts",
+              "line": 467,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Edge Case Testing",
+          "file": "critical-path.spec.ts",
+          "line": 514,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Network Resilience",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-7dd44e3714516acef12b",
+              "file": "critical-path.spec.ts",
+              "line": 515,
+              "column": 7
+            },
+            {
+              "title": "Mobile Responsiveness",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-d61859d513000bbec272",
+              "file": "critical-path.spec.ts",
+              "line": 529,
+              "column": 7
+            },
+            {
+              "title": "Network Resilience",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox-desktop",
+                  "projectName": "firefox-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-f7ca967efb64808ddb6b",
+              "file": "critical-path.spec.ts",
+              "line": 515,
+              "column": 7
+            },
+            {
+              "title": "Mobile Responsiveness",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox-desktop",
+                  "projectName": "firefox-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-1207de692456dd386a95",
+              "file": "critical-path.spec.ts",
+              "line": 529,
+              "column": 7
+            },
+            {
+              "title": "Network Resilience",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-desktop",
+                  "projectName": "webkit-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-0feffe0f0505ac031d61",
+              "file": "critical-path.spec.ts",
+              "line": 515,
+              "column": 7
+            },
+            {
+              "title": "Mobile Responsiveness",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-desktop",
+                  "projectName": "webkit-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-2ed73d06c9ae684e10a6",
+              "file": "critical-path.spec.ts",
+              "line": 529,
+              "column": 7
+            },
+            {
+              "title": "Network Resilience",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-43492887ca70a7ffd1a3",
+              "file": "critical-path.spec.ts",
+              "line": 515,
+              "column": 7
+            },
+            {
+              "title": "Mobile Responsiveness",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-b783967680e420e12ffe",
+              "file": "critical-path.spec.ts",
+              "line": 529,
+              "column": 7
+            },
+            {
+              "title": "Network Resilience",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-safari",
+                  "projectName": "mobile-safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-7b8323e974757e4bd297",
+              "file": "critical-path.spec.ts",
+              "line": 515,
+              "column": 7
+            },
+            {
+              "title": "Mobile Responsiveness",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-safari",
+                  "projectName": "mobile-safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "316e4272d13ffa8f4bb0-37335bfff6d1c94f9a71",
+              "file": "critical-path.spec.ts",
+              "line": 529,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "error-recovery-resilience.spec.ts",
+      "file": "error-recovery-resilience.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Error Recovery and Resilience Testing",
+          "file": "error-recovery-resilience.spec.ts",
+          "line": 397,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Network Failure Scenarios",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7dd2cf71ac1b18144ffd-f6c716055950e07a0c96",
+              "file": "error-recovery-resilience.spec.ts",
+              "line": 404,
+              "column": 7
+            },
+            {
+              "title": "Authentication and Authorization Failures",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7dd2cf71ac1b18144ffd-2390e0696a035fd00a21",
+              "file": "error-recovery-resilience.spec.ts",
+              "line": 482,
+              "column": 7
+            },
+            {
+              "title": "Resource Loading Failures",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7dd2cf71ac1b18144ffd-73e1b9496d2c2afcee7e",
+              "file": "error-recovery-resilience.spec.ts",
+              "line": 567,
+              "column": 7
+            },
+            {
+              "title": "User Input Validation and Error Handling",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7dd2cf71ac1b18144ffd-f4b96f16f47b9ba5d466",
+              "file": "error-recovery-resilience.spec.ts",
+              "line": 648,
+              "column": 7
+            },
+            {
+              "title": "Service Integration Failures",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7dd2cf71ac1b18144ffd-32b5c0c3b8a1fd4ae75d",
+              "file": "error-recovery-resilience.spec.ts",
+              "line": 731,
+              "column": 7
+            },
+            {
+              "title": "Browser Compatibility and Edge Cases",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7dd2cf71ac1b18144ffd-e816a6d2381475806d3e",
+              "file": "error-recovery-resilience.spec.ts",
+              "line": 804,
+              "column": 7
+            },
+            {
+              "title": "Generate Error Recovery Report",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7dd2cf71ac1b18144ffd-fa22946850026fac75fb",
+              "file": "error-recovery-resilience.spec.ts",
+              "line": 868,
+              "column": 7
+            },
+            {
+              "title": "Network Failure Scenarios",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "error-recovery",
+                  "projectName": "error-recovery",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7dd2cf71ac1b18144ffd-ba9a0c74502fe16f7136",
+              "file": "error-recovery-resilience.spec.ts",
+              "line": 404,
+              "column": 7
+            },
+            {
+              "title": "Authentication and Authorization Failures",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "error-recovery",
+                  "projectName": "error-recovery",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7dd2cf71ac1b18144ffd-ee7db327fddbe32721e7",
+              "file": "error-recovery-resilience.spec.ts",
+              "line": 482,
+              "column": 7
+            },
+            {
+              "title": "Resource Loading Failures",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "error-recovery",
+                  "projectName": "error-recovery",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7dd2cf71ac1b18144ffd-8e5ce3032260c0a9ca32",
+              "file": "error-recovery-resilience.spec.ts",
+              "line": 567,
+              "column": 7
+            },
+            {
+              "title": "User Input Validation and Error Handling",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "error-recovery",
+                  "projectName": "error-recovery",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7dd2cf71ac1b18144ffd-04f65e0e71d6099f1551",
+              "file": "error-recovery-resilience.spec.ts",
+              "line": 648,
+              "column": 7
+            },
+            {
+              "title": "Service Integration Failures",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "error-recovery",
+                  "projectName": "error-recovery",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7dd2cf71ac1b18144ffd-d50f9ad6b3209641240c",
+              "file": "error-recovery-resilience.spec.ts",
+              "line": 731,
+              "column": 7
+            },
+            {
+              "title": "Browser Compatibility and Edge Cases",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "error-recovery",
+                  "projectName": "error-recovery",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7dd2cf71ac1b18144ffd-fd3236ebd60dd23edf8f",
+              "file": "error-recovery-resilience.spec.ts",
+              "line": 804,
+              "column": 7
+            },
+            {
+              "title": "Generate Error Recovery Report",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "error-recovery",
+                  "projectName": "error-recovery",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7dd2cf71ac1b18144ffd-6b89a83c886a9d116889",
+              "file": "error-recovery-resilience.spec.ts",
+              "line": 868,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "livekit-voice-session.spec.ts",
+      "file": "livekit-voice-session.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "PC-005 LiveKit Voice Session Integration",
+          "file": "livekit-voice-session.spec.ts",
+          "line": 15,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should successfully start a voice session",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d332ed8d4370899dbffa-c481f738af8b388ea420",
+              "file": "livekit-voice-session.spec.ts",
+              "line": 55,
+              "column": 7
+            },
+            {
+              "title": "should handle API errors gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d332ed8d4370899dbffa-28055be822080626a83d",
+              "file": "livekit-voice-session.spec.ts",
+              "line": 149,
+              "column": 7
+            },
+            {
+              "title": "should send transcriptions to webhook endpoints",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d332ed8d4370899dbffa-aa19e52722932d3ff232",
+              "file": "livekit-voice-session.spec.ts",
+              "line": 186,
+              "column": 7
+            },
+            {
+              "title": "should display session metrics",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d332ed8d4370899dbffa-d20412eb509ed10b673b",
+              "file": "livekit-voice-session.spec.ts",
+              "line": 227,
+              "column": 7
+            },
+            {
+              "title": "should verify all PC-005 endpoints are accessible",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d332ed8d4370899dbffa-f35c357cf98d0605b9ba",
+              "file": "livekit-voice-session.spec.ts",
+              "line": 257,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "pc-010/debug-after-get-started.spec.ts",
+      "file": "pc-010/debug-after-get-started.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Debug what happens after Get Started",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "c7a928140bff40b098c5-31ce4604cea8fc0a16e5",
+          "file": "pc-010/debug-after-get-started.spec.ts",
+          "line": 3,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "pc-010/debug-homepage.spec.ts",
+      "file": "pc-010/debug-homepage.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Debug homepage to see what elements are available",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "f0b3ba973c36a5677ddf-eaa6b24d51f23710b896",
+          "file": "pc-010/debug-homepage.spec.ts",
+          "line": 3,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "pc-010/final-transcription-test.spec.ts",
+      "file": "pc-010/final-transcription-test.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "PC-010 Final Transcription Pipeline Test",
+          "file": "pc-010/final-transcription-test.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should complete full PC-010 transcription pipeline test",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "27d0edc2ee0a106dbad0-719535f38c38c1f5bc1e",
+              "file": "pc-010/final-transcription-test.spec.ts",
+              "line": 25,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "pc-010/transcription-pipeline-full.spec.ts",
+      "file": "pc-010/transcription-pipeline-full.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "PC-010 Transcription Pipeline Test",
+          "file": "pc-010/transcription-pipeline-full.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should verify transcription pipeline in classroom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0a3ed67b27413b9191b9-ba546536d01cb293e596",
+              "file": "pc-010/transcription-pipeline-full.spec.ts",
+              "line": 20,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "pc-010/transcription-pipeline.spec.ts",
+      "file": "pc-010/transcription-pipeline.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "PC-010 Transcription Pipeline Test",
+          "file": "pc-010/transcription-pipeline.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should verify transcription pipeline in classroom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "09ae503ff4947e1fd888-c93f2038674d98c6f645",
+              "file": "pc-010/transcription-pipeline.spec.ts",
+              "line": 18,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "pc-010/transcription-session-test.spec.ts",
+      "file": "pc-010/transcription-session-test.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "PC-010 Transcription Pipeline - Voice Session Test",
+          "file": "pc-010/transcription-session-test.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should test PC-010 transcription pipeline in voice session",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "9202e22765b85945079d-f1a5227021c0d2f6df37",
+              "file": "pc-010/transcription-session-test.spec.ts",
+              "line": 25,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "performance-analysis.spec.ts",
+      "file": "performance-analysis.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Performance Analysis",
+          "file": "performance-analysis.spec.ts",
+          "line": 402,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Performance: Landing - Desktop",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "948261cece364cf11ba7-2a6085d3abc48b3ba1d0",
+              "file": "performance-analysis.spec.ts",
+              "line": 418,
+              "column": 11
+            },
+            {
+              "title": "Performance: Login - Desktop",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "948261cece364cf11ba7-9e0de4ff6512c038d079",
+              "file": "performance-analysis.spec.ts",
+              "line": 418,
+              "column": 11
+            },
+            {
+              "title": "Performance: Classroom - Desktop",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "948261cece364cf11ba7-9bbf3c47a143b9c16912",
+              "file": "performance-analysis.spec.ts",
+              "line": 418,
+              "column": 11
+            },
+            {
+              "title": "Performance: Landing - Mobile",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "948261cece364cf11ba7-675a1f9774dff98151c3",
+              "file": "performance-analysis.spec.ts",
+              "line": 418,
+              "column": 11
+            },
+            {
+              "title": "Performance: Login - Mobile",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "948261cece364cf11ba7-f484d1385ec64234376d",
+              "file": "performance-analysis.spec.ts",
+              "line": 418,
+              "column": 11
+            },
+            {
+              "title": "Performance: Classroom - Mobile",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "948261cece364cf11ba7-9829aea274e823273fee",
+              "file": "performance-analysis.spec.ts",
+              "line": 418,
+              "column": 11
+            },
+            {
+              "title": "Microphone Permission Testing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "948261cece364cf11ba7-94f9cd0a4cffabc9180a",
+              "file": "performance-analysis.spec.ts",
+              "line": 456,
+              "column": 7
+            },
+            {
+              "title": "Generate Performance Report",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "948261cece364cf11ba7-41d2a1b5950857f8df22",
+              "file": "performance-analysis.spec.ts",
+              "line": 478,
+              "column": 7
+            },
+            {
+              "title": "Performance: Landing - Desktop",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "performance-testing",
+                  "projectName": "performance-testing",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "948261cece364cf11ba7-1602c2f58f691374b4aa",
+              "file": "performance-analysis.spec.ts",
+              "line": 418,
+              "column": 11
+            },
+            {
+              "title": "Performance: Login - Desktop",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "performance-testing",
+                  "projectName": "performance-testing",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "948261cece364cf11ba7-3f63a01c54620be4d9c8",
+              "file": "performance-analysis.spec.ts",
+              "line": 418,
+              "column": 11
+            },
+            {
+              "title": "Performance: Classroom - Desktop",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "performance-testing",
+                  "projectName": "performance-testing",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "948261cece364cf11ba7-da003342f13877e83a23",
+              "file": "performance-analysis.spec.ts",
+              "line": 418,
+              "column": 11
+            },
+            {
+              "title": "Performance: Landing - Mobile",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "performance-testing",
+                  "projectName": "performance-testing",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "948261cece364cf11ba7-50a42746082fc7124387",
+              "file": "performance-analysis.spec.ts",
+              "line": 418,
+              "column": 11
+            },
+            {
+              "title": "Performance: Login - Mobile",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "performance-testing",
+                  "projectName": "performance-testing",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "948261cece364cf11ba7-b41e2981e502655b49da",
+              "file": "performance-analysis.spec.ts",
+              "line": 418,
+              "column": 11
+            },
+            {
+              "title": "Performance: Classroom - Mobile",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "performance-testing",
+                  "projectName": "performance-testing",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "948261cece364cf11ba7-768ee0b86ea3910ccb10",
+              "file": "performance-analysis.spec.ts",
+              "line": 418,
+              "column": 11
+            },
+            {
+              "title": "Microphone Permission Testing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "performance-testing",
+                  "projectName": "performance-testing",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "948261cece364cf11ba7-869e05ce7e427c0b0950",
+              "file": "performance-analysis.spec.ts",
+              "line": 456,
+              "column": 7
+            },
+            {
+              "title": "Generate Performance Report",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "performance-testing",
+                  "projectName": "performance-testing",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "948261cece364cf11ba7-66390f4427028f63cc0c",
+              "file": "performance-analysis.spec.ts",
+              "line": 478,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "show-then-tell-timing.spec.ts",
+      "file": "show-then-tell-timing.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Show-Then-Tell Timing Validation",
+          "file": "show-then-tell-timing.spec.ts",
+          "line": 7,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should measure 400ms visual lead time in show-then-tell",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "b673131393e05494d50c-a7e7f9c0aa1ae3072400",
+              "file": "show-then-tell-timing.spec.ts",
+              "line": 95,
+              "column": 7
+            },
+            {
+              "title": "should maintain consistent timing over multiple interactions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "b673131393e05494d50c-9216e90eb52de9a3c5a4",
+              "file": "show-then-tell-timing.spec.ts",
+              "line": 171,
+              "column": 7
+            },
+            {
+              "title": "should detect timing drift and log warnings",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "b673131393e05494d50c-28caab9c48a7d2b6fa0f",
+              "file": "show-then-tell-timing.spec.ts",
+              "line": 231,
+              "column": 7
+            },
+            {
+              "title": "should measure actual browser rendering performance",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "b673131393e05494d50c-63d002fdbe09cb665e45",
+              "file": "show-then-tell-timing.spec.ts",
+              "line": 285,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Performance Integration",
+          "file": "show-then-tell-timing.spec.ts",
+          "line": 326,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should integrate with performance monitoring system",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "b673131393e05494d50c-781465b804ea09162945",
+              "file": "show-then-tell-timing.spec.ts",
+              "line": 327,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "textbook.spec.ts",
+      "file": "textbook.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Textbook Upload and Processing",
+          "file": "textbook.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display textbook management page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7ed83c4173e4250d3e53-cc5529c3286d1de228d0",
+              "file": "textbook.spec.ts",
+              "line": 13,
+              "column": 7
+            },
+            {
+              "title": "should open upload dialog",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7ed83c4173e4250d3e53-52073c0208d11e1c57d6",
+              "file": "textbook.spec.ts",
+              "line": 20,
+              "column": 7
+            },
+            {
+              "title": "should validate upload form",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7ed83c4173e4250d3e53-fbd180c7272df1b523e6",
+              "file": "textbook.spec.ts",
+              "line": 32,
+              "column": 7
+            },
+            {
+              "title": "should upload a textbook",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7ed83c4173e4250d3e53-03706dfd19c40e97f856",
+              "file": "textbook.spec.ts",
+              "line": 44,
+              "column": 7
+            },
+            {
+              "title": "should display uploaded textbooks",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7ed83c4173e4250d3e53-ad4c12f1194e751da564",
+              "file": "textbook.spec.ts",
+              "line": 65,
+              "column": 7
+            },
+            {
+              "title": "should filter textbooks by grade",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7ed83c4173e4250d3e53-649d7192b888b385f1cf",
+              "file": "textbook.spec.ts",
+              "line": 72,
+              "column": 7
+            },
+            {
+              "title": "should filter textbooks by subject",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7ed83c4173e4250d3e53-1fca731f44d6c37481a4",
+              "file": "textbook.spec.ts",
+              "line": 92,
+              "column": 7
+            },
+            {
+              "title": "should show textbook processing status",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7ed83c4173e4250d3e53-657fb8f8167876327e68",
+              "file": "textbook.spec.ts",
+              "line": 112,
+              "column": 7
+            },
+            {
+              "title": "should handle upload errors gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7ed83c4173e4250d3e53-9a3a2f6d4b4137bb9c7e",
+              "file": "textbook.spec.ts",
+              "line": 127,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ui-analysis.spec.ts",
+      "file": "ui-analysis.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Comprehensive UI/UX Analysis",
+          "file": "ui-analysis.spec.ts",
+          "line": 279,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Generate Comprehensive Report",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3525f88661107fa5ea7f-151c7f71c0a4ac18c72e",
+              "file": "ui-analysis.spec.ts",
+              "line": 327,
+              "column": 7
+            }
+          ],
+          "suites": [
+            {
+              "title": "Desktop Analysis",
+              "file": "ui-analysis.spec.ts",
+              "line": 283,
+              "column": 10,
+              "specs": [
+                {
+                  "title": "Landing Page - Desktop",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium-desktop",
+                      "projectName": "chromium-desktop",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "3525f88661107fa5ea7f-4d0e1acce27c8814d596",
+                  "file": "ui-analysis.spec.ts",
+                  "line": 285,
+                  "column": 13
+                },
+                {
+                  "title": "Login Page - Desktop",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium-desktop",
+                      "projectName": "chromium-desktop",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "3525f88661107fa5ea7f-c70f5a86a0373210e79e",
+                  "file": "ui-analysis.spec.ts",
+                  "line": 285,
+                  "column": 13
+                },
+                {
+                  "title": "Classroom Page - Desktop",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium-desktop",
+                      "projectName": "chromium-desktop",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "3525f88661107fa5ea7f-813b7487421a29ed5b91",
+                  "file": "ui-analysis.spec.ts",
+                  "line": 285,
+                  "column": 13
+                }
+              ]
+            },
+            {
+              "title": "Laptop Analysis",
+              "file": "ui-analysis.spec.ts",
+              "line": 283,
+              "column": 10,
+              "specs": [
+                {
+                  "title": "Landing Page - Laptop",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium-desktop",
+                      "projectName": "chromium-desktop",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "3525f88661107fa5ea7f-f053cc7914d413210e77",
+                  "file": "ui-analysis.spec.ts",
+                  "line": 285,
+                  "column": 13
+                },
+                {
+                  "title": "Login Page - Laptop",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium-desktop",
+                      "projectName": "chromium-desktop",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "3525f88661107fa5ea7f-9c30203ae6fe78a8ba35",
+                  "file": "ui-analysis.spec.ts",
+                  "line": 285,
+                  "column": 13
+                },
+                {
+                  "title": "Classroom Page - Laptop",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium-desktop",
+                      "projectName": "chromium-desktop",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "3525f88661107fa5ea7f-bade10d1fdc92ecb5406",
+                  "file": "ui-analysis.spec.ts",
+                  "line": 285,
+                  "column": 13
+                }
+              ]
+            },
+            {
+              "title": "Tablet-Portrait Analysis",
+              "file": "ui-analysis.spec.ts",
+              "line": 283,
+              "column": 10,
+              "specs": [
+                {
+                  "title": "Landing Page - Tablet-Portrait",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium-desktop",
+                      "projectName": "chromium-desktop",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "3525f88661107fa5ea7f-8487d6a1f2af3d6dd2c5",
+                  "file": "ui-analysis.spec.ts",
+                  "line": 285,
+                  "column": 13
+                },
+                {
+                  "title": "Login Page - Tablet-Portrait",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium-desktop",
+                      "projectName": "chromium-desktop",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "3525f88661107fa5ea7f-4d4b29ea51d3503d5467",
+                  "file": "ui-analysis.spec.ts",
+                  "line": 285,
+                  "column": 13
+                },
+                {
+                  "title": "Classroom Page - Tablet-Portrait",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium-desktop",
+                      "projectName": "chromium-desktop",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "3525f88661107fa5ea7f-0f158b5067222d45dd17",
+                  "file": "ui-analysis.spec.ts",
+                  "line": 285,
+                  "column": 13
+                }
+              ]
+            },
+            {
+              "title": "Tablet-Landscape Analysis",
+              "file": "ui-analysis.spec.ts",
+              "line": 283,
+              "column": 10,
+              "specs": [
+                {
+                  "title": "Landing Page - Tablet-Landscape",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium-desktop",
+                      "projectName": "chromium-desktop",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "3525f88661107fa5ea7f-4fffb79a21097d0b1a46",
+                  "file": "ui-analysis.spec.ts",
+                  "line": 285,
+                  "column": 13
+                },
+                {
+                  "title": "Login Page - Tablet-Landscape",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium-desktop",
+                      "projectName": "chromium-desktop",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "3525f88661107fa5ea7f-d437ed9c88acf35155be",
+                  "file": "ui-analysis.spec.ts",
+                  "line": 285,
+                  "column": 13
+                },
+                {
+                  "title": "Classroom Page - Tablet-Landscape",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium-desktop",
+                      "projectName": "chromium-desktop",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "3525f88661107fa5ea7f-dfcd115b327fef3416f6",
+                  "file": "ui-analysis.spec.ts",
+                  "line": 285,
+                  "column": 13
+                }
+              ]
+            },
+            {
+              "title": "Mobile-iPhone Analysis",
+              "file": "ui-analysis.spec.ts",
+              "line": 283,
+              "column": 10,
+              "specs": [
+                {
+                  "title": "Landing Page - Mobile-iPhone",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium-desktop",
+                      "projectName": "chromium-desktop",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "3525f88661107fa5ea7f-e6ae0a32018a627eec20",
+                  "file": "ui-analysis.spec.ts",
+                  "line": 285,
+                  "column": 13
+                },
+                {
+                  "title": "Login Page - Mobile-iPhone",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium-desktop",
+                      "projectName": "chromium-desktop",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "3525f88661107fa5ea7f-bca979b2b5fc94ef428d",
+                  "file": "ui-analysis.spec.ts",
+                  "line": 285,
+                  "column": 13
+                },
+                {
+                  "title": "Classroom Page - Mobile-iPhone",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium-desktop",
+                      "projectName": "chromium-desktop",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "3525f88661107fa5ea7f-7ffbb21c6eaaf27a017b",
+                  "file": "ui-analysis.spec.ts",
+                  "line": 285,
+                  "column": 13
+                }
+              ]
+            },
+            {
+              "title": "Mobile-Large Analysis",
+              "file": "ui-analysis.spec.ts",
+              "line": 283,
+              "column": 10,
+              "specs": [
+                {
+                  "title": "Landing Page - Mobile-Large",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium-desktop",
+                      "projectName": "chromium-desktop",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "3525f88661107fa5ea7f-6ae9a799ef4680bb00df",
+                  "file": "ui-analysis.spec.ts",
+                  "line": 285,
+                  "column": 13
+                },
+                {
+                  "title": "Login Page - Mobile-Large",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium-desktop",
+                      "projectName": "chromium-desktop",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "3525f88661107fa5ea7f-85d5bcf13ebbce9b04ce",
+                  "file": "ui-analysis.spec.ts",
+                  "line": 285,
+                  "column": 13
+                },
+                {
+                  "title": "Classroom Page - Mobile-Large",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium-desktop",
+                      "projectName": "chromium-desktop",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "3525f88661107fa5ea7f-e16508fe804ed3e1b48d",
+                  "file": "ui-analysis.spec.ts",
+                  "line": 285,
+                  "column": 13
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "visual-regression.spec.ts",
+      "file": "visual-regression.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Visual Regression Testing",
+          "file": "visual-regression.spec.ts",
+          "line": 294,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Landing Page Visual Consistency",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-251991e5ec9f37e5da32",
+              "file": "visual-regression.spec.ts",
+              "line": 313,
+              "column": 7
+            },
+            {
+              "title": "Login Page Visual Consistency",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-5eb51bca614d3f45848e",
+              "file": "visual-regression.spec.ts",
+              "line": 318,
+              "column": 7
+            },
+            {
+              "title": "Classroom Page Visual Consistency",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-549b0f8e044b38fcd072",
+              "file": "visual-regression.spec.ts",
+              "line": 323,
+              "column": 7
+            },
+            {
+              "title": "Dashboard Page Visual Consistency (Authenticated)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-51dd2dff86bcd0a779b6",
+              "file": "visual-regression.spec.ts",
+              "line": 328,
+              "column": 7
+            },
+            {
+              "title": "Mobile Responsive Layout Testing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-38b0430e01eb5146d5b9",
+              "file": "visual-regression.spec.ts",
+              "line": 347,
+              "column": 7
+            },
+            {
+              "title": "Dark Mode Visual Testing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-19639b85b0d1a72f8277",
+              "file": "visual-regression.spec.ts",
+              "line": 381,
+              "column": 7
+            },
+            {
+              "title": "Generate Visual Regression Report",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-5f854857d00e4c22ea74",
+              "file": "visual-regression.spec.ts",
+              "line": 411,
+              "column": 7
+            },
+            {
+              "title": "Cross-Device Element Positioning",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-6fbea4c46509b7e41313",
+              "file": "visual-regression.spec.ts",
+              "line": 424,
+              "column": 7
+            },
+            {
+              "title": "Landing Page Visual Consistency",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-eaa4a24620f3ec8f2991",
+              "file": "visual-regression.spec.ts",
+              "line": 313,
+              "column": 7
+            },
+            {
+              "title": "Login Page Visual Consistency",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-f391b80c2c534f4f734a",
+              "file": "visual-regression.spec.ts",
+              "line": 318,
+              "column": 7
+            },
+            {
+              "title": "Classroom Page Visual Consistency",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-6f545a4bfbc88831f1bb",
+              "file": "visual-regression.spec.ts",
+              "line": 323,
+              "column": 7
+            },
+            {
+              "title": "Dashboard Page Visual Consistency (Authenticated)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-a116f0f2dc576f9f19a3",
+              "file": "visual-regression.spec.ts",
+              "line": 328,
+              "column": 7
+            },
+            {
+              "title": "Mobile Responsive Layout Testing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-459ed612fb68dd0318be",
+              "file": "visual-regression.spec.ts",
+              "line": 347,
+              "column": 7
+            },
+            {
+              "title": "Dark Mode Visual Testing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-0a2be8ec5459e162c360",
+              "file": "visual-regression.spec.ts",
+              "line": 381,
+              "column": 7
+            },
+            {
+              "title": "Generate Visual Regression Report",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-4c1cfb64b13e36a280ab",
+              "file": "visual-regression.spec.ts",
+              "line": 411,
+              "column": 7
+            },
+            {
+              "title": "Cross-Device Element Positioning",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-2f4e2f9c013939410ee4",
+              "file": "visual-regression.spec.ts",
+              "line": 424,
+              "column": 7
+            },
+            {
+              "title": "Landing Page Visual Consistency",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-safari",
+                  "projectName": "mobile-safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-9c8d58f0ea252b620892",
+              "file": "visual-regression.spec.ts",
+              "line": 313,
+              "column": 7
+            },
+            {
+              "title": "Login Page Visual Consistency",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-safari",
+                  "projectName": "mobile-safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-0d26355c9fea50fdd78a",
+              "file": "visual-regression.spec.ts",
+              "line": 318,
+              "column": 7
+            },
+            {
+              "title": "Classroom Page Visual Consistency",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-safari",
+                  "projectName": "mobile-safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-841455fc5aceaf5bbc6e",
+              "file": "visual-regression.spec.ts",
+              "line": 323,
+              "column": 7
+            },
+            {
+              "title": "Dashboard Page Visual Consistency (Authenticated)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-safari",
+                  "projectName": "mobile-safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-3e63e980b1e544b0e089",
+              "file": "visual-regression.spec.ts",
+              "line": 328,
+              "column": 7
+            },
+            {
+              "title": "Mobile Responsive Layout Testing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-safari",
+                  "projectName": "mobile-safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-21a4d91af88b120aabda",
+              "file": "visual-regression.spec.ts",
+              "line": 347,
+              "column": 7
+            },
+            {
+              "title": "Dark Mode Visual Testing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-safari",
+                  "projectName": "mobile-safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-d6c97599a390b90e7b0c",
+              "file": "visual-regression.spec.ts",
+              "line": 381,
+              "column": 7
+            },
+            {
+              "title": "Generate Visual Regression Report",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-safari",
+                  "projectName": "mobile-safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-cabbc0782454c63e04c3",
+              "file": "visual-regression.spec.ts",
+              "line": 411,
+              "column": 7
+            },
+            {
+              "title": "Cross-Device Element Positioning",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-safari",
+                  "projectName": "mobile-safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-3725bc6ae35ec1d0e4ee",
+              "file": "visual-regression.spec.ts",
+              "line": 424,
+              "column": 7
+            },
+            {
+              "title": "Landing Page Visual Consistency",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-chrome",
+                  "projectName": "tablet-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-bee5ff59f95cabee06ba",
+              "file": "visual-regression.spec.ts",
+              "line": 313,
+              "column": 7
+            },
+            {
+              "title": "Login Page Visual Consistency",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-chrome",
+                  "projectName": "tablet-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-990295553178b5e10a24",
+              "file": "visual-regression.spec.ts",
+              "line": 318,
+              "column": 7
+            },
+            {
+              "title": "Classroom Page Visual Consistency",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-chrome",
+                  "projectName": "tablet-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-39390a37631638deb07e",
+              "file": "visual-regression.spec.ts",
+              "line": 323,
+              "column": 7
+            },
+            {
+              "title": "Dashboard Page Visual Consistency (Authenticated)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-chrome",
+                  "projectName": "tablet-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-2bbaf800db4b1a7c0de9",
+              "file": "visual-regression.spec.ts",
+              "line": 328,
+              "column": 7
+            },
+            {
+              "title": "Mobile Responsive Layout Testing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-chrome",
+                  "projectName": "tablet-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-ae93b476415fd2c09be5",
+              "file": "visual-regression.spec.ts",
+              "line": 347,
+              "column": 7
+            },
+            {
+              "title": "Dark Mode Visual Testing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-chrome",
+                  "projectName": "tablet-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-63b77ab5cd9117eb0fd7",
+              "file": "visual-regression.spec.ts",
+              "line": 381,
+              "column": 7
+            },
+            {
+              "title": "Generate Visual Regression Report",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-chrome",
+                  "projectName": "tablet-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-0d362490e32ff4efb8b1",
+              "file": "visual-regression.spec.ts",
+              "line": 411,
+              "column": 7
+            },
+            {
+              "title": "Cross-Device Element Positioning",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-chrome",
+                  "projectName": "tablet-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "78e23c5201ba1ea12e76-99f42df743d9f0be7d86",
+              "file": "visual-regression.spec.ts",
+              "line": 424,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "wizard.spec.ts",
+      "file": "wizard.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Class Wizard Flow",
+          "file": "wizard.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should navigate through wizard steps",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ec50ea577bfe475e361b-dcef6e5848cc7062359c",
+              "file": "wizard.spec.ts",
+              "line": 9,
+              "column": 7
+            },
+            {
+              "title": "should allow navigation back and forth",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ec50ea577bfe475e361b-a33410c2e4aa85f2bb1a",
+              "file": "wizard.spec.ts",
+              "line": 43,
+              "column": 7
+            },
+            {
+              "title": "should persist wizard state",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ec50ea577bfe475e361b-a55cb726d22b03b04ebc",
+              "file": "wizard.spec.ts",
+              "line": 64,
+              "column": 7
+            },
+            {
+              "title": "should validate required selections",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ec50ea577bfe475e361b-5f81206b6534dfd34ef1",
+              "file": "wizard.spec.ts",
+              "line": 79,
+              "column": 7
+            },
+            {
+              "title": "should show appropriate subjects for each grade",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ec50ea577bfe475e361b-bbc222b226e68ea665cb",
+              "file": "wizard.spec.ts",
+              "line": 99,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-09-29T16:28:28.667Z",
+    "duration": 232.503,
+    "expected": 0,
+    "skipped": 199,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
