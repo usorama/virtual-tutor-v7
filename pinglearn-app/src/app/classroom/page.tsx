@@ -19,6 +19,7 @@ import { ResizableSplit } from '@/components/ui/resizable-split';
 import { TabsContainer } from '@/components/classroom/TabsContainer';
 import { FloatingControls } from '@/components/classroom/FloatingControls';
 import { ShowThenTellTimingToggle } from '@/components/dev/ShowThenTellTimingDashboard';
+import { ErrorBoundary } from '@/lib/error-handling/error-boundary';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -35,7 +36,7 @@ interface AudioControlState {
   teacherMuted: boolean;
 }
 
-export default function ClassroomPage() {
+function ClassroomPageContent() {
   const router = useRouter();
   const supabase = createClient();
 
@@ -694,5 +695,18 @@ export default function ClassroomPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function ClassroomPage() {
+  return (
+    <ErrorBoundary
+      onError={(error, errorInfo) => {
+        console.error('Voice session error:', error, errorInfo);
+        // TODO: Send to error reporting service
+      }}
+    >
+      <ClassroomPageContent />
+    </ErrorBoundary>
   );
 }

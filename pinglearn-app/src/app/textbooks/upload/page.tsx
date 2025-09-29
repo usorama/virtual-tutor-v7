@@ -10,6 +10,7 @@ import { MetadataWizard } from '@/components/textbook/MetadataWizard';
 import { BulkUploadInterface } from '@/components/textbook/BulkUploadInterface';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ErrorBoundary } from '@/lib/error-handling/error-boundary';
 import type { UploadedFile, FileGroup, TextbookWizardState } from '@/types/textbook-hierarchy';
 
 export default function TextbookUploadPage() {
@@ -52,42 +53,56 @@ export default function TextbookUploadPage() {
 
   if (showWizard) {
     return (
-      <MetadataWizard
-        uploadedFiles={uploadedFiles}
-        detectedGroups={detectedGroups}
-        onComplete={handleWizardComplete}
-        onCancel={handleWizardCancel}
-      />
+      <ErrorBoundary
+        onError={(error, errorInfo) => {
+          console.error('Upload wizard error:', error, errorInfo);
+          // TODO: Send to error reporting service
+        }}
+      >
+        <MetadataWizard
+          uploadedFiles={uploadedFiles}
+          detectedGroups={detectedGroups}
+          onComplete={handleWizardComplete}
+          onCancel={handleWizardCancel}
+        />
+      </ErrorBoundary>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Card className="max-w-4xl mx-auto">
-        <CardHeader>
-          <CardTitle>Upload Textbook Chapters</CardTitle>
-          <CardDescription>
-            Upload multiple chapter PDFs and we'll help you organize them into a proper textbook structure
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <BulkUploadInterface
-            onFilesProcessed={handleFilesProcessed}
-            onStartWizard={(groups) => {
-              console.log('Starting wizard with groups:', groups);
-              setShowWizard(true);
-            }}
-          />
+    <ErrorBoundary
+      onError={(error, errorInfo) => {
+        console.error('Upload interface error:', error, errorInfo);
+        // TODO: Send to error reporting service
+      }}
+    >
+      <div className="container mx-auto px-4 py-8">
+        <Card className="max-w-4xl mx-auto">
+          <CardHeader>
+            <CardTitle>Upload Textbook Chapters</CardTitle>
+            <CardDescription>
+              Upload multiple chapter PDFs and we'll help you organize them into a proper textbook structure
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <BulkUploadInterface
+              onFilesProcessed={handleFilesProcessed}
+              onStartWizard={(groups) => {
+                console.log('Starting wizard with groups:', groups);
+                setShowWizard(true);
+              }}
+            />
 
-          {uploadedFiles.length > 0 && !showWizard && (
-            <div className="mt-4 text-center">
-              <Button onClick={() => setShowWizard(true)}>
-                Continue to Metadata Setup →
-              </Button>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+            {uploadedFiles.length > 0 && !showWizard && (
+              <div className="mt-4 text-center">
+                <Button onClick={() => setShowWizard(true)}>
+                  Continue to Metadata Setup →
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </ErrorBoundary>
   );
 }

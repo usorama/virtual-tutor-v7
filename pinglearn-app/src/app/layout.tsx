@@ -6,6 +6,7 @@ import "../styles/marketing.css";
 import "../styles/glass-morphism.css";
 import { AuthProvider } from '@/lib/auth/auth-provider';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { ErrorBoundary } from '@/lib/error-handling/error-boundary';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -119,11 +120,21 @@ export default function RootLayout({
       <body
         className={`${inter.variable} font-sans antialiased min-h-screen bg-background text-foreground`}
       >
-        <ThemeProvider>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
-        </ThemeProvider>
+        <ErrorBoundary
+          onError={(error, errorInfo) => {
+            // Log to error reporting service in production
+            if (process.env.NODE_ENV === 'production') {
+              console.error('App-level error caught:', error, errorInfo);
+              // TODO: Send to error reporting service (e.g., Sentry)
+            }
+          }}
+        >
+          <ThemeProvider>
+            <AuthProvider>
+              {children}
+            </AuthProvider>
+          </ThemeProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

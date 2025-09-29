@@ -7,6 +7,7 @@
 
 import { useRouter } from 'next/navigation';
 import { ContentManagementDashboard } from '@/components/textbook/ContentManagementDashboard';
+import { ErrorBoundary } from '@/lib/error-handling/error-boundary';
 
 export default function TextbookManagementPage() {
   const router = useRouter();
@@ -31,10 +32,17 @@ export default function TextbookManagementPage() {
   };
 
   return (
-    <ContentManagementDashboard
-      onUploadNew={handleUploadNew}
-      onEditContent={handleEditContent}
-      onDeleteContent={handleDeleteContent}
-    />
+    <ErrorBoundary
+      onError={(error, errorInfo) => {
+        console.error('Dashboard error:', error, errorInfo);
+        // TODO: Send to error reporting service
+      }}
+    >
+      <ContentManagementDashboard
+        onUploadNew={handleUploadNew}
+        onEditContent={handleEditContent}
+        onDeleteContent={handleDeleteContent}
+      />
+    </ErrorBoundary>
   );
 }
