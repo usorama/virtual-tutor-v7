@@ -1,6 +1,7 @@
 /**
  * Protected Core Mocks for Testing
  * TEST-001: Mock implementations for protected core services
+ * TS-006: Enhanced WebSocket typing - eliminated all 'any' types
  */
 
 import { vi } from 'vitest';
@@ -10,8 +11,14 @@ import type {
   ProcessedText,
   DisplayItem,
   TranscriptionContract,
-  VoiceServiceContract
+  VoiceServiceContract,
+  WebSocketConfig,
+  MathSegment
 } from '@/protected-core';
+import type { WebSocketSendData, WebSocketConnectionEvent } from '@/types/websocket';
+
+// Enhanced WebSocket event handler type
+type WebSocketEventHandler = (data: unknown) => void;
 
 // Mock LiveKitVoiceService
 export class MockLiveKitVoiceService implements VoiceServiceContract {
@@ -97,10 +104,11 @@ export class MockLiveKitVoiceService implements VoiceServiceContract {
   }
 }
 
-// Mock TranscriptionService
+// Mock TranscriptionService - TS-006: Fixed to align with TranscriptionContract
 export class MockTranscriptionService implements TranscriptionContract {
   private displayBuffer: DisplayItem[] = [];
 
+  // TS-006: Fixed speaker parameter typing (was speaker as any)
   processTranscription(text: string, speaker?: string): ProcessedText {
     // Simple math detection for testing
     const mathExpressions = [
@@ -132,12 +140,15 @@ export class MockTranscriptionService implements TranscriptionContract {
       }
     ];
 
+    // TS-006: Fixed speaker typing to match contract
+    const validSpeaker = this.validateSpeaker(speaker);
+
     return {
       originalText: text,
       processedText: hasMath ? 'The equation $x^2 + 5x + 6 = 0$' : text,
       segments,
       timestamp: Date.now(),
-      speaker: speaker as any
+      speaker: validSpeaker
     };
   }
 
@@ -148,7 +159,8 @@ export class MockTranscriptionService implements TranscriptionContract {
     return `<span class="katex">${latex}</span>`;
   }
 
-  detectMath(text: string): any[] {
+  // TS-006: Fixed return type to match contract (was any[])
+  detectMath(text: string): MathSegment[] {
     const mathExpressions = [
       'x squared', 'x plus', 'pi r squared', 'one half plus'
     ];
@@ -156,10 +168,11 @@ export class MockTranscriptionService implements TranscriptionContract {
     if (mathExpressions.some(expr => text.toLowerCase().includes(expr))) {
       return [{
         text: text,
-        type: 'math',
+        type: 'math' as const,
         startIndex: 0,
         endIndex: text.length,
-        latex: this.convertToLatex(text)
+        latex: this.convertToLatex(text),
+        confidence: 0.95
       }];
     }
 
@@ -185,6 +198,16 @@ export class MockTranscriptionService implements TranscriptionContract {
 
   getBufferSize(): number {
     return this.displayBuffer.length;
+  }
+
+  // TS-006: Helper method to validate speaker types
+  private validateSpeaker(speaker?: string): 'student' | 'teacher' | 'system' | undefined {
+    if (!speaker) return undefined;
+
+    const validSpeakers = ['student', 'teacher', 'system'] as const;
+    return validSpeakers.includes(speaker as any)
+      ? speaker as 'student' | 'teacher' | 'system'
+      : 'system'; // Default fallback
   }
 
   private convertToLatex(text: string): string {
@@ -261,11 +284,11 @@ export class MockSessionOrchestrator {
   }
 }
 
-// Mock WebSocketManager
+// Mock WebSocketManager - TS-006: Enhanced with proper typing
 export class MockWebSocketManager {
   private static instance: MockWebSocketManager;
   private connected = false;
-  private eventListeners: Map<string, Function[]> = new Map();
+  private eventListeners: Map<string, WebSocketEventHandler[]> = new Map();
   private activeListenerCount = 0;
 
   static getInstance(): MockWebSocketManager {
@@ -275,7 +298,8 @@ export class MockWebSocketManager {
     return MockWebSocketManager.instance;
   }
 
-  async connect(config: any): Promise<void> {
+  // TS-006: Fixed typing - was 'config: any'
+  async connect(config: WebSocketConfig): Promise<void> {
     if (config.url.includes('invalid')) {
       throw new Error('Connection failed');
     }
@@ -298,14 +322,15 @@ export class MockWebSocketManager {
     return this.connected ? 'connected' : 'disconnected';
   }
 
-  send(message: any): void {
+  // TS-006: Fixed typing - was 'message: any'
+  send(message: WebSocketSendData): void {
     if (!this.connected) {
       throw new Error('Not connected');
     }
     // Simulate message sending
   }
 
-  on(event: string, handler: Function): void {
+  on(event: string, handler: WebSocketEventHandler): void {
     if (!this.eventListeners.has(event)) {
       this.eventListeners.set(event, []);
     }
@@ -313,7 +338,7 @@ export class MockWebSocketManager {
     this.activeListenerCount++;
   }
 
-  off(event: string, handler: Function): void {
+  off(event: string, handler: WebSocketEventHandler): void {
     const handlers = this.eventListeners.get(event);
     if (handlers) {
       const index = handlers.indexOf(handler);
@@ -324,7 +349,8 @@ export class MockWebSocketManager {
     }
   }
 
-  emit(event: string, data: any): void {
+  // TS-006: Fixed typing - was 'data: any'
+  emit(event: string, data: unknown): void {
     const handlers = this.eventListeners.get(event);
     if (handlers) {
       handlers.forEach(handler => handler(data));
@@ -336,11 +362,13 @@ export class MockWebSocketManager {
   }
 
   // Test helper methods
-  simulateMessage(data: any): void {
+  // TS-006: Fixed typing - was 'data: any'
+  simulateMessage(data: unknown): void {
     this.emit('message', data);
   }
 
-  simulateError(error: any): void {
+  // TS-006: Fixed typing - was 'error: any'
+  simulateError(error: Error): void {
     this.emit('error', error);
   }
 
