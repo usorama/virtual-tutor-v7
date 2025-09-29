@@ -79,41 +79,51 @@ export async function createTestDatabase(config: TestDatabaseConfig = {}): Promi
 
   // Mock Supabase client for testing
   const mockClient = {
-    from: vi.fn().mockReturnThis(),
-    select: vi.fn().mockReturnThis(),
-    insert: vi.fn().mockReturnThis(),
-    update: vi.fn().mockReturnThis(),
-    delete: vi.fn().mockReturnThis(),
-    eq: vi.fn().mockReturnThis(),
-    neq: vi.fn().mockReturnThis(),
-    gt: vi.fn().mockReturnThis(),
-    lt: vi.fn().mockReturnThis(),
-    gte: vi.fn().mockReturnThis(),
-    lte: vi.fn().mockReturnThis(),
-    like: vi.fn().mockReturnThis(),
-    ilike: vi.fn().mockReturnThis(),
-    is: vi.fn().mockReturnThis(),
-    in: vi.fn().mockReturnThis(),
-    contains: vi.fn().mockReturnThis(),
-    containedBy: vi.fn().mockReturnThis(),
-    rangeGt: vi.fn().mockReturnThis(),
-    rangeLt: vi.fn().mockReturnThis(),
-    rangeGte: vi.fn().mockReturnThis(),
-    rangeLte: vi.fn().mockReturnThis(),
-    rangeAdjacent: vi.fn().mockReturnThis(),
-    overlaps: vi.fn().mockReturnThis(),
-    textSearch: vi.fn().mockReturnThis(),
-    match: vi.fn().mockReturnThis(),
-    not: vi.fn().mockReturnThis(),
-    or: vi.fn().mockReturnThis(),
-    filter: vi.fn().mockReturnThis(),
-    order: vi.fn().mockReturnThis(),
-    limit: vi.fn().mockReturnThis(),
-    range: vi.fn().mockReturnThis(),
-    single: vi.fn(),
-    maybeSingle: vi.fn(),
-    csv: vi.fn(),
-    explain: vi.fn(),
+    from: (table: string) => ({
+      select: (columns: string = '*') => ({
+        eq: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
+        neq: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
+        gt: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
+        lt: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
+        gte: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
+        lte: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
+        like: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
+        ilike: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
+        is: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
+        in: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
+        single: vi.fn().mockResolvedValue({
+          data: (mockData[table] || [])[0] || null,
+          error: (mockData[table] || []).length === 0 ? { message: 'No rows found' } : null
+        }),
+        maybeSingle: vi.fn().mockResolvedValue({
+          data: (mockData[table] || [])[0] || null,
+          error: null
+        })
+      }),
+      insert: (data: any) => {
+        const insertData = Array.isArray(data) ? data : [data];
+        if (mockData[table]) {
+          mockData[table].push(...insertData);
+        }
+        return Promise.resolve({ data, error: null });
+      },
+      update: (data: any) => ({
+        eq: vi.fn().mockImplementation(() => {
+          if (mockData[table]) {
+            mockData[table] = mockData[table].map(item => ({ ...item, ...data }));
+          }
+          return Promise.resolve({ data, error: null });
+        })
+      }),
+      delete: () => ({
+        eq: vi.fn().mockImplementation(() => {
+          if (mockData[table]) {
+            mockData[table] = [];
+          }
+          return Promise.resolve({ data: [], error: null });
+        })
+      })
+    }),
     rpc: vi.fn(),
     auth: {
       getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),
@@ -146,49 +156,6 @@ export async function createTestDatabase(config: TestDatabaseConfig = {}): Promi
     error_logs: []
   };
 
-  // Configure mock responses
-  mockClient.single.mockImplementation(() => {
-    const table = mockClient.from.mock.calls[mockClient.from.mock.calls.length - 1]?.[0];
-    const data = mockData[table] || [];
-    return Promise.resolve({
-      data: data[0] || null,
-      error: data.length === 0 ? { message: 'No rows found' } : null
-    });
-  });
-
-  mockClient.select.mockImplementation(() => {
-    const table = mockClient.from.mock.calls[mockClient.from.mock.calls.length - 1]?.[0];
-    return Promise.resolve({
-      data: mockData[table] || [],
-      error: null
-    });
-  });
-
-  mockClient.insert.mockImplementation((data) => {
-    const table = mockClient.from.mock.calls[mockClient.from.mock.calls.length - 1]?.[0];
-    if (mockData[table]) {
-      const insertData = Array.isArray(data) ? data : [data];
-      mockData[table].push(...insertData);
-    }
-    return Promise.resolve({ data, error: null });
-  });
-
-  mockClient.update.mockImplementation((data) => {
-    const table = mockClient.from.mock.calls[mockClient.from.mock.calls.length - 1]?.[0];
-    if (mockData[table]) {
-      // Simple mock update - replace first matching record
-      mockData[table] = mockData[table].map(item => ({ ...item, ...data }));
-    }
-    return Promise.resolve({ data, error: null });
-  });
-
-  mockClient.delete.mockImplementation(() => {
-    const table = mockClient.from.mock.calls[mockClient.from.mock.calls.length - 1]?.[0];
-    if (mockData[table]) {
-      mockData[table] = [];
-    }
-    return Promise.resolve({ data: [], error: null });
-  });
 
   const instance: TestDatabaseInstance = {
     client: mockClient,
@@ -203,8 +170,44 @@ export async function createTestDatabase(config: TestDatabaseConfig = {}): Promi
     },
 
     async transaction<T>(callback: (trx: any) => Promise<T>): Promise<T> {
-      // Mock transaction wrapper
-      const transactionClient = { ...mockClient };
+      // Mock transaction wrapper with proper chaining
+      const transactionClient = {
+        from: (table: string) => ({
+          select: (columns: string = '*') => ({
+            eq: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
+            neq: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
+            gt: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
+            lt: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
+            single: vi.fn().mockResolvedValue({
+              data: (mockData[table] || [])[0] || null,
+              error: (mockData[table] || []).length === 0 ? { message: 'No rows found' } : null
+            })
+          }),
+          insert: (data: any) => {
+            const insertData = Array.isArray(data) ? data : [data];
+            if (mockData[table]) {
+              mockData[table].push(...insertData);
+            }
+            return Promise.resolve({ data, error: null });
+          },
+          update: (data: any) => ({
+            eq: vi.fn().mockImplementation(() => {
+              if (mockData[table]) {
+                mockData[table] = mockData[table].map(item => ({ ...item, ...data }));
+              }
+              return Promise.resolve({ data, error: null });
+            })
+          }),
+          delete: () => ({
+            eq: vi.fn().mockImplementation(() => {
+              if (mockData[table]) {
+                mockData[table] = [];
+              }
+              return Promise.resolve({ data: [], error: null });
+            })
+          })
+        })
+      };
 
       try {
         const result = await callback(transactionClient);

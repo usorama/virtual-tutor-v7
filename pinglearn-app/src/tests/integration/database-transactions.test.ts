@@ -167,16 +167,15 @@ describe('Database Transaction Integration Tests', () => {
         await outerTrx.from('transcriptions').insert(transcription);
 
         // Update student stats within same transaction
-        await outerTrx
-          .from('profiles')
-          .update({
-            learning_stats: {
-              total_sessions: 1,
-              total_questions: 1,
-              topics_completed: ['nested_test']
-            }
-          })
-          .eq('id', student.id);
+        const updateResult = await outerTrx.from('profiles').update({
+          learning_stats: {
+            total_sessions: 1,
+            total_questions: 1,
+            topics_completed: ['nested_test']
+          }
+        });
+
+        expect(updateResult.error).toBeNull();
       });
 
       // Verify all operations succeeded
