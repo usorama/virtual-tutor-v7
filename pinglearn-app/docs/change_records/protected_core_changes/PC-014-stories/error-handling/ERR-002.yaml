@@ -1,0 +1,350 @@
+# Error Handling Story: Enhanced Voice Session Error Recovery
+story_id: ERR-002
+parent_issue: ISS-011
+category: error_handling
+priority: P1-HIGH
+
+metadata:
+  title: "Implement advanced error recovery for voice sessions and WebSocket connections"
+  description: |
+    Voice sessions and WebSocket connections frequently fail without proper recovery
+    mechanisms. This story implements comprehensive error recovery with automatic
+    reconnection, session state preservation, and graceful degradation.
+  created: 2025-09-29T24:00:00Z
+  estimated_hours: 5
+  risk_level: medium
+  affects_protected_core: true
+
+current_situation:
+  problem: "Voice sessions fail permanently on network issues"
+  failure_scenarios:
+    - WebSocket connection drops during voice session
+    - Gemini API rate limiting or timeouts
+    - LiveKit agent disconnection
+    - Network instability causing data loss
+    - Session state corruption on reconnection
+  user_impact: "Students lose progress and must restart entire sessions"
+  frequency: "15-20% of voice sessions experience issues"
+
+required_implementation:
+  retry_mechanisms:
+    - Exponential backoff for WebSocket reconnection
+    - Circuit breaker pattern for Gemini API
+    - Session state persistence during failures
+    - Graceful fallback to text-only mode
+
+  recovery_strategies:
+    - Automatic WebSocket reconnection with state sync
+    - Voice session resurrection from checkpoints
+    - Progressive degradation of features
+    - User notification with recovery options
+
+code_template: |
+  ```typescript
+  // src/services/voice-session-recovery.ts
+  import { SessionOrchestrator } from '@/protected-core';
+  import { WebSocketManager } from '@/protected-core';
+
+  export interface RecoveryConfig {
+    maxRetries: number;
+    baseDelay: number;
+    maxDelay: number;
+    backoffMultiplier: number;
+    circuitBreakerThreshold: number;
+    stateCheckpointInterval: number;
+  }
+
+  export interface SessionCheckpoint {
+    sessionId: string;
+    studentId: string;
+    topic: string;
+    progress: SessionProgress;
+    voiceState: VoiceSessionState;
+    timestamp: number;
+    lastStableConnection: number;
+  }
+
+  export class VoiceSessionRecovery {
+    private config: RecoveryConfig;
+    private checkpoints: Map<string, SessionCheckpoint> = new Map();
+    private retryAttempts: Map<string, number> = new Map();
+    private circuitBreaker: Map<string, boolean> = new Map();
+
+    constructor(config: RecoveryConfig) {
+      this.config = config;
+      this.setupEventListeners();
+    }
+
+    private setupEventListeners() {
+      // WebSocket connection events
+      WebSocketManager.getInstance().on('connection_lost', this.handleConnectionLoss.bind(this));
+      WebSocketManager.getInstance().on('connection_restored', this.handleConnectionRestored.bind(this));
+
+      // Voice session events
+      SessionOrchestrator.getInstance().on('session_error', this.handleSessionError.bind(this));
+      SessionOrchestrator.getInstance().on('state_corrupted', this.handleStateCorruption.bind(this));
+    }
+
+    async handleConnectionLoss(sessionId: string): Promise<void> {
+      console.warn(`Connection lost for session ${sessionId}, initiating recovery`);
+
+      // Save current state
+      await this.createCheckpoint(sessionId);
+
+      // Start reconnection with exponential backoff
+      await this.attemptReconnection(sessionId);
+    }
+
+    async handleConnectionRestored(sessionId: string): Promise<void> {
+      console.info(`Connection restored for session ${sessionId}, syncing state`);
+
+      const checkpoint = this.checkpoints.get(sessionId);
+      if (checkpoint) {
+        await this.restoreSessionState(checkpoint);
+        this.resetRetryCounter(sessionId);
+      }
+    }
+
+    async handleSessionError(sessionId: string, error: SessionError): Promise<void> {
+      console.error(`Session error in ${sessionId}:`, error);
+
+      if (this.isCircuitBreakerOpen(sessionId)) {
+        await this.fallbackToTextMode(sessionId);
+        return;
+      }
+
+      const retryCount = this.getRetryCount(sessionId);
+      if (retryCount >= this.config.maxRetries) {
+        await this.escalateToHuman(sessionId, error);
+        return;
+      }
+
+      await this.retryWithBackoff(sessionId, retryCount);
+    }
+
+    private async attemptReconnection(sessionId: string): Promise<boolean> {
+      const retryCount = this.getRetryCount(sessionId);
+      const delay = Math.min(
+        this.config.baseDelay * Math.pow(this.config.backoffMultiplier, retryCount),
+        this.config.maxDelay
+      );
+
+      await new Promise(resolve => setTimeout(resolve, delay));
+
+      try {
+        const wsManager = WebSocketManager.getInstance();
+        await wsManager.reconnect(sessionId);
+
+        // Verify connection is stable
+        await this.verifyConnectionStability(sessionId);
+        return true;
+      } catch (error) {
+        this.incrementRetryCount(sessionId);
+
+        if (this.getRetryCount(sessionId) >= this.config.maxRetries) {
+          this.openCircuitBreaker(sessionId);
+          await this.fallbackToTextMode(sessionId);
+          return false;
+        }
+
+        return this.attemptReconnection(sessionId);
+      }
+    }
+
+    private async createCheckpoint(sessionId: string): Promise<void> {
+      const orchestrator = SessionOrchestrator.getInstance();
+      const sessionState = await orchestrator.getSessionState(sessionId);
+
+      if (!sessionState) return;
+
+      const checkpoint: SessionCheckpoint = {
+        sessionId,
+        studentId: sessionState.studentId,
+        topic: sessionState.topic,
+        progress: sessionState.progress,
+        voiceState: sessionState.voiceState,
+        timestamp: Date.now(),
+        lastStableConnection: sessionState.lastStableConnection || Date.now()
+      };
+
+      this.checkpoints.set(sessionId, checkpoint);
+
+      // Persist to storage for cross-tab recovery
+      localStorage.setItem(`voice_checkpoint_${sessionId}`, JSON.stringify(checkpoint));
+    }
+
+    private async restoreSessionState(checkpoint: SessionCheckpoint): Promise<void> {
+      const orchestrator = SessionOrchestrator.getInstance();
+
+      try {
+        await orchestrator.restoreSession({
+          sessionId: checkpoint.sessionId,
+          studentId: checkpoint.studentId,
+          topic: checkpoint.topic,
+          progress: checkpoint.progress,
+          voiceState: checkpoint.voiceState,
+          resumeFromCheckpoint: true
+        });
+
+        // Notify user of successful recovery
+        this.notifyUser(checkpoint.sessionId, 'session_recovered');
+      } catch (error) {
+        console.error('Failed to restore session state:', error);
+        await this.fallbackToTextMode(checkpoint.sessionId);
+      }
+    }
+
+    private async fallbackToTextMode(sessionId: string): Promise<void> {
+      const orchestrator = SessionOrchestrator.getInstance();
+
+      try {
+        await orchestrator.switchToTextMode(sessionId, {
+          reason: 'voice_session_recovery_failed',
+          preserveProgress: true,
+          enableVoiceRetry: true
+        });
+
+        this.notifyUser(sessionId, 'fallback_to_text');
+      } catch (error) {
+        console.error('Fallback to text mode failed:', error);
+        await this.escalateToHuman(sessionId, error);
+      }
+    }
+
+    private async escalateToHuman(sessionId: string, error: Error | SessionError): Promise<void> {
+      // Log critical error for human intervention
+      console.error(`ESCALATION REQUIRED for session ${sessionId}:`, error);
+
+      // Send to monitoring service
+      if (typeof window !== 'undefined') {
+        // Report to analytics/monitoring
+      }
+
+      // Notify user with support contact
+      this.notifyUser(sessionId, 'escalation_required', {
+        supportContact: true,
+        sessionData: this.checkpoints.get(sessionId)
+      });
+    }
+
+    private notifyUser(sessionId: string, type: string, data?: any): void {
+      // Use toast notifications or in-app messaging
+      const messages = {
+        session_recovered: 'Session recovered successfully! Continuing where you left off.',
+        fallback_to_text: 'Voice temporarily unavailable. Switched to text mode.',
+        escalation_required: 'Technical issue detected. Our team has been notified.'
+      };
+
+      // Emit to UI layer for user notification
+      window.dispatchEvent(new CustomEvent('voice_session_notification', {
+        detail: { sessionId, type, message: messages[type] || 'Unknown status', data }
+      }));
+    }
+
+    // Utility methods for retry logic
+    private getRetryCount(sessionId: string): number {
+      return this.retryAttempts.get(sessionId) || 0;
+    }
+
+    private incrementRetryCount(sessionId: string): void {
+      const current = this.getRetryCount(sessionId);
+      this.retryAttempts.set(sessionId, current + 1);
+    }
+
+    private resetRetryCounter(sessionId: string): void {
+      this.retryAttempts.delete(sessionId);
+      this.circuitBreaker.delete(sessionId);
+    }
+
+    private isCircuitBreakerOpen(sessionId: string): boolean {
+      return this.circuitBreaker.get(sessionId) || false;
+    }
+
+    private openCircuitBreaker(sessionId: string): void {
+      this.circuitBreaker.set(sessionId, true);
+
+      // Auto-reset circuit breaker after cooldown period
+      setTimeout(() => {
+        this.circuitBreaker.delete(sessionId);
+      }, this.config.maxDelay * 3);
+    }
+
+    private async verifyConnectionStability(sessionId: string): Promise<void> {
+      // Send ping and wait for pong to verify connection
+      const wsManager = WebSocketManager.getInstance();
+      await wsManager.ping(sessionId);
+
+      // Wait a moment to ensure connection is stable
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+  }
+  ```
+
+integration_points:
+  - protected_core: Integrate with SessionOrchestrator and WebSocketManager
+  - voice_components: Add recovery notifications to UI
+  - error_boundaries: Work with ERR-001 error boundaries
+  - monitoring: Send recovery metrics to analytics
+
+dependencies:
+  hard: ["ERR-001", "ERR-003"]  # Build on existing error handling
+  soft: ["TS-006"]  # Better with WebSocket typing
+  peer: ["ERR-004", "ERR-005"]  # Related error handling stories
+
+implementation_steps:
+  1. Create VoiceSessionRecovery service class
+  2. Implement exponential backoff reconnection logic
+  3. Add session state checkpointing system
+  4. Build circuit breaker pattern for API failures
+  5. Create graceful fallback to text mode
+  6. Add user notification system
+  7. Integrate with protected core services
+  8. Test recovery scenarios thoroughly
+
+verification_requirements:
+  - automatic_reconnection: true
+  - state_preservation: true
+  - graceful_degradation: true
+  - user_notification: true
+  - no_infinite_loops: true
+  - protected_core_compliance: true
+
+testing_scenarios:
+  - WebSocket connection drops during active session
+  - Gemini API rate limiting simulation
+  - Network instability with packet loss
+  - Session state corruption recovery
+  - Multiple concurrent session failures
+  - Cross-tab session recovery
+
+agent_assignment:
+  recommended: error-handling-specialist
+  alternative: websocket-engineer
+  estimated_duration: 5_hours
+
+success_criteria:
+  - 95%+ session recovery success rate
+  - Maximum 30-second recovery time
+  - Zero data loss during recovery
+  - Clear user feedback during recovery
+  - Fallback mechanisms always functional
+  - No impact on stable sessions
+
+rollback_procedure:
+  - Recovery service is additive (low risk)
+  - Can disable recovery features via feature flags
+  - Existing error handling remains functional
+  - Test in staging with simulated failures
+
+notes: |
+  This story significantly enhances the user experience by preventing session
+  loss and maintaining continuity. The implementation builds on ERR-001 and
+  ERR-003 foundations while adding sophisticated recovery capabilities.
+  Focus on user experience - recovery should be seamless and well-communicated.
+
+quality_gates:
+  - Recovery scenarios tested exhaustively
+  - Protected core integration verified
+  - Performance impact minimal (<100ms overhead)
+  - User experience smooth during recovery
+  - Monitoring and alerting in place

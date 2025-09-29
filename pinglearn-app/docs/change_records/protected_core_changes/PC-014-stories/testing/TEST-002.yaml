@@ -1,0 +1,492 @@
+# Testing Story: Expand Test Coverage to 65% with Integration Tests
+story_id: TEST-002
+parent_issue: ISS-005
+category: testing
+priority: P1-HIGH
+
+metadata:
+  title: "Expand test coverage from 45% to 65% with comprehensive integration tests"
+  description: |
+    Building on the excellent TEST-001 foundation (45% coverage, 215+ tests),
+    this story expands testing with integration tests, E2E scenarios, and
+    complex user workflows to achieve 65% coverage with focus on real-world usage.
+  created: 2025-09-29T24:00:00Z
+  estimated_hours: 6
+  risk_level: low
+  affects_protected_core: true
+
+current_state:
+  coverage_percentage: 45
+  total_tests: 215
+  test_foundation: "excellent (from TEST-001)"
+  coverage_gaps:
+    - Voice session integration flows
+    - Database transaction scenarios
+    - Error boundary integration
+    - Multi-component user workflows
+    - API endpoint edge cases
+
+target_state:
+  coverage_percentage: 65
+  new_tests_required: ~120
+  focus_areas:
+    - Integration test suites
+    - User workflow scenarios
+    - Error recovery paths
+    - Database consistency
+    - Performance edge cases
+
+implementation_plan:
+  phase_1_integration_foundation:
+    - Enhanced test utilities for integration scenarios
+    - Database setup/teardown for integration tests
+    - Multi-service mocking coordination
+    - Test data factories for complex scenarios
+
+  phase_2_voice_session_integration:
+    - Complete voice session lifecycle tests (15 tests)
+    - WebSocket + Voice + Transcription integration (12 tests)
+    - Session recovery and error handling (10 tests)
+    - Real-time data synchronization (8 tests)
+
+  phase_3_database_integration:
+    - Multi-table transaction tests (10 tests)
+    - Concurrent user scenario tests (8 tests)
+    - Data consistency validation (6 tests)
+    - Schema migration compatibility (4 tests)
+
+  phase_4_user_workflow_e2e:
+    - Complete learning session flow (12 tests)
+    - Dashboard interaction workflows (8 tests)
+    - Upload and processing workflows (10 tests)
+    - Error recovery user journeys (6 tests)
+
+  phase_5_performance_testing:
+    - Load testing for concurrent sessions (5 tests)
+    - Memory leak detection (4 tests)
+    - Database query performance (6 tests)
+    - WebSocket connection limits (4 tests)
+
+test_template: |
+  ```typescript
+  // Example: src/tests/integration/voice-session-lifecycle.test.ts
+  import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+  import { SessionOrchestrator } from '@/protected-core';
+  import { VoiceService } from '@/protected-core';
+  import { TranscriptionService } from '@/protected-core';
+  import { WebSocketManager } from '@/protected-core';
+  import { createTestDatabase, cleanupTestDatabase } from '@/tests/utils/database';
+  import { createMockStudent, createMockLearningSession } from '@/tests/factories';
+
+  describe('Voice Session Lifecycle Integration', () => {
+    let orchestrator: SessionOrchestrator;
+    let voiceService: VoiceService;
+    let transcriptionService: TranscriptionService;
+    let wsManager: WebSocketManager;
+    let testDb: any;
+    let student: any;
+
+    beforeEach(async () => {
+      // Setup isolated test database
+      testDb = await createTestDatabase();
+
+      // Initialize services
+      orchestrator = SessionOrchestrator.getInstance();
+      voiceService = VoiceService.getInstance();
+      transcriptionService = TranscriptionService.getInstance();
+      wsManager = WebSocketManager.getInstance();
+
+      // Create test student
+      student = await createMockStudent({
+        id: 'test-student-123',
+        voicePreferences: { language: 'en', speed: 1.0 }
+      });
+
+      vi.clearAllMocks();
+    });
+
+    afterEach(async () => {
+      await cleanupTestDatabase(testDb);
+      await orchestrator.cleanup();
+      await voiceService.cleanup();
+      await wsManager.cleanup();
+    });
+
+    describe('Complete Session Flow', () => {
+      it('should successfully complete a full voice learning session', async () => {
+        // Start session through orchestrator
+        const session = await orchestrator.startSession({
+          studentId: student.id,
+          topic: 'quadratic_equations',
+          mode: 'voice_interactive'
+        });
+
+        expect(session).toBeDefined();
+        expect(session.status).toBe('active');
+
+        // Simulate WebSocket connection
+        const wsConnection = await wsManager.connect({
+          sessionId: session.id,
+          studentId: student.id
+        });
+
+        expect(wsConnection.readyState).toBe(WebSocket.OPEN);
+
+        // Start voice service
+        const voiceSession = await voiceService.startSession(
+          student.id,
+          'quadratic_equations'
+        );
+
+        expect(voiceSession.status).toBe('active');
+        expect(voiceSession.sessionId).toBe(session.id);
+
+        // Simulate student voice input
+        const audioData = new Uint8Array([/* mock audio data */]);
+        await voiceService.processAudio(session.id, audioData);
+
+        // Wait for transcription processing
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        // Verify transcription was processed
+        const transcription = await transcriptionService.getLatestTranscription(session.id);
+        expect(transcription).toBeDefined();
+        expect(transcription.text).toBeTruthy();
+
+        // Simulate AI response
+        const aiResponse = await orchestrator.generateResponse(session.id, {
+          studentInput: transcription.text,
+          context: 'quadratic_equations'
+        });
+
+        expect(aiResponse).toBeDefined();
+        expect(aiResponse.content).toBeTruthy();
+
+        // Verify WebSocket message delivery
+        const wsMessages = wsManager.getMessageHistory(session.id);
+        expect(wsMessages.length).toBeGreaterThan(0);
+        expect(wsMessages).toContainEqual(
+          expect.objectContaining({
+            type: 'ai_response',
+            content: aiResponse.content
+          })
+        );
+
+        // End session
+        await orchestrator.endSession(session.id);
+
+        // Verify session was properly saved
+        const savedSession = await testDb
+          .from('learning_sessions')
+          .select('*')
+          .eq('id', session.id)
+          .single();
+
+        expect(savedSession.data).toBeTruthy();
+        expect(savedSession.data.status).toBe('completed');
+        expect(savedSession.data.transcriptions).toBeDefined();
+      }, 10000); // 10 second timeout for integration test
+
+      it('should handle voice session interruption and recovery', async () => {
+        const session = await orchestrator.startSession({
+          studentId: student.id,
+          topic: 'algebra_basics',
+          mode: 'voice_interactive'
+        });
+
+        const voiceSession = await voiceService.startSession(student.id, 'algebra_basics');
+
+        // Simulate mid-session disconnection
+        await wsManager.simulateDisconnection(session.id);
+
+        expect(voiceSession.status).toBe('disconnected');
+
+        // Simulate reconnection attempt
+        await wsManager.reconnect(session.id);
+
+        // Verify session recovery
+        const recoveredSession = await orchestrator.getSession(session.id);
+        expect(recoveredSession.status).toBe('active');
+
+        // Verify state was preserved
+        expect(recoveredSession.progress).toEqual(session.progress);
+      });
+
+      it('should maintain data consistency across concurrent sessions', async () => {
+        const students = await Promise.all([
+          createMockStudent({ id: 'student-1' }),
+          createMockStudent({ id: 'student-2' }),
+          createMockStudent({ id: 'student-3' })
+        ]);
+
+        // Start concurrent sessions
+        const sessions = await Promise.all(
+          students.map(student =>
+            orchestrator.startSession({
+              studentId: student.id,
+              topic: 'trigonometry',
+              mode: 'voice_interactive'
+            })
+          )
+        );
+
+        expect(sessions).toHaveLength(3);
+        expect(new Set(sessions.map(s => s.id))).toHaveLength(3); // All unique
+
+        // Simulate concurrent voice processing
+        await Promise.all(
+          sessions.map(async session => {
+            await voiceService.startSession(session.studentId, 'trigonometry');
+            await voiceService.processAudio(session.id, new Uint8Array([1, 2, 3]));
+          })
+        );
+
+        // Verify no data corruption
+        const savedSessions = await Promise.all(
+          sessions.map(session => orchestrator.getSession(session.id))
+        );
+
+        savedSessions.forEach((session, index) => {
+          expect(session.studentId).toBe(students[index].id);
+          expect(session.status).toBe('active');
+          expect(session.transcriptions).toBeDefined();
+        });
+      });
+    });
+
+    describe('Error Recovery Integration', () => {
+      it('should gracefully handle API failures with session preservation', async () => {
+        const session = await orchestrator.startSession({
+          studentId: student.id,
+          topic: 'calculus_basics',
+          mode: 'voice_interactive'
+        });
+
+        // Simulate API failure
+        vi.spyOn(global, 'fetch').mockRejectedValueOnce(new Error('API Error'));
+
+        const voiceSession = await voiceService.startSession(student.id, 'calculus_basics');
+
+        // Process audio that would trigger API call
+        await expect(
+          voiceService.processAudio(session.id, new Uint8Array([1, 2, 3]))
+        ).rejects.toThrow();
+
+        // Verify session state was preserved despite error
+        const preservedSession = await orchestrator.getSession(session.id);
+        expect(preservedSession.status).toBe('active');
+        expect(preservedSession.errorCount).toBe(1);
+        expect(preservedSession.lastError).toBeTruthy();
+
+        // Verify retry mechanism works
+        vi.spyOn(global, 'fetch').mockResolvedValueOnce(new Response('{"status": "success"}'));
+
+        await voiceService.retryLastOperation(session.id);
+
+        const recoveredSession = await orchestrator.getSession(session.id);
+        expect(recoveredSession.errorCount).toBe(0);
+      });
+    });
+
+    describe('Database Transaction Integration', () => {
+      it('should maintain ACID properties during complex operations', async () => {
+        const session = await orchestrator.startSession({
+          studentId: student.id,
+          topic: 'statistics',
+          mode: 'voice_interactive'
+        });
+
+        // Start database transaction
+        await testDb.transaction(async (trx) => {
+          // Update session progress
+          await trx
+            .from('learning_sessions')
+            .update({
+              progress: { completed_topics: ['mean', 'median'] },
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', session.id);
+
+          // Add transcription record
+          await trx
+            .from('transcriptions')
+            .insert({
+              session_id: session.id,
+              text: 'What is the difference between mean and median?',
+              speaker: 'student',
+              timestamp: new Date().toISOString()
+            });
+
+          // Update student statistics
+          await trx
+            .from('profiles')
+            .update({
+              learning_stats: {
+                total_sessions: 5,
+                total_questions: 23
+              }
+            })
+            .eq('id', student.id);
+        });
+
+        // Verify all updates were committed atomically
+        const [updatedSession, transcriptions, updatedProfile] = await Promise.all([
+          testDb.from('learning_sessions').select('*').eq('id', session.id).single(),
+          testDb.from('transcriptions').select('*').eq('session_id', session.id),
+          testDb.from('profiles').select('*').eq('id', student.id).single()
+        ]);
+
+        expect(updatedSession.data.progress.completed_topics).toContain('mean');
+        expect(updatedSession.data.progress.completed_topics).toContain('median');
+        expect(transcriptions.data).toHaveLength(1);
+        expect(transcriptions.data[0].text).toContain('mean and median');
+        expect(updatedProfile.data.learning_stats.total_sessions).toBe(5);
+      });
+    });
+  });
+  ```
+
+enhanced_test_utilities: |
+  ```typescript
+  // src/tests/utils/integration-helpers.ts
+  export async function createTestDatabase() {
+    // Setup isolated test database instance
+    const { createClient } = await import('@supabase/supabase-js');
+
+    return createClient(
+      process.env.TEST_SUPABASE_URL!,
+      process.env.TEST_SUPABASE_ANON_KEY!,
+      {
+        db: { schema: 'test_schema' }
+      }
+    );
+  }
+
+  export async function setupIntegrationTest() {
+    // Comprehensive test environment setup
+    const testDb = await createTestDatabase();
+
+    // Clear and seed test data
+    await cleanupTestData(testDb);
+    await seedTestData(testDb);
+
+    return { testDb };
+  }
+
+  export async function seedTestData(db: any) {
+    // Insert minimal required test data
+    await db.from('profiles').insert([
+      {
+        id: 'test-student-1',
+        email: 'test1@example.com',
+        full_name: 'Test Student One'
+      },
+      {
+        id: 'test-student-2',
+        email: 'test2@example.com',
+        full_name: 'Test Student Two'
+      }
+    ]);
+
+    await db.from('textbooks').insert([
+      {
+        id: 'test-textbook-math',
+        title: 'Test Mathematics',
+        subject: 'mathematics',
+        grade_level: 10
+      }
+    ]);
+  }
+
+  export function createPerformanceTimer() {
+    const start = performance.now();
+
+    return {
+      end: () => performance.now() - start,
+      expectUnder: (maxMs: number) => {
+        const duration = performance.now() - start;
+        expect(duration).toBeLessThan(maxMs);
+        return duration;
+      }
+    };
+  }
+  ```
+
+dependencies:
+  hard: ["TEST-001"]  # Build on established foundation
+  soft: ["ERR-001", "ERR-002", "TS-007"]  # Better with recent improvements
+  peer: ["TEST-003", "TEST-004"]  # Other testing stories
+
+implementation_steps:
+  1. Enhance test utilities for integration scenarios
+  2. Create database test setup/teardown automation
+  3. Build voice session lifecycle integration tests
+  4. Implement multi-component workflow tests
+  5. Add performance and load testing suites
+  6. Create error recovery integration scenarios
+  7. Build database consistency validation tests
+  8. Add comprehensive E2E user journey tests
+
+verification_requirements:
+  - coverage_improved: from 45% to minimum 65%
+  - integration_tests_pass: 100%
+  - performance_tests_pass: true
+  - no_flaky_tests: true
+  - isolated_test_execution: true
+  - protected_core_integration: true
+
+testing_standards:
+  - Integration tests run in isolated environments
+  - Each test scenario is completely independent
+  - Performance tests have consistent baselines
+  - Database tests use transactions for cleanup
+  - Mock external services comprehensively
+  - Test real user workflows end-to-end
+
+performance_requirements:
+  - Integration test suite completes in <3 minutes
+  - Individual integration tests under 10 seconds
+  - Memory usage stable during test runs
+  - No test pollution between scenarios
+  - Database operations efficient and clean
+
+deliverables:
+  - 120+ new integration and workflow tests
+  - Enhanced test utilities and helpers
+  - Performance testing framework
+  - Database integration test patterns
+  - E2E user journey test scenarios
+  - Coverage reports showing 65%+ achievement
+
+agent_assignment:
+  recommended: qa-engineer
+  alternative: integration-test-specialist
+  estimated_duration: 6_hours
+
+success_criteria:
+  - Coverage reaches 65%
+  - All integration tests pass consistently
+  - Test suite performance optimized
+  - Real user workflows thoroughly tested
+  - Error scenarios comprehensively covered
+  - Protected core integration verified
+
+rollback_procedure:
+  - New tests are additive (minimal risk)
+  - Can disable test categories via configuration
+  - Existing TEST-001 foundation remains intact
+  - Performance impact isolated to test runs
+
+notes: |
+  This story builds directly on the exceptional TEST-001 foundation (45% coverage,
+  215+ tests) to achieve enterprise-grade test coverage. Focus on real-world
+  scenarios that catch integration bugs and ensure system reliability.
+  The integration tests should reflect actual user journeys and complex workflows.
+
+quality_gates:
+  - 65% coverage achieved with meaningful tests
+  - Integration test suite stable and reliable
+  - Performance impact minimal in development
+  - Test documentation comprehensive
+  - CI/CD pipeline optimized for new test load
+  - Protected core compliance maintained

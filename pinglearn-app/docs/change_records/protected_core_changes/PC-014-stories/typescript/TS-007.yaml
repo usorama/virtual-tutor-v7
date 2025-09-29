@@ -1,0 +1,218 @@
+# TypeScript Story: Database Type Alignment and Schema Validation
+story_id: TS-007
+parent_issue: ISS-001
+category: typescript
+priority: P1-HIGH
+
+metadata:
+  title: "Align database types with Supabase schema and eliminate type mismatches"
+  description: |
+    Database interactions use generic types instead of proper schema-aligned types,
+    leading to runtime errors and poor type safety. This story aligns all database
+    operations with the actual Supabase schema structure for type consistency.
+  created: 2025-09-29T24:00:00Z
+  estimated_hours: 3
+  risk_level: medium
+  affects_protected_core: false
+
+current_situation:
+  problem: "Database types don't match actual Supabase schema"
+  affected_files:
+    - src/app/api/textbooks/hierarchy/route.ts
+    - src/app/api/textbooks/statistics/route.ts
+    - src/components/features/ContentManagementDashboard.tsx
+    - src/hooks/useSupabaseQuery.ts
+  type_mismatches:
+    - profiles table: missing voice_preferences column
+    - learning_sessions: incorrect session_data type
+    - textbooks: missing enhanced_metadata field
+    - curriculum_data: weak typing on content field
+
+target_implementation:
+  database_types_file: "src/types/database.ts"
+  supabase_schema_alignment: true
+  runtime_validation: true
+  type_guards: true
+
+code_template: |
+  ```typescript
+  // src/types/database.ts
+  export interface Database {
+    public: {
+      Tables: {
+        profiles: {
+          Row: {
+            id: string;
+            email: string;
+            full_name: string | null;
+            voice_preferences: VoicePreferences | null;
+            learning_style: LearningStyle | null;
+            created_at: string;
+            updated_at: string;
+          };
+          Insert: {
+            id: string;
+            email: string;
+            full_name?: string | null;
+            voice_preferences?: VoicePreferences | null;
+            learning_style?: LearningStyle | null;
+          };
+          Update: {
+            id?: string;
+            email?: string;
+            full_name?: string | null;
+            voice_preferences?: VoicePreferences | null;
+            learning_style?: LearningStyle | null;
+            updated_at?: string;
+          };
+        };
+        learning_sessions: {
+          Row: {
+            id: string;
+            student_id: string;
+            topic: string;
+            session_data: SessionData;
+            status: SessionStatus;
+            started_at: string;
+            ended_at: string | null;
+            created_at: string;
+          };
+          Insert: {
+            id?: string;
+            student_id: string;
+            topic: string;
+            session_data: SessionData;
+            status?: SessionStatus;
+            started_at?: string;
+          };
+          Update: {
+            session_data?: SessionData;
+            status?: SessionStatus;
+            ended_at?: string | null;
+          };
+        };
+        textbooks: {
+          Row: {
+            id: string;
+            title: string;
+            subject: string;
+            grade_level: number;
+            enhanced_metadata: TextbookMetadata;
+            processed_content: ProcessedContent;
+            created_at: string;
+            updated_at: string;
+          };
+          Insert: {
+            id?: string;
+            title: string;
+            subject: string;
+            grade_level: number;
+            enhanced_metadata?: TextbookMetadata;
+            processed_content?: ProcessedContent;
+          };
+          Update: {
+            title?: string;
+            enhanced_metadata?: TextbookMetadata;
+            processed_content?: ProcessedContent;
+            updated_at?: string;
+          };
+        };
+      };
+    };
+  }
+
+  // Type guards for runtime validation
+  export function isValidProfile(data: unknown): data is Database['public']['Tables']['profiles']['Row'] {
+    return (
+      typeof data === 'object' &&
+      data !== null &&
+      'id' in data &&
+      'email' in data &&
+      typeof (data as any).id === 'string' &&
+      typeof (data as any).email === 'string'
+    );
+  }
+
+  export function isValidLearningSession(data: unknown): data is Database['public']['Tables']['learning_sessions']['Row'] {
+    return (
+      typeof data === 'object' &&
+      data !== null &&
+      'id' in data &&
+      'student_id' in data &&
+      'topic' in data &&
+      'session_data' in data &&
+      typeof (data as any).id === 'string' &&
+      typeof (data as any).student_id === 'string' &&
+      typeof (data as any).topic === 'string'
+    );
+  }
+  ```
+
+integration_points:
+  - supabase_client: Use proper Database type
+  - api_routes: Replace generic types with schema types
+  - react_components: Type database query results properly
+  - hooks: Ensure useSupabaseQuery uses correct types
+
+dependencies:
+  hard: ["TS-001", "TS-002", "TS-003", "TS-005", "TS-006"]  # Core TypeScript foundation
+  soft: ["ERR-003"]  # Better with error handling
+  peer: ["TS-008", "TS-009"]  # Other database-related improvements
+
+implementation_steps:
+  1. Generate current Supabase schema types using CLI
+  2. Create comprehensive src/types/database.ts
+  3. Add type guards for runtime validation
+  4. Update API routes to use proper database types
+  5. Fix ContentManagementDashboard type annotations
+  6. Update useSupabaseQuery hook with generic constraints
+  7. Add JSDoc documentation for complex types
+  8. Test database operations with new types
+
+verification_requirements:
+  - typescript_compilation: must_pass
+  - database_operations_typed: true
+  - runtime_validation_working: true
+  - no_type_assertions: true (avoid 'as' casting)
+  - tests_pass: true
+  - api_responses_typed: true
+
+testing_scenarios:
+  - Query profiles table with new types
+  - Insert/update learning sessions with validation
+  - Fetch textbook data with enhanced metadata
+  - Error handling for malformed database responses
+  - Type guard validation edge cases
+
+agent_assignment:
+  recommended: typescript-specialist
+  alternative: database-engineer
+  estimated_duration: 3_hours
+
+success_criteria:
+  - All database operations properly typed
+  - Runtime type validation in place
+  - Zero type assertions in database code
+  - API routes return correctly typed responses
+  - Components receive properly typed data
+  - Developer experience improved with better IntelliSense
+
+rollback_procedure:
+  - Git checkpoint before schema type generation
+  - Can revert to generic types if issues arise
+  - Database operations remain functional
+  - Test incremental deployment
+
+notes: |
+  This story builds on the excellent TypeScript foundation established by
+  TS-001 through TS-006. Focus on creating a robust type system that matches
+  the actual database schema and provides runtime safety. The type guards
+  are crucial for handling external data safely.
+
+quality_gates:
+  - Supabase CLI type generation successful
+  - All API routes use Database types
+  - Type guards cover all critical tables
+  - Zero 'any' types in database operations
+  - Comprehensive JSDoc documentation
+  - Performance impact minimal (<5ms per query)

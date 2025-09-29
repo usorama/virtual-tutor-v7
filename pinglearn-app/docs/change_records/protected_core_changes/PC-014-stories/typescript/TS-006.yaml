@@ -1,0 +1,76 @@
+id: TS-006
+title: "Enhance WebSocket TypeScript typing and eliminate 'any' types"
+parent_issue: ISS-001
+category: typescript
+priority: P1
+estimated_hours: 2
+complexity: medium
+
+description: |
+  Fix TypeScript typing issues related to WebSocket operations and eliminate
+  remaining 'any' types in WebSocket-related code. This builds on TS-005's
+  protected core type fixes and ensures type safety for real-time communications.
+
+acceptance_criteria:
+  - All WebSocket-related 'any' types replaced with proper interfaces
+  - WebSocket manager singleton typing is correct and respects protected core boundaries
+  - Event handler types are properly defined for WebSocket events
+  - Connection state management has proper TypeScript coverage
+  - All WebSocket mock types in tests are properly typed
+  - Zero TypeScript errors related to WebSocket operations
+  - No regression in WebSocket functionality
+
+technical_requirements:
+  type_safety:
+    - Replace any remaining 'any' types in WebSocket code
+    - Define proper interfaces for WebSocket events and messages
+    - Ensure connection state typing is comprehensive
+    - Add proper return type annotations for WebSocket methods
+
+  protected_core_compliance:
+    - Respect WebSocket manager singleton pattern
+    - Use only public APIs from protected core WebSocket services
+    - Do not modify protected core WebSocket implementation
+    - Maintain service contract interfaces
+
+  testing_requirements:
+    - Update test mocks with proper TypeScript types
+    - Ensure WebSocket test utilities are fully typed
+    - Verify integration tests maintain type safety
+    - No TypeScript errors in WebSocket-related test files
+
+files_likely_affected:
+  - src/tests/mocks/protected-core.ts (WebSocket mock typing)
+  - src/tests/utils/index.ts (WebSocket test utilities)
+  - src/tests/integration/websocket-manager.test.ts (test types)
+  - Any non-protected components using WebSocket services
+  - Type definition files for WebSocket interfaces
+
+dependencies:
+  - TS-005  # Protected core type fixes must be complete
+
+validation_steps:
+  - npm run typecheck shows 0 errors
+  - All WebSocket tests pass
+  - No 'any' types in WebSocket-related code
+  - WebSocket functionality works as expected
+  - Protected core boundaries respected
+
+risks:
+  - Medium: WebSocket typing complexity may require interface redesign
+  - Low: Test mock updates might affect other test files
+  - Low: May discover additional type issues in WebSocket usage
+
+status: pending
+assigned_agent: null
+started_at: null
+completed_at: null
+git_checkpoint: null
+
+implementation_notes: |
+  Focus on:
+  1. WebSocket event type definitions
+  2. Connection state management types
+  3. Test mock improvements with proper typing
+  4. Integration with existing protected core contracts
+  5. Elimination of remaining 'any' types in WebSocket operations
