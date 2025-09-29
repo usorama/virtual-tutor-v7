@@ -19,8 +19,10 @@ import {
   SecurityErrorCode,
   ThreatAssessment,
   SecurityAction,
-  SECURITY_USER_MESSAGES
+  SECURITY_USER_MESSAGES,
+  mapToErrorSeverity
 } from '../lib/security/security-error-types';
+import { ErrorCode } from '../lib/errors/error-types';
 import { SecurityThreatDetector } from '../lib/security/threat-detector';
 import { SecurityRecoveryManager } from '../lib/security/security-recovery';
 
@@ -76,8 +78,8 @@ export function useSecurityHandler(options: SecurityHandlerOptions = {}) {
   } = options;
 
   // Security system instances
-  const threatDetector = useRef<SecurityThreatDetector>();
-  const recoveryManager = useRef<SecurityRecoveryManager>();
+  const threatDetector = useRef<SecurityThreatDetector | undefined>(undefined);
+  const recoveryManager = useRef<SecurityRecoveryManager | undefined>(undefined);
 
   // Component state
   const [securityState, setSecurityState] = useState<SecurityState>({
@@ -128,14 +130,14 @@ export function useSecurityHandler(options: SecurityHandlerOptions = {}) {
 
       // Create comprehensive security error
       const securityError: SecurityError = {
-        code: errorReport.errorCode,
+        code: ErrorCode.AUTHORIZATION_ERROR,
         securityCode: errorReport.errorCode,
         message: errorReport.message,
         details: errorReport.payload || {},
         timestamp: new Date().toISOString(),
         requestId: generateRequestId(),
         threatLevel: 'suspicious', // Will be updated by threat detector
-        severity: errorReport.severity || 'medium',
+        severity: mapToErrorSeverity(errorReport.severity || 'medium'),
         clientIP,
         userAgent: navigator.userAgent,
         sessionId,

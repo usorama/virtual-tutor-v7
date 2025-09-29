@@ -172,7 +172,7 @@ export class SecurityRecoveryManager {
         action: 'recovery_failed',
         outcome: 'failure',
         details: {
-          error: recoveryError.message,
+          error: (recoveryError as Error).message || String(recoveryError),
           incidentId,
           originalError: error.securityCode
         }
@@ -238,7 +238,7 @@ export class SecurityRecoveryManager {
       const failureResult: RecoveryActionResult = {
         action,
         success: false,
-        message: `Action failed: ${actionError.message}`,
+        message: `Action failed: ${(actionError as Error).message || String(actionError)}`,
         timestamp: new Date().toISOString()
       };
 
@@ -250,7 +250,7 @@ export class SecurityRecoveryManager {
         outcome: 'failure',
         details: {
           actionId,
-          error: actionError.message,
+          error: (actionError as Error).message || String(actionError),
           duration: Date.now() - startTime
         }
       });
@@ -556,7 +556,7 @@ export class SecurityRecoveryManager {
     };
 
     // Calculate integrity hash
-    logEntry.integrity_hash = this.calculateHash(JSON.stringify({
+    (logEntry as any).integrity_hash = this.calculateHash(JSON.stringify({
       ...logEntry,
       integrity_hash: undefined
     }));
@@ -709,7 +709,7 @@ export class SecurityRecoveryManager {
 
   private mapToMitreTechniques(errorCode: SecurityErrorCode): string[] {
     // Mapping security errors to MITRE ATT&CK techniques
-    const mitreMap: Record<SecurityErrorCode, string[]> = {
+    const mitreMap: Partial<Record<SecurityErrorCode, string[]>> = {
       [SecurityErrorCode.BRUTE_FORCE_DETECTED]: ['T1110'],
       [SecurityErrorCode.SQL_INJECTION_ATTEMPT]: ['T1190'],
       [SecurityErrorCode.XSS_ATTEMPT]: ['T1190'],

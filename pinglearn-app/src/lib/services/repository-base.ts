@@ -72,8 +72,8 @@ export abstract class BaseRepository<T extends Entity> implements Repository<T> 
     try {
       const result = await this.executeQuery<Pick<T, K | 'id'> | null>(
         this.buildSelectQuery(
-          { [this.primaryKey]: id },
-          select ? [...select, 'id'] : undefined
+          { [this.primaryKey]: id } as Partial<T>,
+          select ? [...select, 'id'] as string[] : undefined
         )
       );
 
@@ -108,8 +108,8 @@ export abstract class BaseRepository<T extends Entity> implements Repository<T> 
 
     try {
       const query = this.buildSelectQuery(
-        options.where,
-        options.select ? [...options.select, 'id'] : undefined,
+        options.where as Partial<T>,
+        options.select ? [...options.select, 'id'] as string[] : undefined,
         {
           limit: options.limit,
           offset: options.offset,
@@ -139,7 +139,7 @@ export abstract class BaseRepository<T extends Entity> implements Repository<T> 
 
     try {
       // Validate data before creation
-      await this.validateEntity(data);
+      await this.validateEntity(data as Partial<T>);
 
       // Add metadata
       const entityData = {

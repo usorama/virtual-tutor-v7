@@ -514,19 +514,19 @@ export class SecurityThreatDetector {
       }
 
       // Calculate success rate (approximation)
-      profile.successRate = Math.max(0, 1 - (profile.errorCount / profile.requestCount));
+      (profile as any).successRate = Math.max(0, 1 - (profile.errorCount / profile.requestCount));
     }
 
     // Update risk score based on behavior
-    profile.riskScore = this.calculateClientRiskScore(profile);
+    (profile as any).riskScore = this.calculateClientRiskScore(profile);
 
     // Update status
     if (profile.riskScore > 80) {
-      profile.status = 'blocked';
+      (profile as any).status = 'blocked';
     } else if (profile.riskScore > 50) {
-      profile.status = 'suspicious';
+      (profile as any).status = 'suspicious';
     } else {
-      profile.status = 'normal';
+      (profile as any).status = 'normal';
     }
 
     this.clientProfiles.set(clientIP, profile);

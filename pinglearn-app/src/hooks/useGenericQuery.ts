@@ -221,7 +221,7 @@ export function useGenericQuery<
     const processedData = cachedData && select ? select(cachedData) : cachedData;
 
     return {
-      data: processedData || (initialData && select ? select(initialData) : initialData) as TSelected | undefined,
+      data: (processedData || (initialData && select ? select(initialData) : initialData)) as TSelected | undefined,
       error: null,
       status: cachedData ? 'success' : 'idle',
       fetchStatus: 'idle',
@@ -293,7 +293,7 @@ export function useGenericQuery<
       const now = Date.now();
       setState(prev => ({
         ...prev,
-        data: processedData,
+        data: processedData as TSelected | undefined,
         error: null,
         status: 'success',
         fetchStatus: 'idle',
@@ -385,7 +385,7 @@ export function useGenericQuery<
 
     const interval = typeof refetchInterval === 'number'
       ? refetchInterval
-      : refetchInterval(state.data, { queryKey, queryHash });
+      : refetchInterval(state.data as TData | undefined, { queryKey, queryHash });
 
     if (!interval) return;
 
@@ -541,7 +541,7 @@ export function useListQuery<T, TFilters = Record<string, unknown>>(
 ) {
   return useGenericQuery({
     queryKey: ['list', resource, filters],
-    queryFn: () => queryFn(filters),
+    queryFn: (() => queryFn(filters)) as QueryFunction<T[], TFilters>,
     variables: filters,
     ...options,
   });

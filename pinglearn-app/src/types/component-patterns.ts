@@ -117,7 +117,7 @@ export type ConditionalProps<T extends boolean> = T extends true
 /**
  * Input component with conditional validation requirements
  */
-export interface InputProps<TRequired extends boolean = false> extends ConditionalProps<TRequired> {
+export type InputProps<TRequired extends boolean = false> = ConditionalProps<TRequired> & {
   label: string;
   name: string;
   type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
@@ -528,41 +528,5 @@ export interface AsyncComponentState<T> {
 // EXPORTS
 // =============================================================================
 
-export type {
-  ButtonVariant,
-  AlertVariant,
-  ModalVariant,
-  TextComponent,
-  BoxComponent,
-  FormFieldComponent,
-  RouteDefinition,
-  UserRoutes,
-  TextbookRoutes,
-  LessonRoutes,
-  ValidationSchema,
-  FormProps,
-  FormHelpers,
-  FormRenderProps,
-  FieldProps,
-  QueryProps,
-  QueryState,
-  MutationProps,
-  MutationState,
-  CompoundComponentProps,
-  ProviderProps,
-  HOC,
-  RenderProp,
-  ChildrenAsFunction,
-  ThemeProps,
-  ResponsiveProp,
-  StyledVariantProps,
-  AriaProps,
-  KeyboardProps,
-  FocusProps,
-  MouseEventProps,
-  TouchEventProps,
-  DragEventProps,
-  ControllableProps,
-  ComponentState,
-  AsyncComponentState
-};
+// Component pattern types are available for direct import
+// Avoiding bulk re-exports to prevent conflicts with other type modules

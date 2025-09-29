@@ -20,10 +20,22 @@ import {
   SecurityError,
   SecurityErrorCode,
   ThreatLevel,
-  SECURITY_USER_MESSAGES
+  SECURITY_USER_MESSAGES,
+  mapToErrorSeverity
 } from '../../lib/security/security-error-types';
+import { ErrorCode } from '../../lib/errors/error-types';
 import { SecurityThreatDetector } from '../../lib/security/threat-detector';
 import { SecurityRecoveryManager } from '../../lib/security/security-recovery';
+
+/**
+ * Security analysis result interface
+ */
+interface SecurityAnalysis {
+  isSecurityRelated: boolean;
+  securityType: SecurityErrorCode;
+  riskScore: number;
+  indicators: Array<[string, string[]]>;
+}
 
 /**
  * Security Error Boundary Props
@@ -128,7 +140,7 @@ export class SecurityErrorBoundary extends Component<
   /**
    * Analyze error for security implications
    */
-  private async analyzeErrorSecurity(error: Error, errorInfo: ErrorInfo) {
+  private async analyzeErrorSecurity(error: Error, errorInfo: ErrorInfo): Promise<SecurityAnalysis> {
     const errorMessage = error.message.toLowerCase();
     const stackTrace = error.stack?.toLowerCase() || '';
     const componentStack = errorInfo.componentStack?.toLowerCase() || '';
@@ -208,7 +220,7 @@ export class SecurityErrorBoundary extends Component<
           stackTrace.includes(indicator) ||
           componentStack.includes(indicator)
         )
-      ).map(([category]) => category)
+      )
     };
   }
 
@@ -218,12 +230,12 @@ export class SecurityErrorBoundary extends Component<
   private async handleSecurityError(
     error: Error,
     errorInfo: ErrorInfo,
-    analysis: any
+    analysis: SecurityAnalysis
   ) {
     try {
       // Create comprehensive security error
       const securityError: SecurityError = {
-        code: analysis.securityType,
+        code: ErrorCode.AUTHORIZATION_ERROR,
         securityCode: analysis.securityType,
         message: error.message,
         details: {
@@ -234,16 +246,13 @@ export class SecurityErrorBoundary extends Component<
         timestamp: new Date().toISOString(),
         requestId: this.generateRequestId(),
         threatLevel: 'moderate', // Will be updated by threat detector
-        severity: analysis.riskScore > 70 ? 'critical' : analysis.riskScore > 40 ? 'high' : 'medium',
+        severity: mapToErrorSeverity(analysis.riskScore > 70 ? 'critical' : analysis.riskScore > 40 ? 'high' : 'medium'),
         clientIP: await this.getClientIP(),
         userAgent: navigator.userAgent,
         sessionId: await this.getSessionId(),
         userId: await this.getUserId(),
         metadata: {
           errorType: 'react_error_boundary',
-          errorName: error.name,
-          errorStack: error.stack,
-          componentStack: errorInfo.componentStack,
           timestamp: new Date().toISOString(),
           riskScore: analysis.riskScore,
           confidence: 0.7, // High confidence from error boundary

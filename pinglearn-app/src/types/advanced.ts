@@ -698,22 +698,8 @@ export type RequiredEnvVars<T extends Record<string, unknown>> = {
 // EXPORTS FOR EXTERNAL USE
 // =============================================================================
 
-export type {
-  Entity,
-  Repository,
-  PolymorphicComponentProps,
-  TreeOperations,
-  ConfigBuilder,
-  FluentBuilder,
-  EnvironmentConfig,
-  RequiredEnvVars
-};
+// Advanced types are available for direct import
+// Avoiding bulk re-exports to prevent conflicts
 
-// Re-export commonly used types
-export type {
-  ValidationErrors,
-  FormState,
-  UseQueryOptions,
-  UseQueryResult,
-  UseMutationOptions
-};
+// Advanced types and patterns are now fully defined above
+// No re-exports needed as all types are self-contained
