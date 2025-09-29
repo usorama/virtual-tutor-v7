@@ -81,6 +81,112 @@ vi.mock('katex', () => ({
   renderToString: vi.fn((tex: string) => `<span class="katex">${tex}</span>`),
 }));
 
+// Mock Protected Core - Critical for TEST-002
+vi.mock('@/protected-core', async () => {
+  const {
+    MockLiveKitVoiceService,
+    MockTranscriptionService,
+    MockSessionOrchestrator,
+    MockWebSocketManager,
+  } = await import('@/tests/mocks/protected-core');
+
+  // Mock ExponentialBackoff class
+  class MockExponentialBackoff {
+    private baseDelay: number = 1000;
+    private maxDelay: number = 30000;
+    private multiplier: number = 2;
+    private currentAttempt: number = 0;
+
+    constructor(config?: { baseDelay?: number; maxDelay?: number; multiplier?: number }) {
+      if (config?.baseDelay) this.baseDelay = config.baseDelay;
+      if (config?.maxDelay) this.maxDelay = config.maxDelay;
+      if (config?.multiplier) this.multiplier = config.multiplier;
+    }
+
+    calculateDelay(): number {
+      const delay = Math.min(
+        this.baseDelay * Math.pow(this.multiplier, this.currentAttempt),
+        this.maxDelay
+      );
+      this.currentAttempt++;
+      return delay;
+    }
+
+    reset(): void {
+      this.currentAttempt = 0;
+    }
+
+    getAttemptCount(): number {
+      return this.currentAttempt;
+    }
+  }
+
+  return {
+    // Mock classes and functions
+    WebSocketManager: {
+      getInstance: vi.fn(() => MockWebSocketManager.getInstance()),
+    },
+    ExponentialBackoff: MockExponentialBackoff,
+    WebSocketHealthMonitor: vi.fn(),
+    LiveKitVoiceService: MockLiveKitVoiceService,
+    AudioStreamManager: vi.fn(),
+    AudioQualityMonitor: vi.fn(),
+    LiveKitSessionManager: vi.fn(),
+    AudioPipeline: vi.fn(),
+    TextProcessor: vi.fn(),
+    TextSegmentation: vi.fn(),
+    TextNormalization: vi.fn(),
+    BufferManager: vi.fn(),
+    getTextProcessor: vi.fn(),
+    resetTextProcessor: vi.fn(),
+    DisplayBuffer: vi.fn(),
+    getDisplayBuffer: vi.fn(() => ({
+      getItems: vi.fn(() => []),
+      addItem: vi.fn(),
+      clear: vi.fn(),
+      getSize: vi.fn(() => 0),
+    })),
+    resetDisplayBuffer: vi.fn(),
+    DisplayFormatter: vi.fn(),
+    TranscriptionService: MockTranscriptionService,
+    SessionOrchestrator: {
+      getInstance: vi.fn(() => MockSessionOrchestrator.getInstance()),
+    },
+
+    // Mock type exports (these don't need implementations)
+    VoiceConfig: {},
+    VoiceSession: {},
+    VoiceServiceContract: {},
+    ProcessedText: {},
+    TextSegment: {},
+    MathSegment: {},
+    DisplayItem: {},
+    WordTiming: {},
+    MathFragmentData: {},
+    TranscriptionContract: {},
+    WebSocketConfig: {},
+    WebSocketContract: {},
+    ConnectionEvent: {},
+    RetryConfig: {},
+    RetryAttempt: {},
+    HealthMetrics: {},
+    PingResult: {},
+    AudioConfig: {},
+    AudioQualityMetrics: {},
+    AudioPipelineConfig: {},
+    AudioProcessingState: {},
+    SessionMetrics: {},
+    SessionError: {},
+    ParticipantInfo: {},
+    RecordingConfig: {},
+    FormatterOptions: {},
+    FormattedContent: {},
+    SessionConfig: {},
+    SessionState: {},
+    SessionSummaryMetrics: {},
+  };
+});
+
 // Global test utilities
 declare global {
   var TestUtils: {

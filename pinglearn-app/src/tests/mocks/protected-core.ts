@@ -349,6 +349,16 @@ export class MockWebSocketManager {
     }
   }
 
+  // Missing addEventListener method - TEST-002 critical fix
+  addEventListener(event: string, handler: WebSocketEventHandler): void {
+    this.on(event, handler);
+  }
+
+  // Missing removeEventListener method - TEST-002 critical fix
+  removeEventListener(event: string, handler: WebSocketEventHandler): void {
+    this.off(event, handler);
+  }
+
   // TS-006: Fixed typing - was 'data: any'
   emit(event: string, data: unknown): void {
     const handlers = this.eventListeners.get(event);
