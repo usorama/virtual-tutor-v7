@@ -35,7 +35,42 @@ interface ErrorHandlerState {
   retryCount: number;
 }
 
-export function useErrorHandler(options: UseErrorHandlerOptions = {}) {
+interface UseErrorHandlerReturn {
+  // State
+  isLoading: boolean;
+  error: APIResponse<never> | null;
+  hasError: boolean;
+  retryCount: number;
+
+  // Methods
+  handleApiCall: <T>(
+    apiCall: () => Promise<T>,
+    callOptions?: {
+      fallback?: T;
+      customMessage?: string;
+      suppressToast?: boolean;
+      maxRetries?: number;
+    }
+  ) => Promise<APIResponse<T>>;
+  clearError: () => void;
+  retry: () => Promise<void>;
+  logClientError: (error: unknown, context?: {
+    action?: string;
+    component?: string;
+    userId?: string;
+  }) => void;
+
+  // Utilities
+  showErrorToast: (errorCode: ErrorCode, message?: string) => void;
+  getUserFriendlyMessage: (errorCode: ErrorCode) => string;
+}
+
+/**
+ * Custom hook for comprehensive error handling with standardized patterns
+ * @param options Configuration options for error handling behavior
+ * @returns Object containing error state and handling methods
+ */
+export function useErrorHandler(options: UseErrorHandlerOptions = {}): UseErrorHandlerReturn {
   const {
     showToast = true,
     retryCount = 0,
@@ -144,7 +179,7 @@ export function useErrorHandler(options: UseErrorHandlerOptions = {}) {
   /**
    * Show appropriate toast notification based on error code
    */
-  const showErrorToast = useCallback((errorCode: ErrorCode, customMessage?: string) => {
+  const showErrorToast = useCallback((errorCode: ErrorCode, customMessage?: string): void => {
     const message = customMessage || getUserFriendlyMessage(errorCode);
     const recoveryConfig = getErrorRecoveryConfig(errorCode);
 
@@ -207,7 +242,7 @@ export function useErrorHandler(options: UseErrorHandlerOptions = {}) {
   /**
    * Handle error recovery based on recovery strategy
    */
-  const handleErrorRecovery = useCallback(async (errorCode: ErrorCode) => {
+  const handleErrorRecovery = useCallback(async (errorCode: ErrorCode): Promise<void> => {
     const recoveryConfig = getErrorRecoveryConfig(errorCode);
 
     switch (recoveryConfig.strategy) {
@@ -250,14 +285,14 @@ export function useErrorHandler(options: UseErrorHandlerOptions = {}) {
   /**
    * Clear error state
    */
-  const clearError = useCallback(() => {
+  const clearError = useCallback((): void => {
     setState(prev => ({ ...prev, error: null }));
   }, []);
 
   /**
    * Retry the last failed operation
    */
-  const retry = useCallback(async () => {
+  const retry = useCallback(async (): Promise<void> => {
     if (onRetry) {
       setState(prev => ({ ...prev, retryCount: prev.retryCount + 1 }));
       onRetry(state.retryCount + 1);
@@ -271,7 +306,7 @@ export function useErrorHandler(options: UseErrorHandlerOptions = {}) {
     action?: string;
     component?: string;
     userId?: string;
-  }) => {
+  }): void => {
     const errorContext = createErrorContext(
       {
         url: window.location.href,
@@ -318,8 +353,9 @@ export function useErrorHandler(options: UseErrorHandlerOptions = {}) {
 
 /**
  * Simplified hook for basic error handling
+ * @returns Error handler with basic configuration
  */
-export function useSimpleErrorHandler() {
+export function useSimpleErrorHandler(): UseErrorHandlerReturn {
   return useErrorHandler({
     showToast: true,
     retryCount: 1
@@ -328,8 +364,9 @@ export function useSimpleErrorHandler() {
 
 /**
  * Hook for form error handling with validation support
+ * @returns Error handler optimized for form validation
  */
-export function useFormErrorHandler() {
+export function useFormErrorHandler(): UseErrorHandlerReturn {
   return useErrorHandler({
     showToast: true,
     retryCount: 0 // Forms typically don't auto-retry
@@ -338,8 +375,10 @@ export function useFormErrorHandler() {
 
 /**
  * Hook for API operations that require retry logic
+ * @param maxRetries Maximum number of retry attempts
+ * @returns Error handler with retry functionality
  */
-export function useRetryableErrorHandler(maxRetries: number = 3) {
+export function useRetryableErrorHandler(maxRetries: number = 3): UseErrorHandlerReturn {
   return useErrorHandler({
     showToast: true,
     retryCount: maxRetries

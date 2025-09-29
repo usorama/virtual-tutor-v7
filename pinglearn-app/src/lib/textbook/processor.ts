@@ -14,6 +14,7 @@ interface ChapterInfo {
  * Processes a textbook PDF file, extracting chapters and content chunks
  * @param textbookId - The ID of the textbook to process
  * @param filePath - Path to the PDF file
+ * @returns Promise that resolves when processing is complete
  */
 export async function processTextbook(textbookId: string, filePath: string): Promise<void> {
   const supabase = await createClient()
