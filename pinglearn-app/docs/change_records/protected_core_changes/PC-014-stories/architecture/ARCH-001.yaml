@@ -1,0 +1,332 @@
+# Architecture Story: Circular Dependency Resolution and Module Structure Optimization
+story_id: ARCH-001
+parent_issue: ISS-015
+category: architecture
+priority: P2-MEDIUM
+
+metadata:
+  title: "Resolve circular dependencies and optimize module structure for maintainability"
+  description: |
+    The codebase has developed circular dependencies between modules, particularly
+    between services, components, and utilities. This story identifies and resolves
+    circular dependencies while establishing clear architectural boundaries and
+    dependency flow patterns for long-term maintainability and scalability.
+  created: 2025-09-30T01:15:00Z
+  estimated_hours: 5
+  risk_level: medium
+  affects_protected_core: false
+
+current_architecture_issues:
+  circular_dependencies:
+    - "services ↔ components: Services importing React components"
+    - "utilities ↔ hooks: Hooks importing utilities that import hooks"
+    - "types ↔ services: Services defining types that import service types"
+    - "components ↔ utils: Components and utilities importing each other"
+  dependency_analysis:
+    detected_cycles:
+      - "src/lib/textbook/processor.ts → src/components/textbook/UploadForm.tsx → src/lib/textbook/actions.ts → src/lib/textbook/processor.ts"
+      - "src/hooks/useSupabaseQuery.ts → src/utils/supabase-helpers.ts → src/hooks/useErrorHandler.ts → src/hooks/useSupabaseQuery.ts"
+      - "src/types/common.ts → src/lib/services/base-service.ts → src/types/service-types.ts → src/types/common.ts"
+    impact:
+      - Bundle size inflation due to circular imports
+      - Difficult debugging and testing
+      - Unpredictable build behavior
+      - Hot reloading issues in development
+
+target_architecture:
+  layered_approach: |
+    ```
+    ┌─────────────────────────────┐
+    │        Presentation         │  ← Components, Pages, UI
+    │      (React Components)     │
+    └─────────────────────────────┘
+                    ↓
+    ┌─────────────────────────────┐
+    │        Application          │  ← Hooks, State Management
+    │      (Business Logic)       │
+    └─────────────────────────────┘
+                    ↓
+    ┌─────────────────────────────┐
+    │         Services            │  ← API calls, External services
+    │     (Data Operations)       │
+    └─────────────────────────────┘
+                    ↓
+    ┌─────────────────────────────┐
+    │         Utilities           │  ← Pure functions, Helpers
+    │      (Pure Functions)       │
+    └─────────────────────────────┘
+                    ↓
+    ┌─────────────────────────────┐
+    │          Types              │  ← Type definitions, Interfaces
+    │     (Type Definitions)      │
+    └─────────────────────────────┘
+    ```
+
+  dependency_rules:
+    - "Components can import hooks, services, utilities, types"
+    - "Hooks can import services, utilities, types (NOT components)"
+    - "Services can import utilities, types (NOT hooks, components)"
+    - "Utilities can import types only (NO other layers)"
+    - "Types have NO imports from application layers"
+
+architectural_solutions:
+  dependency_inversion: |
+    ```typescript
+    // src/types/contracts/service-contracts.ts
+    export interface TextbookProcessorContract {
+      processTextbook(file: File): Promise<ProcessedTextbook>;
+      validateTextbook(metadata: TextbookMetadata): ValidationResult;
+    }
+
+    export interface UploadProgressContract {
+      onProgress(progress: number): void;
+      onComplete(result: ProcessedTextbook): void;
+      onError(error: ProcessingError): void;
+    }
+
+    // src/lib/textbook/processor.ts (Service Layer)
+    export class TextbookProcessor implements TextbookProcessorContract {
+      constructor(
+        private progressCallback?: UploadProgressContract
+      ) {}
+
+      async processTextbook(file: File): Promise<ProcessedTextbook> {
+        // Processing logic without importing React components
+        this.progressCallback?.onProgress(50);
+        const result = await this.performProcessing(file);
+        this.progressCallback?.onComplete(result);
+        return result;
+      }
+
+      private async performProcessing(file: File): Promise<ProcessedTextbook> {
+        // Pure processing logic
+      }
+    }
+
+    // src/components/textbook/UploadForm.tsx (Presentation Layer)
+    export const UploadForm: React.FC = () => {
+      const processor = useMemo(() =>
+        new TextbookProcessor({
+          onProgress: setProgress,
+          onComplete: handleComplete,
+          onError: handleError
+        }), []);
+
+      // Component logic using processor without circular import
+    };
+    ```
+
+  event_driven_communication: |
+    ```typescript
+    // src/lib/events/event-bus.ts
+    export class EventBus {
+      private static instance: EventBus;
+      private listeners = new Map<string, Set<(data: any) => void>>();
+
+      static getInstance(): EventBus {
+        if (!this.instance) {
+          this.instance = new EventBus();
+        }
+        return this.instance;
+      }
+
+      emit<T>(event: string, data: T): void {
+        const eventListeners = this.listeners.get(event);
+        if (eventListeners) {
+          eventListeners.forEach(listener => listener(data));
+        }
+      }
+
+      on<T>(event: string, callback: (data: T) => void): () => void {
+        if (!this.listeners.has(event)) {
+          this.listeners.set(event, new Set());
+        }
+        this.listeners.get(event)!.add(callback);
+
+        // Return unsubscribe function
+        return () => {
+          this.listeners.get(event)?.delete(callback);
+        };
+      }
+    }
+
+    // Usage in services (no component imports needed)
+    export class TextbookService {
+      async uploadTextbook(file: File): Promise<void> {
+        const eventBus = EventBus.getInstance();
+
+        try {
+          eventBus.emit('textbook:upload:started', { filename: file.name });
+          const result = await this.processFile(file);
+          eventBus.emit('textbook:upload:completed', result);
+        } catch (error) {
+          eventBus.emit('textbook:upload:failed', error);
+        }
+      }
+    }
+
+    // Usage in components (listening to events)
+    export const UploadStatus: React.FC = () => {
+      const [status, setStatus] = useState('idle');
+
+      useEffect(() => {
+        const eventBus = EventBus.getInstance();
+
+        const unsubscribes = [
+          eventBus.on('textbook:upload:started', () => setStatus('uploading')),
+          eventBus.on('textbook:upload:completed', () => setStatus('completed')),
+          eventBus.on('textbook:upload:failed', () => setStatus('failed'))
+        ];
+
+        return () => unsubscribes.forEach(unsub => unsub());
+      }, []);
+
+      return <div>Status: {status}</div>;
+    };
+    ```
+
+module_restructuring:
+  new_structure: |
+    ```
+    src/
+    ├── types/                    # Layer 1: Pure type definitions
+    │   ├── contracts/           # Service contracts and interfaces
+    │   ├── domain/              # Domain-specific types
+    │   ├── api/                 # API-related types
+    │   └── common.ts            # Shared common types
+    │
+    ├── utils/                   # Layer 2: Pure utility functions
+    │   ├── validation/          # Validation utilities
+    │   ├── formatting/          # Data formatting
+    │   ├── constants/           # Application constants
+    │   └── helpers/             # General helpers
+    │
+    ├── lib/                     # Layer 3: Services and business logic
+    │   ├── services/            # External service integrations
+    │   ├── repositories/        # Data access layer
+    │   ├── processors/          # Data processing logic
+    │   └── events/              # Event system
+    │
+    ├── hooks/                   # Layer 4: Application logic
+    │   ├── data/                # Data fetching hooks
+    │   ├── ui/                  # UI state hooks
+    │   ├── forms/               # Form management hooks
+    │   └── effects/             # Side effect hooks
+    │
+    ├── components/              # Layer 5: Presentation
+    │   ├── ui/                  # Base UI components
+    │   ├── forms/               # Form components
+    │   ├── features/            # Feature-specific components
+    │   └── layouts/             # Layout components
+    │
+    └── app/                     # Layer 6: Application entry points
+        ├── api/                 # API routes
+        ├── (pages)/             # Page components
+        └── globals.css          # Global styles
+    ```
+
+implementation_targets:
+  critical_refactoring:
+    - src/lib/textbook/processor.ts (remove component imports)
+    - src/hooks/useSupabaseQuery.ts (break utility circular dependency)
+    - src/types/common.ts (separate service-specific types)
+    - src/components/textbook/UploadForm.tsx (use dependency injection)
+    - src/utils/supabase-helpers.ts (remove hook imports)
+    - src/lib/events/event-bus.ts (new event system)
+
+dependencies:
+  hard: ["TS-007", "TS-008"]  # Need strong TypeScript foundation
+  soft: ["ERR-003", "ERR-004"]  # Better with error handling
+  peer: ["TEST-003"]  # Testing helps validate architecture
+
+implementation_steps:
+  1. Analyze current circular dependencies using madge or similar tool
+  2. Create service contracts and interface definitions
+  3. Implement event-driven communication system
+  4. Refactor services to remove component dependencies
+  5. Update hooks to use dependency injection patterns
+  6. Restructure utilities to be pure functions
+  7. Update components to use event-driven patterns
+  8. Create architectural documentation and linting rules
+  9. Add dependency validation to CI pipeline
+  10. Test all refactored modules thoroughly
+
+verification_requirements:
+  - circular_dependencies: must_be_zero
+  - dependency_layers: must_respect_rules
+  - bundle_size: must_not_increase
+  - build_time: must_not_degrade
+  - hot_reload: must_be_faster
+  - typescript_compilation: must_pass
+
+architectural_benefits:
+  maintainability:
+    - Clear separation of concerns
+    - Predictable dependency flow
+    - Easier testing and mocking
+    - Reduced coupling between modules
+  performance:
+    - Smaller bundle sizes
+    - Better tree shaking
+    - Faster hot reloading
+    - Improved build times
+  developer_experience:
+    - Clearer mental model
+    - Easier debugging
+    - Better IntelliSense
+    - Reduced cognitive load
+
+agent_assignment:
+  recommended: backend-architect
+  alternative: senior-full-stack-developer
+  estimated_duration: 5_hours
+
+success_criteria:
+  - Zero circular dependencies detected by analysis tools
+  - All modules respect architectural layer rules
+  - Bundle size reduced or maintained
+  - Build and hot reload performance improved
+  - Clear architectural documentation established
+  - Linting rules prevent future circular dependencies
+
+deliverables:
+  - Refactored module structure following layer principles
+  - Event-driven communication system
+  - Service contracts and dependency injection patterns
+  - Architectural documentation and guidelines
+  - Linting rules for dependency validation
+  - Bundle analysis and performance reports
+
+testing_requirements:
+  - Unit tests for all refactored modules
+  - Integration tests for event-driven communication
+  - Performance tests for build time improvements
+  - Bundle size analysis and validation
+
+rollback_procedure:
+  - Git checkpoint before each major refactoring
+  - Incremental refactoring with continuous testing
+  - Performance monitoring during changes
+  - Rollback plan if critical functionality breaks
+
+notes: |
+  This architectural refactoring builds on the strong TypeScript, error handling,
+  and testing foundations established by previous stories. The focus is on creating
+  a maintainable, scalable architecture that will support future development.
+  Event-driven patterns and dependency injection will reduce coupling while
+  maintaining functionality.
+
+quality_gates:
+  - Dependency analysis shows zero circular imports
+  - All architectural layers respect defined rules
+  - Build performance is maintained or improved
+  - Hot reload performance is significantly better
+  - Code maintainability metrics improved
+  - Developer onboarding complexity reduced
+
+monitoring_and_maintenance:
+  - Continuous dependency analysis in CI
+  - Bundle size monitoring and alerts
+  - Architecture decision record (ADR) documentation
+  - Regular architecture reviews and updates
+  - Training materials for architectural patterns

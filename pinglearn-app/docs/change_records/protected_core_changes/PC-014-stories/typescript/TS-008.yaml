@@ -1,0 +1,291 @@
+# TypeScript Story: Advanced Generic Constraints and Utility Types
+story_id: TS-008
+parent_issue: ISS-001
+category: typescript
+priority: P1-HIGH
+
+metadata:
+  title: "Implement advanced TypeScript patterns with generic constraints and utility types"
+  description: |
+    Building on the comprehensive database type alignment (TS-007) and foundational
+    improvements (TS-001 through TS-006), this story implements advanced TypeScript
+    patterns including generic constraints, conditional types, mapped types, and
+    utility types to enhance type safety and developer experience across the application.
+  created: 2025-09-30T01:05:00Z
+  estimated_hours: 4
+  risk_level: low
+  affects_protected_core: false
+
+current_situation:
+  problem: "Missing advanced TypeScript patterns for complex type operations"
+  affected_areas:
+    - Generic hook implementations with weak constraints
+    - API response handling with generic type transformations
+    - Form validation with complex nested object types
+    - Data processing pipelines with type transformations
+    - Component prop types with conditional rendering logic
+    - Service layer interfaces with method overloading
+  missed_opportunities:
+    - Type-safe configuration objects
+    - Conditional types for complex data structures
+    - Mapped types for API transformations
+    - Template literal types for dynamic keys
+    - Branded types for domain-specific values
+
+target_implementation:
+  advanced_patterns_file: "src/types/advanced.ts"
+  utility_types_enhanced: true
+  generic_constraints: true
+  conditional_types: true
+  branded_types: true
+
+advanced_typescript_patterns: |
+  ```typescript
+  // src/types/advanced.ts
+
+  // Branded types for type safety
+  export type UserId = string & { readonly __brand: 'UserId' };
+  export type SessionId = string & { readonly __brand: 'SessionId' };
+  export type TextbookId = string & { readonly __brand: 'TextbookId' };
+  export type ChapterId = string & { readonly __brand: 'ChapterId' };
+
+  // Utility functions for branded types
+  export const createUserId = (id: string): UserId => id as UserId;
+  export const createSessionId = (id: string): SessionId => id as SessionId;
+  export const createTextbookId = (id: string): TextbookId => id as TextbookId;
+  export const createChapterId = (id: string): ChapterId => id as ChapterId;
+
+  // Advanced generic constraints
+  export interface Repository<T extends { id: string }> {
+    findById<K extends keyof T>(
+      id: string,
+      select?: readonly K[]
+    ): Promise<Pick<T, K | 'id'> | null>;
+
+    create<K extends keyof T>(
+      data: Omit<T, 'id' | 'created_at' | 'updated_at'>
+    ): Promise<T>;
+
+    update<K extends keyof T>(
+      id: string,
+      data: Partial<Pick<T, K>>
+    ): Promise<T>;
+
+    delete(id: string): Promise<void>;
+  }
+
+  // Conditional types for API responses
+  export type ApiResponse<T> = T extends string
+    ? { message: T; data: null }
+    : { message: string; data: T };
+
+  export type AsyncResult<T> = T extends (...args: any[]) => Promise<infer R>
+    ? R
+    : T extends (...args: any[]) => infer R
+    ? R
+    : never;
+
+  // Template literal types for dynamic keys
+  export type EventKey<T extends string> = `on${Capitalize<T>}`;
+  export type StateKey<T extends string> = `${T}State`;
+  export type LoadingKey<T extends string> = `is${Capitalize<T>}Loading`;
+
+  // Mapped types for form validation
+  export type ValidationErrors<T> = {
+    [K in keyof T]?: T[K] extends string
+      ? string | null
+      : T[K] extends number
+      ? string | null
+      : T[K] extends object
+      ? ValidationErrors<T[K]>
+      : string | null;
+  };
+
+  export type FormState<T> = {
+    values: T;
+    errors: ValidationErrors<T>;
+    touched: { [K in keyof T]?: boolean };
+    isSubmitting: boolean;
+    isValid: boolean;
+  };
+
+  // Advanced hook constraint types
+  export type UseQueryOptions<TData, TError = Error> = {
+    enabled?: boolean;
+    staleTime?: number;
+    cacheTime?: number;
+    onSuccess?: (data: TData) => void;
+    onError?: (error: TError) => void;
+    select?: <TSelected>(data: TData) => TSelected;
+  };
+
+  export type UseQueryResult<TData, TError = Error> = {
+    data: TData | undefined;
+    error: TError | null;
+    isLoading: boolean;
+    isError: boolean;
+    isSuccess: boolean;
+    refetch: () => Promise<TData>;
+  };
+
+  // Service method overloading
+  export interface TextbookService {
+    // Method overloading for different return types
+    get(id: TextbookId): Promise<Textbook>;
+    get(id: TextbookId, options: { includeContent: true }): Promise<TextbookWithContent>;
+    get(id: TextbookId, options: { includeChapters: true }): Promise<TextbookWithChapters>;
+    get(
+      id: TextbookId,
+      options?: { includeContent?: boolean; includeChapters?: boolean }
+    ): Promise<Textbook | TextbookWithContent | TextbookWithChapters>;
+  }
+
+  // Recursive types for nested content
+  export type NestedContent = {
+    id: string;
+    title: string;
+    content?: string;
+    children?: NestedContent[];
+    parent?: NestedContent;
+  };
+
+  export type FlattenContent<T extends NestedContent> = T & {
+    path: string[];
+    depth: number;
+    hasChildren: boolean;
+  };
+  ```
+
+component_type_enhancements: |
+  ```typescript
+  // src/types/component-patterns.ts
+
+  // Discriminated union for component variants
+  export type ButtonVariant =
+    | { variant: 'primary'; color: 'blue' | 'green' }
+    | { variant: 'secondary'; color: 'gray' | 'white' }
+    | { variant: 'danger'; color: 'red' };
+
+  // Polymorphic component props
+  export type PolymorphicProps<T extends React.ElementType> = {
+    as?: T;
+  } & React.ComponentPropsWithoutRef<T>;
+
+  // Generic form component with strict validation
+  export interface FormProps<T extends Record<string, any>> {
+    initialValues: T;
+    validationSchema: ValidationSchema<T>;
+    onSubmit: (values: T) => Promise<void> | void;
+    children: (formState: FormState<T>) => React.ReactNode;
+  }
+
+  // Type-safe route params
+  export type RouteParams<T extends string> = T extends `${infer Start}:${infer Param}/${infer Rest}`
+    ? { [K in Param]: string } & RouteParams<`${Start}${Rest}`>
+    : T extends `${infer Start}:${infer Param}`
+    ? { [K in Param]: string }
+    : {};
+
+  // Component with conditional props
+  export type ConditionalProps<T extends boolean> = T extends true
+    ? { required: true; placeholder?: string }
+    : { required?: false; placeholder: string };
+  ```
+
+implementation_targets:
+  critical_files:
+    - src/types/advanced.ts (new)
+    - src/types/component-patterns.ts (new)
+    - src/hooks/useGenericQuery.ts (enhance)
+    - src/lib/services/repository-base.ts (new)
+    - src/components/forms/GenericForm.tsx (enhance)
+    - src/utils/type-guards.ts (enhance)
+
+dependencies:
+  hard: ["TS-001", "TS-002", "TS-003", "TS-007"]  # Core TypeScript and database foundation
+  soft: ["TS-004", "TS-005", "TS-006"]  # Interface consolidation helps
+  peer: ["ERR-003"]  # Better error handling integration
+
+implementation_steps:
+  1. Create advanced TypeScript pattern definitions
+  2. Implement branded types for domain-specific values
+  3. Add generic repository pattern with constraints
+  4. Create conditional types for API responses
+  5. Implement template literal types for event handling
+  6. Add mapped types for form validation
+  7. Create polymorphic component prop types
+  8. Implement service method overloading
+  9. Add recursive types for nested data structures
+  10. Update existing code to use advanced patterns
+
+type_safety_improvements:
+  branded_types: "Prevent ID mixing between different entities"
+  generic_constraints: "Ensure type safety in generic functions"
+  conditional_types: "Dynamic type resolution based on conditions"
+  mapped_types: "Transform types systematically"
+  template_literals: "Type-safe string manipulation"
+
+verification_requirements:
+  - typescript_compilation: must_pass
+  - advanced_patterns_working: true
+  - type_inference_improved: true
+  - intellisense_enhanced: true
+  - no_type_assertions: true (prefer type guards)
+  - performance_maintained: true
+
+testing_scenarios:
+  - Branded type safety prevents ID confusion
+  - Generic constraints catch invalid type usage
+  - Conditional types resolve correctly
+  - Form validation types work with nested objects
+  - Polymorphic components accept correct props
+  - Service overloading resolves to correct return types
+
+agent_assignment:
+  recommended: typescript-specialist
+  alternative: senior-frontend-architect
+  estimated_duration: 4_hours
+
+success_criteria:
+  - Advanced TypeScript patterns implemented correctly
+  - Enhanced type safety across the application
+  - Improved developer experience with better IntelliSense
+  - Reduced runtime errors through compile-time checks
+  - Maintainable and scalable type definitions
+  - Performance impact negligible
+
+deliverables:
+  - types/advanced.ts with comprehensive patterns
+  - types/component-patterns.ts for UI type safety
+  - Enhanced hooks with generic constraints
+  - Repository base class with advanced generics
+  - Updated components using advanced patterns
+  - Documentation for advanced TypeScript usage
+
+rollback_procedure:
+  - Git checkpoint before implementing each pattern
+  - Incremental rollout of advanced types
+  - Fallback to simpler types if performance issues
+  - Test compatibility with existing code
+
+notes: |
+  This story builds on the excellent database type foundation from TS-007
+  and takes TypeScript usage to the next level. Focus on patterns that
+  provide real value - better type safety, improved developer experience,
+  and catching errors at compile time. Avoid over-engineering with complex
+  types that don't provide clear benefits.
+
+quality_gates:
+  - All advanced patterns have clear use cases
+  - Type inference works correctly without manual annotations
+  - Compile-time error detection improved significantly
+  - IntelliSense provides better suggestions
+  - Code readability maintained despite complexity
+  - Performance impact measured and acceptable
+
+performance_considerations:
+  - Branded types have zero runtime overhead
+  - Conditional types resolve at compile time
+  - Generic constraints don't affect bundle size
+  - Template literal types compile efficiently
+  - Mapped types don't slow down type checking

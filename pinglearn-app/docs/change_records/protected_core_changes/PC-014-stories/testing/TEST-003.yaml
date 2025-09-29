@@ -1,0 +1,385 @@
+# Testing Story: Security and Integration Testing Expansion
+story_id: TEST-003
+parent_issue: ISS-005
+category: testing
+priority: P1-HIGH
+
+metadata:
+  title: "Expand test coverage to 75%+ with security, integration, and advanced pattern testing"
+  description: |
+    Building on the comprehensive testing foundation established by TEST-001 (45% coverage)
+    and TEST-002 (60% coverage), this story expands coverage to 75%+ by adding security
+    testing, advanced integration scenarios, error recovery testing, and validation of
+    the new TypeScript patterns and error handling implementations.
+  created: 2025-09-30T01:10:00Z
+  estimated_hours: 6
+  risk_level: low
+  affects_protected_core: false
+
+current_testing_state:
+  coverage_progression:
+    - "TEST-001: 5% → 45% (foundation established)"
+    - "TEST-002: 45% → 60% (integration testing added)"
+    - "TEST-003: 60% → 75%+ (security & advanced patterns)"
+  established_infrastructure:
+    - Comprehensive test factories and utilities
+    - Protected core mocks and integration helpers
+    - Database isolation patterns
+    - Component workflow testing framework
+    - Error handling test coverage
+  new_testing_requirements:
+    - Security error handling validation (ERR-004)
+    - Advanced TypeScript pattern testing (TS-008)
+    - Threat detection system validation
+    - Advanced generic constraint testing
+    - Security incident response testing
+
+scope:
+  new_testing_areas:
+    - Security error handling and threat detection
+    - Advanced TypeScript patterns and constraints
+    - Authentication and authorization flows
+    - File upload security validation
+    - WebSocket security error scenarios
+    - Database type safety with advanced patterns
+    - Form validation with complex nested types
+    - Performance testing for type-heavy operations
+  coverage_targets:
+    - Security modules: 90%+ coverage
+    - Advanced TypeScript utilities: 85%+ coverage
+    - Error recovery mechanisms: 95%+ coverage
+    - Integration workflows: 80%+ coverage
+    - Overall application: 75%+ coverage
+
+security_testing_framework: |
+  ```typescript
+  // src/tests/security/security-test-framework.ts
+
+  export interface SecurityTestScenario {
+    name: string;
+    threat: SecurityErrorCode;
+    setup: () => Promise<void>;
+    execute: () => Promise<SecurityError>;
+    verify: (error: SecurityError, response: ThreatAssessment) => boolean;
+    cleanup: () => Promise<void>;
+  }
+
+  export class SecurityTestRunner {
+    private threatDetector = SecurityThreatDetector.getInstance();
+
+    async runSecuritySuite(scenarios: SecurityTestScenario[]): Promise<SecurityTestResults> {
+      const results: SecurityTestResults = {
+        passed: 0,
+        failed: 0,
+        scenarios: [],
+        coverage: {}
+      };
+
+      for (const scenario of scenarios) {
+        try {
+          await scenario.setup();
+          const error = await scenario.execute();
+          const assessment = this.threatDetector.detectThreat(error);
+          const passed = scenario.verify(error, assessment);
+
+          results.scenarios.push({
+            name: scenario.name,
+            passed,
+            error: passed ? null : 'Verification failed',
+            assessment
+          });
+
+          if (passed) results.passed++;
+          else results.failed++;
+
+        } catch (testError) {
+          results.scenarios.push({
+            name: scenario.name,
+            passed: false,
+            error: testError.message,
+            assessment: null
+          });
+          results.failed++;
+        } finally {
+          await scenario.cleanup();
+        }
+      }
+
+      return results;
+    }
+  }
+
+  // Security test scenarios
+  export const securityTestScenarios: SecurityTestScenario[] = [
+    {
+      name: 'Brute Force Detection',
+      threat: SecurityErrorCode.BRUTE_FORCE_DETECTED,
+      setup: async () => {
+        // Setup mock user and session
+      },
+      execute: async () => {
+        // Simulate multiple failed login attempts
+        return await simulateBruteForceAttack();
+      },
+      verify: (error, assessment) => {
+        return assessment.level === 'high' && assessment.action === 'temporary_block';
+      },
+      cleanup: async () => {
+        // Clear attempt tracking
+      }
+    },
+    // Additional security scenarios...
+  ];
+  ```
+
+advanced_typescript_testing: |
+  ```typescript
+  // src/tests/typescript/advanced-patterns.test.ts
+
+  describe('Advanced TypeScript Patterns', () => {
+    describe('Branded Types', () => {
+      it('should prevent ID type confusion', () => {
+        const userId = createUserId('user-123');
+        const textbookId = createTextbookId('book-456');
+
+        // This should cause a TypeScript error (tested via type-testing library)
+        expectTypeError(() => {
+          const service = new UserService();
+          service.findById(textbookId); // Should not accept TextbookId for UserId
+        });
+      });
+
+      it('should allow proper ID usage', () => {
+        const userId = createUserId('user-123');
+        const service = new UserService();
+
+        expect(() => service.findById(userId)).not.toThrow();
+      });
+    });
+
+    describe('Generic Constraints', () => {
+      it('should enforce repository constraints', async () => {
+        const userRepo = new Repository<User>();
+
+        // Should work with proper entity type
+        const user = await userRepo.create({
+          email: 'test@example.com',
+          full_name: 'Test User'
+        });
+
+        expect(user).toHaveProperty('id');
+        expect(user).toHaveProperty('created_at');
+      });
+
+      it('should provide correct return types with select', async () => {
+        const userRepo = new Repository<User>();
+
+        const partialUser = await userRepo.findById('123', ['email', 'full_name']);
+
+        // TypeScript should infer correct type
+        expectType<Pick<User, 'id' | 'email' | 'full_name'> | null>(partialUser);
+      });
+    });
+
+    describe('Conditional Types', () => {
+      it('should resolve API response types correctly', () => {
+        type StringResponse = ApiResponse<string>;
+        type DataResponse = ApiResponse<{ id: string; name: string }>;
+
+        expectType<{ message: string; data: null }>(
+          {} as StringResponse
+        );
+
+        expectType<{ message: string; data: { id: string; name: string } }>(
+          {} as DataResponse
+        );
+      });
+    });
+  });
+  ```
+
+integration_testing_expansion: |
+  ```typescript
+  // src/tests/integration/advanced-workflows.test.ts
+
+  describe('Advanced Integration Workflows', () => {
+    describe('Security Error Recovery', () => {
+      it('should handle authentication failure with recovery', async () => {
+        const { render, user } = setupIntegrationTest();
+
+        // Mock authentication failure
+        mockAuthService.login.mockRejectedValue(
+          new SecurityError(SecurityErrorCode.AUTHENTICATION_FAILED, 'Invalid credentials')
+        );
+
+        const { getByRole, getByTestId } = render(<LoginForm />);
+
+        await user.type(getByRole('textbox', { name: /email/i }), 'user@example.com');
+        await user.type(getByRole('textbox', { name: /password/i }), 'wrongpassword');
+        await user.click(getByRole('button', { name: /sign in/i }));
+
+        // Verify security error handling
+        expect(getByTestId('security-error-message')).toBeInTheDocument();
+        expect(getByTestId('recovery-options')).toBeInTheDocument();
+
+        // Verify threat detection triggered
+        const threatAssessment = await waitFor(() =>
+          SecurityThreatDetector.getInstance().getLastAssessment()
+        );
+        expect(threatAssessment.level).toBe('suspicious');
+      });
+
+      it('should handle escalating security threats', async () => {
+        const detector = SecurityThreatDetector.getInstance();
+
+        // Simulate multiple security violations
+        for (let i = 0; i < 6; i++) {
+          const error = new SecurityError(
+            SecurityErrorCode.AUTHENTICATION_FAILED,
+            'Multiple failures',
+            { clientIP: '192.168.1.100' }
+          );
+          await detector.detectThreat(error);
+        }
+
+        const assessment = detector.getLastAssessment();
+        expect(assessment.level).toBe('severe');
+        expect(assessment.autoBlock).toBe(true);
+      });
+    });
+
+    describe('Advanced Form Validation', () => {
+      it('should validate complex nested forms with TypeScript safety', async () => {
+        const formSchema: ValidationSchema<ComplexFormData> = {
+          user: {
+            profile: {
+              name: { required: true, minLength: 2 },
+              email: { required: true, pattern: /^[^@]+@[^@]+\.[^@]+$/ }
+            },
+            preferences: {
+              notifications: { required: false },
+              theme: { required: true, options: ['light', 'dark'] }
+            }
+          }
+        };
+
+        const { result } = renderHook(() => useGenericForm({
+          initialValues: mockComplexFormData,
+          validationSchema: formSchema,
+          onSubmit: jest.fn()
+        }));
+
+        // Test nested validation
+        act(() => {
+          result.current.setFieldValue('user.profile.name', '');
+        });
+
+        expect(result.current.errors.user?.profile?.name).toBeTruthy();
+        expect(result.current.isValid).toBe(false);
+      });
+    });
+  });
+  ```
+
+implementation_targets:
+  new_test_files:
+    - src/tests/security/security-test-framework.ts (new)
+    - src/tests/security/threat-detection.test.ts (new)
+    - src/tests/security/error-recovery.test.ts (new)
+    - src/tests/typescript/advanced-patterns.test.ts (new)
+    - src/tests/typescript/generic-constraints.test.ts (new)
+    - src/tests/integration/advanced-workflows.test.ts (new)
+    - src/tests/integration/security-flows.test.ts (new)
+    - src/tests/performance/type-heavy-operations.test.ts (new)
+  enhanced_test_files:
+    - src/tests/integration/api-endpoints.test.ts (add security tests)
+    - src/tests/components/forms.test.tsx (add advanced validation)
+    - src/tests/utils/enhanced-integration-helpers.ts (add security helpers)
+
+dependencies:
+  hard: ["TEST-001", "TEST-002"]  # Need testing foundation
+  soft: ["ERR-004", "TS-008"]  # Testing the new implementations
+  peer: ["ERR-003"]  # Error handling integration
+
+implementation_steps:
+  1. Create security testing framework and utilities
+  2. Implement threat detection test scenarios
+  3. Add advanced TypeScript pattern tests
+  4. Create integration tests for security workflows
+  5. Add performance tests for type-heavy operations
+  6. Implement form validation test expansion
+  7. Add authentication/authorization flow tests
+  8. Create file upload security test scenarios
+  9. Add WebSocket security error tests
+  10. Update existing tests for new patterns
+
+verification_requirements:
+  - test_coverage: must_reach_75_percent
+  - security_tests: must_pass_all
+  - typescript_tests: must_validate_patterns
+  - integration_tests: must_cover_workflows
+  - performance_tests: must_meet_benchmarks
+  - existing_tests: must_remain_passing
+
+testing_metrics:
+  coverage_targets:
+    - Security modules: 90%+
+    - TypeScript utilities: 85%+
+    - Error handlers: 95%+
+    - Integration flows: 80%+
+    - Overall app: 75%+
+  performance_benchmarks:
+    - Type checking: <500ms for full project
+    - Security tests: <100ms per scenario
+    - Integration tests: <5s per workflow
+    - Test suite: <60s total runtime
+
+agent_assignment:
+  recommended: qa-engineer-security
+  alternative: full-stack-test-specialist
+  estimated_duration: 6_hours
+
+success_criteria:
+  - Test coverage increased from 60% to 75%+
+  - Comprehensive security testing framework implemented
+  - Advanced TypeScript patterns fully tested
+  - All security workflows covered by integration tests
+  - Performance benchmarks met for all test categories
+  - Zero regressions in existing test suite
+
+deliverables:
+  - Security testing framework with threat scenarios
+  - Advanced TypeScript pattern test suite
+  - Enhanced integration test workflows
+  - Performance test suite for type operations
+  - Updated test utilities and helpers
+  - Comprehensive test documentation
+  - Coverage reports and metrics
+
+rollback_procedure:
+  - Git checkpoint before each test category
+  - Incremental test addition with CI validation
+  - Performance monitoring during test execution
+  - Rollback if test suite performance degrades significantly
+
+notes: |
+  This story builds on the excellent testing foundation from TEST-001 and
+  TEST-002 to create a comprehensive, security-aware test suite. Focus on
+  testing the real-world scenarios users will encounter, especially security
+  threats and error recovery situations. The advanced TypeScript testing
+  ensures our type system actually provides the safety we expect.
+
+quality_gates:
+  - All new security features have comprehensive tests
+  - TypeScript pattern tests validate compile-time safety
+  - Integration tests cover realistic user workflows
+  - Performance tests ensure no regressions
+  - Test suite maintainability preserved
+  - Documentation covers all testing patterns
+
+testing_philosophy:
+  - Security testing focuses on realistic attack vectors
+  - TypeScript tests validate compile-time guarantees
+  - Integration tests simulate real user journeys
+  - Performance tests ensure production readiness
+  - Test code is as maintainable as application code
