@@ -1,18 +1,33 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { Textbook, TextbookUploadResponse } from '@/types/textbook'
 import { getUser } from '@/lib/auth/actions'
-import { writeFile, unlink } from 'fs/promises'
-import { join } from 'path'
-import { processTextbook } from './processor'
-import { TextbookUploadResponse, Textbook } from '@/types/textbook'
 import { randomUUID } from 'crypto'
+import { join } from 'path'
+import { writeFile, unlink } from 'fs/promises'
+
+/**
+ * Helper function to create properly formatted TextbookUploadResponse objects
+ */
+function createTextbookResponse(
+  success: boolean,
+  data?: Textbook,
+  error?: string
+): TextbookUploadResponse {
+  return {
+    success,
+    data,
+    error,
+    timestamp: new Date().toISOString()
+  }
+}
 
 export async function uploadTextbook(formData: FormData): Promise<TextbookUploadResponse> {
   try {
-    const user = await getUser()
-    if (!user) {
-      return { data: null, error: 'User not authenticated' }
+    const userResponse = await getUser()
+    if (!userResponse.success || !userResponse.data?.user) {
+      return createTextbookResponse(false, undefined, 'User not authenticated')
     }
 
     const file = formData.get('file') as File
@@ -21,14 +36,14 @@ export async function uploadTextbook(formData: FormData): Promise<TextbookUpload
 
     // Validate file
     if (!file || !file.name.endsWith('.pdf')) {
-      return { data: null, error: 'Please select a valid PDF file' }
+      return createTextbookResponse(false, undefined, 'Please select a valid PDF file')
     }
 
     const maxSizeMB = 50
     const fileSizeMB = file.size / (1024 * 1024)
-    
+
     if (fileSizeMB > maxSizeMB) {
-      return { data: null, error: `File size must be less than ${maxSizeMB}MB` }
+      return createTextbookResponse(false, undefined, `File size must be less than ${maxSizeMB}MB`)
     }
 
     // Save file temporarily
@@ -36,154 +51,130 @@ export async function uploadTextbook(formData: FormData): Promise<TextbookUpload
     const buffer = Buffer.from(bytes)
     const tempFileName = `${randomUUID()}_${file.name}`
     const tempPath = join('/tmp', tempFileName)
-    
-    await writeFile(tempPath, buffer)
 
     try {
-      // Create database entry
-      const supabase = await createClient()
-      const { data: textbook, error: dbError } = await supabase
-        .from('textbooks')
-        .insert({
-          file_name: file.name,
-          title: file.name.replace('.pdf', ''),
-          grade,
-          subject,
-          status: 'processing',
-          file_size_mb: fileSizeMB,
-        })
-        .select()
-        .single()
-
-      if (dbError) {
-        console.error('Database error:', dbError)
-        await unlink(tempPath) // Clean up temp file
-        return { data: null, error: 'Failed to save textbook information' }
-      }
-
-      // Queue for processing (async - don't await)
-      processTextbook(textbook.id, tempPath)
-        .catch(error => {
-          console.error('Background processing failed:', error)
-          // Update status to failed
-          supabase
-            .from('textbooks')
-            .update({ 
-              status: 'failed', 
-              error_message: error.message 
-            })
-            .eq('id', textbook.id)
-            .then(() => {
-              console.log('Updated textbook status to failed')
-            })
-        })
-        .finally(() => {
-          // Clean up temp file after processing
-          unlink(tempPath).catch(console.error)
-        })
-
-      return { data: textbook as Textbook, error: null }
-    } catch (error) {
-      await unlink(tempPath) // Clean up temp file on error
-      throw error
+      await writeFile(tempPath, buffer)
+    } catch (writeError) {
+      console.error('Failed to write temp file:', writeError)
+      return createTextbookResponse(false, undefined, 'Failed to process file')
     }
-  } catch (error) {
-    console.error('Unexpected error in uploadTextbook:', error)
-    return { data: null, error: 'Failed to upload textbook' }
-  }
-}
 
-export async function getTextbooks(
-  grade?: number,
-  subject?: string
-): Promise<{ data: Textbook[] | null; error: string | null }> {
-  try {
+    // Create textbook record
     const supabase = await createClient()
-    
-    let query = supabase.from('textbooks').select('*')
-    
-    if (grade) {
-      query = query.eq('grade', grade)
+
+    const newTextbook = {
+      id: randomUUID(),
+      file_name: file.name,
+      title: file.name.replace('.pdf', ''),
+      grade,
+      subject,
+      total_pages: 0, // Will be updated after processing
+      file_size_mb: parseFloat(fileSizeMB.toFixed(2)),
+      uploaded_at: new Date().toISOString(),
+      status: 'pending' as const,
     }
-    
-    if (subject) {
-      query = query.eq('subject', subject)
+
+    const { data: textbook, error } = await supabase
+      .from('textbooks')
+      .insert(newTextbook)
+      .select()
+      .single()
+
+    // Clean up temp file
+    try {
+      await unlink(tempPath)
+    } catch (unlinkError) {
+      console.warn('Failed to clean up temp file:', unlinkError)
     }
-    
-    const { data, error } = await query.order('uploaded_at', { ascending: false })
-    
+
     if (error) {
-      console.error('Error fetching textbooks:', error)
-      return { data: null, error: error.message }
+      console.error('Database error:', error)
+      return createTextbookResponse(false, undefined, 'Failed to save textbook record')
     }
-    
-    return { data: data as Textbook[], error: null }
+
+    return createTextbookResponse(true, textbook)
+
   } catch (error) {
-    console.error('Unexpected error in getTextbooks:', error)
-    return { data: null, error: 'Failed to fetch textbooks' }
+    console.error('Upload error:', error)
+    return createTextbookResponse(false, undefined, 'Upload failed due to an internal error')
   }
 }
 
-export async function deleteTextbook(
-  textbookId: string
-): Promise<{ success: boolean; error: string | null }> {
+export async function getTextbooks(): Promise<{ success: boolean; data?: Textbook[]; error?: string }> {
   try {
-    const user = await getUser()
-    if (!user) {
+    const userResponse = await getUser()
+    if (!userResponse.success || !userResponse.data?.user) {
       return { success: false, error: 'User not authenticated' }
     }
 
     const supabase = await createClient()
-    
-    // Delete textbook and cascade will handle related records
+    const { data: textbooks, error } = await supabase
+      .from('textbooks')
+      .select('*')
+      .order('uploaded_at', { ascending: false })
+
+    if (error) {
+      console.error('Database error:', error)
+      return { success: false, error: 'Failed to fetch textbooks' }
+    }
+
+    return { success: true, data: textbooks || [] }
+
+  } catch (error) {
+    console.error('Fetch error:', error)
+    return { success: false, error: 'Failed to fetch textbooks' }
+  }
+}
+
+export async function getTextbook(id: string): Promise<{ success: boolean; data?: Textbook; error?: string }> {
+  try {
+    const userResponse = await getUser()
+    if (!userResponse.success || !userResponse.data?.user) {
+      return { success: false, error: 'User not authenticated' }
+    }
+
+    const supabase = await createClient()
+    const { data: textbook, error } = await supabase
+      .from('textbooks')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error) {
+      console.error('Database error:', error)
+      return { success: false, error: 'Failed to fetch textbook' }
+    }
+
+    return { success: true, data: textbook }
+
+  } catch (error) {
+    console.error('Fetch error:', error)
+    return { success: false, error: 'Failed to fetch textbook' }
+  }
+}
+
+export async function deleteTextbook(id: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    const userResponse = await getUser()
+    if (!userResponse.success || !userResponse.data?.user) {
+      return { success: false, error: 'User not authenticated' }
+    }
+
+    const supabase = await createClient()
     const { error } = await supabase
       .from('textbooks')
       .delete()
-      .eq('id', textbookId)
-    
+      .eq('id', id)
+
     if (error) {
-      console.error('Error deleting textbook:', error)
-      return { success: false, error: error.message }
+      console.error('Database error:', error)
+      return { success: false, error: 'Failed to delete textbook' }
     }
-    
-    return { success: true, error: null }
+
+    return { success: true }
+
   } catch (error) {
-    console.error('Unexpected error in deleteTextbook:', error)
+    console.error('Delete error:', error)
     return { success: false, error: 'Failed to delete textbook' }
-  }
-}
-
-export async function retryProcessing(
-  textbookId: string
-): Promise<{ success: boolean; error: string | null }> {
-  try {
-    const user = await getUser()
-    if (!user) {
-      return { success: false, error: 'User not authenticated' }
-    }
-
-    const supabase = await createClient()
-    
-    // Update status to processing
-    const { error } = await supabase
-      .from('textbooks')
-      .update({ 
-        status: 'processing',
-        error_message: null 
-      })
-      .eq('id', textbookId)
-    
-    if (error) {
-      console.error('Error updating textbook status:', error)
-      return { success: false, error: error.message }
-    }
-    
-    // TODO: Re-queue for processing once we have the original file
-    // For now, this just resets the status
-    
-    return { success: true, error: null }
-  } catch (error) {
-    console.error('Unexpected error in retryProcessing:', error)
-    return { success: false, error: 'Failed to retry processing' }
   }
 }

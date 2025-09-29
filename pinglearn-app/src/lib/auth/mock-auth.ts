@@ -1,7 +1,23 @@
 'use server'
 
-import { AuthResponse, LoginCredentials, RegisterCredentials, User, Session } from '@/types/auth'
+import { AuthResponse, LoginCredentials, RegisterCredentials, ResetPasswordCredentials, UpdatePasswordCredentials, User, Session, AuthData, AuthError } from '@/types/auth'
 import { AUTH_CONSTANTS } from './constants'
+
+/**
+ * Helper function to create properly formatted AuthResponse objects for mock auth
+ */
+function createMockAuthResponse(
+  success: boolean,
+  data?: AuthData | null,
+  error?: AuthError | null
+): AuthResponse {
+  return {
+    success,
+    data: data || null,
+    error: error || null,
+    timestamp: new Date().toISOString()
+  }
+}
 
 // Mock test credentials
 const MOCK_CREDENTIALS = {
@@ -61,23 +77,17 @@ export async function mockSignIn(credentials: LoginCredentials): Promise<AuthRes
       window.dispatchEvent(new CustomEvent('auth-changed'))
     }
 
-    return {
-      data: {
-        user: MOCK_USER,
-        session: session
-      },
-      error: null
-    }
+    return createMockAuthResponse(true, {
+      user: MOCK_USER,
+      session: session
+    })
   }
 
-  return {
-    data: null,
-    error: {
-      message: AUTH_CONSTANTS.ERRORS.INVALID_CREDENTIALS,
-      code: 'INVALID_CREDENTIALS',
-      statusCode: 401
-    }
-  }
+  return createMockAuthResponse(false, null, {
+    message: AUTH_CONSTANTS.ERRORS.INVALID_CREDENTIALS,
+    code: 'INVALID_CREDENTIALS',
+    statusCode: 401
+  })
 }
 
 export async function mockSignUp(credentials: RegisterCredentials): Promise<AuthResponse> {
@@ -88,23 +98,17 @@ export async function mockSignUp(credentials: RegisterCredentials): Promise<Auth
   if (credentials.email && credentials.password) {
     const session = createMockSession()
 
-    return {
-      data: {
-        user: MOCK_USER,
-        session: session
-      },
-      error: null
-    }
+    return createMockAuthResponse(true, {
+      user: MOCK_USER,
+      session: session
+    })
   }
 
-  return {
-    data: null,
-    error: {
-      message: AUTH_CONSTANTS.ERRORS.GENERIC_ERROR,
-      code: 'SIGNUP_ERROR',
-      statusCode: 400
-    }
-  }
+  return createMockAuthResponse(false, null, {
+    message: AUTH_CONSTANTS.ERRORS.GENERIC_ERROR,
+    code: 'SIGNUP_ERROR',
+    statusCode: 400
+  })
 }
 
 export async function mockSignOut(): Promise<void> {
@@ -118,7 +122,7 @@ export async function mockSignOut(): Promise<void> {
   }
 }
 
-export async function mockGetSession(): Promise<Session | null> {
+export async function mockGetSession(): Promise<AuthResponse> {
   if (typeof window !== 'undefined') {
     try {
       const sessionData = localStorage.getItem('mock-auth-session')
@@ -128,7 +132,10 @@ export async function mockGetSession(): Promise<Session | null> {
         // Check if session is expired
         const now = Math.floor(Date.now() / 1000)
         if (session.expires_at && session.expires_at > now) {
-          return session
+          return createMockAuthResponse(true, {
+            user: session.user,
+            session: session
+          })
         } else {
           // Session expired, clear it
           localStorage.removeItem('mock-auth-session')
@@ -139,41 +146,49 @@ export async function mockGetSession(): Promise<Session | null> {
       console.warn('Error parsing mock session:', error)
     }
   }
-  return null
+
+  return createMockAuthResponse(false, null, {
+    message: 'No active session',
+    code: 'NO_SESSION',
+    statusCode: 401
+  })
 }
 
-export async function mockGetUser(): Promise<User | null> {
+export async function mockGetUser(): Promise<AuthResponse> {
   if (typeof window !== 'undefined') {
     try {
       const userData = localStorage.getItem('mock-auth-user')
       if (userData) {
-        return JSON.parse(userData)
+        return createMockAuthResponse(true, {
+          user: JSON.parse(userData)
+        })
       }
     } catch (error) {
       console.warn('Error parsing mock user:', error)
     }
   }
-  return null
+
+  return createMockAuthResponse(false, null, {
+    message: 'No authenticated user',
+    code: 'NO_USER',
+    statusCode: 401
+  })
 }
 
-export async function mockResetPassword(email: string): Promise<AuthResponse> {
+export async function mockResetPassword(credentials: ResetPasswordCredentials): Promise<AuthResponse> {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 500))
 
   // Always succeed for development
-  return {
-    data: { success: true },
-    error: null
-  }
+  return createMockAuthResponse(true, { success: true })
 }
 
-export async function mockUpdatePassword(password: string): Promise<AuthResponse> {
+export async function mockUpdatePassword(credentials: UpdatePasswordCredentials): Promise<AuthResponse> {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 500))
 
   // Always succeed for development
-  return {
-    data: { user: MOCK_USER },
-    error: null
-  }
+  return createMockAuthResponse(true, {
+    user: MOCK_USER
+  })
 }

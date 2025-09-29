@@ -64,7 +64,7 @@ export interface AuthData {
 
 export interface AuthResponse<T = AuthData> {
   readonly success: boolean;
-  readonly data?: T;
+  readonly data: T | null;
   readonly error: AuthError | null;
   readonly timestamp: string;
 }

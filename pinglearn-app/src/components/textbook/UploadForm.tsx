@@ -37,6 +37,7 @@ export function UploadForm({
   const [progress, setProgress] = useState<ProcessingProgress>({
     status: 'idle',
     progress: 0,
+    isLoading: false
   })
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -57,7 +58,7 @@ export function UploadForm({
     }
 
     setFile(selectedFile)
-    setProgress({ status: 'idle', progress: 0 })
+    setProgress({ status: 'idle', progress: 0, isLoading: false })
   }
 
   const handleDrop = (e: React.DragEvent): void => {
@@ -80,7 +81,7 @@ export function UploadForm({
     setIsDragging(false)
   }
 
-  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const files = e.target.files
     if (files && files.length > 0) {
       handleFileSelect(files[0])
@@ -91,19 +92,19 @@ export function UploadForm({
     if (!file) return
 
     try {
-      setProgress({ status: 'processing', progress: 0, message: 'Starting upload...' })
+      setProgress({ status: 'processing', progress: 0, message: 'Starting upload...', isLoading: true })
 
       const formData = new FormData()
       formData.append('file', file)
       formData.append('grade', grade.toString())
       formData.append('subject', subject)
 
-      setProgress({ status: 'processing', progress: 25, message: 'Uploading file...' })
+      setProgress({ status: 'processing', progress: 25, message: 'Uploading file...', isLoading: true })
 
       const result = await uploadTextbook(formData)
 
       if (result.data) {
-        setProgress({ status: 'completed', progress: 100, message: 'Upload completed successfully!' })
+        setProgress({ status: 'completed', progress: 100, message: 'Upload completed successfully!', isLoading: false })
         toast.success('Textbook uploaded successfully!')
 
         if (onUploadComplete) {
@@ -112,7 +113,7 @@ export function UploadForm({
 
         // Reset form
         setFile(null)
-        setProgress({ status: 'idle', progress: 0 })
+        setProgress({ status: 'idle', progress: 0, isLoading: false })
         if (fileInputRef.current) {
           fileInputRef.current.value = ''
         }
@@ -124,7 +125,8 @@ export function UploadForm({
       setProgress({
         status: 'failed',
         progress: 0,
-        message: error instanceof Error ? error.message : 'Upload failed'
+        message: error instanceof Error ? error.message : 'Upload failed',
+        isLoading: false
       })
       toast.error('Upload failed. Please try again.')
     }
@@ -132,131 +134,145 @@ export function UploadForm({
 
   const removeFile = (): void => {
     setFile(null)
-    setProgress({ status: 'idle', progress: 0 })
+    setProgress({ status: 'idle', progress: 0, isLoading: false })
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
   }
 
-  const isProcessing = progress.status === 'processing'
-  const isCompleted = progress.status === 'completed'
-  const isFailed = progress.status === 'failed'
+  const getStatusIcon = () => {
+    switch (progress.status) {
+      case 'processing':
+        return <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+      case 'completed':
+        return <CheckCircle2 className="h-4 w-4 text-green-500" />
+      case 'failed':
+        return <XCircle className="h-4 w-4 text-red-500" />
+      default:
+        return <Upload className="h-4 w-4 text-muted-foreground" />
+    }
+  }
+
+  const getStatusMessage = () => {
+    if (progress.message) {
+      return progress.message
+    }
+
+    switch (progress.status) {
+      case 'processing':
+        return 'Processing...'
+      case 'completed':
+        return 'Upload completed successfully!'
+      case 'failed':
+        return 'Upload failed'
+      default:
+        return 'Ready to upload'
+    }
+  }
 
   return (
-    <Card
-      id={id}
-      data-testid={testId}
-      className={cn('w-full max-w-2xl mx-auto', className)}
-    >
+    <Card className={cn('w-full', className)} id={id} data-testid={testId}>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Upload className="h-5 w-5" />
-          Upload Textbook
-        </CardTitle>
+        <CardTitle>Upload Textbook</CardTitle>
         <CardDescription>
           Upload a PDF textbook for Grade {grade} {subject}
         </CardDescription>
       </CardHeader>
-
-      <CardContent className="space-y-6">
-        {/* Drop Zone */}
+      <CardContent className="space-y-4">
+        {/* File Upload Area */}
         <div
           className={cn(
-            'border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors',
-            isDragging ? 'border-primary bg-primary/5' : 'border-gray-300 hover:border-gray-400',
-            isProcessing && 'cursor-not-allowed opacity-50'
+            'border-2 border-dashed rounded-lg p-8 text-center transition-colors',
+            isDragging
+              ? 'border-primary bg-primary/5'
+              : 'border-muted-foreground/25 hover:border-muted-foreground/50',
+            file && 'border-green-500 bg-green-50'
           )}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          onClick={() => !isProcessing && fileInputRef.current?.click()}
         >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".pdf"
-            className="hidden"
-            onChange={handleFileInputChange}
-            disabled={isProcessing}
-          />
-
           {file ? (
-            <div className="space-y-4">
-              <FileText className="mx-auto h-12 w-12 text-blue-500" />
-              <div>
-                <p className="font-medium">{file.name}</p>
-                <p className="text-sm text-gray-500">
-                  {(file.size / (1024 * 1024)).toFixed(2)} MB
-                </p>
-              </div>
-              {!isProcessing && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    removeFile()
-                  }}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  <XCircle className="h-4 w-4 mr-2" />
-                  Remove
-                </Button>
-              )}
+            <div className="space-y-2">
+              <FileText className="h-8 w-8 mx-auto text-green-500" />
+              <p className="font-medium">{file.name}</p>
+              <p className="text-sm text-muted-foreground">
+                {(file.size / (1024 * 1024)).toFixed(2)} MB
+              </p>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={removeFile}
+                className="mt-2"
+              >
+                Remove File
+              </Button>
             </div>
           ) : (
             <div className="space-y-4">
-              <Upload className="mx-auto h-12 w-12 text-gray-400" />
+              <Upload className="h-12 w-12 mx-auto text-muted-foreground" />
               <div>
-                <p className="font-medium">Drop your PDF here or click to browse</p>
-                <p className="text-sm text-gray-500">Maximum file size: 50MB</p>
+                <p className="text-lg font-medium">Drop your PDF here</p>
+                <p className="text-sm text-muted-foreground">
+                  or click to browse files
+                </p>
               </div>
+              <Button
+                variant="outline"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                Choose File
+              </Button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf"
+                onChange={handleInputChange}
+                className="hidden"
+              />
             </div>
           )}
         </div>
 
-        {/* Progress Section */}
-        {(isProcessing || isCompleted || isFailed) && (
-          <div className="space-y-4">
-            <Progress value={progress.progress} className="w-full" />
-
-            <div className="flex items-center gap-2">
-              {isProcessing && <Loader2 className="h-4 w-4 animate-spin" />}
-              {isCompleted && <CheckCircle2 className="h-4 w-4 text-green-500" />}
-              {isFailed && <AlertCircle className="h-4 w-4 text-red-500" />}
-
-              <span className="text-sm">
-                {progress.message || `${progress.progress}% complete`}
+        {/* Upload Progress */}
+        {progress.status !== 'idle' && (
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                {getStatusIcon()}
+                <span className="text-sm font-medium">
+                  {getStatusMessage()}
+                </span>
+              </div>
+              <span className="text-sm text-muted-foreground">
+                {progress.progress}%
               </span>
             </div>
-
-            {isFailed && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>
-                  {progress.message || 'Upload failed. Please try again.'}
-                </AlertDescription>
-              </Alert>
-            )}
+            <Progress value={progress.progress} className="w-full" />
           </div>
+        )}
+
+        {/* Error Message */}
+        {progress.status === 'failed' && progress.message && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              {progress.message}
+            </AlertDescription>
+          </Alert>
         )}
 
         {/* Upload Button */}
         <div className="flex justify-end">
           <Button
             onClick={handleUpload}
-            disabled={!file || isProcessing || isCompleted}
-            className="min-w-32"
+            disabled={!file || progress.status === 'processing'}
+            className="min-w-[120px]"
           >
-            {isProcessing ? (
+            {progress.status === 'processing' ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                 Uploading...
-              </>
-            ) : isCompleted ? (
-              <>
-                <CheckCircle2 className="h-4 w-4 mr-2" />
-                Completed
               </>
             ) : (
               <>

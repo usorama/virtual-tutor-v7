@@ -1,7 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { User, Session, AuthState } from '@/types/auth'
+import { User, Session, AuthState, AuthError } from '@/types/auth'
 import { getSession, getUser } from './actions'
 
 interface AuthContextType extends AuthState {
@@ -14,7 +14,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<AuthError | null>(null)
 
   const refreshAuth = async () => {
     try {
@@ -22,19 +22,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setError(null)
 
       // Get session first (includes user data)
-      const sessionData = await getSession()
-      setSession(sessionData)
+      const sessionResponse = await getSession()
 
-      if (sessionData?.user) {
-        setUser(sessionData.user)
+      if (sessionResponse.success && sessionResponse.data) {
+        setSession(sessionResponse.data.session || null)
+        setUser(sessionResponse.data.user || null)
       } else {
-        // Fallback to get user directly
-        const userData = await getUser()
-        setUser(userData)
+        // Try to get user separately if session fails
+        const userResponse = await getUser()
+        if (userResponse.success && userResponse.data) {
+          setUser(userResponse.data.user || null)
+        } else {
+          setUser(null)
+        }
+        setSession(null)
       }
     } catch (err) {
       console.error('Auth refresh error:', err)
-      setError(err as any)
+      const authError: AuthError = {
+        message: err instanceof Error ? err.message : 'Authentication error',
+        code: 'AUTH_REFRESH_ERROR',
+        statusCode: 500
+      }
+      setError(authError)
       setUser(null)
       setSession(null)
     } finally {
@@ -42,24 +52,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  // Initialize auth on mount
   useEffect(() => {
-    // Initial auth check
     refreshAuth()
 
-    // For mock auth, set up localStorage listener to handle session changes
+    // Listen for auth changes from mock auth events
+    const handleAuthChange = () => {
+      refreshAuth()
+    }
+
+    // Listen for storage changes (for mock auth across tabs)
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'mock-auth-session' || e.key === 'mock-auth-user') {
         refreshAuth()
       }
     }
 
-    // Only add listener in browser environment
     if (typeof window !== 'undefined') {
-      window.addEventListener('storage', handleStorageChange)
-
-      // Also listen for custom events for same-tab updates
-      const handleAuthChange = () => refreshAuth()
       window.addEventListener('auth-changed', handleAuthChange)
+      window.addEventListener('storage', handleStorageChange)
 
       return () => {
         window.removeEventListener('storage', handleStorageChange)
@@ -72,6 +83,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     user,
     session,
     loading,
+    isLoading: loading, // Add the missing isLoading property
     error,
     refreshAuth
   }
@@ -85,11 +97,4 @@ export function useAuth() {
     throw new Error('useAuth must be used within an AuthProvider')
   }
   return context
-}
-
-// Helper function to trigger auth change events
-export function triggerAuthChange() {
-  if (typeof window !== 'undefined') {
-    window.dispatchEvent(new CustomEvent('auth-changed'))
-  }
 }
