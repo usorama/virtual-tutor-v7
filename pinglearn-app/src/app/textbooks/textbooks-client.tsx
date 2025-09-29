@@ -49,11 +49,11 @@ export function TextbooksClient({
   const [textbookToDelete, setTextbookToDelete] = useState<string | null>(null)
 
   const refreshTextbooks = useCallback(async () => {
-    const { data } = await getTextbooks(userGrade)
+    const { data } = await getTextbooks()
     if (data) {
       setTextbooks(data)
     }
-  }, [userGrade])
+  }, [])
 
   // Refresh textbooks periodically to check processing status
   useEffect(() => {

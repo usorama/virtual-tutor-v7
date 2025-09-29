@@ -10,11 +10,13 @@ import { AuthenticatedLayout } from '@/components/layout/AuthenticatedLayout'
 import { DashboardContentLight } from '@/components/dashboard/DashboardContentLight'
 
 export default async function DashboardLightPage() {
-  const user = await getUser()
+  const userResponse = await getUser()
 
-  if (!user) {
+  if (!userResponse.success || !userResponse.data?.user) {
     redirect('/auth/signin')
   }
+
+  const user = userResponse.data.user
 
   // Check wizard completion and get profile
   const { needsWizard } = await checkWizardCompletion()

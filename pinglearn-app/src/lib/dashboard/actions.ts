@@ -35,11 +35,13 @@ export async function getDashboardMetrics(): Promise<{
   error: string | null
 }> {
   try {
-    const user = await getUser()
+    const userResponse = await getUser()
 
-    if (!user) {
+    if (!userResponse.success || !userResponse.data?.user) {
       return { data: null, error: 'User not authenticated' }
     }
+
+    const user = userResponse.data.user
 
     const supabase = await createClient()
 
@@ -155,11 +157,13 @@ export async function getDashboardChartData(): Promise<{
   error: string | null
 }> {
   try {
-    const user = await getUser()
+    const userResponse = await getUser()
 
-    if (!user) {
+    if (!userResponse.success || !userResponse.data?.user) {
       return { data: null, error: 'User not authenticated' }
     }
+
+    const user = userResponse.data.user
 
     const supabase = await createClient()
 
@@ -238,11 +242,13 @@ export async function getRecentSessions(): Promise<{
   error: string | null
 }> {
   try {
-    const user = await getUser()
+    const userResponse = await getUser()
 
-    if (!user) {
+    if (!userResponse.success || !userResponse.data?.user) {
       return { data: null, error: 'User not authenticated' }
     }
+
+    const user = userResponse.data.user
 
     const supabase = await createClient()
 

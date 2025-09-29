@@ -65,11 +65,13 @@ export async function saveWizardSelections(selections: WizardState): Promise<{
   error: string | null
 }> {
   try {
-    const user = await getUser()
-    
-    if (!user) {
+    const userResponse = await getUser()
+
+    if (!userResponse.success || !userResponse.data?.user) {
       return { success: false, error: 'User not authenticated' }
     }
+
+    const user = userResponse.data.user
 
     const supabase = await createClient()
     
@@ -110,11 +112,13 @@ export async function getUserProfile(): Promise<{
   error: string | null
 }> {
   try {
-    const user = await getUser()
-    
-    if (!user) {
+    const userResponse = await getUser()
+
+    if (!userResponse.success || !userResponse.data?.user) {
       return { data: null, error: 'User not authenticated' }
     }
+
+    const user = userResponse.data.user
 
     const supabase = await createClient()
     
@@ -176,11 +180,13 @@ export async function checkWizardCompletion(): Promise<{
   needsWizard: boolean
 }> {
   try {
-    const user = await getUser()
-    
-    if (!user) {
+    const userResponse = await getUser()
+
+    if (!userResponse.success || !userResponse.data?.user) {
       return { isComplete: false, needsWizard: false }
     }
+
+    const user = userResponse.data.user
 
     const supabase = await createClient()
     

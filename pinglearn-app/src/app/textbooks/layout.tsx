@@ -8,11 +8,13 @@ export default async function TextbooksLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getUser();
+  const userResponse = await getUser();
 
-  if (!user) {
+  if (!userResponse.success || !userResponse.data?.user) {
     redirect('/auth/signin');
   }
+
+  const user = userResponse.data.user;
 
   // Get user profile for navigation
   const { data: profile } = await getUserProfile();

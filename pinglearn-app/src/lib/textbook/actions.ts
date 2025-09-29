@@ -178,3 +178,34 @@ export async function deleteTextbook(id: string): Promise<{ success: boolean; er
     return { success: false, error: 'Failed to delete textbook' }
   }
 }
+
+export async function retryProcessing(id: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    const userResponse = await getUser()
+    if (!userResponse.success || !userResponse.data?.user) {
+      return { success: false, error: 'User not authenticated' }
+    }
+
+    const supabase = await createClient()
+
+    // Update textbook status to 'pending' to retry processing
+    const { error } = await supabase
+      .from('textbooks')
+      .update({
+        status: 'pending',
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+
+    if (error) {
+      console.error('Database error:', error)
+      return { success: false, error: 'Failed to retry processing' }
+    }
+
+    return { success: true }
+
+  } catch (error) {
+    console.error('Retry processing error:', error)
+    return { success: false, error: 'Failed to retry processing' }
+  }
+}

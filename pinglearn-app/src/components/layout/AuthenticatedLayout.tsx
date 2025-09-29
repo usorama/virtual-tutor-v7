@@ -8,11 +8,13 @@ export async function AuthenticatedLayout({
   children: React.ReactNode
 }) {
   // Use existing auth action instead of direct supabase
-  const user = await getUser();
+  const userResponse = await getUser();
 
-  if (!user) {
+  if (!userResponse.success || !userResponse.data?.user) {
     return <>{children}</>;
   }
+
+  const user = userResponse.data.user;
 
   // Get profile for display name using existing pattern
   const supabase = await createClient();

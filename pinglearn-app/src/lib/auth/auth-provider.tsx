@@ -98,3 +98,9 @@ export function useAuth() {
   }
   return context
 }
+
+export function triggerAuthChange() {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('auth-changed'))
+  }
+}

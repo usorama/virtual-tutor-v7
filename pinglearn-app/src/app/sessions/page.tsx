@@ -5,11 +5,13 @@ import { SessionHistory } from '@/components/session/SessionHistory';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default async function SessionsPage() {
-  const user = await getUser();
+  const userResponse = await getUser();
 
-  if (!user) {
+  if (!userResponse.success || !userResponse.data?.user) {
     redirect('/login');
   }
+
+  const user = userResponse.data.user;
 
   return (
     <AuthenticatedLayout>

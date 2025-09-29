@@ -14,11 +14,13 @@ import { AppleSessionSection } from '@/components/dashboard/AppleSessionSection'
 import { AppleQuickActions } from '@/components/dashboard/AppleQuickActions'
 
 export default async function DashboardApplePage() {
-  const user = await getUser()
+  const userResponse = await getUser()
 
-  if (!user) {
+  if (!userResponse.success || !userResponse.data?.user) {
     redirect('/auth/signin')
   }
+
+  const user = userResponse.data.user
 
   const { needsWizard } = await checkWizardCompletion()
   const { data: profile } = await getUserProfile()

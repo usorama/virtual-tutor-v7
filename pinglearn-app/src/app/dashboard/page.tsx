@@ -11,11 +11,13 @@ import { Component as EtheralShadow } from '@/components/ui/etheral-shadow'
 import { DashboardContent } from '@/components/dashboard/DashboardContent'
 
 export default async function DashboardPage() {
-  const user = await getUser()
+  const userResponse = await getUser()
 
-  if (!user) {
+  if (!userResponse.success || !userResponse.data?.user) {
     redirect('/auth/signin')
   }
+
+  const user = userResponse.data.user
 
   // Check wizard completion and get profile
   const { needsWizard } = await checkWizardCompletion()
