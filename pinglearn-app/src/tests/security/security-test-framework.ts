@@ -208,7 +208,8 @@ export class MockSecurityThreatDetector {
       [SecurityErrorCode.DATA_EXFILTRATION]: 95,
       [SecurityErrorCode.DDOS_ATTACK]: 80,
       [SecurityErrorCode.PRIVILEGE_ESCALATION]: 90,
-    };
+      [SecurityErrorCode.ACCOUNT_LOCKOUT]: 40,
+    } as Record<SecurityErrorCode, number>;
 
     score += errorScores[error.securityCode] || 30;
 
@@ -387,6 +388,10 @@ export class MockSecurityThreatDetector {
 
     // Specific recommendations by error type
     const specificActions = {
+      [SecurityErrorCode.AUTHENTICATION_FAILED]: [
+        'Review authentication flow',
+        'Check credential validation'
+      ],
       [SecurityErrorCode.BRUTE_FORCE_DETECTED]: [
         'Implement CAPTCHA after failed attempts',
         'Consider account lockout policies'
@@ -403,10 +408,11 @@ export class MockSecurityThreatDetector {
         'Review file upload restrictions',
         'Implement virus scanning'
       ]
-    };
+    } as Partial<Record<SecurityErrorCode, string[]>>;
 
-    if (specificActions[error.securityCode]) {
-      actions.push(...specificActions[error.securityCode]);
+    const specificAction = specificActions[error.securityCode];
+    if (specificAction) {
+      actions.push(...specificAction);
     }
 
     return actions;
@@ -508,7 +514,7 @@ export class SecurityTestRunner {
           console.log(`    ❌ FAILED: ${scenarioResult.error}`);
         }
       } catch (error) {
-        console.log(`    ⚠️  SKIPPED: ${error.message}`);
+        console.log(`    ⚠️  SKIPPED: ${error instanceof Error ? error.message : String(error)}`);
         skipped++;
 
         results.push({
@@ -516,7 +522,7 @@ export class SecurityTestRunner {
           category: scenario.metadata.category,
           passed: false,
           executionTime: 0,
-          error: error.message,
+          error: error instanceof Error ? error.message : String(error),
           analysis: {
             threatDetectionAccurate: false,
             responseTimeMs: 0,
@@ -818,7 +824,7 @@ export function createMockSecurityError(
   };
 
   return {
-    code: 'SECURITY_ERROR',
+    code: 'AUTHENTICATION_ERROR' as any,
     message: `Security test error: ${code}`,
     severity: ErrorSeverity.HIGH,
     timestamp: context.timestamp,

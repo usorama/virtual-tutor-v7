@@ -22,6 +22,7 @@ import {
   ProgressCallback,
   ServiceError,
 } from '@/types/contracts/service-contracts';
+import { MutabilityTypes } from '@/lib/types/inference-optimizations';
 import { createClient } from '@/lib/supabase/server';
 import pdfParse from 'pdf-parse';
 import { readFile } from 'fs/promises';
@@ -459,7 +460,7 @@ export class TextbookProcessorService implements TextbookProcessorContract {
       year: /(\d{4})/g,
     };
 
-    const metadata: Partial<TextbookMetadata> = {
+    const metadata: Partial<MutabilityTypes.Mutable<TextbookMetadata>> = {
       language: 'English', // Default
     };
 

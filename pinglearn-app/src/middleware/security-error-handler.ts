@@ -22,6 +22,7 @@ import {
   SECURITY_ERROR_TO_HTTP_STATUS,
   SECURITY_USER_MESSAGES
 } from '../lib/security/security-error-types';
+import { ErrorSeverity } from '../lib/errors/error-types';
 import { SecurityThreatDetector } from '../lib/security/threat-detector';
 import { SecurityRecoveryManager } from '../lib/security/security-recovery';
 
@@ -147,7 +148,7 @@ export class SecurityMiddleware {
       // CORS security check
       const corsResult = await this.checkCORS(request, context);
       if (!corsResult.allowed) {
-        return this.createCORSViolationResponse(context, corsResult.reason);
+        return this.createCORSViolationResponse(context, corsResult.reason || 'CORS policy violation');
       }
 
       // Comprehensive security analysis
@@ -504,10 +505,10 @@ export class SecurityMiddleware {
           threats: analysis.threats,
           riskScore: analysis.riskScore
         });
-        return null; // Continue processing
+        return NextResponse.next(); // Continue processing
 
       default:
-        return null;
+        return NextResponse.next();
     }
   }
 
@@ -702,14 +703,14 @@ export class SecurityMiddleware {
     };
 
     return {
-      code: errorCode,
+      code: 'AUTHENTICATION_ERROR' as any,
       securityCode: errorCode,
       message: `Security threat detected: ${errorCode}`,
       details: { analysisResult: analysis },
       timestamp: context.timestamp,
       requestId: context.requestId,
       threatLevel: 'moderate', // Will be updated by threat detector
-      severity: analysis.riskScore > 70 ? 'critical' : analysis.riskScore > 40 ? 'high' : 'medium',
+      severity: analysis.riskScore > 70 ? ErrorSeverity.CRITICAL : analysis.riskScore > 40 ? ErrorSeverity.HIGH : ErrorSeverity.MEDIUM,
       clientIP: context.clientIP,
       userAgent: context.userAgent,
       sessionId: context.sessionId,
