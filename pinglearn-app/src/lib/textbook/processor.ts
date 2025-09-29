@@ -10,36 +10,41 @@ interface ChapterInfo {
   topics: string[]
 }
 
-export async function processTextbook(textbookId: string, filePath: string) {
+/**
+ * Processes a textbook PDF file, extracting chapters and content chunks
+ * @param textbookId - The ID of the textbook to process
+ * @param filePath - Path to the PDF file
+ */
+export async function processTextbook(textbookId: string, filePath: string): Promise<void> {
   const supabase = await createClient()
-  
+
   try {
     console.log(`Processing textbook ${textbookId} from ${filePath}`)
-    
+
     // Read PDF file
     const dataBuffer = await readFile(filePath)
-    
+
     // Extract text from PDF
     const pdfData = await pdfParse(dataBuffer)
     const fullText = pdfData.text
     const numPages = pdfData.numpages
-    
+
     console.log(`Extracted text from ${numPages} pages`)
-    
+
     // Update textbook with page count
     await supabase
       .from('textbooks')
       .update({ total_pages: numPages })
       .eq('id', textbookId)
-    
+
     // Identify chapters
     const chapters = identifyChapters(fullText)
     console.log(`Identified ${chapters.length} chapters`)
-    
+
     // Process each chapter
     for (let i = 0; i < chapters.length; i++) {
       const chapter = chapters[i]
-      
+
       // Save chapter to database
       const { data: savedChapter, error: chapterError } = await supabase
         .from('chapters')
@@ -53,16 +58,16 @@ export async function processTextbook(textbookId: string, filePath: string) {
         })
         .select()
         .single()
-      
+
       if (chapterError) {
         console.error(`Error saving chapter ${i + 1}:`, chapterError)
         continue
       }
-      
+
       // Chunk chapter content
       const chunks = chunkContent(chapter.content)
       console.log(`Chapter ${i + 1} split into ${chunks.length} chunks`)
-      
+
       // Save chunks to database
       const chunkRecords = chunks.map((chunk, index) => ({
         chapter_id: savedChapter.id,
@@ -72,46 +77,51 @@ export async function processTextbook(textbookId: string, filePath: string) {
         token_count: estimateTokenCount(chunk.content),
         page_number: chapter.pageStart + Math.floor((index / chunks.length) * (chapter.pageEnd - chapter.pageStart)),
       }))
-      
+
       const { error: chunksError } = await supabase
         .from('content_chunks')
         .insert(chunkRecords)
-      
+
       if (chunksError) {
         console.error(`Error saving chunks for chapter ${i + 1}:`, chunksError)
       }
     }
-    
+
     // Update textbook status to ready
     await supabase
       .from('textbooks')
-      .update({ 
+      .update({
         status: 'ready',
         processed_at: new Date().toISOString()
       })
       .eq('id', textbookId)
-    
+
     console.log(`Textbook ${textbookId} processing completed successfully`)
-    
+
   } catch (error) {
     console.error('Error processing textbook:', error)
-    
+
     // Update textbook status to failed
     await supabase
       .from('textbooks')
-      .update({ 
+      .update({
         status: 'failed',
         error_message: error instanceof Error ? error.message : 'Processing failed'
       })
       .eq('id', textbookId)
-    
+
     throw error
   }
 }
 
+/**
+ * Identifies chapters within the provided text using pattern matching
+ * @param text - The full text content to analyze
+ * @returns Array of identified chapter information
+ */
 function identifyChapters(text: string): ChapterInfo[] {
   const chapters: ChapterInfo[] = []
-  
+
   // Common chapter patterns
   const chapterPatterns = [
     /Chapter\s+(\d+)[:\s]+([^\n]+)/gi,
@@ -119,20 +129,20 @@ function identifyChapters(text: string): ChapterInfo[] {
     /Lesson\s+(\d+)[:\s]+([^\n]+)/gi,
     /^\d+\.\s+([^\n]+)/gm,
   ]
-  
+
   // Split text into lines for processing
   const lines = text.split('\n')
   let currentChapter: ChapterInfo | null = null
   let currentContent: string[] = []
   let currentPage = 1
-  
+
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
-    
+
     // Check if this line is a chapter heading
     let isChapter = false
     let chapterTitle = ''
-    
+
     for (const pattern of chapterPatterns) {
       const match = pattern.exec(line)
       if (match) {
@@ -141,7 +151,7 @@ function identifyChapters(text: string): ChapterInfo[] {
         break
       }
     }
-    
+
     if (isChapter && chapterTitle) {
       // Save previous chapter if exists
       if (currentChapter) {
@@ -150,7 +160,7 @@ function identifyChapters(text: string): ChapterInfo[] {
         currentChapter.topics = extractTopics(currentChapter.content)
         chapters.push(currentChapter)
       }
-      
+
       // Start new chapter
       currentChapter = {
         title: chapterTitle.trim(),
@@ -164,13 +174,13 @@ function identifyChapters(text: string): ChapterInfo[] {
       // Add line to current chapter content
       currentContent.push(line)
     }
-    
+
     // Estimate page changes (simple heuristic)
     if (i % 40 === 0) {
       currentPage++
     }
   }
-  
+
   // Save last chapter
   if (currentChapter) {
     currentChapter.content = currentContent.join('\n')
@@ -178,7 +188,7 @@ function identifyChapters(text: string): ChapterInfo[] {
     currentChapter.topics = extractTopics(currentChapter.content)
     chapters.push(currentChapter)
   }
-  
+
   // If no chapters were identified, treat entire text as one chapter
   if (chapters.length === 0) {
     chapters.push({
@@ -189,20 +199,25 @@ function identifyChapters(text: string): ChapterInfo[] {
       topics: extractTopics(text),
     })
   }
-  
+
   return chapters
 }
 
+/**
+ * Extracts topic names from content using pattern matching
+ * @param content - The content to analyze for topics
+ * @returns Array of unique topic names
+ */
 function extractTopics(content: string): string[] {
   const topics: string[] = []
-  
+
   // Look for topic patterns
   const topicPatterns = [
     /Topic[:\s]+([^\n]+)/gi,
     /Section[:\s]+([^\n]+)/gi,
     /^\d+\.\d+\s+([^\n]+)/gm,
   ]
-  
+
   for (const pattern of topicPatterns) {
     let match
     while ((match = pattern.exec(content)) !== null) {
@@ -212,7 +227,7 @@ function extractTopics(content: string): string[] {
       }
     }
   }
-  
+
   // Return unique topics
   return [...new Set(topics)]
 }
@@ -222,92 +237,115 @@ interface ChunkInfo {
   type: 'text' | 'example' | 'exercise' | 'summary'
 }
 
+/**
+ * Breaks content into smaller chunks with overlap for better processing
+ * @param text - The text content to chunk
+ * @param maxTokens - Maximum tokens per chunk
+ * @param overlapTokens - Number of overlapping tokens between chunks
+ * @returns Array of content chunks with type information
+ */
 function chunkContent(
   text: string,
   maxTokens: number = 800,
   overlapTokens: number = 100
 ): ChunkInfo[] {
   const chunks: ChunkInfo[] = []
-  
+
   // Split by paragraphs
   const paragraphs = text.split(/\n\n+/)
-  
+
   let currentChunk = ''
   let currentType: ChunkInfo['type'] = 'text'
-  
+
   for (const paragraph of paragraphs) {
     // Detect content type
-    const type = detectContentType(paragraph)
-    
-    // Estimate token count (rough approximation)
-    const paragraphTokens = estimateTokenCount(paragraph)
-    const currentTokens = estimateTokenCount(currentChunk)
-    
-    // Check if adding this paragraph would exceed max tokens
-    if (currentTokens + paragraphTokens > maxTokens && currentChunk.length > 0) {
-      // Save current chunk
-      chunks.push({
-        content: currentChunk.trim(),
-        type: currentType,
-      })
-      
-      // Start new chunk with overlap
-      const overlapText = getOverlapText(currentChunk, overlapTokens)
-      currentChunk = overlapText + '\n\n' + paragraph
-      currentType = type
+    const detectedType = detectContentType(paragraph)
+
+    // If type changes or chunk is getting too long, start new chunk
+    const estimatedTokens = estimateTokenCount(currentChunk + paragraph)
+
+    if (estimatedTokens > maxTokens || (currentType !== detectedType && currentChunk)) {
+      if (currentChunk.trim()) {
+        chunks.push({
+          content: currentChunk.trim(),
+          type: currentType,
+        })
+      }
+
+      // Start new chunk with overlap if needed
+      if (overlapTokens > 0 && currentChunk) {
+        const words = currentChunk.split(' ')
+        const overlapWords = words.slice(-Math.floor(overlapTokens / 4)) // Rough estimation
+        currentChunk = overlapWords.join(' ') + '\n\n' + paragraph
+      } else {
+        currentChunk = paragraph
+      }
+
+      currentType = detectedType
     } else {
-      // Add paragraph to current chunk
-      if (currentChunk.length > 0) {
-        currentChunk += '\n\n'
-      }
-      currentChunk += paragraph
-      
-      // Update type if it's more specific
-      if (type !== 'text' && currentType === 'text') {
-        currentType = type
-      }
+      currentChunk += '\n\n' + paragraph
+      currentType = detectedType
     }
   }
-  
-  // Save last chunk
-  if (currentChunk.trim().length > 0) {
+
+  // Add final chunk
+  if (currentChunk.trim()) {
     chunks.push({
       content: currentChunk.trim(),
       type: currentType,
     })
   }
-  
+
   return chunks
 }
 
-function detectContentType(text: string): ChunkInfo['type'] {
-  const lowerText = text.toLowerCase()
-  
-  if (lowerText.includes('example') || lowerText.includes('e.g.') || lowerText.includes('for instance')) {
-    return 'example'
-  }
-  
-  if (lowerText.includes('exercise') || lowerText.includes('question') || lowerText.includes('solve')) {
+/**
+ * Detects the type of content based on patterns and keywords
+ * @param content - The content to analyze
+ * @returns The detected content type
+ */
+function detectContentType(content: string): ChunkInfo['type'] {
+  const lowerContent = content.toLowerCase()
+
+  // Check for exercise patterns
+  if (
+    lowerContent.includes('exercise') ||
+    lowerContent.includes('problem') ||
+    lowerContent.includes('solve') ||
+    /\d+\.\s*\w+/.test(content) // Numbered problems
+  ) {
     return 'exercise'
   }
-  
-  if (lowerText.includes('summary') || lowerText.includes('conclusion') || lowerText.includes('in summary')) {
+
+  // Check for example patterns
+  if (
+    lowerContent.includes('example') ||
+    lowerContent.includes('for instance') ||
+    lowerContent.includes('let us consider')
+  ) {
+    return 'example'
+  }
+
+  // Check for summary patterns
+  if (
+    lowerContent.includes('summary') ||
+    lowerContent.includes('conclusion') ||
+    lowerContent.includes('in summary') ||
+    lowerContent.includes('to summarize')
+  ) {
     return 'summary'
   }
-  
+
+  // Default to text
   return 'text'
 }
 
-function getOverlapText(text: string, overlapTokens: number): string {
-  // Get last portion of text for overlap
-  const words = text.split(/\s+/)
-  const overlapWords = Math.floor(overlapTokens / 1.3) // Rough token to word conversion
-  const startIndex = Math.max(0, words.length - overlapWords)
-  
-  return words.slice(startIndex).join(' ')
-}
-
+/**
+ * Estimates the token count for a given text string
+ * @param text - The text to count tokens for
+ * @returns Estimated number of tokens
+ */
 function estimateTokenCount(text: string): number {
-  // Rough estimation: 1 token ≈ 4 characters or 0.75 words
+  // Rough estimation: 1 token ≈ 4 characters for English text
   return Math.ceil(text.length / 4)
 }

@@ -65,6 +65,8 @@ export async function processFolderStructure(
 
 /**
  * Extract folder path from file
+ * @param file File object with name and optional path
+ * @returns The folder path for the file
  */
 function extractFolderPath(file: { name: string; path?: string }): string {
   if (file.path) {
@@ -84,6 +86,8 @@ function extractFolderPath(file: { name: string; path?: string }): string {
 
 /**
  * Format folder name as proper title
+ * @param folder The folder name to format
+ * @returns Properly formatted title string
  */
 function formatFolderAsTitle(folder: string): string {
   // Handle specific patterns
@@ -108,6 +112,8 @@ function formatFolderAsTitle(folder: string): string {
 
 /**
  * Extract grade from folder name
+ * @param folder The folder name to analyze
+ * @returns The grade number or null if not determinable
  */
 function extractGradeFromFolder(folder: string): number | null {
   // Class X = Grade 10
@@ -135,6 +141,8 @@ function extractGradeFromFolder(folder: string): number | null {
 
 /**
  * Extract subject from folder name
+ * @param folder The folder name to analyze
+ * @returns The subject name string
  */
 function extractSubjectFromFolder(folder: string): string {
   const folderLower = folder.toLowerCase();
@@ -156,6 +164,8 @@ function extractSubjectFromFolder(folder: string): string {
 
 /**
  * Extract chapter title from filename
+ * @param filename The filename to process
+ * @returns Clean, formatted chapter title
  */
 function extractChapterTitle(filename: string): string {
   // Remove extension
@@ -185,81 +195,60 @@ function extractChapterTitle(filename: string): string {
 /**
  * Create textbook and chapters in database
  * IMPORTANT: Creates ONE textbook per folder, not per file
+ * @param textbook The textbook data to save
+ * @returns Object containing the created textbook ID and chapter count
  */
 export async function saveTextbookWithChapters(
   textbook: FolderBasedTextbook
 ): Promise<{ textbookId: string; chapterCount: number }> {
   const supabase = await createClient();
 
-  // Create ONE textbook for the entire folder
-  const { data: newTextbook, error: textbookError } = await supabase
-    .from('textbooks')
-    .insert({
-      title: textbook.textbookTitle,
-      file_name: `${textbook.folderName.toLowerCase().replace(/\s+/g, '-')}.pdf`,
-      grade: textbook.grade || 0, // Use 0 if no grade
-      subject: textbook.subject,
-      status: 'ready',
-      upload_status: 'completed',
-      total_pages: textbook.chapters.length * 50 // Estimate
-    })
-    .select()
-    .single();
+  try {
+    // Create ONE textbook for the entire folder
+    const { data: savedTextbook, error: textbookError } = await supabase
+      .from('textbooks')
+      .insert({
+        title: textbook.textbookTitle,
+        grade: textbook.grade?.toString() || 'unknown',
+        subject: textbook.subject,
+        total_pages: textbook.chapters.length * 25, // Rough estimate
+        status: 'ready',
+        upload_status: 'completed',
+        file_name: `${textbook.folderName.toLowerCase().replace(/\s+/g, '-')}.pdf`
+      })
+      .select()
+      .single();
 
-  if (textbookError || !newTextbook) {
-    throw new Error(`Failed to create textbook: ${textbookError?.message}`);
-  }
+    if (textbookError || !savedTextbook) {
+      throw new Error(`Failed to create textbook: ${textbookError?.message || 'Unknown error'}`);
+    }
 
-  // Create chapters for this textbook
-  const chapters = textbook.chapters.map(ch => ({
-    textbook_id: newTextbook.id,
-    title: ch.chapterTitle,
-    chapter_number: ch.chapterNumber,
-    topics: [] // Will be populated during processing
-  }));
+    // Create chapters for this textbook
+    const chapterRecords = textbook.chapters.map(chapter => ({
+      textbook_id: savedTextbook.id,
+      title: chapter.chapterTitle,
+      chapter_number: chapter.chapterNumber,
+      topics: [],
+      page_start: (chapter.chapterNumber - 1) * 25 + 1,
+      page_end: chapter.chapterNumber * 25
+    }));
 
-  const { error: chaptersError } = await supabase
-    .from('chapters')
-    .insert(chapters);
+    const { error: chaptersError } = await supabase
+      .from('chapters')
+      .insert(chapterRecords);
 
-  if (chaptersError) {
-    console.error('Error creating chapters:', chaptersError);
-  }
+    if (chaptersError) {
+      console.error('Failed to create chapters:', chaptersError);
+      // Don't fail the entire operation for chapter creation errors
+    }
 
-  return {
-    textbookId: newTextbook.id,
-    chapterCount: chapters.length
-  };
-}
-
-/**
- * Validate folder structure before processing
- */
-export function validateFolderStructure(
-  files: { name: string; path?: string }[]
-): { isValid: boolean; message: string } {
-  const folders = new Set<string>();
-
-  files.forEach(file => {
-    folders.add(extractFolderPath(file));
-  });
-
-  if (folders.size === 0) {
     return {
-      isValid: false,
-      message: 'No folder structure detected. Please organize PDFs in folders where each folder represents one textbook.'
+      textbookId: savedTextbook.id,
+      chapterCount: textbook.chapters.length
     };
-  }
 
-  if (folders.has('ungrouped') && folders.size === 1) {
-    return {
-      isValid: false,
-      message: 'Files are not organized in folders. Each textbook should be in its own folder.'
-    };
+  } catch (error) {
+    console.error('Error saving textbook with chapters:', error);
+    throw error;
   }
-
-  return {
-    isValid: true,
-    message: `Detected ${folders.size} textbook(s) from folder structure.`
-  };
 }

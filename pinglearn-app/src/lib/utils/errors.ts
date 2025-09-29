@@ -1,3 +1,7 @@
+/**
+ * Custom application error classes with proper typing
+ */
+
 export class AppError extends Error {
   constructor(
     message: string,
@@ -30,6 +34,11 @@ export class NotFoundError extends AppError {
   }
 }
 
+/**
+ * Handles unknown errors and converts them to AppError instances
+ * @param error - The error to handle
+ * @returns A standardized AppError instance
+ */
 export function handleError(error: unknown): AppError {
   if (error instanceof AppError) {
     return error
