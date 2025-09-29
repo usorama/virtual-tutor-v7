@@ -1,0 +1,111 @@
+# TypeScript Story: Enhance Return Type Annotations in Utility Functions
+story_id: TS-004
+parent_issue: ISS-001
+category: typescript
+priority: P1-HIGH
+
+metadata:
+  title: "Add explicit return type annotations to utility functions and improve type safety"
+  description: |
+    Several utility functions in the codebase lack explicit return type annotations,
+    which can lead to type inference issues and reduced IDE support. This story
+    adds explicit return types to improve type safety and developer experience.
+  created: 2025-09-29T16:30:00Z
+  estimated_hours: 2
+  risk_level: low
+  affects_protected_core: false
+
+scope:
+  target_files:
+    - src/lib/utils.ts
+    - src/lib/textbook/processor.ts
+    - src/lib/textbook/folder-processor.ts
+    - src/hooks/useLocalStorage.ts
+    - src/utils/format.ts
+  focus_areas:
+    - Utility functions missing return types
+    - Hook functions with inferred returns
+    - Helper functions in lib directory
+    - Data transformation functions
+
+current_issues:
+  - Utility functions rely on type inference
+  - Inconsistent return type documentation
+  - Reduced IDE intellisense support
+  - Potential for unintended type changes
+
+proposed_improvements:
+  cn_function: |
+    ```typescript
+    // Before
+    export function cn(...inputs: ClassValue[]) {
+      return twMerge(clsx(inputs))
+    }
+
+    // After
+    export function cn(...inputs: ClassValue[]): string {
+      return twMerge(clsx(inputs))
+    }
+    ```
+
+  hook_returns: |
+    ```typescript
+    // Before
+    export function useLocalStorage<T>(key: string, initialValue: T) {
+      // implementation
+    }
+
+    // After
+    export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
+      // implementation
+    }
+    ```
+
+dependencies:
+  hard: ["TS-001", "TS-002", "TS-003"]  # After compilation fixes
+  soft: []
+  peer: ["TS-005"]  # Should be done together
+
+implementation_steps:
+  1. Audit all utility functions for missing return types
+  2. Add explicit return type annotations
+  3. Update function documentation where needed
+  4. Run TypeScript compiler to verify no new errors
+  5. Test affected components to ensure no regressions
+  6. Update JSDoc comments for better documentation
+
+verification_requirements:
+  - typescript_compilation: must_pass
+  - no_new_errors: true
+  - improved_intellisense: true
+  - consistent_patterns: true
+  - tests_pass: true
+
+quality_standards:
+  - All public functions must have explicit return types
+  - Generic functions should properly constrain return types
+  - Complex return types should use type aliases
+  - JSDoc should document return value purpose
+
+agent_assignment:
+  recommended: typescript-specialist
+  alternative: code-optimizer
+  estimated_duration: 2_hours
+
+success_criteria:
+  - All targeted utility functions have explicit return types
+  - TypeScript compilation remains error-free
+  - Improved IDE support and intellisense
+  - Consistent code patterns across utility files
+  - No regression in functionality
+
+rollback_procedure:
+  - Git checkpoint before changes
+  - If verification fails, reset to checkpoint
+  - Document any type compatibility issues
+
+notes: |
+  This story improves the developer experience and type safety without
+  changing functionality. Focus on commonly used utility functions first,
+  then expand to less critical functions. This sets a good pattern for
+  future utility development.

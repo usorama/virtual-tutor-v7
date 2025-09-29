@@ -1,0 +1,152 @@
+# TypeScript Story: Consolidate and Strengthen Interface Definitions
+story_id: TS-005
+parent_issue: ISS-001
+category: typescript
+priority: P1-HIGH
+
+metadata:
+  title: "Consolidate duplicate interfaces and strengthen type definitions across components"
+  description: |
+    The codebase has several areas with duplicate interface definitions, weak
+    type constraints, and inconsistent typing patterns. This story consolidates
+    interfaces, strengthens type safety, and establishes consistent patterns.
+  created: 2025-09-29T16:45:00Z
+  estimated_hours: 3
+  risk_level: medium
+  affects_protected_core: false
+
+scope:
+  target_areas:
+    - Component prop interfaces
+    - API response types
+    - Hook return types
+    - Context provider types
+    - Event handler types
+  consolidation_targets:
+    - Duplicate button/input prop interfaces
+    - Repeated form state types
+    - Common API response patterns
+    - Shared component base props
+
+current_issues:
+  - Duplicate interface definitions across files
+  - Weak type constraints (string when specific values expected)
+  - Inconsistent prop naming patterns
+  - Missing readonly modifiers where appropriate
+  - Union types that could be more specific
+
+proposed_improvements:
+  shared_types: |
+    ```typescript
+    // Create shared/base interfaces
+    export interface BaseComponentProps {
+      readonly id?: string;
+      readonly className?: string;
+      readonly testId?: string;
+    }
+
+    export interface LoadingState {
+      readonly isLoading: boolean;
+      readonly error?: string | null;
+    }
+
+    export interface APIResponse<T = unknown> {
+      readonly success: boolean;
+      readonly data?: T;
+      readonly error?: string;
+      readonly timestamp: string;
+    }
+    ```
+
+  strengthen_constraints: |
+    ```typescript
+    // Before: weak constraints
+    interface ButtonProps {
+      variant: string;
+      size: string;
+    }
+
+    // After: specific constraints
+    interface ButtonProps {
+      readonly variant: 'primary' | 'secondary' | 'destructive';
+      readonly size: 'sm' | 'md' | 'lg';
+    }
+    ```
+
+  consolidate_duplicates: |
+    ```typescript
+    // Instead of having FormButtonProps, ModalButtonProps, etc.
+    // Use composition with base types
+    interface ButtonProps extends BaseComponentProps {
+      readonly variant: ButtonVariant;
+      readonly size: ButtonSize;
+      readonly disabled?: boolean;
+      readonly onClick?: () => void;
+    }
+
+    interface FormButtonProps extends ButtonProps {
+      readonly type?: 'submit' | 'reset' | 'button';
+      readonly form?: string;
+    }
+    ```
+
+dependencies:
+  hard: ["TS-001", "TS-002", "TS-003"]  # After compilation fixes
+  soft: ["TS-004"]  # Better with explicit return types
+  peer: []
+
+implementation_steps:
+  1. Audit existing interfaces for duplicates and weak constraints
+  2. Create shared base interfaces in types/common.ts
+  3. Update component interfaces to extend base types
+  4. Replace string literals with specific union types
+  5. Add readonly modifiers where data shouldn't mutate
+  6. Update imports across affected files
+  7. Run comprehensive type checking
+
+verification_requirements:
+  - typescript_compilation: must_pass
+  - no_duplicate_interfaces: true
+  - stronger_type_constraints: true
+  - consistent_patterns: true
+  - no_breaking_changes: true
+  - improved_type_safety: true
+
+quality_standards:
+  - Use readonly for immutable properties
+  - Prefer specific union types over generic strings
+  - Extend base interfaces rather than duplicate props
+  - Group related types in logical files
+  - Document complex type relationships
+
+deliverables:
+  - types/common.ts with shared base interfaces
+  - Updated component interfaces using composition
+  - Strengthened type constraints throughout codebase
+  - Eliminated duplicate interface definitions
+  - Improved type documentation
+
+agent_assignment:
+  recommended: typescript-specialist
+  alternative: interface-architect
+  estimated_duration: 3_hours
+
+success_criteria:
+  - Zero duplicate interface definitions
+  - All string types replaced with appropriate unions
+  - Consistent use of readonly where appropriate
+  - Components extend shared base interfaces
+  - TypeScript compilation remains error-free
+  - Improved type safety and developer experience
+
+rollback_procedure:
+  - Git checkpoint before major changes
+  - Stage changes incrementally to isolate issues
+  - If verification fails, rollback to last working state
+  - Document any breaking change discoveries
+
+notes: |
+  This story establishes the foundation for consistent typing patterns
+  across the application. Focus on high-usage interfaces first to maximize
+  impact. The consolidation will make future type maintenance much easier
+  and reduce the likelihood of type-related bugs.

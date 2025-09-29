@@ -1,0 +1,192 @@
+# Error Handling Story: Implement Comprehensive API Error Handling
+story_id: ERR-003
+parent_issue: ISS-011
+category: error_handling
+priority: P1-HIGH
+
+metadata:
+  title: "Implement standardized API error handling with proper error types and recovery"
+  description: |
+    Current API error handling is inconsistent across the application, with some
+    endpoints having no error handling and others using generic catch blocks.
+    This story implements a standardized error handling system for all API calls.
+  created: 2025-09-29T16:50:00Z
+  estimated_hours: 4
+  risk_level: low
+  affects_protected_core: false
+
+scope:
+  target_areas:
+    - API route handlers in src/app/api/
+    - Client-side API call functions
+    - Form submission error handling
+    - File upload error scenarios
+    - Database operation error handling
+  error_categories:
+    - Network errors (timeouts, connectivity)
+    - Validation errors (400 Bad Request)
+    - Authentication errors (401 Unauthorized)
+    - Authorization errors (403 Forbidden)
+    - Not found errors (404)
+    - Server errors (500)
+    - File processing errors
+
+current_issues:
+  - Inconsistent error response formats
+  - Generic try-catch blocks without specific handling
+  - Missing error logging and monitoring
+  - Poor user experience during error states
+  - No standardized error recovery mechanisms
+
+error_handling_strategy:
+  api_error_types: |
+    ```typescript
+    export enum ErrorCode {
+      VALIDATION_ERROR = 'VALIDATION_ERROR',
+      AUTHENTICATION_ERROR = 'AUTHENTICATION_ERROR',
+      AUTHORIZATION_ERROR = 'AUTHORIZATION_ERROR',
+      NOT_FOUND = 'NOT_FOUND',
+      RATE_LIMIT_EXCEEDED = 'RATE_LIMIT_EXCEEDED',
+      FILE_PROCESSING_ERROR = 'FILE_PROCESSING_ERROR',
+      DATABASE_ERROR = 'DATABASE_ERROR',
+      EXTERNAL_SERVICE_ERROR = 'EXTERNAL_SERVICE_ERROR',
+      UNKNOWN_ERROR = 'UNKNOWN_ERROR'
+    }
+
+    export interface APIError {
+      readonly code: ErrorCode;
+      readonly message: string;
+      readonly details?: Record<string, unknown>;
+      readonly timestamp: string;
+      readonly requestId?: string;
+    }
+
+    export interface APIResponse<T = unknown> {
+      readonly success: boolean;
+      readonly data?: T;
+      readonly error?: APIError;
+    }
+    ```
+
+  standardized_handlers: |
+    ```typescript
+    // API route error handler
+    export function handleAPIError(error: unknown, requestId: string): Response {
+      const apiError = createAPIError(error, requestId);
+
+      // Log error for monitoring
+      console.error('API Error:', {
+        ...apiError,
+        stack: error instanceof Error ? error.stack : undefined
+      });
+
+      return new Response(JSON.stringify({
+        success: false,
+        error: apiError
+      }), {
+        status: getHTTPStatusFromErrorCode(apiError.code),
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Client-side error handler
+    export async function handleClientError<T>(
+      apiCall: () => Promise<T>,
+      fallback?: T
+    ): Promise<APIResponse<T>> {
+      try {
+        const data = await apiCall();
+        return { success: true, data };
+      } catch (error) {
+        const apiError = parseAPIError(error);
+
+        // Show user-friendly error
+        toast.error(getUserFriendlyMessage(apiError.code));
+
+        return {
+          success: false,
+          error: apiError,
+          data: fallback
+        };
+      }
+    }
+    ```
+
+implementation_targets:
+  critical_endpoints:
+    - src/app/api/textbooks/hierarchy/route.ts
+    - src/app/api/textbooks/upload/route.ts
+    - src/app/api/voice/session/route.ts
+    - src/lib/textbook/actions.ts
+    - src/components/textbook/UploadForm.tsx
+
+dependencies:
+  hard: ["TS-001", "TS-002", "TS-003"]  # Need clean TypeScript base
+  soft: ["ERR-001"]  # Error boundaries provide additional safety
+  peer: []
+
+implementation_steps:
+  1. Create standardized error types and interfaces
+  2. Implement API error handler utilities
+  3. Update all API routes to use standardized error handling
+  4. Create client-side error handling hooks
+  5. Update form components to handle errors gracefully
+  6. Add error logging and monitoring hooks
+  7. Test error scenarios thoroughly
+  8. Update documentation for error handling patterns
+
+verification_requirements:
+  - all_endpoints_covered: true
+  - consistent_error_format: true
+  - proper_error_logging: true
+  - user_friendly_messages: true
+  - no_unhandled_rejections: true
+  - typescript_compilation: must_pass
+  - error_recovery_tested: true
+
+quality_standards:
+  - All API errors include request ID for tracing
+  - Error messages are user-friendly and actionable
+  - Sensitive information is never exposed in errors
+  - Errors are properly typed throughout the stack
+  - Fallback values provided where appropriate
+
+deliverables:
+  - lib/errors/api-error-handler.ts
+  - lib/errors/error-types.ts
+  - hooks/useErrorHandler.ts
+  - Updated API routes with standardized error handling
+  - Updated components with proper error states
+  - Error handling documentation
+
+agent_assignment:
+  recommended: error-handling-specialist
+  alternative: reliability-engineer
+  estimated_duration: 4_hours
+
+success_criteria:
+  - All API endpoints use standardized error handling
+  - Consistent error response format across all APIs
+  - User-friendly error messages in UI
+  - Proper error logging for debugging
+  - No unhandled promise rejections
+  - Error recovery mechanisms in place
+  - TypeScript compilation remains clean
+
+testing_requirements:
+  - Unit tests for error handler utilities
+  - Integration tests for API error scenarios
+  - UI tests for error state rendering
+  - End-to-end tests for error recovery flows
+
+rollback_procedure:
+  - Git checkpoint before each major change
+  - Test error handling after each component update
+  - If critical issues arise, rollback to previous checkpoint
+  - Document any compatibility issues discovered
+
+notes: |
+  This story is a prerequisite for comprehensive testing (TEST-001) as it
+  ensures all error paths are properly handled and testable. Focus on the
+  most critical user flows first, then expand to edge cases. The standardized
+  error handling will significantly improve both developer and user experience.
