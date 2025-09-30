@@ -8,6 +8,7 @@ import {
   getValidationErrorStatus
 } from '@/lib/security/token-validation'
 import { generateNonce, buildCSP, getCSPHeaderName } from './middleware/security-headers'
+import { PerformanceTracker } from '@/lib/monitoring/performance'
 
 // Theme types for server-side detection
 type Theme = 'light' | 'dark' | 'system'
@@ -66,6 +67,14 @@ function logSecurityEvent(event: {
 
 export async function middleware(request: NextRequest) {
   /**
+   * Performance Tracking (ARCH-008)
+   * Start tracking request duration with minimal overhead (<5ms)
+   */
+  const startTime = typeof performance !== 'undefined' && performance.now ? performance.now() : Date.now();
+  const performanceTracker = PerformanceTracker.getInstance();
+  const pathname = request.nextUrl.pathname;
+
+  /**
    * Security Headers (SEC-012)
    * Generate Content-Security-Policy with nonce for this request
    */
@@ -88,8 +97,6 @@ export async function middleware(request: NextRequest) {
 
   // Set nonce in header for Server Components to access
   response.headers.set('x-nonce', nonce);
-
-  const pathname = request.nextUrl.pathname
 
   // Theme Management - Handle theme detection and cookie management
   const currentTheme = getThemeFromCookie(request)
@@ -207,6 +214,31 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/wizard', request.url))
       }
     }
+  }
+
+  /**
+   * Performance Tracking (ARCH-008)
+   * Track request completion with minimal overhead
+   * Uses async recording to avoid blocking response
+   */
+  const duration = (typeof performance !== 'undefined' && performance.now ? performance.now() : Date.now()) - startTime;
+
+  // Don't block response for tracking (async)
+  if (performanceTracker.isEnabled()) {
+    Promise.resolve().then(() => {
+      performanceTracker.trackRequest({
+        route: pathname,
+        method: request.method,
+        duration,
+        statusCode: response.status,
+        timestamp: Date.now(),
+      });
+    });
+  }
+
+  // Add performance header in development
+  if (isDevelopment) {
+    response.headers.set('X-Response-Time', `${duration.toFixed(2)}ms`);
   }
 
   return response
