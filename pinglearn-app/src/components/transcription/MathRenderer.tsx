@@ -5,9 +5,16 @@
  * Renders LaTeX math expressions using KaTeX
  * Handles both inline and display math with error boundaries
  * OPTIMIZED: Memoization, async rendering, and caching
+ * SECURITY: XSS protection via multi-layered validation (SEC-002)
  */
 
 import React, { useEffect, useState, useMemo } from 'react';
+import {
+  validateLatexForXSS,
+  getSecureKatexOptions,
+  sanitizeMathHTML,
+  reportMathXSSAttempt
+} from '@/lib/security/xss-protection';
 
 // Math rendering cache to avoid re-rendering identical equations
 const mathCache = new Map<string, { html: string; error: string | null }>();
@@ -64,6 +71,28 @@ export function MathRenderer({
     // Async math rendering to avoid blocking UI
     const renderMathAsync = async () => {
       try {
+        // SECURITY LAYER 1: XSS Validation (before KaTeX)
+        const xssValidation = validateLatexForXSS(latex);
+        if (!xssValidation.safe) {
+          // Report to threat detector
+          await reportMathXSSAttempt(latex, xssValidation.threats[0]?.pattern || 'unknown', {
+            component: 'MathRenderer-Transcription',
+            display,
+            threatCount: xssValidation.threats.length,
+            riskScore: xssValidation.riskScore
+          });
+
+          // Block rendering, show security error
+          const errorMsg = `Math expression blocked for security: ${xssValidation.threats[0]?.type || 'suspicious content'}`;
+          mathCache.set(cacheKey, { html: latex, error: errorMsg });
+          cleanupCache();
+
+          setError(errorMsg);
+          setMathHtml(latex); // Fallback: display raw LaTeX
+          setIsLoaded(true);
+          return;
+        }
+
         const katex = await import('katex');
 
         // Use requestIdleCallback for non-blocking rendering when available
@@ -73,27 +102,23 @@ export function MathRenderer({
 
         renderFunction(() => {
           try {
-            // Use renderToString to avoid DOM manipulation conflicts
-            const html = katex.default.renderToString(latex, {
-              displayMode: display,
-              throwOnError: false,
-              errorColor: '#cc0000',
-              strict: false,
-              trust: true,
-              macros: {
-                '\\RR': '\\mathbb{R}',
-                '\\NN': '\\mathbb{N}',
-                '\\ZZ': '\\mathbb{Z}',
-                '\\QQ': '\\mathbb{Q}',
-                '\\CC': '\\mathbb{C}'
-              }
-            });
+            // SECURITY LAYER 2: Secure KaTeX Configuration
+            const secureOptions = getSecureKatexOptions(display);
 
-            // Cache the result with cleanup
-            mathCache.set(cacheKey, { html, error: null });
+            // Use renderToString with SECURE options and SANITIZED input
+            const html = katex.default.renderToString(
+              xssValidation.sanitized, // Use sanitized LaTeX
+              secureOptions
+            );
+
+            // SECURITY LAYER 3: HTML Output Sanitization
+            const sanitizedHtml = sanitizeMathHTML(html);
+
+            // Cache the sanitized result with cleanup
+            mathCache.set(cacheKey, { html: sanitizedHtml, error: null });
             cleanupCache();
 
-            setMathHtml(html);
+            setMathHtml(sanitizedHtml);
             setIsLoaded(true);
             setError(null);
           } catch (err) {
