@@ -48,7 +48,7 @@ export class CachedResponseStrategy implements FallbackStrategy {
 
     // Return cached data with staleness metadata
     return {
-      ...cached.data,
+      ...(cached.data as Record<string, unknown>),
       _fromCache: true,
       _cacheAge: age,
       _stale: age > this.maxAge,
