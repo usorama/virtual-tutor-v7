@@ -81,7 +81,7 @@ export default function TextbookUploadPage() {
           <CardHeader>
             <CardTitle>Upload Textbook Chapters</CardTitle>
             <CardDescription>
-              Upload multiple chapter PDFs and we'll help you organize them into a proper textbook structure
+              Upload multiple chapter PDFs and we&apos;ll help you organize them into a proper textbook structure
             </CardDescription>
           </CardHeader>
           <CardContent>

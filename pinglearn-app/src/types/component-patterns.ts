@@ -167,7 +167,7 @@ export type RouteParams<T extends string> = T extends `${infer Start}:${infer Pa
   ? { [K in Param]: string } & RouteParams<`${Start}${Rest}`>
   : T extends `${infer Start}:${infer Param}`
   ? { [K in Param]: string }
-  : {};
+  : Record<string, never>;
 
 /**
  * Route definition with type-safe parameters

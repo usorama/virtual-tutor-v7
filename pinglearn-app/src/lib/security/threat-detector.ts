@@ -155,7 +155,7 @@ export class SecurityThreatDetector {
    * Calculate comprehensive risk score using multiple factors
    */
   private async calculateRiskScore(error: SecurityError): Promise<number> {
-    let baseScore = this.getBaseRiskScore(error.securityCode);
+    const baseScore = this.getBaseRiskScore(error.securityCode);
 
     // Factor in attempt frequency
     const trackingKey = this.generateTrackingKey(error);

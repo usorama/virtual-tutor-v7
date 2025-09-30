@@ -440,7 +440,7 @@ export function EnhancedUploadFlow({
           Upload Textbook Chapters
         </CardTitle>
         <CardDescription>
-          Upload multiple chapter PDFs and we'll automatically organize them into a proper textbook structure
+          Upload multiple chapter PDFs and we&apos;ll automatically organize them into a proper textbook structure
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -465,7 +465,7 @@ export function EnhancedUploadFlow({
           Analyzing Your Files
         </CardTitle>
         <CardDescription>
-          We're intelligently detecting metadata from your uploaded files
+          We&apos;re intelligently detecting metadata from your uploaded files
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -504,7 +504,7 @@ export function EnhancedUploadFlow({
         <Alert className="border-blue-200 bg-blue-50">
           <Sparkles className="h-4 w-4 text-blue-600" />
           <AlertDescription className="text-blue-800">
-            <strong>Smart Detection Complete!</strong> We've pre-filled the information below based on your files.
+            <strong>Smart Detection Complete!</strong> We&apos;ve pre-filled the information below based on your files.
             Please review and make any necessary corrections.
           </AlertDescription>
         </Alert>

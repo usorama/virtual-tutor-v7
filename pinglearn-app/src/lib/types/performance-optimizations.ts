@@ -43,7 +43,7 @@ export namespace UnionOptimizations {
   /**
    * Tagged union for better type inference
    */
-  export interface Tagged<T extends string, D = {}> {
+  export interface Tagged<T extends string, D = Record<string, unknown>> {
     readonly _tag: T;
     readonly data: D;
   }
@@ -107,7 +107,7 @@ export namespace TemplateOptimizations {
       ? { [K in Param]: string } & ExtractRouteParams<Rest>
       : T extends `${string}:${infer Param}`
       ? { [K in Param]: string }
-      : {};
+      : Record<string, never>;
 }
 
 /**
@@ -278,14 +278,14 @@ export namespace AdvancedGenerics {
    * Required fields extractor
    */
   export type RequiredFields<T> = {
-    [K in keyof T]-?: {} extends Pick<T, K> ? never : K;
+    [K in keyof T]-?: Record<string, never> extends Pick<T, K> ? never : K;
   }[keyof T];
 
   /**
    * Optional fields extractor
    */
   export type OptionalFields<T> = {
-    [K in keyof T]-?: {} extends Pick<T, K> ? K : never;
+    [K in keyof T]-?: Record<string, never> extends Pick<T, K> ? K : never;
   }[keyof T];
 
   /**

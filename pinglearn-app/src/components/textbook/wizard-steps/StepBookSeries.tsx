@@ -428,7 +428,7 @@ export function StepBookSeries({
           <div className="space-y-2 text-sm text-blue-800">
             <p>
               <strong>Series Information</strong> helps group all related textbooks together.
-              For example, "NCERT Mathematics" can contain books for different grades.
+              For example, &quot;NCERT Mathematics&quot; can contain books for different grades.
             </p>
             <p>
               <strong>Publisher & Curriculum</strong> ensure proper categorization and help

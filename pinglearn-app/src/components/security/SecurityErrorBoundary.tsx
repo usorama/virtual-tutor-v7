@@ -643,11 +643,13 @@ export const withSecurityErrorBoundary = <P extends object>(
   Component: React.ComponentType<P>,
   errorBoundaryProps?: Omit<SecurityErrorBoundaryProps, 'children'>
 ) => {
-  return (props: P) => (
+  const WrappedComponent = (props: P) => (
     <SecurityErrorBoundary {...errorBoundaryProps}>
       <Component {...props} />
     </SecurityErrorBoundary>
   );
+  WrappedComponent.displayName = `withSecurityErrorBoundary(${Component.displayName || Component.name || 'Component'})`;
+  return WrappedComponent;
 };
 
 /**

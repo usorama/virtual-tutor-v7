@@ -104,7 +104,7 @@ export default function ContactRedesigned() {
             Get In Touch
           </p>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-            We're Here to
+            We&apos;re Here to
             <span className="text-gradient bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"> Help</span>
           </h2>
           <p className="text-xl text-white/70 max-w-3xl mx-auto">

@@ -26,10 +26,10 @@ export default function DesignDemoPage() {
         {/* Hero Section */}
         <section className="mb-16 text-center">
           <h1 className="text-largeTitle text-primary mb-4">
-            Apple's Liquid Glass Design
+            Apple&apos;s Liquid Glass Design
           </h1>
           <p className="text-body text-secondary max-w-2xl mx-auto mb-2">
-            Crafted with Apple's new material called Liquid Glass - a translucent material that
+            Crafted with Apple&apos;s new material called Liquid Glass - a translucent material that
           </p>
           <p className="text-body text-secondary max-w-2xl mx-auto">
             reflects and refracts its surroundings, bringing greater focus to content

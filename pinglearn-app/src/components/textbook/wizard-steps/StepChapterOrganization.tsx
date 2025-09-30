@@ -203,7 +203,7 @@ export function StepChapterOrganization({
               </Badge>
             </div>
             <p className="text-sm text-gray-600">
-              We'll analyze your file names to automatically detect chapters and organize them properly.
+              We&apos;ll analyze your file names to automatically detect chapters and organize them properly.
             </p>
             {data.detectionMethod === 'auto' && (
               <div className="mt-2 flex items-center gap-2">
@@ -421,7 +421,7 @@ export function StepChapterOrganization({
             <div className="text-sm text-green-800">
               <p className="font-medium mb-1">✅ Problem Solved!</p>
               <p>
-                Instead of treating each uploaded file as a separate textbook, we're now
+                Instead of treating each uploaded file as a separate textbook, we&apos;re now
                 organizing them as chapters within a single book. This makes it much easier
                 for students to navigate and understand the content structure.
               </p>

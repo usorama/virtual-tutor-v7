@@ -214,8 +214,8 @@ export function detectMathExpressions(text: string): {
   // Pattern for inline math $...$
   const inlineMathRegex = /\$(.*?)\$/g;
 
-  let lastIndex = 0;
-  let processedText = text;
+  const lastIndex = 0;
+  const processedText = text;
 
   // First, extract display math
   let match;

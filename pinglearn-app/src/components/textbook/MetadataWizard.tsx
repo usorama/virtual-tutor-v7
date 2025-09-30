@@ -396,7 +396,7 @@ export function MetadataWizard({
           Textbook Setup Wizard
         </h1>
         <p className="text-lg text-gray-600">
-          Let's organize your textbook chapters into a proper book structure
+          Let&apos;s organize your textbook chapters into a proper book structure
         </p>
       </div>
 
@@ -539,7 +539,7 @@ export function MetadataWizard({
               <p className="font-medium mb-1">💡 Why This Matters</p>
               <p>
                 This wizard helps organize your individual chapter PDFs into a proper textbook structure.
-                Instead of treating each chapter as a separate book, we'll create one book containing all chapters,
+                Instead of treating each chapter as a separate book, we&apos;ll create one book containing all chapters,
                 making it easier for students to navigate and for you to manage content.
               </p>
             </div>

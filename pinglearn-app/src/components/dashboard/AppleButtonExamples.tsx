@@ -167,7 +167,7 @@ export function AppleButtonExamples() {
               Wrong - Too Much Color
             </button>
             <span className="text-xs text-[#86868B]">
-              Don't use cyan/teal everywhere
+              Don&apos;t use cyan/teal everywhere
             </span>
           </div>
 
@@ -176,14 +176,14 @@ export function AppleButtonExamples() {
               <Heart className="w-4 h-4 text-cyan-400" />
             </div>
             <span className="text-xs text-[#86868B]">
-              Don't use black backgrounds with colored icons
+              Don&apos;t use black backgrounds with colored icons
             </span>
           </div>
 
           <div className="flex items-center gap-4">
             <h1 className="text-2xl font-bold text-cyan-700">Colored Heading</h1>
             <span className="text-xs text-[#86868B]">
-              Don't use color for headings
+              Don&apos;t use color for headings
             </span>
           </div>
         </div>

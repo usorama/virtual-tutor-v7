@@ -42,7 +42,7 @@ export namespace TypeOptimizations {
     export type OptimizedOmit<T, K extends PropertyKey> = import('./inference-optimizations').OptimizedOmit<T, K>;
 
     // Performance types
-    export type LazyComponent<T = {}> = import('./inference-optimizations').PerformanceTypes.LazyComponent<T>;
+    export type LazyComponent<T = Record<string, unknown>> = import('./inference-optimizations').PerformanceTypes.LazyComponent<T>;
     export type MemoizedProps<T> = import('./inference-optimizations').PerformanceTypes.MemoizedProps<T>;
 
     // Union utilities

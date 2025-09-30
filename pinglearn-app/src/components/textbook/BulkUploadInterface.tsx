@@ -581,7 +581,7 @@ export function BulkUploadInterface({
             <div className="text-sm text-blue-800">
               <p className="font-medium mb-1">💡 Pro Tips for Better Organization</p>
               <ul className="space-y-1 text-sm">
-                <li>• Name your files like: "Ch1_RealNumbers.pdf", "Ch2_Polynomials.pdf"</li>
+                <li>• Name your files like: &quot;Ch1_RealNumbers.pdf&quot;, &quot;Ch2_Polynomials.pdf&quot;</li>
                 <li>• Upload all chapters from the same textbook together</li>
                 <li>• Include series/publisher info in filenames for better detection</li>
                 <li>• Review auto-detected groups before proceeding to setup</li>

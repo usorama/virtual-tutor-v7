@@ -172,7 +172,7 @@ export default function TestTranscriptionPage() {
               <p><strong>Performance Testing Instructions:</strong></p>
               <ul className="list-disc list-inside space-y-1">
                 <li>Open browser DevTools (F12) and go to Console tab</li>
-                <li>Click "Run Performance Tests" or run manually: <code>PerformanceTestSuite.runAllTests()</code></li>
+                <li>Click &quot;Run Performance Tests&quot; or run manually: <code>PerformanceTestSuite.runAllTests()</code></li>
                 <li>Monitor memory usage in DevTools Performance tab during Heavy Load Test</li>
                 <li>Check console for detailed performance metrics and bottleneck analysis</li>
               </ul>

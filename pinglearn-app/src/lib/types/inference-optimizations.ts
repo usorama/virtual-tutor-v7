@@ -251,7 +251,7 @@ export namespace PerformanceTypes {
   /**
    * Lazy-loaded component type
    */
-  export type LazyComponent<T = {}> = React.LazyExoticComponent<React.ComponentType<T>>;
+  export type LazyComponent<T = Record<string, unknown>> = React.LazyExoticComponent<React.ComponentType<T>>;
 
   /**
    * Memoized component props

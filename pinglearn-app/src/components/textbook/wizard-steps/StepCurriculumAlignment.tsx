@@ -517,7 +517,7 @@ export function StepCurriculumAlignment({
               <div className="text-sm text-green-800">
                 <p className="font-medium mb-1">🎯 Auto-mapping Complete!</p>
                 <p>
-                  We've automatically mapped {data.mappedTopics.filter(m => m.topics.length > 0).length} chapters
+                  We&apos;ve automatically mapped {data.mappedTopics.filter(m => m.topics.length > 0).length} chapters
                   to curriculum topics based on their titles. You can review and adjust these mappings below.
                 </p>
               </div>

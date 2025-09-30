@@ -147,7 +147,7 @@ export default function PricingPage() {
             className="text-center mb-12"
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              Invest in Your Child's
+              Invest in Your Child&apos;s
               <span className="text-gradient bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"> Future</span>
             </h1>
             <p className="text-xl text-white/70 max-w-3xl mx-auto">

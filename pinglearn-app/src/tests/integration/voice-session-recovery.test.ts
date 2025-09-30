@@ -94,7 +94,7 @@ describe('Voice Session Recovery Integration Tests', () => {
   describe('Exponential Backoff and Circuit Breaker', () => {
     it('should implement exponential backoff for connection failures', async () => {
       const startTime = Date.now();
-      let attemptTimes: number[] = [];
+      const attemptTimes: number[] = [];
 
       // Mock websocket reconnection attempts
       const mockReconnection = vi.fn().mockImplementation(() => {

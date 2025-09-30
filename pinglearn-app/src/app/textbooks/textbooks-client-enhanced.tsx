@@ -176,7 +176,7 @@ export function TextbooksClientEnhanced({
         <Alert>
           <Library className="h-4 w-4" />
           <AlertDescription>
-            <strong>New!</strong> Upload multiple chapter PDFs and we'll automatically organize them into proper textbook structures.
+            <strong>New!</strong> Upload multiple chapter PDFs and we&apos;ll automatically organize them into proper textbook structures.
             Our AI detects metadata and helps you review before processing.
           </AlertDescription>
         </Alert>
@@ -318,7 +318,7 @@ export function TextbooksClientEnhanced({
               <CardHeader>
                 <CardTitle>Smart Organization</CardTitle>
                 <CardDescription>
-                  Upload multiple chapter PDFs and we'll automatically organize them
+                  Upload multiple chapter PDFs and we&apos;ll automatically organize them
                 </CardDescription>
               </CardHeader>
               <CardContent>

@@ -24,7 +24,7 @@ export function PingLearnFeaturesModern() {
                         <span className="text-gradient bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"> Everything</span>
                     </h2>
                     <p className="text-xl text-white/70 max-w-3xl mx-auto">
-                        One platform that addresses every challenge in your child's educational journey
+                        One platform that addresses every challenge in your child&apos;s educational journey
                         with innovative technology and empathetic teaching.
                     </p>
                 </motion.div>
@@ -51,7 +51,7 @@ export function PingLearnFeaturesModern() {
                                         <span className="mx-auto block w-fit text-5xl font-semibold text-white">100%</span>
                                     </div>
                                     <h2 className="mt-6 text-center text-3xl font-semibold text-white">Adaptive</h2>
-                                    <p className="text-center text-white/60 mt-2">PingLearn adapts to each student's unique learning style and pace in real-time</p>
+                                    <p className="text-center text-white/60 mt-2">PingLearn adapts to each student&apos;s unique learning style and pace in real-time</p>
                                 </CardContent>
                             </Card>
                         </motion.div>
@@ -71,7 +71,7 @@ export function PingLearnFeaturesModern() {
                                     </div>
                                     <div className="relative z-10 mt-6 space-y-2 text-center">
                                         <h2 className="text-lg font-medium text-white">Secure by Default</h2>
-                                        <p className="text-white/60 text-sm">COPPA compliant with enterprise-grade security. Your child's data and privacy are our top priority.</p>
+                                        <p className="text-white/60 text-sm">COPPA compliant with enterprise-grade security. Your child&apos;s data and privacy are our top priority.</p>
                                     </div>
                                 </CardContent>
                             </Card>

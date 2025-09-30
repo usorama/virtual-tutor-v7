@@ -105,7 +105,7 @@ export async function getDashboardMetrics(): Promise<{
       const today = new Date()
       today.setHours(0, 0, 0, 0)
 
-      let currentDate = new Date(today)
+      const currentDate = new Date(today)
       const sessionDates = new Set(
         recentSessions.map((s: any) => {
           const date = new Date(s.started_at)
