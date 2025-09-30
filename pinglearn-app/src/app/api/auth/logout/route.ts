@@ -5,7 +5,10 @@ import { AUTH_CONSTANTS } from '@/lib/auth/constants'
 export async function POST() {
   try {
     const supabase = await createClient()
-    
+
+    // Get user info before logout for logging
+    const { data: { user } } = await supabase.auth.getUser()
+
     const { error } = await supabase.auth.signOut()
 
     if (error) {
@@ -13,6 +16,15 @@ export async function POST() {
         { error: error.message },
         { status: 400 }
       )
+    }
+
+    // Log logout for security monitoring
+    if (user) {
+      console.info('[AUTH] User logged out:', {
+        timestamp: new Date().toISOString(),
+        userId: user.id,
+        email: user.email
+      })
     }
 
     return NextResponse.json(

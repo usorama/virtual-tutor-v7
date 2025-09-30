@@ -121,7 +121,7 @@ export const createQuestionId = (id: string): QuestionId => {
 };
 
 // Re-export new implementations for easy migration
-export {
+export type {
   UserId as NewUserId,
   SessionId as NewSessionId,
   VoiceSessionId,
@@ -130,6 +130,9 @@ export {
   LessonId as NewLessonId,
   TopicId as NewTopicId,
   QuestionId as NewQuestionId,
+} from '@/lib/types';
+
+export {
   // Validated factories (already exported above with same names)
   createUserId as newCreateUserId,
   createSessionId as newCreateSessionId,

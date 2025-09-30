@@ -11,12 +11,16 @@
 
 // Core type optimization utilities
 export * from './inference-optimizations';
-export * from './performance-optimizations';
 export * from './union-optimizations';
 
-// TS-012: Branded type utilities and domain-specific ID types
+// TS-012: Branded type utilities and domain-specific ID types (export first to take precedence)
 export * from './branded';
 export * from './id-types';
+
+// Performance optimizations (exported after branded to avoid Brand type conflict)
+// Note: performance-optimizations.ts has an old Brand type that conflicts with the new one
+// The new Brand type from branded.ts takes precedence
+export * from './performance-optimizations';
 
 // Type guards and validators
 export * from './type-guards';

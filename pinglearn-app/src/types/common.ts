@@ -373,11 +373,14 @@ export type TextbookId = Brand<string, 'TextbookId'>;
 export type ChapterId = Brand<string, 'ChapterId'>;
 
 // Re-export new branded types for backwards compatibility
-export {
+export type {
   UserId as BrandedUserId,
   SessionId as BrandedSessionId,
   TextbookId as BrandedTextbookId,
   ChapterId as BrandedChapterId,
+} from '@/lib/types';
+
+export {
   // Factories
   createUserId,
   createSessionId,
