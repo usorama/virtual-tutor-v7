@@ -9,6 +9,12 @@ import {
 } from '@/lib/security/token-validation'
 import { generateNonce, buildCSP, getCSPHeaderName } from './middleware/security-headers'
 import { PerformanceTracker } from '@/lib/monitoring/performance'
+import {
+  detectApiVersion,
+  addVersionHeaders,
+  addDeprecationHeaders,
+  createVersionRedirect,
+} from '@/middleware/api-versioning'
 
 // Theme types for server-side detection
 type Theme = 'light' | 'dark' | 'system'
@@ -115,6 +121,29 @@ export async function middleware(request: NextRequest) {
   // Add theme headers for server components
   response.headers.set('x-theme', currentTheme)
   response.headers.set('x-resolved-theme', resolvedTheme)
+
+  /**
+   * API Versioning (ARCH-007)
+   * Detect version from URL, handle redirects, add deprecation warnings
+   */
+  const versionDetection = detectApiVersion(pathname);
+
+  if (versionDetection.isApiRoute) {
+    // Handle unversioned API routes - redirect to v2
+    if (versionDetection.shouldRedirect && versionDetection.redirectTarget) {
+      return createVersionRedirect(request, versionDetection.redirectTarget);
+    }
+
+    // Add version headers for versioned routes
+    if (versionDetection.isVersioned && versionDetection.version) {
+      addVersionHeaders(response, versionDetection.version);
+
+      // Add deprecation warnings for v1
+      if (versionDetection.version === 'v1') {
+        addDeprecationHeaders(response);
+      }
+    }
+  }
 
   // Skip Supabase auth if credentials are not configured
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL

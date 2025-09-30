@@ -15,7 +15,10 @@
     "test:protected-core": "node scripts/test-protected-core.js",
     "test:all": "npm run test:protected-core && npm run test:coverage && npm run test:e2e",
     "test:e2e": "playwright test",
-    "test:regression": "vitest --run src/tests/regression"
+    "test:regression": "vitest --run src/tests/regression",
+    "test:performance": "vitest run tests/performance --reporter=verbose",
+    "test:performance:watch": "vitest watch tests/performance",
+    "test:performance:baseline": "node scripts/generate-performance-baseline.js"
   },
   "dependencies": {
     "@google/genai": "^1.21.0",
