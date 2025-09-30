@@ -236,11 +236,6 @@ export function detectMathExpressions(text: string): {
 
   // Pattern for display math $$...$$
   const displayMathRegex = /\$\$(.*?)\$\$/g;
-  // Pattern for inline math $...$
-  const inlineMathRegex = /\$(.*?)\$/g;
-
-  const lastIndex = 0;
-  const processedText = text;
 
   // First, extract display math
   let match;

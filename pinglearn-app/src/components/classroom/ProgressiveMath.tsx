@@ -23,7 +23,6 @@ export const ProgressiveMath: React.FC<ProgressiveMathProps> = ({
   className = ''
 }) => {
   const [visibleFragments, setVisibleFragments] = useState<number>(0);
-  const [startTime] = useState(Date.now());
   const [isComplete, setIsComplete] = useState(false);
   const [securityBlocked, setSecurityBlocked] = useState(false);
 
