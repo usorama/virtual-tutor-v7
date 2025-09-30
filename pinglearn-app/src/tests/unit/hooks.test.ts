@@ -21,13 +21,27 @@ const mockSessionManager = {
     pauseSession: vi.fn().mockResolvedValue(undefined),
     resumeSession: vi.fn().mockResolvedValue(undefined),
     getCurrentSession: vi.fn().mockReturnValue({
-      id: 'voice-session-123',
+      id: 'session-123',
       sessionId: 'session-123',
       status: 'active',
       startedAt: new Date().toISOString()
     }),
+    getCurrentMetrics: vi.fn().mockReturnValue(null),
     isSessionActive: vi.fn().mockReturnValue(true),
-    getSessionStatus: vi.fn().mockReturnValue('active')
+    getSessionStatus: vi.fn().mockReturnValue('active'),
+    // Session controls support
+    getSessionControls: vi.fn().mockReturnValue({
+      start: vi.fn().mockResolvedValue({ sessionId: 'session-123', roomName: 'room-123' }),
+      stop: vi.fn().mockResolvedValue(undefined),
+      pause: vi.fn().mockResolvedValue(undefined),
+      resume: vi.fn().mockResolvedValue(undefined),
+      mute: vi.fn().mockResolvedValue(undefined),
+      unmute: vi.fn().mockResolvedValue(undefined),
+      setVolume: vi.fn().mockResolvedValue(undefined)
+    }),
+    // Event listener support for hooks
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn()
   }))
 };
 
