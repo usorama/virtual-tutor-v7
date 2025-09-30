@@ -3,6 +3,14 @@ import { NextRequest, NextResponse } from 'next/server'
 import { validateLoginForm } from '@/lib/auth/validation'
 import { AUTH_CONSTANTS } from '@/lib/auth/constants'
 import { mockSignIn } from '@/lib/auth/mock-auth'
+import {
+  checkIPRateLimit,
+  recordIPAttempt,
+  checkEmailRateLimit,
+  recordEmailAttempt,
+  clearRateLimit,
+  getRateLimitErrorMessage
+} from '@/lib/security/rate-limiter'
 
 // Enable mock authentication only for truly mock projects
 const USE_MOCK_AUTH = process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('mock-project')
