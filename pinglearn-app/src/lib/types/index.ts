@@ -35,8 +35,53 @@ export type {
 } from './performance-optimizations';
 
 // Type guards and validators
-export * from './type-guards';
-export * from './validators';
+// Note: Selective exports to avoid duplicate exports between type-guards and validators
+export {
+  isNonEmptyString,
+  isPositiveNumber,
+  isNonNegativeNumber,
+  isEmail,
+  isURL,
+  isArrayOf,
+  isNonEmptyArray,
+  isRecordOf,
+  hasKey,
+  isOneOf,
+  isAPIError,
+  isSuccessResponse,
+  isErrorResponse,
+  isPaginatedResponse,
+  isFeatureFlags,
+  isEnvironmentConfig,
+  isString,
+  isNumber,
+  isBoolean,
+  isObject,
+  isArray
+} from './type-guards';
+
+export type {
+  APIError,
+  APIResponse,
+  SuccessResponse,
+  ErrorResponse,
+  PaginatedResponse,
+  FeatureFlags,
+  EnvironmentConfig
+} from './type-guards';
+
+export {
+  validate,
+  validateObject,
+  composeValidators,
+  optional,
+  nullable
+} from './validators';
+
+export type {
+  ValidationResult,
+  ValidationError
+} from './validators';
 
 // Discriminated unions (TS-013)
 export * from './discriminated';
@@ -192,8 +237,8 @@ import { TypeUtils } from './inference-optimizations';
 export const {
   createKeyExtractor,
   createSortComparator,
-  isDefined,
-  hasKey
+  isDefined
+  // Note: hasKey is already exported from type-guards
 } = TypeUtils || {};
 
 /**

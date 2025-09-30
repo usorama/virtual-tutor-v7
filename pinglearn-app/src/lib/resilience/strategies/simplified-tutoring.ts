@@ -84,8 +84,10 @@ export class SimplifiedTutoringStrategy implements FallbackStrategy {
     }
 
     // Add metadata indicating this is a simplified response
+    // Use type assertion with proper spread to satisfy TypeScript
+    const simplifiedResponse: T = response as T;
     return {
-      ...response,
+      ...simplifiedResponse,
       _simplified: true,
       _fullFeaturesAvailable: false,
       _message:
