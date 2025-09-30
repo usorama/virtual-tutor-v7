@@ -3,7 +3,7 @@
  * Test CacheManager singleton and CacheStore functionality
  */
 
-import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
+import { describe, test, expect, beforeEach, afterEach } from 'vitest';
 import { CacheManager } from './cache-manager';
 
 // Test helper: Wait for specified milliseconds

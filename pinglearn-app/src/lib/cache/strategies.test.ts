@@ -3,7 +3,7 @@
  * Test LRU, TTL, and SWR eviction strategies
  */
 
-import { describe, test, expect, beforeEach } from '@jest/globals';
+import { describe, test, expect, beforeEach } from 'vitest';
 import { LRUStrategy, TTLStrategy, SWRStrategy } from './strategies';
 import type { CacheEntry } from './types';
 
