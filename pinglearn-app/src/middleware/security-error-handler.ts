@@ -88,6 +88,53 @@ const DEFAULT_SECURITY_CONFIG: SecurityMiddlewareConfig = {
 };
 
 /**
+ * Sliding window rate limit entry
+ */
+interface SlidingWindowEntry {
+  timestamps: number[];  // Request timestamps within window
+  lastCleanup: number;   // Last cleanup time for optimization
+}
+
+/**
+ * Rate limit rule for specific endpoints
+ */
+interface RateLimitRule {
+  perUser: number;       // Requests per user per window
+  perIP: number;         // Requests per IP per window
+  windowMs: number;      // Time window in milliseconds
+  blockDuration?: number; // Optional: block duration after limit exceeded
+}
+
+/**
+ * Voice session rate limit configuration
+ * Optimized for different voice/session endpoints based on traffic patterns
+ */
+const VOICE_SESSION_RATE_LIMITS: Record<string, RateLimitRule> = {
+  '/api/livekit': {
+    perUser: 5,           // 5 room creations per user per minute
+    perIP: 10,            // 10 per IP (allows some flexibility)
+    windowMs: 60000,      // 1 minute window
+    blockDuration: 120000 // 2 minute block after abuse
+  },
+  '/api/livekit/token': {
+    perUser: 10,          // 10 token requests per user per minute (allows refreshes)
+    perIP: 20,            // 20 per IP (higher for shared networks)
+    windowMs: 60000,
+    blockDuration: 300000 // 5 minute block (high-risk endpoint)
+  },
+  '/api/session/start': {
+    perUser: 3,           // 3 session starts per user per minute
+    perIP: 5,             // 5 per IP
+    windowMs: 60000
+  },
+  '/api/transcription': {
+    perUser: 100,         // High frequency during active voice session
+    perIP: 150,           // Allow more per IP for transcription bursts
+    windowMs: 60000
+  }
+};
+
+/**
  * Advanced Security Middleware Class
  */
 export class SecurityMiddleware {
@@ -96,11 +143,14 @@ export class SecurityMiddleware {
   private threatDetector: SecurityThreatDetector;
   private recoveryManager: SecurityRecoveryManager;
 
-  // Rate limiting tracking
-  private rateLimitTracker = new Map<string, { count: number; resetTime: number }>();
+  // Sliding window rate limiting tracking
+  private slidingWindowStore = new Map<string, SlidingWindowEntry>();
 
   // Request tracking for analysis
   private recentRequests = new Map<string, RequestSecurityContext[]>();
+
+  // Block tracker for temporary bans after rate limit abuse
+  private blockTracker = new Map<string, number>();
 
   private constructor(config: Partial<SecurityMiddlewareConfig> = {}) {
     this.config = { ...DEFAULT_SECURITY_CONFIG, ...config };
@@ -513,32 +563,225 @@ export class SecurityMiddleware {
   }
 
   /**
-   * Check rate limiting
+   * Sliding window rate limiter - accurate rate limiting without boundary burst issues
+   *
+   * @param key - Unique identifier (e.g., "IP:endpoint" or "userId:endpoint")
+   * @param limit - Maximum number of requests allowed in the window
+   * @param windowMs - Time window in milliseconds
+   * @returns Rate limit check result with allowed status and metadata
+   */
+  private checkSlidingWindowRateLimit(
+    key: string,
+    limit: number,
+    windowMs: number
+  ): {
+    allowed: boolean;
+    remaining: number;
+    resetTime: number;
+    count: number;
+  } {
+    const now = Date.now();
+    const windowStart = now - windowMs;
+
+    // Get or create entry
+    let entry = this.slidingWindowStore.get(key);
+    if (!entry) {
+      entry = { timestamps: [], lastCleanup: now };
+      this.slidingWindowStore.set(key, entry);
+    }
+
+    // Remove expired timestamps (this is what makes the window "slide")
+    entry.timestamps = entry.timestamps.filter((ts: number) => ts > windowStart);
+    entry.lastCleanup = now;
+
+    // Check if limit exceeded
+    const allowed = entry.timestamps.length < limit;
+    const count = entry.timestamps.length;
+
+    if (allowed) {
+      // Add current request timestamp
+      entry.timestamps.push(now);
+    }
+
+    // Calculate reset time (when oldest request will expire)
+    const resetTime = entry.timestamps.length > 0
+      ? entry.timestamps[0] + windowMs
+      : now + windowMs;
+
+    return {
+      allowed,
+      remaining: Math.max(0, limit - entry.timestamps.length),
+      resetTime,
+      count: entry.timestamps.length
+    };
+  }
+
+  /**
+   * Check voice session rate limiting with per-user and per-IP limits
+   *
+   * @param request - Next.js request object
+   * @param endpoint - API endpoint path
+   * @returns Rate limit check result
+   */
+  async checkVoiceRateLimit(
+    request: NextRequest,
+    endpoint: string
+  ): Promise<{
+    allowed: boolean;
+    remaining: number;
+    resetTime: number;
+    retryAfter: number;
+    limit: number;
+    violationType?: 'user' | 'ip';
+  }> {
+    // Check if endpoint has voice rate limit configuration
+    const rule = VOICE_SESSION_RATE_LIMITS[endpoint];
+    if (!rule) {
+      // No specific rule, use default rate limiting
+      return {
+        allowed: true,
+        remaining: 100,
+        resetTime: Date.now() + 60000,
+        retryAfter: 0,
+        limit: 100
+      };
+    }
+
+    const clientIP = this.extractClientIP(request);
+    const userId = await this.extractUserId(request);
+    const now = Date.now();
+
+    // Check if temporarily blocked
+    if (rule.blockDuration) {
+      const ipBlockKey = `block:${clientIP}:${endpoint}`;
+      const ipBlockUntil = this.blockTracker.get(ipBlockKey);
+      if (ipBlockUntil && now < ipBlockUntil) {
+        return {
+          allowed: false,
+          remaining: 0,
+          resetTime: ipBlockUntil,
+          retryAfter: ipBlockUntil - now,
+          limit: rule.perIP,
+          violationType: 'ip'
+        };
+      }
+
+      if (userId) {
+        const userBlockKey = `block:${userId}:${endpoint}`;
+        const userBlockUntil = this.blockTracker.get(userBlockKey);
+        if (userBlockUntil && now < userBlockUntil) {
+          return {
+            allowed: false,
+            remaining: 0,
+            resetTime: userBlockUntil,
+            retryAfter: userBlockUntil - now,
+            limit: rule.perUser,
+            violationType: 'user'
+          };
+        }
+      }
+    }
+
+    // Check per-user limit (primary check)
+    if (userId) {
+      const userKey = `user:${userId}:${endpoint}`;
+      const userResult = this.checkSlidingWindowRateLimit(
+        userKey,
+        rule.perUser,
+        rule.windowMs
+      );
+
+      if (!userResult.allowed) {
+        // User limit exceeded - apply block if configured
+        if (rule.blockDuration) {
+          const blockKey = `block:${userId}:${endpoint}`;
+          this.blockTracker.set(blockKey, now + rule.blockDuration);
+        }
+
+        return {
+          allowed: false,
+          remaining: userResult.remaining,
+          resetTime: userResult.resetTime,
+          retryAfter: userResult.resetTime - now,
+          limit: rule.perUser,
+          violationType: 'user'
+        };
+      }
+
+      // User limit passed, check IP limit (secondary check)
+      const ipKey = `ip:${clientIP}:${endpoint}`;
+      const ipResult = this.checkSlidingWindowRateLimit(
+        ipKey,
+        rule.perIP,
+        rule.windowMs
+      );
+
+      if (!ipResult.allowed) {
+        // IP limit exceeded - apply block if configured
+        if (rule.blockDuration) {
+          const blockKey = `block:${clientIP}:${endpoint}`;
+          this.blockTracker.set(blockKey, now + rule.blockDuration);
+        }
+
+        return {
+          allowed: false,
+          remaining: ipResult.remaining,
+          resetTime: ipResult.resetTime,
+          retryAfter: ipResult.resetTime - now,
+          limit: rule.perIP,
+          violationType: 'ip'
+        };
+      }
+
+      // Both limits passed
+      return {
+        allowed: true,
+        remaining: Math.min(userResult.remaining, ipResult.remaining),
+        resetTime: Math.min(userResult.resetTime, ipResult.resetTime),
+        retryAfter: 0,
+        limit: rule.perUser
+      };
+    }
+
+    // No user ID, only check IP limit
+    const ipKey = `ip:${clientIP}:${endpoint}`;
+    const ipResult = this.checkSlidingWindowRateLimit(
+      ipKey,
+      rule.perIP,
+      rule.windowMs
+    );
+
+    if (!ipResult.allowed && rule.blockDuration) {
+      const blockKey = `block:${clientIP}:${endpoint}`;
+      this.blockTracker.set(blockKey, now + rule.blockDuration);
+    }
+
+    return {
+      allowed: ipResult.allowed,
+      remaining: ipResult.remaining,
+      resetTime: ipResult.resetTime,
+      retryAfter: ipResult.allowed ? 0 : ipResult.resetTime - now,
+      limit: rule.perIP,
+      violationType: ipResult.allowed ? undefined : 'ip'
+    };
+  }
+
+  /**
+   * Legacy rate limiting check (kept for backward compatibility)
+   * @deprecated Use checkVoiceRateLimit for new implementations
    */
   private async checkRateLimit(context: RequestSecurityContext): Promise<{ allowed: boolean; resetTime?: number }> {
     const key = `${context.clientIP}:${context.endpoint}`;
-    const now = Date.now();
-    const windowMs = this.config.rateLimiting.windowMs;
-    const maxRequests = this.config.rateLimiting.requests;
+    const result = this.checkSlidingWindowRateLimit(
+      key,
+      this.config.rateLimiting.requests,
+      this.config.rateLimiting.windowMs
+    );
 
-    const current = this.rateLimitTracker.get(key);
-
-    if (!current || now > current.resetTime) {
-      // New window
-      this.rateLimitTracker.set(key, {
-        count: 1,
-        resetTime: now + windowMs
-      });
-      return { allowed: true };
-    }
-
-    if (current.count >= maxRequests) {
-      return { allowed: false, resetTime: current.resetTime };
-    }
-
-    // Increment count
-    current.count++;
-    return { allowed: true };
+    return {
+      allowed: result.allowed,
+      resetTime: result.resetTime
+    };
   }
 
   /**
