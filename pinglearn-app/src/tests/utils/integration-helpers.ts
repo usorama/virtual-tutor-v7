@@ -92,11 +92,11 @@ export async function createTestDatabase(config: TestDatabaseConfig = {}): Promi
         is: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
         in: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
         single: vi.fn().mockResolvedValue({
-          data: (mockData[table] || [])[0] || null,
+          data: (mockData[table] || [])[0] ?? null,
           error: (mockData[table] || []).length === 0 ? { message: 'No rows found' } : null
         }),
         maybeSingle: vi.fn().mockResolvedValue({
-          data: (mockData[table] || [])[0] || null,
+          data: (mockData[table] || [])[0] ?? null,
           error: null
         })
       }),
@@ -174,12 +174,17 @@ export async function createTestDatabase(config: TestDatabaseConfig = {}): Promi
       const transactionClient = {
         from: (table: string) => ({
           select: (columns: string = '*') => ({
-            eq: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
+            eq: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({
+                data: (mockData[table] || [])[0] ?? null,
+                error: (mockData[table] || []).length === 0 ? { message: 'No rows found' } : null
+              })
+            }),
             neq: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
             gt: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
             lt: vi.fn().mockResolvedValue({ data: mockData[table] || [], error: null }),
             single: vi.fn().mockResolvedValue({
-              data: (mockData[table] || [])[0] || null,
+              data: (mockData[table] || [])[0] ?? null,
               error: (mockData[table] || []).length === 0 ? { message: 'No rows found' } : null
             })
           }),

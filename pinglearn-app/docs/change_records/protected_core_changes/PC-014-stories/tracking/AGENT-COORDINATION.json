@@ -30,6 +30,18 @@
       "duration_minutes": 30,
       "files_modified": 13,
       "git_commit": "e6b4576"
+    },
+    {
+      "agent_id": "architect-agent-dependency-analyzer-001",
+      "agent_type": "dependency-graph-analyzer",
+      "task_id": "dependency-graph-analysis",
+      "started_at": "2025-09-30T09:00:00Z",
+      "completed_at": "2025-09-30T09:45:00Z",
+      "status": "completed",
+      "duration_minutes": 45,
+      "deliverables_created": 3,
+      "waves_created": 4,
+      "time_savings_identified": "138 hours (74%)"
     }
   ],
   "failed_agents": [],
@@ -72,10 +84,10 @@
     "status_update_frequency": "on_progress_change"
   },
   "metrics": {
-    "total_agents_spawned": 0,
-    "total_agents_completed": 0,
+    "total_agents_spawned": 3,
+    "total_agents_completed": 2,
     "total_agents_failed": 0,
-    "average_agent_duration_minutes": 0,
-    "total_processing_time_minutes": 0
+    "average_agent_duration_minutes": 37.5,
+    "total_processing_time_minutes": 75
   }
 }

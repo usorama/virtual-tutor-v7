@@ -15,6 +15,25 @@ export default defineConfig({
       'e2e',
       'src/protected-core/**/*' // Protected core should not be tested directly
     ],
+
+    // 🔥 CRITICAL: Resource Management - Prevent Memory Saturation
+    pool: 'forks',                    // Use forks (better isolation, less memory than threads)
+    poolOptions: {
+      forks: {
+        maxForks: 2,                  // Max 2 concurrent test processes (was unlimited = 14!)
+        minForks: 1,
+        singleFork: false,            // Allow parallel execution with limit
+      }
+    },
+
+    // Timeouts to force cleanup
+    testTimeout: 30000,               // 30s test timeout
+    hookTimeout: 20000,               // 20s hook timeout
+    teardownTimeout: 10000,           // 10s to force cleanup
+
+    // Concurrency limit
+    maxConcurrency: 5,                // Max 5 tests running at once
+
     coverage: {
       reporter: ['text', 'json', 'html'],
       exclude: [
