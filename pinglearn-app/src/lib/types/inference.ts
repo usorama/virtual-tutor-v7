@@ -742,3 +742,410 @@ namespace ArrayTupleInferenceTests {
   type ReadonlyIsTuple = InferIsTuple<ReadonlyTup>; // true
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */
+
+// ============================================================================
+// OBJECT & PROPERTY TYPE INFERENCE
+// ============================================================================
+
+/**
+ * Infer property value type by key
+ *
+ * Extracts the type of a specific property from an object type.
+ * Falls back to indexed access if Record check fails.
+ *
+ * @example
+ * ```typescript
+ * interface User { id: string; name: string; age: number; }
+ * type IdType = InferPropertyType<User, 'id'>; // string
+ * type AgeType = InferPropertyType<User, 'age'>; // number
+ * ```
+ *
+ * @template T - Object type
+ * @template K - Property key
+ * @returns Type of property K, or never if K doesn't exist
+ */
+export type InferPropertyType<T, K extends keyof T> =
+  T extends Record<K, infer V>
+    ? V
+    : T[K];
+
+/**
+ * Infer all property types as union
+ *
+ * Creates a union of all property value types in an object.
+ *
+ * @example
+ * ```typescript
+ * type Props = InferPropertyTypes<{ a: string; b: number; c: boolean }>;
+ * // string | number | boolean
+ * ```
+ *
+ * @template T - Object type
+ * @returns Union of all property types
+ */
+export type InferPropertyTypes<T> = T[keyof T];
+
+/**
+ * Infer property type for nested path
+ *
+ * Extracts type at a nested property path using dot notation.
+ * Supports arbitrary nesting depth.
+ *
+ * @example
+ * ```typescript
+ * interface Data {
+ *   user: {
+ *     profile: {
+ *       name: string;
+ *     };
+ *   };
+ * }
+ *
+ * type Name = InferNestedType<Data, 'user.profile.name'>; // string
+ * ```
+ *
+ * @template T - Object type
+ * @template Path - Dot-separated property path string
+ * @returns Type at the nested path, or never if path invalid
+ */
+export type InferNestedType<T, Path extends string> =
+  Path extends `${infer Key}.${infer Rest}`
+    ? Key extends keyof T
+      ? InferNestedType<T[Key], Rest>
+      : never
+    : Path extends keyof T
+    ? T[Path]
+    : never;
+
+/**
+ * Infer method return type by method name
+ *
+ * Extracts the return type of a specific method from an object type.
+ * Returns never if the property is not a function.
+ *
+ * @example
+ * ```typescript
+ * interface API {
+ *   getData(): { value: string };
+ *   setData(value: string): void;
+ * }
+ *
+ * type GetReturn = InferMethodReturn<API, 'getData'>; // { value: string }
+ * type SetReturn = InferMethodReturn<API, 'setData'>; // void
+ * ```
+ *
+ * @template T - Object type containing methods
+ * @template K - Method name key
+ * @returns Return type of method, or never if not a function
+ */
+export type InferMethodReturn<T, K extends keyof T> =
+  T[K] extends (...args: any[]) => infer R
+    ? R
+    : never;
+
+/**
+ * Infer method parameters by method name
+ *
+ * Extracts the parameter types of a specific method as a tuple.
+ * Returns never if the property is not a function.
+ *
+ * @example
+ * ```typescript
+ * interface API {
+ *   setData(id: string, value: number): void;
+ * }
+ *
+ * type Params = InferMethodParams<API, 'setData'>; // [string, number]
+ * ```
+ *
+ * @template T - Object type containing methods
+ * @template K - Method name key
+ * @returns Tuple of parameter types, or never if not a function
+ */
+export type InferMethodParams<T, K extends keyof T> =
+  T[K] extends (...args: infer P) => any
+    ? P
+    : never;
+
+/**
+ * Infer all method names from object
+ *
+ * Filters object keys to only those whose values are functions.
+ * Useful for creating method-only subsets.
+ *
+ * @example
+ * ```typescript
+ * interface Mixed {
+ *   id: string;
+ *   getData(): string;
+ *   count: number;
+ *   setData(value: string): void;
+ * }
+ *
+ * type Methods = InferMethodNames<Mixed>; // 'getData' | 'setData'
+ * ```
+ *
+ * @template T - Object type
+ * @returns Union of method name keys
+ */
+export type InferMethodNames<T> = {
+  [K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;
+}[keyof T];
+
+/**
+ * Infer all method signatures as mapped type
+ *
+ * Creates a new type containing only the methods from the source type.
+ * Properties that aren't functions are excluded.
+ *
+ * @example
+ * ```typescript
+ * interface Mixed {
+ *   id: string;
+ *   getData(): string;
+ *   count: number;
+ *   setData(value: string): void;
+ * }
+ *
+ * type Methods = InferMethods<Mixed>;
+ * // { getData(): string; setData(value: string): void; }
+ * ```
+ *
+ * @template T - Object type
+ * @returns Object type with only methods
+ */
+export type InferMethods<T> = {
+  [K in InferMethodNames<T>]: T[K];
+};
+
+/**
+ * Infer constructor parameters
+ *
+ * Extracts parameter types from a constructor function.
+ * Works with both regular and abstract constructors.
+ *
+ * @example
+ * ```typescript
+ * class User {
+ *   constructor(name: string, age: number) { }
+ * }
+ *
+ * type Params = InferConstructorParams<typeof User>; // [string, number]
+ * ```
+ *
+ * @template T - Constructor type
+ * @returns Tuple of constructor parameter types
+ */
+export type InferConstructorParams<T> =
+  T extends new (...args: infer P) => any
+    ? P
+    : T extends abstract new (...args: infer P) => any
+    ? P
+    : never;
+
+/**
+ * Infer instance type from constructor
+ *
+ * Extracts the instance type created by a constructor.
+ * Works with both regular and abstract constructors.
+ *
+ * @example
+ * ```typescript
+ * class User {
+ *   name: string;
+ *   constructor(name: string) {
+ *     this.name = name;
+ *   }
+ * }
+ *
+ * type Instance = InferInstanceType<typeof User>; // User
+ * ```
+ *
+ * @template T - Constructor type
+ * @returns Instance type, or never if not a constructor
+ */
+export type InferInstanceType<T> =
+  T extends new (...args: any[]) => infer I
+    ? I
+    : T extends abstract new (...args: any[]) => infer I
+    ? I
+    : never;
+
+/**
+ * Infer class static properties
+ *
+ * Extracts static properties from a class constructor type.
+ * Excludes the prototype property.
+ *
+ * @example
+ * ```typescript
+ * class Config {
+ *   static version = '1.0.0';
+ *   static maxSize = 100;
+ *   instance: string;
+ * }
+ *
+ * type Statics = InferStaticProps<typeof Config>;
+ * // { version: string; maxSize: number; }
+ * ```
+ *
+ * @template T - Class constructor type
+ * @returns Object type of static properties
+ */
+export type InferStaticProps<T> = Omit<T, 'prototype'>;
+
+/**
+ * Infer class prototype properties
+ *
+ * Extracts instance properties from a class constructor type.
+ * Returns the prototype property type.
+ *
+ * @example
+ * ```typescript
+ * class User {
+ *   name: string;
+ *   greet(): void { }
+ * }
+ *
+ * type Proto = InferPrototypeProps<typeof User>;
+ * // { name: string; greet(): void; }
+ * ```
+ *
+ * @template T - Class constructor type
+ * @returns Prototype property types
+ */
+export type InferPrototypeProps<T> =
+  T extends { prototype: infer P }
+    ? P
+    : never;
+
+// ============================================================================
+// TYPE-LEVEL TESTS FOR OBJECT & PROPERTY INFERENCE
+// ============================================================================
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+namespace ObjectPropertyInferenceTests {
+  interface TestObject {
+    id: string;
+    count: number;
+    getData(): { value: string };
+    setData(value: string): void;
+    nested: {
+      deep: {
+        value: number;
+      };
+    };
+  }
+
+  // Test InferPropertyType
+  type PropType1 = InferPropertyType<TestObject, 'id'>; // string
+  type PropType2 = InferPropertyType<TestObject, 'count'>; // number
+
+  // Test InferPropertyTypes
+  type AllTypes = InferPropertyTypes<{ a: string; b: number; c: boolean }>;
+  // string | number | boolean
+
+  // Test InferNestedType
+  type Nested1 = InferNestedType<TestObject, 'nested.deep.value'>; // number
+  type Nested2 = InferNestedType<TestObject, 'nested'>; // { deep: { value: number } }
+
+  // Test InferMethodReturn
+  type MethodRet1 = InferMethodReturn<TestObject, 'getData'>; // { value: string }
+  type MethodRet2 = InferMethodReturn<TestObject, 'setData'>; // void
+
+  // Test InferMethodParams
+  type MethodParams1 = InferMethodParams<TestObject, 'setData'>; // [string]
+  type MethodParams2 = InferMethodParams<TestObject, 'getData'>; // []
+
+  // Test InferMethodNames
+  type Methods = InferMethodNames<TestObject>; // 'getData' | 'setData'
+
+  // Test InferMethods
+  type OnlyMethods = InferMethods<TestObject>;
+  // { getData(): { value: string }; setData(value: string): void; }
+
+  // Test constructor inference
+  class TestClass {
+    static version = '1.0.0';
+    instance: string;
+
+    constructor(public name: string, public age: number) {
+      this.instance = 'test';
+    }
+
+    greet(): string {
+      return `Hello ${this.name}`;
+    }
+  }
+
+  abstract class AbstractClass {
+    abstract method(): void;
+    constructor(public id: string) { }
+  }
+
+  // Test InferConstructorParams
+  type ConstructorParams1 = InferConstructorParams<typeof TestClass>; // [string, number]
+  type ConstructorParams2 = InferConstructorParams<typeof AbstractClass>; // [string]
+
+  // Test InferInstanceType
+  type Instance1 = InferInstanceType<typeof TestClass>; // TestClass
+  type Instance2 = InferInstanceType<typeof AbstractClass>; // AbstractClass
+
+  // Test InferStaticProps
+  type Statics = InferStaticProps<typeof TestClass>;
+  // { version: string; } (+ other built-in static properties)
+
+  // Test InferPrototypeProps
+  type Proto = InferPrototypeProps<typeof TestClass>;
+  // { instance: string; name: string; age: number; greet(): string; }
+
+  // Complex nested object scenario
+  interface ComplexAPI {
+    config: {
+      database: {
+        host: string;
+        port: number;
+      };
+      cache: {
+        enabled: boolean;
+      };
+    };
+    connect(): Promise<void>;
+    query<T>(sql: string): Promise<T[]>;
+    disconnect(): void;
+  }
+
+  type DBHost = InferNestedType<ComplexAPI, 'config.database.host'>; // string
+  type DBPort = InferNestedType<ComplexAPI, 'config.database.port'>; // number
+  type ConnectReturn = InferMethodReturn<ComplexAPI, 'connect'>; // Promise<void>
+  type QueryParams = InferMethodParams<ComplexAPI, 'query'>; // [string]
+  type APIMethod = InferMethodNames<ComplexAPI>; // 'connect' | 'query' | 'disconnect'
+
+  // Edge case: readonly properties
+  interface ReadonlyProps {
+    readonly id: string;
+    readonly created: Date;
+    update(data: object): void;
+  }
+
+  type ReadonlyPropType = InferPropertyType<ReadonlyProps, 'id'>; // string
+  type ReadonlyMethodNames = InferMethodNames<ReadonlyProps>; // 'update'
+
+  // Edge case: optional methods
+  interface OptionalMethods {
+    required(): void;
+    optional?(): string;
+  }
+
+  type OptionalMethodNames = InferMethodNames<OptionalMethods>; // 'required' | 'optional'
+
+  // Edge case: generic methods
+  interface GenericAPI {
+    get<T>(id: string): Promise<T>;
+    set<T>(id: string, value: T): Promise<void>;
+  }
+
+  type GetReturn = InferMethodReturn<GenericAPI, 'get'>; // Promise<unknown>
+  type SetParams = InferMethodParams<GenericAPI, 'set'>; // [string, unknown]
+}
+/* eslint-enable @typescript-eslint/no-unused-vars */
