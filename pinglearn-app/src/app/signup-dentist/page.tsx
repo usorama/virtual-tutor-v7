@@ -52,9 +52,10 @@ export default function SignupDentistPage() {
         await setupProfile(authData.user.id)
       }
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error:', error)
-      setMessage(`❌ Error: ${error.message}`)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+      setMessage(`❌ Error: ${errorMessage}`)
     } finally {
       setLoading(false)
     }
@@ -152,9 +153,10 @@ export default function SignupDentistPage() {
         }, 3000)
       }
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Profile setup error:', error)
-      setMessage(prev => prev + `\n❌ Profile setup error: ${error.message}`)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+      setMessage(prev => prev + `\n❌ Profile setup error: ${errorMessage}`)
     }
   }
 

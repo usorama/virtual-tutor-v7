@@ -9,6 +9,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { PDFMetadataExtractor } from '@/lib/textbook/pdf-metadata-extractor';
 import type { UploadedFile } from '@/types/textbook-hierarchy';
 
+interface AggregatedMetadata {
+  publisher?: string;
+  publisherConfidence?: number;
+  subject?: string;
+  subjectConfidence?: number;
+  grade?: number;
+  gradeConfidence?: number;
+  seriesName?: string;
+  curriculum?: string;
+}
+
 /**
  * POST /api/textbooks/extract-metadata
  * Extract metadata from uploaded PDF files
@@ -38,7 +49,7 @@ export async function POST(request: NextRequest) {
       name: file.name,
       size: file.size,
       type: file.type,
-      file: null as any, // File object not needed for metadata extraction
+      file: null as unknown as File, // File object not needed for metadata extraction
       processingStatus: 'pending',
       progress: 0
     }));
@@ -74,7 +85,7 @@ export async function POST(request: NextRequest) {
       }
 
       return acc;
-    }, {} as any);
+    }, {} as AggregatedMetadata);
 
     // Build suggested metadata for wizard
     const suggestedMetadata = {

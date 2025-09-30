@@ -652,14 +652,16 @@ export interface Database {
  * Validates if data is a valid Profile row
  */
 export function isValidProfile(data: unknown): data is Database['public']['Tables']['profiles']['Row'] {
+  if (typeof data !== 'object' || data === null) return false;
+
+  const record = data as Record<string, unknown>;
   return (
-    typeof data === 'object' &&
-    data !== null &&
-    'id' in data &&
-    'email' in data &&
-    typeof (data as any).id === 'string' &&
-    typeof (data as any).email === 'string' &&
-    (data as any).email.includes('@')
+    'id' in record &&
+    'email' in record &&
+    typeof record.id === 'string' &&
+    typeof record.email === 'string' &&
+    typeof record.email === 'string' &&
+    record.email.includes('@')
   );
 }
 
@@ -667,17 +669,19 @@ export function isValidProfile(data: unknown): data is Database['public']['Table
  * Validates if data is a valid LearningSession row
  */
 export function isValidLearningSession(data: unknown): data is Database['public']['Tables']['learning_sessions']['Row'] {
+  if (typeof data !== 'object' || data === null) return false;
+
+  const record = data as Record<string, unknown>;
   return (
-    typeof data === 'object' &&
-    data !== null &&
-    'id' in data &&
-    'student_id' in data &&
-    'topic' in data &&
-    'session_data' in data &&
-    typeof (data as any).id === 'string' &&
-    typeof (data as any).student_id === 'string' &&
-    typeof (data as any).topic === 'string' &&
-    typeof (data as any).session_data === 'object'
+    'id' in record &&
+    'student_id' in record &&
+    'topic' in record &&
+    'session_data' in record &&
+    typeof record.id === 'string' &&
+    typeof record.student_id === 'string' &&
+    typeof record.topic === 'string' &&
+    typeof record.session_data === 'object' &&
+    record.session_data !== null
   );
 }
 
@@ -685,17 +689,18 @@ export function isValidLearningSession(data: unknown): data is Database['public'
  * Validates if data is a valid Textbook row
  */
 export function isValidTextbook(data: unknown): data is Database['public']['Tables']['textbooks']['Row'] {
+  if (typeof data !== 'object' || data === null) return false;
+
+  const record = data as Record<string, unknown>;
   return (
-    typeof data === 'object' &&
-    data !== null &&
-    'id' in data &&
-    'title' in data &&
-    'subject' in data &&
-    'grade_level' in data &&
-    typeof (data as any).id === 'string' &&
-    typeof (data as any).title === 'string' &&
-    typeof (data as any).subject === 'string' &&
-    typeof (data as any).grade_level === 'number'
+    'id' in record &&
+    'title' in record &&
+    'subject' in record &&
+    'grade_level' in record &&
+    typeof record.id === 'string' &&
+    typeof record.title === 'string' &&
+    typeof record.subject === 'string' &&
+    typeof record.grade_level === 'number'
   );
 }
 
@@ -703,19 +708,20 @@ export function isValidTextbook(data: unknown): data is Database['public']['Tabl
  * Validates if data is a valid BookSeries row
  */
 export function isValidBookSeries(data: unknown): data is Database['public']['Tables']['book_series']['Row'] {
+  if (typeof data !== 'object' || data === null) return false;
+
+  const record = data as Record<string, unknown>;
   return (
-    typeof data === 'object' &&
-    data !== null &&
-    'id' in data &&
-    'series_name' in data &&
-    'publisher' in data &&
-    'grade' in data &&
-    'subject' in data &&
-    typeof (data as any).id === 'string' &&
-    typeof (data as any).series_name === 'string' &&
-    typeof (data as any).publisher === 'string' &&
-    typeof (data as any).grade === 'number' &&
-    typeof (data as any).subject === 'string'
+    'id' in record &&
+    'series_name' in record &&
+    'publisher' in record &&
+    'grade' in record &&
+    'subject' in record &&
+    typeof record.id === 'string' &&
+    typeof record.series_name === 'string' &&
+    typeof record.publisher === 'string' &&
+    typeof record.grade === 'number' &&
+    typeof record.subject === 'string'
   );
 }
 
@@ -723,17 +729,18 @@ export function isValidBookSeries(data: unknown): data is Database['public']['Ta
  * Validates if data is a valid Book row
  */
 export function isValidBook(data: unknown): data is Database['public']['Tables']['books']['Row'] {
+  if (typeof data !== 'object' || data === null) return false;
+
+  const record = data as Record<string, unknown>;
   return (
-    typeof data === 'object' &&
-    data !== null &&
-    'id' in data &&
-    'series_id' in data &&
-    'volume_number' in data &&
-    'volume_title' in data &&
-    typeof (data as any).id === 'string' &&
-    typeof (data as any).series_id === 'string' &&
-    typeof (data as any).volume_number === 'number' &&
-    typeof (data as any).volume_title === 'string'
+    'id' in record &&
+    'series_id' in record &&
+    'volume_number' in record &&
+    'volume_title' in record &&
+    typeof record.id === 'string' &&
+    typeof record.series_id === 'string' &&
+    typeof record.volume_number === 'number' &&
+    typeof record.volume_title === 'string'
   );
 }
 
@@ -741,17 +748,18 @@ export function isValidBook(data: unknown): data is Database['public']['Tables']
  * Validates if data is a valid BookChapter row
  */
 export function isValidBookChapter(data: unknown): data is Database['public']['Tables']['book_chapters']['Row'] {
+  if (typeof data !== 'object' || data === null) return false;
+
+  const record = data as Record<string, unknown>;
   return (
-    typeof data === 'object' &&
-    data !== null &&
-    'id' in data &&
-    'book_id' in data &&
-    'chapter_number' in data &&
-    'title' in data &&
-    typeof (data as any).id === 'string' &&
-    typeof (data as any).book_id === 'string' &&
-    typeof (data as any).chapter_number === 'number' &&
-    typeof (data as any).title === 'string'
+    'id' in record &&
+    'book_id' in record &&
+    'chapter_number' in record &&
+    'title' in record &&
+    typeof record.id === 'string' &&
+    typeof record.book_id === 'string' &&
+    typeof record.chapter_number === 'number' &&
+    typeof record.title === 'string'
   );
 }
 
@@ -759,15 +767,16 @@ export function isValidBookChapter(data: unknown): data is Database['public']['T
  * Validates if data is a valid VoiceSession row
  */
 export function isValidVoiceSession(data: unknown): data is Database['public']['Tables']['voice_sessions']['Row'] {
+  if (typeof data !== 'object' || data === null) return false;
+
+  const record = data as Record<string, unknown>;
   return (
-    typeof data === 'object' &&
-    data !== null &&
-    'id' in data &&
-    'session_id' in data &&
-    'livekit_room_name' in data &&
-    typeof (data as any).id === 'string' &&
-    typeof (data as any).session_id === 'string' &&
-    typeof (data as any).livekit_room_name === 'string'
+    'id' in record &&
+    'session_id' in record &&
+    'livekit_room_name' in record &&
+    typeof record.id === 'string' &&
+    typeof record.session_id === 'string' &&
+    typeof record.livekit_room_name === 'string'
   );
 }
 

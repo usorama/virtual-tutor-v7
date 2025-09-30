@@ -23,7 +23,7 @@ export async function POST() {
         } else {
           results.push({ query: query.substring(0, 50), success: true })
         }
-      } catch (e: any) {
+      } catch (e: unknown) {
         // If RPC doesn't exist, try direct modification
         results.push({ query: query.substring(0, 50), note: 'RPC not available' })
       }
@@ -114,10 +114,11 @@ export async function POST() {
       migration_results: results
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fixing profiles:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
     return NextResponse.json(
-      { error: error.message },
+      { error: errorMessage },
       { status: 500 }
     )
   }
@@ -162,9 +163,10 @@ export async function GET() {
       sessions: sessions || []
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
     return NextResponse.json(
-      { error: error.message },
+      { error: errorMessage },
       { status: 500 }
     )
   }

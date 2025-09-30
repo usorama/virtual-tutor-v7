@@ -126,7 +126,7 @@ export const PerformanceTestSuite = {
   testMemoryUsage() {
     console.log('💾 Testing Memory Usage Patterns...');
     
-    const perfMemory = (performance as any).memory;
+    const perfMemory = (performance as Performance & { memory?: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
     if (!perfMemory) {
       console.warn('⚠️ Performance.memory not available in this browser');
       return;
@@ -357,7 +357,7 @@ export const PerformanceTestSuite = {
 
 // Export for use in browser console
 if (typeof window !== 'undefined') {
-  (window as any).PerformanceTestSuite = PerformanceTestSuite;
+  (window as Window & { PerformanceTestSuite?: unknown }).PerformanceTestSuite = PerformanceTestSuite;
   console.log('💡 Performance test suite available as window.PerformanceTestSuite');
   console.log('Run: PerformanceTestSuite.runAllTests()');
 }

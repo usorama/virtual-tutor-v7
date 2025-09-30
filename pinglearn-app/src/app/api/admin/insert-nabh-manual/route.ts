@@ -6,6 +6,35 @@ import path from 'path'
 // This is an admin endpoint to insert the NABH manual
 // Should be protected in production
 
+interface NABHChapter {
+  id: string;
+  chapter_number: number;
+  title: string;
+  topics: string[];
+  start_page?: number;
+  end_page?: number;
+}
+
+interface NABHChunk {
+  chapter_id: string;
+  chunk_index: number;
+  content: string;
+  content_type?: string;
+  token_count?: number;
+  page_number?: number;
+}
+
+interface NABHJsonData {
+  textbook: {
+    file_name: string;
+    title: string;
+    total_pages?: number;
+    file_size_mb?: number;
+  };
+  chapters: NABHChapter[];
+  chunks: NABHChunk[];
+}
+
 export async function POST(request: Request) {
   try {
     // Load the processed JSON data
@@ -18,7 +47,7 @@ export async function POST(request: Request) {
       )
     }
 
-    const jsonData = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'))
+    const jsonData = JSON.parse(fs.readFileSync(jsonPath, 'utf-8')) as NABHJsonData
 
     const supabase = await createClient()
 
@@ -61,7 +90,7 @@ export async function POST(request: Request) {
     }
 
     // Insert first 10 chapters as a test
-    const chaptersToInsert = jsonData.chapters.slice(0, 10).map((chapter: any) => ({
+    const chaptersToInsert = jsonData.chapters.slice(0, 10).map((chapter) => ({
       textbook_id: textbook.id,
       chapter_number: chapter.chapter_number,
       title: chapter.title.substring(0, 200),
@@ -84,7 +113,7 @@ export async function POST(request: Request) {
 
     // Create chapter ID mapping
     const chapterIdMap: Record<string, string> = {}
-    jsonData.chapters.slice(0, 10).forEach((originalChapter: any, index: number) => {
+    jsonData.chapters.slice(0, 10).forEach((originalChapter, index) => {
       if (chapters[index]) {
         chapterIdMap[originalChapter.id] = chapters[index].id
       }
@@ -93,7 +122,7 @@ export async function POST(request: Request) {
     // Insert content chunks for the inserted chapters
     let chunksInserted = 0
     const chunksToInsert = jsonData.chunks
-      .filter((chunk: any) => chapterIdMap[chunk.chapter_id])
+      .filter((chunk) => chapterIdMap[chunk.chapter_id])
       .slice(0, 30) // Limit to first 30 chunks
 
     for (const chunk of chunksToInsert) {

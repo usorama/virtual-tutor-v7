@@ -124,7 +124,7 @@ export default function TestTranscriptionPage() {
   // Load performance test suite into window for console access
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      (window as any).PerformanceTestSuite = PerformanceTestSuite;
+      (window as Window & { PerformanceTestSuite?: typeof PerformanceTestSuite }).PerformanceTestSuite = PerformanceTestSuite;
       console.log('💡 Performance test suite loaded. Run in console: PerformanceTestSuite.runAllTests()');
     }
   }, []);

@@ -27,7 +27,9 @@ import type {
   BookChapterInsert,
   TextbookInsert,
   ChapterInsert,
-  BookChapter as DBBookChapter
+  BookChapter as DBBookChapter,
+  Textbook,
+  BookSeries as DBBookSeries
 } from '@/types/database';
 import {
   isValidBookSeries,
@@ -420,9 +422,10 @@ async function processTextbooksAsync(
     }
 
     // Runtime validation of textbook data with proper typing
-    const validTextbooks = textbooks.filter((textbook: any) => {
+    const validTextbooks = textbooks.filter((textbook: unknown): textbook is Textbook => {
       if (!isValidTextbook(textbook)) {
-        console.warn(`Skipping invalid textbook data: ${textbook?.id}`);
+        const textbookRecord = textbook as Record<string, unknown>;
+        console.warn(`Skipping invalid textbook data: ${textbookRecord?.id}`);
         return false;
       }
       return true;
@@ -567,9 +570,10 @@ export async function GET(request: NextRequest) {
     }
 
     // Runtime validation of series data with proper typing
-    const validatedSeries = (series || []).filter((seriesItem: any) => {
+    const validatedSeries = (series || []).filter((seriesItem: unknown): seriesItem is DBBookSeries => {
       if (!isValidBookSeries(seriesItem)) {
-        console.warn(`Skipping invalid series data: ${seriesItem?.id}`);
+        const seriesRecord = seriesItem as Record<string, unknown>;
+        console.warn(`Skipping invalid series data: ${seriesRecord?.id}`);
         return false;
       }
       return true;
