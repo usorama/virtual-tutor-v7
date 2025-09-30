@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { getDisplayBuffer } from '@/protected-core';
+import { withVoiceRateLimit } from '@/lib/rate-limit/voice-rate-limit';
 
-export async function POST(request: NextRequest) {
+/**
+ * POST /api/transcription
+ * Process transcription data from voice session
+ * Rate limited: 100 requests per user per minute, 150 per IP (high frequency)
+ */
+async function handlePOST(request: NextRequest) {
   try {
     const data = await request.json();
     const { sessionId, speaker, text, hasMath, timestamp } = data;
@@ -66,3 +72,6 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+// Export POST handler with rate limiting
+export const POST = withVoiceRateLimit(handlePOST, '/api/transcription');

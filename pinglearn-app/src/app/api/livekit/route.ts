@@ -5,6 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { AccessToken, VideoGrant } from 'livekit-server-sdk';
 import { createClient as createServerClient } from '@supabase/supabase-js';
+import { withVoiceRateLimit } from '@/lib/rate-limit/voice-rate-limit';
 
 // LiveKit configuration from environment
 const LIVEKIT_URL = process.env.LIVEKIT_URL || 'wss://ai-tutor-prototype-ny9l58vd.livekit.cloud';
@@ -18,8 +19,9 @@ const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 /**
  * POST /api/livekit
  * Create a room and generate access token for the student
+ * Rate limited: 5 requests per user per minute, 10 per IP
  */
-export async function POST(request: NextRequest) {
+async function handlePOST(request: NextRequest) {
   try {
     // Get the authorization header
     const authorization = request.headers.get('authorization');
@@ -294,6 +296,9 @@ async function endSession(userId: string, body: EndSessionRequest) {
     duration_minutes: durationMinutes
   });
 }
+
+// Export POST handler with rate limiting
+export const POST = withVoiceRateLimit(handlePOST, '/api/livekit');
 
 /**
  * OPTIONS /api/livekit

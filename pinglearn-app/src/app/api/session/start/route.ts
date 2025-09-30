@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { withVoiceRateLimit } from '@/lib/rate-limit/voice-rate-limit';
 
-export async function POST(request: NextRequest) {
+/**
+ * POST /api/session/start
+ * Start a learning session
+ * Rate limited: 3 requests per user per minute, 5 per IP
+ */
+async function handlePOST(request: NextRequest) {
   try {
     const data = await request.json();
     const { sessionId, roomName, studentId, topic } = data;
@@ -37,3 +43,6 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+// Export POST handler with rate limiting
+export const POST = withVoiceRateLimit(handlePOST, '/api/session/start');

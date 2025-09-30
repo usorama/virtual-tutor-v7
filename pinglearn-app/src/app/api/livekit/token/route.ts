@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { AccessToken } from 'livekit-server-sdk';
+import { withVoiceRateLimit } from '@/lib/rate-limit/voice-rate-limit';
 
-export async function POST(request: NextRequest) {
+/**
+ * POST /api/livekit/token
+ * Generate LiveKit access token
+ * Rate limited: 10 requests per user per minute, 20 per IP
+ */
+async function handlePOST(request: NextRequest) {
   try {
     const { participantId, sessionId, roomName, participantName } = await request.json();
 
@@ -49,3 +55,6 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+// Export POST handler with rate limiting
+export const POST = withVoiceRateLimit(handlePOST, '/api/livekit/token');
