@@ -1,6 +1,12 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import {
+  extractTokenFromRequest,
+  validateAccessToken,
+  getValidationErrorMessage,
+  getValidationErrorStatus
+} from '@/lib/security/token-validation'
 
 // Theme types for server-side detection
 type Theme = 'light' | 'dark' | 'system'
@@ -41,6 +47,21 @@ function setResolvedThemeCookie(response: NextResponse, resolvedTheme: 'light' |
 const AUTH_ROUTES = ['/login', '/register', '/forgot-password', '/auth/signin', '/auth/signup', '/auth/reset-password']
 const PROTECTED_ROUTES = ['/dashboard', '/wizard', '/classroom', '/textbooks', '/profile']
 const ROUTES_REQUIRING_WIZARD = ['/dashboard', '/classroom', '/textbooks']
+
+// Security logging helper
+function logSecurityEvent(event: {
+  type: 'auth_failure' | 'token_expired' | 'rate_limited'
+  userId?: string
+  path: string
+  ip?: string
+  reason?: string
+}) {
+  // In production, this would send to security monitoring service
+  console.warn('[SECURITY]', {
+    timestamp: new Date().toISOString(),
+    ...event
+  })
+}
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next({
@@ -99,18 +120,52 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // Get user session
-  const { data: { user } } = await supabase.auth.getUser()
+  // Get user session with Supabase client (handles signature verification)
+  const { data: { user }, error: authError } = await supabase.auth.getUser()
 
   // Check if the route requires authentication
   const isProtectedRoute = PROTECTED_ROUTES.some(route => pathname.startsWith(route))
   const isAuthRoute = AUTH_ROUTES.some(route => pathname.startsWith(route))
 
   // Redirect to login if accessing protected route without authentication
-  if (isProtectedRoute && !user) {
-    const redirectUrl = new URL('/login', request.url)
-    redirectUrl.searchParams.set('redirect', pathname)
-    return NextResponse.redirect(redirectUrl)
+  if (isProtectedRoute) {
+    if (!user || authError) {
+      // No user or auth error - redirect to login
+      const redirectUrl = new URL('/login', request.url)
+      redirectUrl.searchParams.set('redirect', pathname)
+      redirectUrl.searchParams.set('reason', 'session_required')
+      return NextResponse.redirect(redirectUrl)
+    }
+
+    // User exists - perform additional token validation
+    const token = extractTokenFromRequest(request)
+
+    if (token) {
+      const validationResult = validateAccessToken(token)
+
+      if (!validationResult.valid) {
+        // Token validation failed - redirect with specific error
+        const redirectUrl = new URL('/login', request.url)
+        redirectUrl.searchParams.set('redirect', pathname)
+        redirectUrl.searchParams.set('reason', validationResult.reason || 'invalid_token')
+
+        // Log validation failure for security monitoring
+        console.warn('Token validation failed:', {
+          userId: user.id,
+          reason: validationResult.reason,
+          path: pathname,
+          ip: request.headers.get('x-forwarded-for') || 'unknown'
+        })
+
+        return NextResponse.redirect(redirectUrl)
+      }
+
+      // Token expiring soon - add header to trigger client-side refresh
+      if (validationResult.expiresIn && validationResult.expiresIn < 5 * 60) {
+        response.headers.set('X-Token-Expiring', 'true')
+        response.headers.set('X-Token-Expires-In', validationResult.expiresIn.toString())
+      }
+    }
   }
 
   // Redirect to dashboard if accessing auth routes while authenticated
