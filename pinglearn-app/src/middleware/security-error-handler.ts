@@ -1087,6 +1087,42 @@ export class SecurityMiddleware {
 
     // In production, this would alert security team
   }
+
+  /**
+   * Log rate limit events for monitoring and abuse detection
+   */
+  logRateLimitEvent(context: {
+    userId?: string;
+    clientIP: string;
+    endpoint: string;
+    limitType: 'user' | 'ip';
+    limit: number;
+    count: number;
+    blocked: boolean;
+  }): void {
+    const logEntry = {
+      event: 'rate_limit',
+      userId: context.userId,
+      clientIP: context.clientIP,
+      endpoint: context.endpoint,
+      limitType: context.limitType,
+      limit: context.limit,
+      currentCount: context.count,
+      blocked: context.blocked,
+      timestamp: new Date().toISOString()
+    };
+
+    if (context.blocked) {
+      console.warn('[RATE_LIMIT_BLOCKED]', logEntry);
+    } else {
+      console.log('[RATE_LIMIT_CHECK]', logEntry);
+    }
+
+    // In production, this would:
+    // 1. Send to logging service (e.g., DataDog, LogRocket)
+    // 2. Trigger alerts for repeated violations
+    // 3. Feed into security analytics dashboard
+  }
 }
 
 /**
