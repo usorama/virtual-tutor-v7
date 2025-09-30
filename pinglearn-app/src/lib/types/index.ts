@@ -46,6 +46,10 @@ export * from './union-types';
 export * from './recursive';
 export * from './tree-types';
 
+// Template literal types (TS-016)
+export * from './template-literals';
+export * from './string-types';
+
 // Performance monitoring and build optimization
 export * from '../utils/typescript-performance';
 
