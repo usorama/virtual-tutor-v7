@@ -5,33 +5,37 @@
   "last_updated": "2025-09-30T00:00:00Z",
   "active_agents": [
     {
-      "agent_id": "agent_test_fixer_001",
-      "agent_type": "test-writer-fixer",
-      "task_id": "test-infrastructure-fix",
-      "status": "running",
-      "started_at": "2025-09-30T10:15:00Z",
-      "files_locked": [
-        "src/tests/mocks/protected-core.ts",
-        "src/tests/helpers/database.ts",
-        "src/tests/mocks/websocket.ts"
-      ],
-      "progress": "10% - Research phase started",
-      "last_update": "2025-09-30T10:15:00Z"
+      "agent_id": "story_sec005_001",
+      "agent_type": "story-implementer",
+      "task_id": "SEC-005",
+      "status": "planning_complete",
+      "started_at": "2025-09-30T20:00:00Z",
+      "files_locked": [],
+      "progress": "40% - Research & Plan complete, awaiting approval",
+      "last_update": "2025-09-30T20:15:00Z"
     },
     {
-      "agent_id": "story_sec002_001",
+      "agent_id": "story_ts012_001",
       "agent_type": "story-implementer",
-      "task_id": "SEC-002",
-      "status": "planning_complete",
-      "started_at": "2025-09-30T14:00:00Z",
+      "task_id": "TS-012",
+      "status": "implementing",
+      "started_at": "2025-09-30T20:00:00Z",
       "files_locked": [
-        "src/components/transcription/MathRenderer.tsx",
-        "src/components/classroom/MathRenderer.tsx",
-        "src/components/classroom/ProgressiveMath.tsx",
-        "src/lib/security/xss-protection.ts"
+        "src/lib/types/branded.ts",
+        "src/lib/types/id-types.ts"
       ],
-      "progress": "40% - Research & Plan complete, awaiting user approval",
-      "last_update": "2025-09-30T16:00:00Z"
+      "progress": "60% - Core types created, tests remaining",
+      "last_update": "2025-09-30T20:20:00Z"
+    },
+    {
+      "agent_id": "story_err005_001",
+      "agent_type": "story-implementer",
+      "task_id": "ERR-005",
+      "status": "planning_complete",
+      "started_at": "2025-09-30T20:00:00Z",
+      "files_locked": [],
+      "progress": "40% - Research & Plan complete, awaiting approval",
+      "last_update": "2025-09-30T20:25:00Z"
     }
   ],
   "completed_agents": [
@@ -47,6 +51,59 @@
       "files_created": 3,
       "tests_added": 44,
       "git_commits": ["f487769", "e412365", "5056efd", "3b0236b"]
+    },
+    {
+      "agent_id": "story_sec002_001",
+      "agent_type": "story-implementer",
+      "task_id": "SEC-002",
+      "started_at": "2025-09-30T14:00:00Z",
+      "completed_at": "2025-09-30T20:00:00Z",
+      "status": "completed",
+      "duration_minutes": 240,
+      "files_modified": 3,
+      "files_created": 2,
+      "tests_added": 280,
+      "git_commits": ["6ab3790", "92afbf2", "eddbe02", "16016ff", "6558df3", "f2f1674"]
+    },
+    {
+      "agent_id": "story_ts010_001",
+      "agent_type": "story-implementer",
+      "task_id": "TS-010",
+      "started_at": "2025-09-30T16:00:00Z",
+      "completed_at": "2025-09-30T18:45:00Z",
+      "status": "completed",
+      "duration_minutes": 165,
+      "files_modified": 0,
+      "files_created": 4,
+      "tests_added": 98,
+      "git_commits": ["ts010_commits"]
+    },
+    {
+      "agent_id": "story_err003_001",
+      "agent_type": "story-implementer",
+      "task_id": "ERR-003",
+      "started_at": "2025-09-30T16:30:00Z",
+      "completed_at": "2025-09-30T20:00:00Z",
+      "status": "completed",
+      "duration_minutes": 210,
+      "files_modified": 1,
+      "files_created": 3,
+      "tests_added": 31,
+      "git_commits": ["err003_commits"]
+    },
+    {
+      "agent_id": "story_sec004_001",
+      "agent_type": "story-implementer",
+      "task_id": "SEC-004",
+      "started_at": "2025-09-30T20:00:00Z",
+      "completed_at": "2025-09-30T20:15:00Z",
+      "status": "completed",
+      "duration_minutes": 180,
+      "files_modified": 6,
+      "files_created": 1,
+      "tests_added": 0,
+      "git_commits": ["b0869bc", "d5a6aa5", "17fdf9b"],
+      "notes": "Tests deferred to separate task"
     },
     {
       "agent_id": "boundary-enforcer-001",
@@ -112,10 +169,13 @@
     "status_update_frequency": "on_progress_change"
   },
   "metrics": {
-    "total_agents_spawned": 3,
-    "total_agents_completed": 2,
+    "total_agents_spawned": 10,
+    "total_agents_completed": 7,
+    "total_agents_active": 3,
     "total_agents_failed": 0,
-    "average_agent_duration_minutes": 37.5,
-    "total_processing_time_minutes": 75
+    "average_agent_duration_minutes": 155.7,
+    "total_processing_time_minutes": 1090,
+    "stories_completed": 5,
+    "stories_in_progress": 3
   }
 }
