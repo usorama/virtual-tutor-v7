@@ -202,6 +202,74 @@ export type {
   NarrowNonNull,
 } from './conditional-helpers';
 
+// Type inference improvements (TS-018)
+export type {
+  // Function inference
+  InferReturnType,
+  InferAsyncReturnType,
+  InferFunctionResult,
+  InferParameters,
+  InferFirstParam,
+  InferLastParam,
+  InferParam,
+  InferRestParams,
+  InferParamCount,
+
+  // Promise & async inference
+  InferPromiseType,
+  InferPromiseValue,
+  InferAwaited,
+  InferPromiseArray,
+  InferAwaitedObject,
+
+  // Array & tuple inference
+  InferElementType,
+  InferDeepElement,
+  InferArrayDepth,
+  InferFirst,
+  InferLast,
+  InferRest,
+  InferTupleLength,
+  InferTupleElement,
+  InferIsTuple,
+
+  // Object & property inference
+  InferPropertyType,
+  InferPropertyTypes,
+  InferNestedType,
+  InferMethodReturn,
+  InferMethodParams,
+  InferMethodNames,
+  InferMethods,
+  InferConstructorParams,
+  InferInstanceType,
+  InferStaticProps,
+  InferPrototypeProps,
+} from './inference';
+
+export type {
+  // Generic constraint inference
+  InferConstrained,
+  InferGenericParam,
+  InferGenericParams,
+  InferWithDefault,
+  InferNarrowed,
+
+  // Context-sensitive inference
+  InferCallbackResult,
+  InferCallbackParam,
+  InferEventType,
+  InferHandlerType,
+  InferMapperTypes,
+  InferReducerState,
+  InferReducerAction,
+
+  // Pattern matching inference
+  InferByDiscriminant,
+  InferVariant,
+  InferCommonProps,
+} from './inference-helpers';
+
 export {
   deepPartial,
   deepFreeze,
