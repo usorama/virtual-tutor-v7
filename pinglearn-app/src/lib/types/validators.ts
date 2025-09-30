@@ -101,7 +101,7 @@ export function validateObject<T extends Record<string, unknown>>(
     [K in keyof T]: (val: unknown) => val is T[K];
   }
 ): ValidationResult<T> {
-  if (typeof value !== 'object' || value === null) {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
     return {
       success: false,
       error: {

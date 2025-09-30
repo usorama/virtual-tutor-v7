@@ -13,6 +13,10 @@ export * from './inference-optimizations';
 export * from './performance-optimizations';
 export * from './union-optimizations';
 
+// Type guards and validators
+export * from './type-guards';
+export * from './validators';
+
 // Performance monitoring and build optimization
 export * from '../utils/typescript-performance';
 

@@ -16,6 +16,7 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Bot, User, Clock, Pause, Play } from 'lucide-react';
+import { sanitizeText, type SanitizationResult } from '@/lib/security/input-sanitization';
 
 // Use local DisplayItem type that matches what DisplayBuffer returns
 interface DisplayItem {
@@ -362,12 +363,25 @@ const TranscriptionItem = React.memo(({ item, isLatest }: { item: DisplayItem; i
 
   const renderContent = () => {
     switch (item.type) {
-      case 'text':
+      case 'text': {
+        // Sanitize text content to prevent XSS
+        const sanitized = sanitizeText(item.content);
+
+        // Log XSS attempts for security monitoring
+        if (!sanitized.isClean) {
+          console.warn('XSS attempt detected in transcription text', {
+            threats: sanitized.threatsDetected,
+            itemId: item.id,
+            timestamp: item.timestamp
+          });
+        }
+
         return (
           <div className="text-sm leading-relaxed">
-            {item.content}
+            {sanitized.sanitized}
           </div>
         );
+      }
 
       case 'math':
         // Determine if it's inline or block based on content
@@ -382,27 +396,54 @@ const TranscriptionItem = React.memo(({ item, isLatest }: { item: DisplayItem; i
           </div>
         );
 
-      case 'code':
+      case 'code': {
+        // Sanitize code content (escape HTML to prevent execution)
+        const sanitizedCode = sanitizeText(item.content);
+
+        if (!sanitizedCode.isClean) {
+          console.warn('XSS attempt detected in transcription code', {
+            threats: sanitizedCode.threatsDetected,
+            itemId: item.id
+          });
+        }
+
         return (
           <pre className="p-3 bg-gray-900 text-gray-100 rounded-md overflow-x-auto text-xs">
-            <code>{item.content}</code>
+            <code>{sanitizedCode.sanitized}</code>
           </pre>
         );
+      }
 
       case 'diagram':
-      case 'image':
+      case 'image': {
+        // Sanitize display text for diagram/image labels
+        const sanitizedLabel = sanitizeText(item.content);
+
+        if (!sanitizedLabel.isClean) {
+          console.warn('XSS attempt detected in transcription diagram/image', {
+            threats: sanitizedLabel.threatsDetected,
+            itemId: item.id,
+            type: item.type
+          });
+        }
+
         return (
           <div className="p-3 bg-gray-100 rounded-md text-center text-gray-600 text-sm">
-            <p>[{item.type}: {item.content}]</p>
+            <p>[{item.type}: {sanitizedLabel.sanitized}]</p>
           </div>
         );
+      }
 
-      default:
+      default: {
+        // Sanitize any fallback content
+        const sanitizedDefault = sanitizeText(item.content);
+
         return (
           <div className="text-sm text-gray-600">
-            {item.content}
+            {sanitizedDefault.sanitized}
           </div>
         );
+      }
     }
   };
 
