@@ -63,7 +63,7 @@ export type PolymorphicRef<T extends React.ElementType> = React.ComponentPropsWi
 /**
  * Complete polymorphic component interface
  */
-export type PolymorphicComponentProps<T extends React.ElementType, P = {}> = P &
+export type PolymorphicComponentProps<T extends React.ElementType, P = Record<string, never>> = P &
   PolymorphicProps<T> & {
     ref?: PolymorphicRef<T>;
   };
@@ -142,7 +142,7 @@ export type FormFieldComponent = {
 /**
  * Loading state conditional props
  */
-export type LoadingProps<T extends boolean> = T extends true
+export type LoadingProps<T extends boolean, TData = Record<string, unknown>> = T extends true
   ? {
       loading: true;
       data?: never;
@@ -151,7 +151,7 @@ export type LoadingProps<T extends boolean> = T extends true
     }
   : {
       loading: false;
-      data: unknown;
+      data: TData;
       error?: string | null;
       loadingComponent?: never;
     };
@@ -193,7 +193,7 @@ export type LessonRoutes = RouteDefinition<'/lessons/:lessonId/topics/:topicId/q
 /**
  * Generic form component with strict validation schema
  */
-export interface FormProps<T extends Record<string, any>> {
+export interface FormProps<T extends Record<string, unknown>> {
   initialValues: T;
   validationSchema: ValidationSchema<T>;
   onSubmit: (values: T, helpers: FormHelpers<T>) => Promise<void> | void;
@@ -316,7 +316,7 @@ export interface QueryState<TData, TError> {
   error: TError | null;
   loading: boolean;
   refetch: () => Promise<void>;
-  fetchMore: (variables?: any) => Promise<void>;
+  fetchMore: (variables?: Record<string, unknown>) => Promise<void>;
 }
 
 /**
@@ -362,7 +362,7 @@ export interface ProviderProps<T> {
 /**
  * Higher-order component pattern with proper typing
  */
-export type HOC<TInjectedProps, TOriginalProps = {}> = <TProps extends TInjectedProps>(
+export type HOC<TInjectedProps, TOriginalProps = Record<string, never>> = <TProps extends TInjectedProps>(
   Component: React.ComponentType<TProps>
 ) => React.ComponentType<Omit<TProps, keyof TInjectedProps> & TOriginalProps>;
 
@@ -507,10 +507,10 @@ export type ControllableProps<T> = ControlledProps<T> | UncontrolledProps<T>;
 /**
  * Component state machine pattern
  */
-export type ComponentState =
+export type ComponentState<TData = Record<string, unknown>> =
   | { status: 'idle' }
   | { status: 'loading' }
-  | { status: 'success'; data: unknown }
+  | { status: 'success'; data: TData }
   | { status: 'error'; error: string };
 
 /**

@@ -170,9 +170,9 @@ export type ApiResponse<T> = T extends string
 /**
  * Async result extraction from functions
  */
-export type AsyncResult<T> = T extends (...args: any[]) => Promise<infer R>
+export type AsyncResult<T> = T extends (...args: readonly unknown[]) => Promise<infer R>
   ? R
-  : T extends (...args: any[]) => infer R
+  : T extends (...args: readonly unknown[]) => infer R
   ? R
   : never;
 
@@ -181,7 +181,7 @@ export type AsyncResult<T> = T extends (...args: any[]) => Promise<infer R>
  */
 export type DeepReadonly<T> = {
   readonly [K in keyof T]: T[K] extends object
-    ? T[K] extends Function
+    ? T[K] extends (...args: readonly unknown[]) => unknown
       ? T[K]
       : DeepReadonly<T[K]>
     : T[K];
@@ -192,7 +192,7 @@ export type DeepReadonly<T> = {
  */
 export type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends object
-    ? T[K] extends Function
+    ? T[K] extends (...args: readonly unknown[]) => unknown
       ? T[K]
       : DeepPartial<T[K]>
     : T[K];
@@ -555,7 +555,7 @@ export type PolymorphicRef<T extends React.ElementType> = React.ComponentPropsWi
 /**
  * Complete polymorphic component props with ref
  */
-export type PolymorphicComponentProps<T extends React.ElementType, P = {}> = P &
+export type PolymorphicComponentProps<T extends React.ElementType, P = Record<string, never>> = P &
   PolymorphicProps<T> & {
     ref?: PolymorphicRef<T>;
   };
@@ -582,7 +582,7 @@ export function isEntity(value: unknown): value is Entity {
     typeof value === 'object' &&
     value !== null &&
     'id' in value &&
-    typeof (value as any).id === 'string'
+    typeof (value as Record<string, unknown>).id === 'string'
   );
 }
 
@@ -634,7 +634,7 @@ export type MemoizedFunction<TArgs extends readonly unknown[], TReturn> = {
 /**
  * Debounced function type
  */
-export type DebouncedFunction<T extends (...args: any[]) => any> = {
+export type DebouncedFunction<T extends (...args: readonly unknown[]) => unknown> = {
   (...args: Parameters<T>): void;
   cancel: () => void;
   flush: () => void;
@@ -644,7 +644,7 @@ export type DebouncedFunction<T extends (...args: any[]) => any> = {
 /**
  * Throttled function type
  */
-export type ThrottledFunction<T extends (...args: any[]) => any> = {
+export type ThrottledFunction<T extends (...args: readonly unknown[]) => unknown> = {
   (...args: Parameters<T>): void;
   cancel: () => void;
   flush: () => void;
