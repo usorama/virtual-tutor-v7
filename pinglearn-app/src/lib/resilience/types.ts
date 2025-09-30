@@ -44,6 +44,7 @@ export interface HealingAttempt {
 export interface OperationContext {
   operationType: string;
   operationId: string;
+  component?: string;
   params?: Record<string, unknown>;
   metadata?: Record<string, unknown>;
 }
@@ -259,21 +260,26 @@ export interface ResilienceConfig {
  * Performance metrics for a fallback strategy
  */
 export interface FallbackMetrics {
-  strategyName: string;
   successCount: number;
   failureCount: number;
-  averageDuration: number;
-  lastUsed: number;
+  totalAttempts: number;
+  avgExecutionTime: number;
   successRate: number;
+  lastUsed: number;
+  errors: Array<{
+    timestamp: number;
+    message: string;
+  }>;
 }
 
 /**
  * Performance metrics for recovery methods
  */
 export interface RecoveryPerformance {
-  method: RecoveryMethod;
-  successCount: number;
-  failureCount: number;
-  averageDuration: number;
-  successRate: number;
+  totalRecoveryAttempts: number;
+  successfulRecoveries: number;
+  failedRecoveries: number;
+  averageRecoveryTime: number;
+  recoverySuccessRate: number;
+  strategiesUsed: Record<string, number>;
 }
