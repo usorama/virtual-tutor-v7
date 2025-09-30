@@ -1,0 +1,28 @@
+config:
+  target: "ws://localhost:3006"
+  phases:
+    - duration: 300
+      arrivalRate: 1
+      name: "Normal load - 50 WebSocket connections over 5 minutes"
+  ensure:
+    maxErrorRate: 1
+  engines:
+    ws:
+      timeout: 10
+
+scenarios:
+  - name: "WebSocket connection lifecycle - normal load"
+    engine: "ws"
+    flow:
+      - connect:
+          url: "/ws"
+      - think: 2
+      - send:
+          payload: '{"type":"ping","timestamp":{{$timestamp}}}'
+      - think: 5
+      - send:
+          payload: '{"type":"student_message","content":"Normal load test message"}'
+      - think: 10
+      - send:
+          payload: '{"type":"session_update","status":"active"}'
+      - think: 15

@@ -18,7 +18,13 @@
     "test:regression": "vitest --run src/tests/regression",
     "test:performance": "vitest run tests/performance --reporter=verbose",
     "test:performance:watch": "vitest watch tests/performance",
-    "test:performance:baseline": "node scripts/generate-performance-baseline.js"
+    "test:performance:baseline": "node scripts/generate-performance-baseline.js",
+    "test:load:ci": "vitest run tests/load/ci --reporter=verbose",
+    "test:load:full": "vitest run tests/load/scenarios --reporter=verbose",
+    "test:load:normal": "vitest run tests/load/scenarios/normal-load.test.ts",
+    "test:load:peak": "vitest run tests/load/scenarios/peak-load.test.ts",
+    "test:load:stress": "vitest run tests/load/scenarios/stress-load.test.ts",
+    "test:load:spike": "vitest run tests/load/scenarios/spike-load.test.ts"
   },
   "dependencies": {
     "@google/genai": "^1.21.0",

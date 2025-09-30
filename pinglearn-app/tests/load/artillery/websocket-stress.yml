@@ -1,0 +1,25 @@
+config:
+  target: "ws://localhost:3006"
+  phases:
+    - duration: 600
+      arrivalRate: 5
+      name: "Stress load - 500 WebSocket connections over 10 minutes"
+  ensure:
+    maxErrorRate: 5
+  engines:
+    ws:
+      timeout: 15
+
+scenarios:
+  - name: "WebSocket connection lifecycle - stress load"
+    engine: "ws"
+    flow:
+      - connect:
+          url: "/ws"
+      - think: 1
+      - send:
+          payload: '{"type":"ping","timestamp":{{$timestamp}}}'
+      - think: 3
+      - send:
+          payload: '{"type":"stress_test","connections":500}'
+      - think: 5
