@@ -11,5 +11,11 @@
   "enablePerformanceOptimization": false,
   "enableShowThenTell": true,
   "enableFC010": true,
-  "enableShowThenTellTiming": true
+  "enableShowThenTellTiming": true,
+  "resilience": {
+    "selfHealing": false,
+    "errorPredictor": false,
+    "intelligentFallback": false,
+    "recoveryOrchestrator": false
+  }
 }
