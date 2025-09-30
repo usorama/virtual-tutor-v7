@@ -8,3 +8,4 @@
 export * from './types';
 export * from './error-enrichment';
 export * from './error-tracker';
+export * from './error-catalog';
