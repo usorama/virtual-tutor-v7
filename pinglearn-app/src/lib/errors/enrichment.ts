@@ -21,10 +21,6 @@ import {
   captureSessionContext,
   createBreadcrumb,
   sanitizeContext,
-  type RequestContext,
-  type BrowserContext,
-  type EnvironmentContext,
-  type SessionContext,
   type Breadcrumb,
   type ContextTags,
 } from './context';
