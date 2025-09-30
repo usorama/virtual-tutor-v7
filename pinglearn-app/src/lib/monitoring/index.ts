@@ -42,9 +42,8 @@ export function initializeMonitoring(config?: {
     // Integrate with error tracker for critical performance alerts
     if (errorTracking) {
       const { trackPerformance } = require('./error-tracker');
-      const { AlertEvent } = require('./types');
-
-      performanceTracker.onAlert((alert: AlertEvent) => {
+      // Import type using import type syntax
+      const alertHandler = (alert: import('./types').AlertEvent): void => {
         if (alert.threshold.level === 'critical') {
           // Log critical performance alerts to error tracker
           trackPerformance({
@@ -59,7 +58,9 @@ export function initializeMonitoring(config?: {
             },
           });
         }
-      });
+      };
+
+      performanceTracker.onAlert(alertHandler);
     }
   }
 }

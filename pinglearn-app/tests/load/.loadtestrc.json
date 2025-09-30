@@ -1,0 +1,67 @@
+{
+  "loadTesting": {
+    "baseUrl": "http://localhost:3006",
+    "scenarios": {
+      "normal": {
+        "concurrency": 50,
+        "duration": 300,
+        "description": "Normal load - 50 concurrent users for 5 minutes"
+      },
+      "peak": {
+        "concurrency": 100,
+        "duration": 600,
+        "description": "Peak load - 100 concurrent users for 10 minutes"
+      },
+      "stress": {
+        "concurrency": 500,
+        "duration": 1200,
+        "description": "Stress load - 500 concurrent users for 20 minutes (or until failure)"
+      },
+      "spike": {
+        "concurrency": 1000,
+        "duration": 120,
+        "description": "Spike load - 1000 concurrent users for 2 minutes"
+      },
+      "endurance": {
+        "concurrency": 50,
+        "duration": 3600,
+        "description": "Endurance load - 50 concurrent users for 60 minutes"
+      }
+    },
+    "slas": {
+      "responseTime": {
+        "p50": 200,
+        "p95": 500,
+        "p99": 1000
+      },
+      "errorRate": {
+        "normal": 0.1,
+        "peak": 1.0,
+        "stress": 5.0
+      },
+      "throughput": {
+        "minRequestsPerSecond": 10,
+        "minMessagesPerSecond": 100
+      }
+    },
+    "endpoints": {
+      "critical": [
+        "/api/auth/login",
+        "/api/session/start",
+        "/api/livekit/token",
+        "/api/transcription"
+      ],
+      "standard": [
+        "/api/textbooks/hierarchy",
+        "/api/textbooks/statistics",
+        "/api/session/metrics"
+      ]
+    },
+    "ci": {
+      "enabled": true,
+      "concurrency": 10,
+      "duration": 30,
+      "description": "CI smoke tests - 10 concurrent users for 30 seconds"
+    }
+  }
+}
