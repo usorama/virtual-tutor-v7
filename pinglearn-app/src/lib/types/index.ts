@@ -17,6 +17,10 @@ export * from './union-optimizations';
 export * from './branded';
 export * from './id-types';
 
+// TS-017: Advanced mapped types and object transformations
+export * from './mapped-types';
+export * from './object-transforms';
+
 // Performance optimizations (excluding Brand to avoid conflict with branded.ts)
 // Note: performance-optimizations.ts exports Brand<T, B> = T & { __brand: B }
 // We exclude it in favor of the new Brand<T, BrandSymbol> from branded.ts
