@@ -34,6 +34,7 @@ export type { HealingStrategy } from './strategies/healing-strategy.interface';
 export { SelfHealingSystem } from './self-healing';
 export { ErrorPredictor } from './error-predictor';
 export { IntelligentFallbackSystem } from './intelligent-fallback';
+export { RecoveryOrchestrator } from './recovery-orchestrator';
 
 // Healing strategies
 export { DatabaseReconnectionStrategy } from './strategies/database-reconnection';
@@ -51,6 +52,3 @@ export { OfflineModeStrategy } from './strategies/offline-mode';
 export { MetricsCollector } from './metrics/metrics-collector';
 export { RiskScorer } from './metrics/risk-scorer';
 export { PerformanceTracker } from './metrics/performance-tracker';
-
-// Systems to be implemented
-// export { RecoveryOrchestrator } from './recovery-orchestrator';
