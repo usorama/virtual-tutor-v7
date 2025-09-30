@@ -65,11 +65,29 @@ function logSecurityEvent(event: {
 }
 
 export async function middleware(request: NextRequest) {
+  /**
+   * Security Headers (SEC-012)
+   * Generate Content-Security-Policy with nonce for this request
+   */
+  const nonce = generateNonce();
+  const isDevelopment = process.env.NODE_ENV === 'development';
+
+  // Build CSP with environment-specific configuration
+  const csp = buildCSP({ nonce, isDevelopment, reportOnly: isDevelopment });
+  const cspHeaderName = getCSPHeaderName({ nonce, isDevelopment, reportOnly: isDevelopment });
+
+  // Create response with security headers
   const response = NextResponse.next({
     request: {
       headers: request.headers,
     },
   })
+
+  // Set Content-Security-Policy header (report-only in dev, enforcing in prod)
+  response.headers.set(cspHeaderName, csp);
+
+  // Set nonce in header for Server Components to access
+  response.headers.set('x-nonce', nonce);
 
   const pathname = request.nextUrl.pathname
 
