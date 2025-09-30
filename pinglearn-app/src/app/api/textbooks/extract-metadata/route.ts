@@ -3,11 +3,19 @@
  *
  * This endpoint analyzes uploaded file names and extracts metadata
  * to auto-populate the textbook wizard
+ * Updated for SEC-008: Integrated file validation
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { PDFMetadataExtractor } from '@/lib/textbook/pdf-metadata-extractor';
 import type { UploadedFile } from '@/types/textbook-hierarchy';
+import {
+  validateFileExtension,
+  validateFileSize,
+  validateFileName,
+  getValidationOptionsForFileType
+} from '@/lib/security/file-validation';
+import { sanitizeFilename } from '@/lib/security/filename-sanitizer';
 
 interface AggregatedMetadata {
   publisher?: string;
@@ -43,10 +51,54 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Convert to UploadedFile format
-    const uploadedFiles: UploadedFile[] = files.map((file, index) => ({
+    // SEC-008: Validate all files before processing
+    const validationOptions = getValidationOptionsForFileType('textbook');
+    const validationErrors: string[] = [];
+
+    for (const file of files) {
+      // Validate extension
+      const extCheck = validateFileExtension(file.name, validationOptions.allowedExtensions);
+      if (!extCheck.passed) {
+        validationErrors.push(`${file.name}: ${extCheck.message}`);
+        continue;
+      }
+
+      // Validate size
+      const sizeCheck = validateFileSize(file.size, validationOptions.maxFileSize);
+      if (!sizeCheck.passed) {
+        validationErrors.push(`${file.name}: ${sizeCheck.message}`);
+        continue;
+      }
+
+      // Validate filename
+      const nameCheck = validateFileName(file.name);
+      if (!nameCheck.passed) {
+        validationErrors.push(`${file.name}: ${nameCheck.message}`);
+      }
+    }
+
+    // If any validation errors, return them
+    if (validationErrors.length > 0) {
+      return NextResponse.json(
+        {
+          error: 'File validation failed',
+          details: validationErrors
+        },
+        { status: 400 }
+      );
+    }
+
+    // SEC-008: Sanitize filenames for safe processing
+    const sanitizedFiles = files.map(file => ({
+      ...file,
+      name: sanitizeFilename(file.name),
+      originalName: file.name
+    }));
+
+    // Convert to UploadedFile format (use sanitized filenames)
+    const uploadedFiles: UploadedFile[] = sanitizedFiles.map((file, index) => ({
       id: `file-${index}`,
-      name: file.name,
+      name: file.name, // SEC-008: Use sanitized name
       size: file.size,
       type: file.type,
       file: null as unknown as File, // File object not needed for metadata extraction
@@ -108,7 +160,7 @@ export async function POST(request: NextRequest) {
         .map(m => ({
           chapterNumber: m.chapterNumber!,
           chapterTitle: m.chapterTitle || `Chapter ${m.chapterNumber}`,
-          fileName: files.find((_, i) => extractedMetadata[i] === m)?.name || '',
+          fileName: sanitizedFiles.find((_, i) => extractedMetadata[i] === m)?.name || '',
           confidence: m.confidence.chapter || 0.5
         })),
       confidence: {
