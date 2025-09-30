@@ -295,3 +295,177 @@ namespace FunctionInferenceTests {
   type NeverParams = InferParameters<never>; // never
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */
+
+// ============================================================================
+// PROMISE & ASYNC TYPE INFERENCE
+// ============================================================================
+
+/**
+ * Recursively unwrap Promise types to get final value
+ *
+ * Handles nested Promise<Promise<T>> by recursively unwrapping until
+ * reaching a non-Promise type.
+ *
+ * @example
+ * ```typescript
+ * type P1 = InferPromiseType<Promise<string>>; // string
+ * type P2 = InferPromiseType<Promise<Promise<number>>>; // number (recursive)
+ * type P3 = InferPromiseType<string>; // string (non-Promise)
+ * ```
+ *
+ * @template T - Type to unwrap (may be nested Promises)
+ * @returns Final unwrapped value type
+ */
+export type InferPromiseType<T> = T extends Promise<infer U>
+  ? InferPromiseType<U>
+  : T;
+
+/**
+ * Infer Promise value type (single level)
+ *
+ * Extracts the value type from a Promise without recursive unwrapping.
+ * Returns never if not a Promise.
+ *
+ * @example
+ * ```typescript
+ * type V1 = InferPromiseValue<Promise<{ id: number }>>; // { id: number }
+ * type V2 = InferPromiseValue<string>; // never (not a Promise)
+ * ```
+ *
+ * @template T - Promise type to infer from
+ * @returns Promise value type, or never if not a Promise
+ */
+export type InferPromiseValue<T> = T extends Promise<infer V>
+  ? V
+  : never;
+
+/**
+ * Infer type from Promise or return as-is
+ *
+ * Safe unwrapper that doesn't fail on non-Promise types.
+ * Recursively unwraps nested Promises like InferPromiseType.
+ *
+ * @example
+ * ```typescript
+ * type A1 = InferAwaited<Promise<string>>; // string
+ * type A2 = InferAwaited<number>; // number (non-Promise preserved)
+ * type A3 = InferAwaited<Promise<Promise<boolean>>>; // boolean
+ * ```
+ *
+ * @template T - Type to unwrap (Promise or regular type)
+ * @returns Unwrapped type, or original type if not a Promise
+ */
+export type InferAwaited<T> = T extends Promise<infer U>
+  ? InferAwaited<U>
+  : T;
+
+/**
+ * Infer Promise array element types
+ *
+ * Converts Promise<T>[] to T[], or awaits elements in T[].
+ * Handles both array of Promises and Promise of array.
+ *
+ * @example
+ * ```typescript
+ * type PA1 = InferPromiseArray<Promise<string>[]>; // string[]
+ * type PA2 = InferPromiseArray<Promise<number>[]>; // number[]
+ * ```
+ *
+ * @template T - Array of Promises or Promise array type
+ * @returns Array of unwrapped element types
+ */
+export type InferPromiseArray<T> =
+  T extends Promise<infer U>[]
+    ? U[]
+    : T extends (infer U)[]
+    ? Awaited<U>[]
+    : never;
+
+/**
+ * Infer resolved values from object with Promise properties
+ *
+ * Transforms an object type where some or all properties are Promises
+ * into an object with all Promises resolved.
+ *
+ * @example
+ * ```typescript
+ * type Obj = InferAwaitedObject<{
+ *   a: Promise<string>;
+ *   b: Promise<number>;
+ *   c: boolean;
+ * }>;
+ * // { a: string; b: number; c: boolean }
+ * ```
+ *
+ * @template T - Object type with Promise properties
+ * @returns Object type with all Promises resolved
+ */
+export type InferAwaitedObject<T> = {
+  [K in keyof T]: InferAwaited<T[K]>;
+};
+
+// ============================================================================
+// TYPE-LEVEL TESTS FOR PROMISE INFERENCE
+// ============================================================================
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+namespace PromiseInferenceTests {
+  // Test InferPromiseType
+  type P1 = InferPromiseType<Promise<string>>; // string
+  type P2 = InferPromiseType<Promise<Promise<number>>>; // number (recursive)
+  type P3 = InferPromiseType<string>; // string (non-Promise)
+  type P4 = InferPromiseType<Promise<{ id: number }>>; // { id: number }
+
+  // Test InferPromiseValue
+  type V1 = InferPromiseValue<Promise<{ id: number }>>; // { id: number }
+  type V2 = InferPromiseValue<Promise<string>>; // string
+  type V3 = InferPromiseValue<string>; // never (not a Promise)
+
+  // Test InferAwaited
+  type A1 = InferAwaited<Promise<string>>; // string
+  type A2 = InferAwaited<number>; // number (preserved)
+  type A3 = InferAwaited<Promise<Promise<boolean>>>; // boolean
+  type A4 = InferAwaited<{ id: string }>; // { id: string } (preserved)
+
+  // Test InferPromiseArray
+  type PA1 = InferPromiseArray<Promise<string>[]>; // string[]
+  type PA2 = InferPromiseArray<Promise<number>[]>; // number[]
+  type PA3 = InferPromiseArray<Array<Promise<boolean>>>; // boolean[]
+
+  // Test InferAwaitedObject
+  type Obj1 = InferAwaitedObject<{
+    a: Promise<string>;
+    b: Promise<number>;
+    c: boolean;
+  }>;
+  // { a: string; b: number; c: boolean }
+
+  type Obj2 = InferAwaitedObject<{
+    user: Promise<{ id: string; name: string }>;
+    posts: Promise<string[]>;
+    count: number;
+  }>;
+  // { user: { id: string; name: string }; posts: string[]; count: number }
+
+  // Complex scenario: nested Promises in object
+  type Complex = InferAwaitedObject<{
+    data: Promise<Promise<{ value: string }>>;
+    meta: { cached: boolean };
+  }>;
+  // { data: { value: string }; meta: { cached: boolean } }
+
+  // Edge case: empty Promise
+  type EmptyPromise = InferPromiseType<Promise<void>>; // void
+
+  // Edge case: never in Promise
+  type NeverPromise = InferPromiseType<Promise<never>>; // never
+
+  // Integration: async function with InferAwaited
+  async function fetchData(): Promise<{ items: string[] }> {
+    return { items: ['a', 'b'] };
+  }
+
+  type FetchResult = InferAwaited<ReturnType<typeof fetchData>>;
+  // { items: string[] }
+}
+/* eslint-enable @typescript-eslint/no-unused-vars */
