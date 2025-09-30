@@ -788,3 +788,480 @@ namespace ConditionalMappingTests {
   };
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */
+
+// ============================================================================
+// HOMOMORPHIC MAPPED TYPES
+// ============================================================================
+
+/**
+ * Homomorphic partial that preserves readonly modifiers
+ * Unlike built-in Partial, this preserves the readonly status of properties
+ *
+ * @example
+ * ```typescript
+ * interface User {
+ *   readonly id: string;
+ *   name: string;
+ *   email: string;
+ * }
+ *
+ * type PartialUser = StrictPartial<User>;
+ * // {
+ * //   readonly id?: string;  // readonly preserved
+ * //   name?: string;
+ * //   email?: string;
+ * // }
+ * ```
+ *
+ * @template T - Object type to make partial
+ */
+export type StrictPartial<T> = {
+  [K in keyof T]?: T[K]
+};
+
+/**
+ * Homomorphic readonly that preserves optional modifiers
+ * Unlike built-in Readonly, this preserves the optional status of properties
+ *
+ * @example
+ * ```typescript
+ * interface User {
+ *   id: string;
+ *   name: string;
+ *   email?: string;
+ * }
+ *
+ * type ReadonlyUser = StrictReadonly<User>;
+ * // {
+ * //   readonly id: string;
+ * //   readonly name: string;
+ * //   readonly email?: string;  // optional preserved
+ * // }
+ * ```
+ *
+ * @template T - Object type to make readonly
+ */
+export type StrictReadonly<T> = {
+  readonly [K in keyof T]: T[K]
+};
+
+/**
+ * Homomorphic required that preserves readonly modifiers
+ * Unlike built-in Required, this preserves the readonly status of properties
+ *
+ * @example
+ * ```typescript
+ * interface User {
+ *   readonly id?: string;
+ *   name?: string;
+ *   email?: string;
+ * }
+ *
+ * type RequiredUser = StrictRequired<User>;
+ * // {
+ * //   readonly id: string;  // readonly preserved
+ * //   name: string;
+ * //   email: string;
+ * // }
+ * ```
+ *
+ * @template T - Object type to make required
+ */
+export type StrictRequired<T> = {
+  [K in keyof T]-?: T[K]
+};
+
+/**
+ * Homomorphic mutable that preserves optional modifiers
+ * Removes readonly modifiers while preserving optional status
+ *
+ * @example
+ * ```typescript
+ * interface User {
+ *   readonly id: string;
+ *   readonly name: string;
+ *   readonly email?: string;
+ * }
+ *
+ * type MutableUser = StrictMutable<User>;
+ * // {
+ * //   id: string;
+ * //   name: string;
+ * //   email?: string;  // optional preserved
+ * // }
+ * ```
+ *
+ * @template T - Object type to make mutable
+ */
+export type StrictMutable<T> = {
+  -readonly [K in keyof T]: T[K]
+};
+
+// ============================================================================
+// TYPE-LEVEL TESTS FOR HOMOMORPHIC TYPES
+// ============================================================================
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+namespace HomomorphicTests {
+  // Test interface with mixed modifiers
+  interface TestBase {
+    readonly id: string;
+    name: string;
+    email?: string;
+    readonly createdAt?: Date;
+  }
+
+  // Test StrictPartial - should preserve readonly
+  type PartialTest = StrictPartial<TestBase>;
+  const testPartial: PartialTest = {
+    id: '123',  // Still readonly
+    name: 'Alice'
+    // All properties optional
+  };
+
+  // Verify readonly is preserved
+  // testPartial.id = 'new'; // Should error if readonly preserved
+
+  // Test StrictReadonly - should preserve optional
+  type ReadonlyTest = StrictReadonly<TestBase>;
+  const testReadonly: ReadonlyTest = {
+    id: '123',
+    name: 'Alice',
+    email: 'alice@example.com'  // Still optional
+  };
+
+  // Test StrictRequired - should preserve readonly
+  type RequiredTest = StrictRequired<TestBase>;
+  const testRequired: RequiredTest = {
+    id: '123',  // Still readonly
+    name: 'Alice',
+    email: 'required@example.com',  // Now required
+    createdAt: new Date()  // Now required, still readonly
+  };
+
+  // Test StrictMutable - should preserve optional
+  type MutableTest = StrictMutable<TestBase>;
+  const testMutable: MutableTest = {
+    id: '123',  // No longer readonly
+    name: 'Alice',
+    email: 'test@example.com'  // Still optional
+  };
+  testMutable.id = 'new';  // Should work now
+
+  // Compare with built-in types
+  type BuiltInPartial = Partial<TestBase>;
+  type BuiltInReadonly = Readonly<TestBase>;
+  type BuiltInRequired = Required<TestBase>;
+
+  // Test combination of homomorphic types
+  type PartialReadonly = StrictReadonly<StrictPartial<TestBase>>;
+  const testCombined: PartialReadonly = {
+    id: '123'
+  };
+
+  // Test with complex nested structure
+  interface Nested {
+    readonly user: {
+      readonly id: string;
+      name?: string;
+    };
+    settings?: {
+      theme: string;
+    };
+  }
+
+  type PartialNested = StrictPartial<Nested>;
+  const testNested: PartialNested = {
+    user: {
+      id: '123'
+    }
+  };
+}
+/* eslint-enable @typescript-eslint/no-unused-vars */
+
+// ============================================================================
+// PROPERTY MODIFIER UTILITIES
+// ============================================================================
+
+/**
+ * Modifies specific properties to a new type
+ * Selectively changes the type of specified keys
+ *
+ * @example
+ * ```typescript
+ * interface User {
+ *   id: string;
+ *   name: string;
+ *   age: number;
+ * }
+ *
+ * type ModifiedUser = ModifyKeys<User, 'id' | 'age', number>;
+ * // {
+ * //   id: number;    // Changed from string
+ * //   name: string;  // Unchanged
+ * //   age: number;   // Unchanged
+ * // }
+ * ```
+ *
+ * @template T - Object type to modify
+ * @template Keys - Keys to modify
+ * @template NewType - New type for specified keys
+ */
+export type ModifyKeys<T, Keys extends keyof T, NewType> = {
+  [K in keyof T]: K extends Keys ? NewType : T[K]
+};
+
+/**
+ * Makes all properties nullable (T | null | undefined)
+ * Wraps all property value types with null and undefined
+ *
+ * @example
+ * ```typescript
+ * interface User {
+ *   id: string;
+ *   name: string;
+ *   age: number;
+ * }
+ *
+ * type NullableUser = NullableProps<User>;
+ * // {
+ * //   id: string | null | undefined;
+ * //   name: string | null | undefined;
+ * //   age: number | null | undefined;
+ * // }
+ * ```
+ *
+ * @template T - Object type to modify
+ */
+export type NullableProps<T> = {
+  [K in keyof T]: T[K] | null | undefined
+};
+
+/**
+ * Removes null and undefined from all properties
+ * Unwraps property value types from nullable wrappers
+ *
+ * @example
+ * ```typescript
+ * interface User {
+ *   id: string | null;
+ *   name: string | undefined;
+ *   age: number | null | undefined;
+ * }
+ *
+ * type NonNullableUser = NonNullableProps<User>;
+ * // {
+ * //   id: string;
+ * //   name: string;
+ * //   age: number;
+ * // }
+ * ```
+ *
+ * @template T - Object type to modify
+ */
+export type NonNullableProps<T> = {
+  [K in keyof T]: NonNullable<T[K]>
+};
+
+/**
+ * Makes specific properties optional
+ * Selectively adds the `?` optional modifier to specified keys
+ *
+ * @example
+ * ```typescript
+ * interface User {
+ *   id: string;
+ *   name: string;
+ *   email: string;
+ * }
+ *
+ * type OptionalEmailUser = OptionalProps<User, 'email'>;
+ * // {
+ * //   id: string;
+ * //   name: string;
+ * //   email?: string;  // Now optional
+ * // }
+ * ```
+ *
+ * @template T - Object type to modify
+ * @template Keys - Keys to make optional
+ */
+export type OptionalProps<T, Keys extends keyof T> =
+  Omit<T, Keys> & Partial<Pick<T, Keys>>;
+
+/**
+ * Makes specific properties required
+ * Selectively removes the `?` optional modifier from specified keys
+ *
+ * @example
+ * ```typescript
+ * interface User {
+ *   id: string;
+ *   name: string;
+ *   email?: string;
+ *   phone?: string;
+ * }
+ *
+ * type RequiredEmailUser = RequiredProps<User, 'email'>;
+ * // {
+ * //   id: string;
+ * //   name: string;
+ * //   email: string;   // Now required
+ * //   phone?: string;  // Still optional
+ * // }
+ * ```
+ *
+ * @template T - Object type to modify
+ * @template Keys - Keys to make required
+ */
+export type RequiredProps<T, Keys extends keyof T> =
+  Omit<T, Keys> & Required<Pick<T, Keys>>;
+
+/**
+ * Makes specific properties readonly
+ * Selectively adds the `readonly` modifier to specified keys
+ *
+ * @example
+ * ```typescript
+ * interface User {
+ *   id: string;
+ *   name: string;
+ *   email: string;
+ * }
+ *
+ * type ReadonlyIdUser = ReadonlyProps<User, 'id'>;
+ * // {
+ * //   readonly id: string;  // Now readonly
+ * //   name: string;
+ * //   email: string;
+ * // }
+ * ```
+ *
+ * @template T - Object type to modify
+ * @template Keys - Keys to make readonly
+ */
+export type ReadonlyProps<T, Keys extends keyof T> =
+  Omit<T, Keys> & Readonly<Pick<T, Keys>>;
+
+/**
+ * Makes specific properties mutable (removes readonly)
+ * Selectively removes the `readonly` modifier from specified keys
+ *
+ * @example
+ * ```typescript
+ * interface User {
+ *   readonly id: string;
+ *   readonly name: string;
+ *   readonly email: string;
+ * }
+ *
+ * type MutableNameUser = MutableProps<User, 'name'>;
+ * // {
+ * //   readonly id: string;
+ * //   name: string;         // No longer readonly
+ * //   readonly email: string;
+ * // }
+ * ```
+ *
+ * @template T - Object type to modify
+ * @template Keys - Keys to make mutable
+ */
+export type MutableProps<T, Keys extends keyof T> =
+  Omit<T, Keys> & { -readonly [K in Keys]: T[K] };
+
+// ============================================================================
+// TYPE-LEVEL TESTS FOR PROPERTY MODIFIERS
+// ============================================================================
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+namespace PropertyModifierTests {
+  interface TestUser {
+    id: string;
+    name: string;
+    age: number;
+    email?: string;
+  }
+
+  // Test ModifyKeys
+  type ModifiedUser = ModifyKeys<TestUser, 'id' | 'age', number>;
+  const testModify: ModifiedUser = {
+    id: 123,  // Changed to number
+    name: 'Alice',
+    age: 30
+  };
+
+  // Test NullableProps
+  type NullableUser = NullableProps<TestUser>;
+  const testNullable: NullableUser = {
+    id: null,
+    name: undefined,
+    age: 30,
+    email: 'test@example.com'
+  };
+
+  // Test NonNullableProps
+  interface NullableInterface {
+    id: string | null;
+    name: string | undefined;
+    age: number | null | undefined;
+  }
+  type NonNullableUser = NonNullableProps<NullableInterface>;
+  const testNonNullable: NonNullableUser = {
+    id: '123',
+    name: 'Alice',
+    age: 30
+  };
+
+  // Test OptionalProps
+  type OptionalEmailUser = OptionalProps<TestUser, 'email'>;
+  const testOptionalProps: OptionalEmailUser = {
+    id: '123',
+    name: 'Alice',
+    age: 30
+    // email is optional
+  };
+
+  // Test RequiredProps
+  type RequiredEmailUser = RequiredProps<TestUser, 'email'>;
+  const testRequiredProps: RequiredEmailUser = {
+    id: '123',
+    name: 'Alice',
+    age: 30,
+    email: 'required@example.com'  // Now required
+  };
+
+  // Test ReadonlyProps
+  type ReadonlyIdUser = ReadonlyProps<TestUser, 'id'>;
+  const testReadonlyProps: ReadonlyIdUser = {
+    id: '123',  // Now readonly
+    name: 'Alice',
+    age: 30
+  };
+
+  // Test MutableProps
+  interface ReadonlyUser {
+    readonly id: string;
+    readonly name: string;
+    readonly email: string;
+  }
+  type MutableNameUser = MutableProps<ReadonlyUser, 'name'>;
+  const testMutableProps: MutableNameUser = {
+    id: '123',
+    name: 'Alice',
+    email: 'test@example.com'
+  };
+  testMutableProps.name = 'Bob';  // Should work
+
+  // Complex combinations
+  type ComplexModified = RequiredProps<
+    OptionalProps<TestUser, 'age'>,
+    'email'
+  >;
+  const testComplex: ComplexModified = {
+    id: '123',
+    name: 'Alice',
+    age: 30,  // Optional
+    email: 'required@example.com'  // Required
+  };
+}
+/* eslint-enable @typescript-eslint/no-unused-vars */

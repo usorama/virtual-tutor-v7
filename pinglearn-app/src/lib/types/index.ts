@@ -141,6 +141,63 @@ export type {
   AnyExtends
 } from './utility-types';
 
+// Conditional type patterns (TS-015)
+export type {
+  // Type filtering
+  ExtractByType,
+  ExcludeByType,
+  FilterByProperty,
+  FilterByValueType,
+  WithProperty,
+  WithoutProperty,
+
+  // Property key extraction
+  OptionalKeys,
+  RequiredKeys,
+  ReadonlyKeys,
+  MutableKeys,
+
+  // Property extraction
+  ExtractProps,
+  ExtractOptional,
+  ExtractRequired,
+  ExtractReadonly,
+  ExtractMutable,
+
+  // Distribution control
+  NonDistributive,
+  Distribute,
+  ForceDistribute,
+  PreventDistribute,
+  ConditionalWithDepth,
+} from './conditional';
+
+export type {
+  // Type predicates
+  Satisfies,
+  ValidateConstraint,
+  AssertExtends,
+  AllSatisfy,
+  AnySatisfies,
+  NoneSatisfy,
+
+  // Union operations
+  PartitionUnion,
+  SplitUnion,
+  SplitPrimitives,
+  GroupUnionBy,
+  GroupByType,
+  MapUnion,
+  TransformUnion,
+
+  // Type narrowing
+  NarrowTo,
+  RefineType,
+  NarrowByProperty,
+  NarrowByProperties,
+  NarrowNonNull,
+} from './conditional-helpers';
+
 export {
   deepPartial,
   deepFreeze,
