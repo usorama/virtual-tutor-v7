@@ -198,7 +198,7 @@ describe('Message Validation', () => {
     });
     await authenticateConnection(connectionId, {
       type: 'auth',
-      data: { token: 'valid-token' }
+      data: { token: 'a'.repeat(20) } // Valid length token
     });
 
     const message = {
@@ -242,7 +242,7 @@ describe('Message Validation', () => {
     });
     await authenticateConnection(connectionId, {
       type: 'auth',
-      data: { token: 'valid-token' }
+      data: { token: 'a'.repeat(20) } // Valid length token
     });
 
     const invalidMessage = {
@@ -268,7 +268,7 @@ describe('Message Validation', () => {
     });
     await authenticateConnection(connectionId, {
       type: 'auth',
-      data: { token: 'valid-token' }
+      data: { token: 'a'.repeat(20) } // Valid length token
     });
 
     const maliciousMessage = {
@@ -485,7 +485,7 @@ describe('Integration: Complete Authentication Flow', () => {
     const connectionId = 'conn-integration-test';
     const authMessage = {
       type: 'auth',
-      data: { token: 'valid-token' }
+      data: { token: 'a'.repeat(20) } // Valid length token
     };
 
     const authResult = await authenticateConnection(connectionId, authMessage);
