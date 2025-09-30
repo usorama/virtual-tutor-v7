@@ -16,6 +16,51 @@
  * Pattern: Extends the existing rate-limiter.ts pattern for consistency
  *
  * @module lib/security/upload-rate-limiter
+ *
+ * @example Basic usage in API route
+ * ```typescript
+ * import { checkUploadRateLimit, recordUploadAttempt } from '@/lib/security/upload-rate-limiter';
+ *
+ * export async function POST(request: NextRequest) {
+ *   const user = await getUser();
+ *
+ *   // Check rate limit
+ *   const limit = checkUploadRateLimit(user.id);
+ *   if (!limit.allowed) {
+ *     return error(`Too many uploads. Try again in ${Math.ceil(limit.resetIn / 60)} minutes`);
+ *   }
+ *
+ *   // Process upload
+ *   const file = await request.file();
+ *   await processFile(file);
+ *
+ *   // Record successful upload
+ *   recordUploadAttempt(user.id, file.size);
+ * }
+ * ```
+ *
+ * @example Combined user + IP rate limiting (defense in depth)
+ * ```typescript
+ * import { checkCombinedUploadRateLimit, recordCombinedUploadAttempt } from '@/lib/security/upload-rate-limiter';
+ *
+ * export async function POST(request: NextRequest) {
+ *   const user = await getUser();
+ *   const ip = request.ip || 'unknown';
+ *
+ *   // Check both user and IP limits
+ *   const limit = checkCombinedUploadRateLimit(user.id, ip);
+ *   if (!limit.allowed) {
+ *     return error('Rate limit exceeded');
+ *   }
+ *
+ *   // Process upload
+ *   const file = await request.file();
+ *   await processFile(file);
+ *
+ *   // Record for both user and IP
+ *   recordCombinedUploadAttempt(user.id, ip, file.size);
+ * }
+ * ```
  */
 
 import type {
@@ -30,31 +75,76 @@ import type {
 
 /**
  * Rate limit windows (in milliseconds)
+ *
+ * Two-window strategy provides granular control:
+ * - Short window: Prevents rapid-fire attacks
+ * - Long window: Prevents sustained abuse
+ *
+ * These values are based on typical usage patterns:
+ * - Teachers upload textbooks occasionally (1-5 per session)
+ * - Legitimate users rarely exceed 10 uploads in 15 minutes
+ * - Attackers typically attempt hundreds of uploads rapidly
  */
 const UPLOAD_RATE_WINDOW_SHORT = 15 * 60 * 1000; // 15 minutes
 const UPLOAD_RATE_WINDOW_LONG = 60 * 60 * 1000;  // 1 hour
 
 /**
  * Per-user limits (authenticated users)
+ *
+ * More lenient than IP limits because:
+ * - Users are authenticated (accountable)
+ * - Legitimate users may upload multiple textbook chapters
+ * - False positives harm user experience more than false negatives
+ *
+ * Rationale:
+ * - 10 files per 15 min: Allows batch chapter uploads
+ * - 50 files per hour: Accommodates large textbook series
  */
 const MAX_UPLOADS_PER_USER_SHORT = 10;  // 10 files per 15 minutes
 const MAX_UPLOADS_PER_USER_LONG = 50;   // 50 files per hour
 
 /**
  * Per-IP limits (includes unauthenticated users)
+ *
+ * More strict than user limits to prevent:
+ * - Multiple accounts from same IP abusing system
+ * - Proxy-based attacks
+ * - Shared IP abuse (schools, libraries)
+ *
+ * Higher than user limits to accommodate:
+ * - Multiple users behind NAT/proxy
+ * - School networks with many legitimate users
  */
 const MAX_UPLOADS_PER_IP_SHORT = 20;    // 20 files per 15 minutes
 const MAX_UPLOADS_PER_IP_LONG = 100;    // 100 files per hour
 
 /**
  * File size-based "cost" multiplier
- * Files larger than this threshold count as multiple uploads
+ *
+ * Large files consume more resources (bandwidth, storage, processing).
+ * Files larger than threshold count as multiple uploads to prevent:
+ * - Resource exhaustion via large file uploads
+ * - Storage quota abuse
+ * - Bandwidth consumption attacks
+ *
+ * Example:
+ * - 5 MB file = 1 upload
+ * - 15 MB file = 2 uploads
+ * - 45 MB file = 2 uploads (not 4.5, multiplier is fixed at 2)
  */
 const SIZE_MULTIPLIER_THRESHOLD = 10 * 1024 * 1024; // 10 MB
 const SIZE_MULTIPLIER = 2; // Large files count as 2 uploads
 
 /**
  * Cleanup interval for expired entries
+ *
+ * Periodically removes stale entries to prevent memory leaks.
+ * Entries are removed if not accessed for over 1 hour.
+ *
+ * NOTE: For production, consider migrating to Redis for:
+ * - Distributed rate limiting across servers
+ * - Persistent storage (survives restarts)
+ * - Better memory management
  */
 const CLEANUP_INTERVAL = 10 * 60 * 1000; // 10 minutes
 

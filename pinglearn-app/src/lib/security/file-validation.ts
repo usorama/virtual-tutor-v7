@@ -39,6 +39,16 @@ import {
 
 /**
  * Validation configuration for textbook uploads (PDFs)
+ *
+ * These limits are based on:
+ * - Average textbook PDF size: 20-40 MB
+ * - Max practical size: 50 MB (prevents DoS, reasonable for educational content)
+ * - Magic number check: REQUIRED for PDFs (ensures file integrity)
+ *
+ * @example
+ * // Use this preset for textbook uploads
+ * const options = getValidationOptionsForFileType('textbook');
+ * const result = await validateUploadedFile(pdfFile, options);
  */
 const TEXTBOOK_VALIDATION_OPTIONS: FileValidationOptions = {
   allowedExtensions: ['.pdf'],
@@ -49,6 +59,16 @@ const TEXTBOOK_VALIDATION_OPTIONS: FileValidationOptions = {
 
 /**
  * Validation configuration for image uploads (covers, metadata)
+ *
+ * These limits are based on:
+ * - Typical cover image size: 500 KB - 2 MB
+ * - Max practical size: 5 MB (prevents DoS, adequate for high-quality images)
+ * - Magic number check: REQUIRED (prevents file type spoofing)
+ *
+ * @example
+ * // Use this preset for cover images and metadata
+ * const options = getValidationOptionsForFileType('image');
+ * const result = await validateUploadedFile(imageFile, options);
  */
 const IMAGE_VALIDATION_OPTIONS: FileValidationOptions = {
   allowedExtensions: ['.jpg', '.jpeg', '.png', '.gif'],
@@ -59,6 +79,20 @@ const IMAGE_VALIDATION_OPTIONS: FileValidationOptions = {
 
 /**
  * Validation configuration for general documents
+ *
+ * These limits are based on:
+ * - Typical document size: 1-5 MB
+ * - Max practical size: 10 MB (prevents DoS, reasonable for documents)
+ * - Magic number check: DISABLED (DOC/DOCX not supported in current implementation)
+ *
+ * NOTE: Magic number validation only supports PDF. For DOC/DOCX, we rely on
+ * extension and MIME type validation only. Consider implementing DOC/DOCX
+ * magic number checks in the future.
+ *
+ * @example
+ * // Use this preset for general document uploads
+ * const options = getValidationOptionsForFileType('document');
+ * const result = await validateUploadedFile(docFile, options);
  */
 const DOCUMENT_VALIDATION_OPTIONS: FileValidationOptions = {
   allowedExtensions: ['.pdf', '.doc', '.docx'],
