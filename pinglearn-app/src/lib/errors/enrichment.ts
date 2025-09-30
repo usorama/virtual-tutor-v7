@@ -276,10 +276,8 @@ export function getErrorBreadcrumbs(): Breadcrumb[] {
  */
 export function clearErrorBreadcrumbs(): void {
   try {
-    if (typeof window === 'undefined') {
-      const key = 'global';
-      serverBreadcrumbs.delete(key);
-    }
+    const key = 'global';
+    breadcrumbStore.delete(key);
   } catch (error) {
     console.warn('[Enrichment] Failed to clear breadcrumbs:', error);
   }
@@ -358,12 +356,12 @@ function generateErrorId(): string {
 export function cleanupOldBreadcrumbs(): void {
   try {
     const now = Date.now();
-    for (const [key, breadcrumbs] of serverBreadcrumbs.entries()) {
+    for (const [key, breadcrumbs] of breadcrumbStore.entries()) {
       const filtered = breadcrumbs.filter(b => now - b.timestamp < BREADCRUMB_TTL);
       if (filtered.length === 0) {
-        serverBreadcrumbs.delete(key);
+        breadcrumbStore.delete(key);
       } else {
-        serverBreadcrumbs.set(key, filtered);
+        breadcrumbStore.set(key, filtered);
       }
     }
   } catch (error) {
