@@ -59,7 +59,7 @@ export const basicAPIErrorHandler = (error: unknown, requestId?: string) => {
 };
 
 // For client components - basic setup
-export const basicClientErrorHandler = () => {
+export const useBasicClientErrorHandler = () => {
   return useSimpleErrorHandler();
 };
 
