@@ -6,12 +6,17 @@
  * type checking overhead, and enhance IDE responsiveness.
  *
  * TS-009: Advanced Type Inference Optimization Implementation
+ * TS-012: Branded Types for Type-Safe IDs
  */
 
 // Core type optimization utilities
 export * from './inference-optimizations';
 export * from './performance-optimizations';
 export * from './union-optimizations';
+
+// TS-012: Branded type utilities and domain-specific ID types
+export * from './branded';
+export * from './id-types';
 
 // Type guards and validators
 export * from './type-guards';
