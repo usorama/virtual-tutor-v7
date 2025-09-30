@@ -67,6 +67,20 @@ export {
   NON_RETRYABLE_ERRORS
 } from './retry';
 
+// Enhanced user messages (ERR-008)
+export {
+  getEnhancedUserMessage,
+  getAllErrorMessages,
+  hasEnhancedMessage,
+  validateMessageCoverage
+} from './user-messages';
+
+export type {
+  EnhancedErrorMessage,
+  MessageContext,
+  MessageIcon
+} from './user-messages';
+
 // Re-export for convenience
 import { ErrorCode } from './error-types';
 import { handleAPIError } from './api-error-handler';
