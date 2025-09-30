@@ -23,7 +23,7 @@
 
 import type { TreeNode, TreeNodeMetadata } from './recursive';
 import type { TextbookId, ChapterId, LessonId, TopicId } from './id-types';
-import type { Textbook, BookChapter, CurriculumData } from '@/types/database';
+import type { Textbook, BookChapter, CurriculumData } from '../../types/database';
 
 // =============================================================================
 // CURRICULUM NODE TYPE ENUM
@@ -601,10 +601,12 @@ export function createCurriculumTreeFromDatabase(
   // 5. Calculate statistics
 
   const textbookData = textbookFromDatabase(textbook);
+  const chapterNodes: ChapterNode[] = []; // Chapters would be built from database here
+
   const textbookNode = createTextbookNode(
     textbook.id as TextbookId,
     textbookData,
-    [] // Chapters would be built here
+    chapterNodes
   );
 
   const stats = getCurriculumStats(textbookNode);
