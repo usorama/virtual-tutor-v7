@@ -82,10 +82,11 @@ describe('WebSocket Authentication', () => {
       reason: 'TOKEN_EXPIRED'
     });
 
+    // Auth message must meet minimum token length (20 chars)
     const authMessage = {
       type: 'auth',
       data: {
-        token: 'expired-jwt-token'
+        token: 'a'.repeat(20) // Minimum valid length but will fail validation
       }
     };
 
@@ -123,7 +124,7 @@ describe('WebSocket Authentication', () => {
     const authMessage = {
       type: 'auth',
       data: {
-        token: 'valid-jwt-token'
+        token: 'a'.repeat(20) // Valid length token
       }
     };
 
@@ -147,7 +148,7 @@ describe('WebSocket Authentication', () => {
     const authMessage = {
       type: 'auth',
       data: {
-        token: 'valid-jwt-token'
+        token: 'a'.repeat(20) // Valid length token
       }
     };
 
@@ -171,7 +172,7 @@ describe('WebSocket Authentication', () => {
     const authMessage = {
       type: 'auth',
       data: {
-        token: 'valid-jwt-token'
+        token: 'a'.repeat(20) // Valid length token
       }
     };
 
