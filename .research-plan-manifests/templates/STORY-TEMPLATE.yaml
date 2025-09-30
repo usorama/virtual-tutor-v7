@@ -1,0 +1,460 @@
+---
+# Story Template with Embedded 6-Phase Workflow
+# MANDATORY: All phases must complete before story is marked done
+
+story_id: "[STORY-ID]"  # e.g., ERR-006, TS-010
+title: "[Story Title]"
+category: "[typescript|error_handling|security|architecture|testing]"
+priority: "[P0|P1|P2|P3]"
+parent_issue: "[ISS-XXX]"
+estimated_hours: 0
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# MANDATORY 6-PHASE WORKFLOW
+# Each phase MUST complete before proceeding to next
+# Phases 3-5 are ITERATIVE until all conditions met
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+workflow:
+  phases:
+    # ═══════════════════════════════════════════════════
+    # PHASE 1: RESEARCH (BLOCKING)
+    # ═══════════════════════════════════════════════════
+    research:
+      status: "pending"  # pending|in_progress|completed|blocked
+      mandatory: true
+      blocking: true  # Cannot proceed to Plan without completion
+
+      checklist:
+        codebase_research:
+          required: true
+          tasks:
+            - "Search protected-core for existing patterns"
+            - "Find similar functionality in codebase"
+            - "Identify integration points"
+            - "Document what already exists"
+          verification: "protected-core search results documented"
+
+        context7_research:
+          required: true
+          tasks:
+            - "Resolve package library IDs"
+            - "Get latest official documentation (2025)"
+            - "Extract best practices and patterns"
+            - "Note any breaking changes from 2024"
+          verification: "context7 queries logged with results"
+
+        web_research:
+          required: true
+          tasks:
+            - "Search industry standards (2025)"
+            - "Identify known issues and anti-patterns"
+            - "Security and performance considerations"
+            - "Compare with existing approach"
+          verification: "3+ authoritative sources cited"
+
+      completion_criteria:
+        - manifest_exists: ".research-plan-manifests/research/[STORY-ID]-RESEARCH.md"
+        - signature_present: "[RESEARCH-COMPLETE-{story-id}]"
+        - all_sections_complete: true
+        - integration_decision_made: true
+
+      agent: "web-research"  # Primary agent for this phase
+      hooks:
+        pre_phase: "research-phase-validator.py"
+        post_phase: "research-completion-checker.py"
+
+    # ═══════════════════════════════════════════════════
+    # PHASE 2: PLAN (BLOCKING)
+    # ═══════════════════════════════════════════════════
+    plan:
+      status: "pending"
+      mandatory: true
+      blocking: true  # Cannot proceed to Implement without completion
+      depends_on: ["research"]
+
+      checklist:
+        architecture_decisions:
+          required: true
+          based_on: "research findings"
+          tasks:
+            - "File structure (where code goes)"
+            - "Integration with protected-core"
+            - "Technology stack choices"
+          verification: "Architecture documented with justification"
+
+        implementation_roadmap:
+          required: true
+          tasks:
+            - "Step-by-step breakdown"
+            - "Dependencies between steps"
+            - "Verification for each step"
+          verification: "Clear numbered steps with checkpoints"
+
+        testing_strategy:
+          required: true
+          tasks:
+            - "Unit tests (what to test)"
+            - "Integration tests (integration points)"
+            - "E2E tests (user workflows if applicable)"
+          verification: "Test plan with specific scenarios"
+
+        security_patterns:
+          required: true
+          tasks:
+            - "Security considerations from research"
+            - "Validation points"
+            - "Input sanitization approach"
+          verification: "Security patterns specified"
+
+        success_criteria:
+          required: true
+          tasks:
+            - "Functional requirements checklist"
+            - "Quality gates (TypeScript: 0, coverage: >80%)"
+            - "Integration verification points"
+          verification: "Clear measurable success criteria"
+
+      completion_criteria:
+        - manifest_exists: ".research-plan-manifests/plans/[STORY-ID]-PLAN.md"
+        - signature_present: "[PLAN-APPROVED-{story-id}]"
+        - all_sections_complete: true
+        - roadmap_defined: true
+        - tests_planned: true
+
+      agent: "bmad-architect"
+      hooks:
+        pre_phase: "plan-phase-validator.py"
+        post_phase: "plan-completion-checker.py"
+
+    # ═══════════════════════════════════════════════════
+    # PHASE 3: IMPLEMENT (ITERATIVE with Verify+Test)
+    # ═══════════════════════════════════════════════════
+    implement:
+      status: "pending"
+      mandatory: true
+      blocking: false  # Can iterate with Verify+Test
+      depends_on: ["research", "plan"]
+      iterative_with: ["verify", "test"]  # LOOP: Implement→Verify→Test until pass
+
+      checklist:
+        follow_plan:
+          required: true
+          tasks:
+            - "Implement exactly per plan roadmap"
+            - "Follow researched patterns"
+            - "Use protected-core integration points"
+            - "Create checkpoint after each step"
+          verification: "Code matches plan roadmap"
+
+        code_quality:
+          required: true
+          tasks:
+            - "No 'any' types (use proper types)"
+            - "Import from protected-core where needed"
+            - "Follow established patterns"
+            - "Add inline comments for complex logic"
+          verification: "Code quality standards met"
+
+      completion_criteria:
+        - follows_plan: true
+        - no_protected_core_duplication: true
+        - typescript_compiles: true  # Must pass before Verify phase
+        - git_checkpoint_created: true
+
+      agent: "story-implementer"
+      hooks:
+        pre_phase: "implementation-plan-checker.py"
+        pre_edit: "plan-adherence-validator.py"  # Before each file edit
+        post_edit: "post-write-plan-validator.py"  # After each file edit
+
+    # ═══════════════════════════════════════════════════
+    # PHASE 4: VERIFY (ITERATIVE with Implement+Test)
+    # ═══════════════════════════════════════════════════
+    verify:
+      status: "pending"
+      mandatory: true
+      blocking: true  # Must pass before considering story complete
+      depends_on: ["implement"]
+      iterative_with: ["implement", "test"]
+
+      checklist:
+        typescript_verification:
+          required: true
+          command: "npm run typecheck"
+          expected: "0 errors"
+          blocking: true
+
+        lint_verification:
+          required: true
+          command: "npm run lint"
+          expected: "0 errors"
+          blocking: false  # Warnings allowed, errors block
+
+        protected_core_compliance:
+          required: true
+          tasks:
+            - "No modifications to protected-core"
+            - "Correct imports from protected-core"
+            - "No duplicate patterns created"
+          verification: "Protected-core boundaries respected"
+
+        plan_adherence:
+          required: true
+          tasks:
+            - "All planned files created"
+            - "Architecture matches plan"
+            - "Integration points implemented"
+          verification: "Implementation matches plan exactly"
+
+        code_review:
+          required: true
+          tasks:
+            - "Logic correctness"
+            - "Error handling present"
+            - "Edge cases considered"
+            - "Performance acceptable"
+          verification: "Code review passed"
+
+      completion_criteria:
+        - typescript_errors: 0
+        - lint_errors: 0
+        - protected_core_violations: 0
+        - plan_deviations: 0
+        - code_review_approved: true
+
+      agent: "code-verifier"  # Dedicated verification agent
+      hooks:
+        pre_phase: "verify-prerequisites-checker.py"
+        during_phase: "continuous-verification.py"
+        post_phase: "verification-report-generator.py"
+
+      # If verification fails, loop back to Implement
+      on_failure:
+        action: "return_to_implement"
+        max_iterations: 5
+        escalate_after: 5
+
+    # ═══════════════════════════════════════════════════
+    # PHASE 5: TEST (ITERATIVE with Implement+Verify)
+    # ═══════════════════════════════════════════════════
+    test:
+      status: "pending"
+      mandatory: true
+      blocking: true  # Must pass before story complete
+      depends_on: ["implement", "verify"]
+      iterative_with: ["implement", "verify"]
+
+      checklist:
+        unit_tests:
+          required: true
+          command: "npm test [test-file-pattern]"
+          coverage_minimum: 80
+          blocking: true
+          tasks:
+            - "Happy path tests"
+            - "Error cases"
+            - "Edge cases"
+            - "Integration with protected-core"
+
+        integration_tests:
+          required: true
+          tasks:
+            - "Test integration points from plan"
+            - "Verify protected-core integration"
+            - "Test data flow"
+          verification: "All integration scenarios pass"
+
+        e2e_tests:
+          required: false  # Only if UI changes
+          command: "npm run test:e2e"
+          tasks:
+            - "User workflow scenarios"
+            - "Cross-browser if applicable"
+
+        performance_tests:
+          required: false  # Only if performance critical
+          tasks:
+            - "Benchmark critical operations"
+            - "Memory usage acceptable"
+            - "No regressions"
+
+      completion_criteria:
+        - all_tests_passing: true
+        - coverage_above_threshold: true  # >80%
+        - no_regressions: true
+        - performance_acceptable: true
+
+      agent: "test-runner"  # Dedicated testing agent
+      hooks:
+        pre_phase: "test-prerequisites-checker.py"
+        during_phase: "test-execution-monitor.py"
+        post_phase: "test-results-analyzer.py"
+
+      # If tests fail, loop back to Implement
+      on_failure:
+        action: "return_to_implement"
+        max_iterations: 5
+        escalate_after: 5
+
+    # ═══════════════════════════════════════════════════
+    # PHASE 6: CONFIRM WITH EVIDENCE (FINAL)
+    # ═══════════════════════════════════════════════════
+    confirm:
+      status: "pending"
+      mandatory: true
+      blocking: true  # Story cannot be marked complete without this
+      depends_on: ["research", "plan", "implement", "verify", "test"]
+
+      checklist:
+        evidence_collection:
+          required: true
+          tasks:
+            - "Research manifest complete"
+            - "Plan manifest complete"
+            - "Implementation git log"
+            - "Verification results"
+            - "Test results and coverage report"
+            - "Before/after comparison"
+
+        completion_report:
+          required: true
+          location: "docs/change_records/protected_core_changes/PC-014-stories/evidence/[STORY-ID]-EVIDENCE.md"
+          sections:
+            - "What was implemented"
+            - "Research findings used"
+            - "Plan adherence verification"
+            - "Verification results (TypeScript, lint, protected-core)"
+            - "Test results (unit, integration, E2E)"
+            - "Files created/modified with line counts"
+            - "Integration points verified"
+            - "No duplicate infrastructure confirmation"
+
+        final_validation:
+          required: true
+          tasks:
+            - "All phases completed"
+            - "All checkpoints passed"
+            - "All success criteria met"
+            - "Documentation updated"
+            - "Git committed and pushed"
+
+      completion_criteria:
+        - evidence_report_exists: true
+        - all_phases_complete: true
+        - all_criteria_met: true
+        - git_committed: true
+        - ready_for_next_story: true
+
+      agent: "completion-enforcer"
+      hooks:
+        pre_phase: "evidence-collection-validator.py"
+        post_phase: "story-completion-finalizer.py"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ITERATIVE LOOP CONFIGURATION
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+iterative_loop:
+  phases: ["implement", "verify", "test"]
+  description: "Implement→Verify→Test loop continues until all conditions met"
+
+  exit_conditions:
+    - typescript_errors: 0
+    - lint_errors: 0
+    - protected_core_violations: 0
+    - tests_passing: 100
+    - coverage: ">80%"
+
+  max_iterations: 5
+  escalation:
+    after_iterations: 5
+    action: "human_review_required"
+    notify: true
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# AGENT ORCHESTRATION
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+agents:
+  orchestrator:
+    agent_type: "orchestrator-coordinator"
+    role: "Coordinate all agents and enforce workflow"
+    responsibilities:
+      - "Phase transition management"
+      - "Agent coordination"
+      - "Checkpoint enforcement"
+      - "Escalation handling"
+
+  researcher:
+    agent_type: "web-research"
+    role: "Research phase execution"
+
+  planner:
+    agent_type: "bmad-architect"
+    role: "Planning phase execution"
+
+  implementer:
+    agent_type: "story-implementer"
+    role: "Implementation phase execution"
+
+  verifier:
+    agent_type: "code-verifier"
+    role: "Verification phase execution"
+
+  tester:
+    agent_type: "test-runner"
+    role: "Testing phase execution"
+
+  completer:
+    agent_type: "completion-enforcer"
+    role: "Evidence collection and final confirmation"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ENFORCEMENT MECHANISMS
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+enforcement:
+  level_1_proactive:
+    - "UserPromptSubmit hook blocks without research+plan"
+    - "Pre-task hooks validate phase prerequisites"
+
+  level_2_during:
+    - "Pre-edit hooks validate plan adherence"
+    - "Post-edit hooks check for violations"
+    - "Continuous verification during Implement"
+
+  level_3_checkpoint:
+    - "Post-phase hooks enforce completion criteria"
+    - "Agent-complete hooks collect results"
+    - "Session-end hooks prevent incomplete stories"
+
+  level_4_evidence:
+    - "Evidence collection enforced before completion"
+    - "All criteria must be met"
+    - "No story marked complete without evidence"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# STATUS TRACKING
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+status: "pending"  # pending|research|plan|implement|verify|test|confirm|completed|blocked
+assigned_agent: null
+started_at: null
+completed_at: null
+current_phase: null
+iterations_count: 0
+
+# Git tracking
+git:
+  checkpoint_commits: []
+  final_commit: null
+
+# Evidence
+evidence_path: null
+verification_passed: false
+tests_passed: false
+
+---
+
+# STORY COMPLETION REQUIRES ALL 6 PHASES COMPLETE
