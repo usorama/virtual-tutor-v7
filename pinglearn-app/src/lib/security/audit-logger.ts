@@ -202,7 +202,7 @@ export class AuditLogger {
    */
   public async query(filters: AuditFilters = {}): Promise<AuditEvent[]> {
     try {
-      const supabase = createClient();
+      const supabase = await createClient();
 
       let query = supabase
         .from('audit_events')
@@ -314,7 +314,7 @@ export class AuditLogger {
 
     try {
       const batch = this.queue.splice(0, this.queue.length);
-      const supabase = createClient();
+      const supabase = await createClient();
 
       const { error } = await supabase.from('audit_events').insert(batch);
 
