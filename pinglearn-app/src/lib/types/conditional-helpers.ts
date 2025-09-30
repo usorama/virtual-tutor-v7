@@ -249,9 +249,14 @@ export type SplitPrimitives<T> = PartitionUnion<
  * @template T - Discriminated union type
  * @template K - Discriminant property key
  */
-export type GroupUnionBy<T, K extends keyof T> = {
-  [V in T[K]]: Extract<T, Record<K, V>>;
-};
+export type GroupUnionBy<
+  T,
+  K extends keyof T
+> = T[K] extends string | number | symbol
+  ? {
+      [V in T[K]]: Extract<T, Record<K, V>>;
+    }
+  : never;
 
 /**
  * Group union by type category
@@ -584,12 +589,15 @@ namespace ConditionalHelperTests {
     | { status: 'success'; data: T }
     | { status: 'error'; error: Error };
 
-  type [Terminal, NonTerminal] = PartitionUnion<
+  type AsyncPartition = PartitionUnion<
     AsyncState<string>,
     { status: 'success'; data: string } | { status: 'error'; error: Error }
   >;
-  // Terminal: { status: 'success'; data: string } | { status: 'error'; error: Error }
-  // NonTerminal: { status: 'idle' } | { status: 'loading' }
+  // AsyncPartition[0]: { status: 'success'; data: string } | { status: 'error'; error: Error }
+  // AsyncPartition[1]: { status: 'idle' } | { status: 'loading' }
+
+  type Terminal = AsyncPartition[0];
+  type NonTerminal = AsyncPartition[1];
 
   // Edge case: empty union
   type EmptyPartition = PartitionUnion<never, string>; // [never, never]
