@@ -3,6 +3,7 @@
  *
  * Handles the creation and management of book series, books, and chapters
  * Updated for TS-007: Now uses proper database types with runtime validation
+ * Updated for SEC-008: Integrated file validation and rate limiting
  */
 
 import { NextRequest } from 'next/server';
@@ -15,6 +16,12 @@ import {
   createAPIError
 } from '@/lib/errors/api-error-handler';
 import { ErrorCode, ErrorSeverity } from '@/lib/errors/error-types';
+import {
+  checkUploadRateLimit,
+  recordUploadAttempt,
+  getUploadRateLimitErrorMessage
+} from '@/lib/security/upload-rate-limiter';
+import { sanitizeFilename } from '@/lib/security/filename-sanitizer';
 import type {
   BookSeries,
   Book,
@@ -69,6 +76,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // SEC-008: Check upload rate limit
+    const rateLimitResult = checkUploadRateLimit(user.id);
+    if (!rateLimitResult.allowed) {
+      const error = createAPIError(
+        new Error('Rate limit exceeded'),
+        requestId,
+        getUploadRateLimitErrorMessage(rateLimitResult.resetIn),
+        ErrorCode.RATE_LIMIT_EXCEEDED
+      );
+
+      return handleAPIError(
+        error,
+        requestId,
+        createErrorContext(
+          { url: request.url, method: 'POST' },
+          { id: user.id },
+          ErrorSeverity.LOW
+        )
+      );
+    }
+
     // Parse request body with validation
     let body: {
       formData: TextbookWizardState['formData'];
@@ -117,6 +145,53 @@ export async function POST(request: NextRequest) {
         )
       );
     }
+
+    // SEC-008: Validate uploaded files
+    if (!uploadedFiles || uploadedFiles.length === 0) {
+      const error = createAPIError(
+        new Error('No files uploaded'),
+        requestId,
+        'Please upload at least one PDF file',
+        ErrorCode.MISSING_REQUIRED_FIELD
+      );
+
+      return handleAPIError(
+        error,
+        requestId,
+        createErrorContext(
+          { url: request.url, method: 'POST' },
+          { id: user.id },
+          ErrorSeverity.LOW
+        )
+      );
+    }
+
+    // SEC-008: Sanitize filenames and validate extensions
+    const sanitizedFiles = uploadedFiles.map(file => {
+      const sanitizedName = sanitizeFilename(file.name);
+
+      // Validate PDF extension
+      if (!sanitizedName.toLowerCase().endsWith('.pdf')) {
+        throw createAPIError(
+          new Error(`Invalid file type: ${file.name}`),
+          requestId,
+          'Only PDF files are allowed',
+          ErrorCode.VALIDATION_ERROR
+        );
+      }
+
+      return {
+        ...file,
+        name: sanitizedName,
+        originalName: file.name
+      };
+    });
+
+    // SEC-008: Calculate total upload size for rate limiting
+    const totalUploadSize = sanitizedFiles.reduce((sum, file) => sum + file.size, 0);
+
+    // SEC-008: Record upload attempt (counts large files as multiple uploads)
+    recordUploadAttempt(user.id, totalUploadSize);
 
     // Create book series with proper typing
     const seriesData: BookSeriesInsert = {
@@ -281,9 +356,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Create textbook entry with proper typing
+    // SEC-008: Use sanitized filename for storage
+    const sanitizedSeriesName = sanitizeFilename(
+      formData.seriesInfo.seriesName.toLowerCase().replace(/\s+/g, '-')
+    );
+
     const textbookData: TextbookInsert = {
       title: formData.bookDetails.volumeTitle || formData.seriesInfo.seriesName,
-      file_name: `${formData.seriesInfo.seriesName.toLowerCase().replace(/\s+/g, '-')}.pdf`,
+      file_name: `${sanitizedSeriesName}.pdf`,
       grade_level: formData.seriesInfo.grade,
       subject: formData.seriesInfo.subject,
       total_pages: formData.bookDetails.totalPages || (chaptersData.length * 25),
@@ -342,7 +422,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Process PDFs in the background using real PDF processing
-    processTextbooksAsync(series.id, uploadedFiles, requestId)
+    // SEC-008: Use sanitized files for processing
+    processTextbooksAsync(series.id, sanitizedFiles, requestId)
       .then(() => {
         console.log(`✅ Background processing completed for series ${series.id}`);
       })
