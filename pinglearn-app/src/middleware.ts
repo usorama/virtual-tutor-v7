@@ -7,6 +7,7 @@ import {
   getValidationErrorMessage,
   getValidationErrorStatus
 } from '@/lib/security/token-validation'
+import { generateNonce, buildCSP, getCSPHeaderName } from './middleware/security-headers'
 
 // Theme types for server-side detection
 type Theme = 'light' | 'dark' | 'system'
