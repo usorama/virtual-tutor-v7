@@ -3,7 +3,7 @@
  * LRU, TTL, and SWR (Stale-While-Revalidate) implementations
  */
 
-import type { CacheStrategy, CacheEntry, CacheConfig, ListNode } from './types';
+import type { CacheStrategy, CacheEntry, ListNode } from './types';
 import { isExpired } from './utils';
 
 /**
@@ -139,7 +139,7 @@ export class LRUStrategy implements CacheStrategy {
     this.nodeMap = new Map();
   }
 
-  shouldEvict(entry: CacheEntry, _config: CacheConfig): boolean {
+  shouldEvict(entry: CacheEntry): boolean {
     // Check TTL expiration
     return isExpired(entry);
   }
@@ -171,8 +171,7 @@ export class LRUStrategy implements CacheStrategy {
   }
 
   selectEvictionCandidate(
-    entries: Map<string, CacheEntry>,
-    _config: CacheConfig
+    entries: Map<string, CacheEntry>
   ): string | null {
     // First, check for expired entries
     for (const [key, entry] of entries) {
@@ -212,7 +211,7 @@ export class LRUStrategy implements CacheStrategy {
 export class TTLStrategy implements CacheStrategy {
   readonly name = 'ttl';
 
-  shouldEvict(entry: CacheEntry, _config: CacheConfig): boolean {
+  shouldEvict(entry: CacheEntry): boolean {
     return isExpired(entry);
   }
 
@@ -221,13 +220,12 @@ export class TTLStrategy implements CacheStrategy {
     entry.metadata.accessCount++;
   }
 
-  onSet(_entry: CacheEntry): void {
+  onSet(): void {
     // TTL is set during entry creation, nothing to do here
   }
 
   selectEvictionCandidate(
-    entries: Map<string, CacheEntry>,
-    _config: CacheConfig
+    entries: Map<string, CacheEntry>
   ): string | null {
     // First, find expired entries
     for (const [key, entry] of entries) {
@@ -280,7 +278,7 @@ export class SWRStrategy implements CacheStrategy {
     this.nodeMap = new Map();
   }
 
-  shouldEvict(entry: CacheEntry, _config: CacheConfig): boolean {
+  shouldEvict(): boolean {
     // Never auto-evict in SWR mode
     // Always serve stale entries
     // Eviction only happens when cache is full (via selectEvictionCandidate)
@@ -315,8 +313,7 @@ export class SWRStrategy implements CacheStrategy {
   }
 
   selectEvictionCandidate(
-    entries: Map<string, CacheEntry>,
-    _config: CacheConfig
+    entries: Map<string, CacheEntry>
   ): string | null {
     // Use LRU for eviction (prefer expired entries first)
     // First, check for very old stale entries (expired > 1 hour ago)

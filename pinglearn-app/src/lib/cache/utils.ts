@@ -95,7 +95,7 @@ export function estimateSize(value: unknown): number {
     // Handle objects/arrays via JSON
     const json = JSON.stringify(value);
     return json.length * 2; // UTF-16
-  } catch (error) {
+  } catch {
     // Circular reference or non-serializable
     // Return conservative estimate
     return 1024; // 1KB default

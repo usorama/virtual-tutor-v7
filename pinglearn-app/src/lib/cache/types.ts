@@ -142,10 +142,9 @@ export interface CacheStrategy {
   /**
    * Determine if entry should be evicted
    * @param entry - Cache entry to check
-   * @param config - Cache configuration
    * @returns true if entry should be evicted
    */
-  shouldEvict(entry: CacheEntry, config: CacheConfig): boolean;
+  shouldEvict(entry: CacheEntry): boolean;
 
   /**
    * Called when entry is accessed (get operation)
@@ -162,12 +161,10 @@ export interface CacheStrategy {
   /**
    * Select candidate for eviction when cache is full
    * @param entries - All cache entries
-   * @param config - Cache configuration
    * @returns Key of entry to evict, or null if none suitable
    */
   selectEvictionCandidate(
-    entries: Map<string, CacheEntry>,
-    config: CacheConfig
+    entries: Map<string, CacheEntry>
   ): string | null;
 }
 

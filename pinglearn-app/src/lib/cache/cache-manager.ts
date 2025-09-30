@@ -45,7 +45,7 @@ class CacheStore<T = unknown> {
     }
 
     // Check expiration (strategy determines behavior)
-    if (this.strategy.shouldEvict(entry, this.config)) {
+    if (this.strategy.shouldEvict(entry)) {
       // Expired - remove and count as miss
       this.delete(key);
       this.stats.misses++;
@@ -136,7 +136,7 @@ class CacheStore<T = unknown> {
    * Evict one entry (LRU or TTL-based)
    */
   private evictOne(): void {
-    const candidate = this.strategy.selectEvictionCandidate(this.data, this.config);
+    const candidate = this.strategy.selectEvictionCandidate(this.data);
 
     if (candidate) {
       const entry = this.data.get(candidate);
@@ -160,7 +160,7 @@ class CacheStore<T = unknown> {
 
     // Collect expired keys
     for (const [key, entry] of this.data.entries()) {
-      if (this.strategy.shouldEvict(entry, this.config)) {
+      if (this.strategy.shouldEvict(entry)) {
         keysToDelete.push(key);
       }
     }
