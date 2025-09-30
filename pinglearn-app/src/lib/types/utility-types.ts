@@ -855,3 +855,314 @@ namespace PromiseTypeTests {
   const testComplex: ComplexResult = { data: { nested: 'test' } };
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */
+
+// ============================================================================
+// GENERIC CONSTRAINT HELPERS
+// ============================================================================
+
+/**
+ * Checks if a type is exactly `never`
+ * Useful for exhaustiveness checking and type validation
+ *
+ * @example
+ * ```typescript
+ * type T1 = IsNever<never>; // true
+ * type T2 = IsNever<string>; // false
+ * type T3 = IsNever<unknown>; // false
+ * ```
+ */
+export type IsNever<T> = [T] extends [never] ? true : false;
+
+/**
+ * Checks if a type is `any`
+ * Uses a special property of `any` type for detection
+ *
+ * @example
+ * ```typescript
+ * type T1 = IsAny<any>; // true
+ * type T2 = IsAny<string>; // false
+ * type T3 = IsAny<unknown>; // false
+ * ```
+ */
+export type IsAny<T> = 0 extends 1 & T ? true : false;
+
+/**
+ * Checks if a type is `unknown`
+ * Distinguishes unknown from any and other types
+ *
+ * @example
+ * ```typescript
+ * type T1 = IsUnknown<unknown>; // true
+ * type T2 = IsUnknown<any>; // false
+ * type T3 = IsUnknown<string>; // false
+ * ```
+ */
+export type IsUnknown<T> = IsNever<T> extends false
+  ? T extends unknown
+    ? unknown extends T
+      ? IsAny<T> extends false
+        ? true
+        : false
+      : false
+    : false
+  : false;
+
+/**
+ * Performs deep equality check between two types
+ * Returns true only if types are structurally identical
+ *
+ * @example
+ * ```typescript
+ * type T1 = IsEqual<string, string>; // true
+ * type T2 = IsEqual<string, number>; // false
+ * type T3 = IsEqual<{ a: string }, { a: string }>; // true
+ * type T4 = IsEqual<{ a: string }, { a: number }>; // false
+ * ```
+ */
+export type IsEqual<T, U> =
+  (<G>() => G extends T ? 1 : 2) extends (<G>() => G extends U ? 1 : 2)
+    ? true
+    : false;
+
+/**
+ * Checks if type T extends type U
+ *
+ * @example
+ * ```typescript
+ * type T1 = IsExtends<'hello', string>; // true
+ * type T2 = IsExtends<string, 'hello'>; // false
+ * type T3 = IsExtends<number, number>; // true
+ * ```
+ */
+export type IsExtends<T, U> = T extends U ? true : false;
+
+/**
+ * Checks if a type is `null`
+ *
+ * @example
+ * ```typescript
+ * type T1 = IsNull<null>; // true
+ * type T2 = IsNull<undefined>; // false
+ * type T3 = IsNull<string>; // false
+ * ```
+ */
+export type IsNull<T> = IsEqual<T, null>;
+
+/**
+ * Checks if a type is `undefined`
+ *
+ * @example
+ * ```typescript
+ * type T1 = IsUndefined<undefined>; // true
+ * type T2 = IsUndefined<null>; // false
+ * type T3 = IsUndefined<void>; // false
+ * ```
+ */
+export type IsUndefined<T> = IsEqual<T, undefined>;
+
+/**
+ * Checks if a type is nullable (null or undefined)
+ *
+ * @example
+ * ```typescript
+ * type T1 = IsNullable<null>; // true
+ * type T2 = IsNullable<undefined>; // true
+ * type T3 = IsNullable<string>; // false
+ * type T4 = IsNullable<string | null>; // true
+ * ```
+ */
+export type IsNullable<T> = Or<
+  Extract<T, null> extends never ? false : true,
+  Extract<T, undefined> extends never ? false : true
+>;
+
+/**
+ * Checks if a type is an array
+ *
+ * @example
+ * ```typescript
+ * type T1 = IsArray<string[]>; // true
+ * type T2 = IsArray<Array<number>>; // true
+ * type T3 = IsArray<string>; // false
+ * type T4 = IsArray<readonly string[]>; // true
+ * ```
+ */
+export type IsArray<T> = T extends readonly any[] ? true : false;
+
+/**
+ * Checks if a type is a tuple (fixed-length array)
+ *
+ * @example
+ * ```typescript
+ * type T1 = IsTuple<[string, number]>; // true
+ * type T2 = IsTuple<string[]>; // false
+ * type T3 = IsTuple<[]>; // true
+ * ```
+ */
+export type IsTuple<T> = T extends readonly any[]
+  ? number extends T['length']
+    ? false
+    : true
+  : false;
+
+/**
+ * Checks if a type is a function
+ *
+ * @example
+ * ```typescript
+ * type T1 = IsFunction<() => void>; // true
+ * type T2 = IsFunction<(x: string) => number>; // true
+ * type T3 = IsFunction<string>; // false
+ * ```
+ */
+export type IsFunction<T> = T extends (...args: any[]) => any ? true : false;
+
+/**
+ * Checks if a type is an object (excludes primitives, arrays, functions)
+ *
+ * @example
+ * ```typescript
+ * type T1 = IsObject<{ a: string }>; // true
+ * type T2 = IsObject<string[]>; // false
+ * type T3 = IsObject<() => void>; // false
+ * type T4 = IsObject<string>; // false
+ * ```
+ */
+export type IsObject<T> = And<
+  T extends object ? true : false,
+  And<
+    IsArray<T> extends true ? false : true,
+    IsFunction<T> extends true ? false : true
+  >
+>;
+
+/**
+ * Checks if a type is a union type
+ *
+ * @example
+ * ```typescript
+ * type T1 = IsUnion<string | number>; // true
+ * type T2 = IsUnion<string>; // false
+ * ```
+ */
+export type IsUnion<T> = [T] extends [UnionToIntersection<T>] ? false : true;
+
+/**
+ * Helper: Converts union to intersection
+ * Used internally by IsUnion
+ */
+type UnionToIntersection<U> = (
+  U extends any ? (k: U) => void : never
+) extends (k: infer I) => void
+  ? I
+  : never;
+
+/**
+ * Checks if all types in a union satisfy a constraint
+ *
+ * @example
+ * ```typescript
+ * type T1 = AllExtend<'a' | 'b' | 'c', string>; // true
+ * type T2 = AllExtend<string | number, string>; // false
+ * ```
+ */
+export type AllExtend<T, U> = T extends U ? true : false;
+
+/**
+ * Checks if any type in a union satisfies a constraint
+ *
+ * @example
+ * ```typescript
+ * type T1 = AnyExtends<string | number, string>; // true
+ * type T2 = AnyExtends<number | boolean, string>; // false
+ * ```
+ */
+export type AnyExtends<T, U> = Extract<T, U> extends never ? false : true;
+
+// ============================================================================
+// TYPE-LEVEL TESTS FOR CONSTRAINT HELPERS
+// ============================================================================
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+namespace ConstraintTypeTests {
+  // Test IsNever
+  type NeverTest1 = IsNever<never>; // true
+  type NeverTest2 = IsNever<string>; // false
+
+  // Test IsAny
+  type AnyTest1 = IsAny<any>; // true
+  type AnyTest2 = IsAny<unknown>; // false
+  type AnyTest3 = IsAny<string>; // false
+
+  // Test IsUnknown
+  type UnknownTest1 = IsUnknown<unknown>; // true
+  type UnknownTest2 = IsUnknown<any>; // false
+  type UnknownTest3 = IsUnknown<string>; // false
+
+  // Test IsEqual
+  type EqualTest1 = IsEqual<string, string>; // true
+  type EqualTest2 = IsEqual<string, number>; // false
+  type EqualTest3 = IsEqual<{ a: string }, { a: string }>; // true
+  type EqualTest4 = IsEqual<{ a: string }, { a: number }>; // false
+
+  // Test IsExtends
+  type ExtendsTest1 = IsExtends<'hello', string>; // true
+  type ExtendsTest2 = IsExtends<string, 'hello'>; // false
+
+  // Test IsNull and IsUndefined
+  type NullTest1 = IsNull<null>; // true
+  type NullTest2 = IsNull<undefined>; // false
+  type UndefinedTest1 = IsUndefined<undefined>; // true
+  type UndefinedTest2 = IsUndefined<null>; // false
+
+  // Test IsNullable
+  type NullableTest1 = IsNullable<null>; // true
+  type NullableTest2 = IsNullable<undefined>; // true
+  type NullableTest3 = IsNullable<string>; // false
+  type NullableTest4 = IsNullable<string | null>; // true
+
+  // Test IsArray
+  type ArrayTest1 = IsArray<string[]>; // true
+  type ArrayTest2 = IsArray<Array<number>>; // true
+  type ArrayTest3 = IsArray<string>; // false
+  type ArrayTest4 = IsArray<readonly string[]>; // true
+
+  // Test IsTuple
+  type TupleTest1 = IsTuple<[string, number]>; // true
+  type TupleTest2 = IsTuple<string[]>; // false
+  type TupleTest3 = IsTuple<[]>; // true
+  type TupleTest4 = IsTuple<[string]>; // true
+
+  // Test IsFunction
+  type FunctionTest1 = IsFunction<() => void>; // true
+  type FunctionTest2 = IsFunction<(x: string) => number>; // true
+  type FunctionTest3 = IsFunction<string>; // false
+
+  // Test IsObject
+  type ObjectTest1 = IsObject<{ a: string }>; // true
+  type ObjectTest2 = IsObject<string[]>; // false
+  type ObjectTest3 = IsObject<() => void>; // false
+  type ObjectTest4 = IsObject<string>; // false
+
+  // Test IsUnion
+  type UnionTest1 = IsUnion<string | number>; // true
+  type UnionTest2 = IsUnion<string>; // false
+
+  // Test AllExtend
+  type AllExtendTest1 = AllExtend<'a' | 'b', string>; // true
+  type AllExtendTest2 = AllExtend<string | number, string>; // false
+
+  // Test AnyExtends
+  type AnyExtendsTest1 = AnyExtends<string | number, string>; // true
+  type AnyExtendsTest2 = AnyExtends<number | boolean, string>; // false
+
+  // Complex constraint checking
+  type ComplexCheck<T> = And<
+    IsObject<T>,
+    Not<IsArray<T>>
+  >;
+
+  type ComplexTest1 = ComplexCheck<{ a: string }>; // true
+  type ComplexTest2 = ComplexCheck<string[]>; // false
+}
+/* eslint-enable @typescript-eslint/no-unused-vars */
