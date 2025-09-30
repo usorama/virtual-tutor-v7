@@ -24,7 +24,6 @@ import {
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { cn } from '@/lib/utils';
 import {
   getEnhancedUserMessage,
@@ -32,7 +31,7 @@ import {
   type MessageContext,
   type EnhancedErrorMessage,
 } from '@/lib/errors/user-messages';
-import { type APIError } from '@/lib/errors/error-types';
+import { type APIError, ErrorCode } from '@/lib/errors/error-types';
 import { addBreadcrumb, type EnrichedError } from '@/lib/monitoring';
 import { showRecoverySuccessNotification, showErrorNotification } from '../error/ErrorNotification';
 import { createAPIError } from '@/lib/errors';
@@ -93,8 +92,9 @@ export function ErrorDisplay({
   // Use external retry state if provided, otherwise use internal
   const isRetrying = externalIsRetrying || internalIsRetrying;
 
-  // Get enhanced user-friendly message
-  const enhancedMessage = getEnhancedUserMessage(error.code, context);
+  // Get enhanced user-friendly message (fallback to UNKNOWN_ERROR if code is undefined)
+  const errorCode = (error.code as ErrorCode) || ErrorCode.UNKNOWN_ERROR;
+  const enhancedMessage = getEnhancedUserMessage(errorCode, context);
 
   // Get severity-based styling
   const styles = getSeverityStyles(enhancedMessage.severity);
@@ -123,8 +123,11 @@ export function ErrorDisplay({
         errorCode: error.code,
         retryError: String(retryError),
       });
+      const apiError = createAPIError(retryError);
+      // Cast to EnrichedError to satisfy type requirements
+      const enrichedError = apiError as unknown as EnrichedError;
       showErrorNotification({
-        error: createAPIError(retryError),
+        error: enrichedError,
         duration: 5000,
       });
     } finally {
@@ -214,54 +217,55 @@ export function ErrorDisplay({
           </Button>
         )}
 
-        {/* Technical Details (Collapsible) */}
+        {/* Technical Details (Expandable) */}
         {showDetails && (error.code || ('errorId' in error && error.errorId)) && (
-          <Collapsible open={detailsOpen} onOpenChange={setDetailsOpen}>
-            <CollapsibleTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="w-full"
-                aria-expanded={detailsOpen}
-                aria-label="Toggle technical details"
-              >
-                <ChevronDown
-                  className={cn(
-                    'mr-2 h-4 w-4 transition-transform',
-                    detailsOpen && 'rotate-180'
-                  )}
-                  aria-hidden="true"
-                />
-                Technical Details
-              </Button>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="mt-2 space-y-1 rounded-md bg-muted/50 p-3 text-xs">
-              {error.code && (
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Error Code:</span>
-                  <code className="rounded bg-background px-2 py-0.5 font-mono">
-                    {error.code}
-                  </code>
-                </div>
-              )}
-              {'errorId' in error && error.errorId && (
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Error ID:</span>
-                  <code className="rounded bg-background px-2 py-0.5 font-mono text-[10px]">
-                    {error.errorId.substring(0, 16)}...
-                  </code>
-                </div>
-              )}
-              {error.timestamp && (
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Time:</span>
-                  <span className="font-mono">
-                    {new Date(error.timestamp).toLocaleString()}
-                  </span>
-                </div>
-              )}
-            </CollapsibleContent>
-          </Collapsible>
+          <div>
+            <Button
+              onClick={() => setDetailsOpen(!detailsOpen)}
+              variant="ghost"
+              size="sm"
+              className="w-full"
+              aria-expanded={detailsOpen}
+              aria-label="Toggle technical details"
+            >
+              <ChevronDown
+                className={cn(
+                  'mr-2 h-4 w-4 transition-transform',
+                  detailsOpen && 'rotate-180'
+                )}
+                aria-hidden="true"
+              />
+              Technical Details
+            </Button>
+            {detailsOpen && (
+              <div className="mt-2 space-y-1 rounded-md bg-muted/50 p-3 text-xs">
+                {error.code && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Error Code:</span>
+                    <code className="rounded bg-background px-2 py-0.5 font-mono">
+                      {error.code}
+                    </code>
+                  </div>
+                )}
+                {'errorId' in error && error.errorId && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Error ID:</span>
+                    <code className="rounded bg-background px-2 py-0.5 font-mono text-[10px]">
+                      {error.errorId.substring(0, 16)}...
+                    </code>
+                  </div>
+                )}
+                {error.timestamp && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Time:</span>
+                    <span className="font-mono">
+                      {new Date(error.timestamp).toLocaleString()}
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         )}
       </CardContent>
     </Card>
@@ -336,7 +340,9 @@ export function ErrorDisplayCompact({
   onRetry,
   className,
 }: Omit<ErrorDisplayProps, 'onDismiss' | 'showDetails'>) {
-  const enhancedMessage = getEnhancedUserMessage(error.code, context);
+  // Fallback to UNKNOWN_ERROR if code is undefined
+  const errorCode = (error.code as ErrorCode) || ErrorCode.UNKNOWN_ERROR;
+  const enhancedMessage = getEnhancedUserMessage(errorCode, context);
   const styles = getSeverityStyles(enhancedMessage.severity);
   const IconComponent = getIconComponent(enhancedMessage.icon);
 
