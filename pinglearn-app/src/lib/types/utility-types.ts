@@ -255,3 +255,195 @@ namespace MappedTypeTests {
   type ReadonlyBoolean = DeepReadonly<boolean>; // Should be boolean
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */
+
+// ============================================================================
+// CONDITIONAL TYPE HELPERS
+// ============================================================================
+
+/**
+ * Type-level if-then-else expression
+ * Provides a more readable alternative to ternary conditional types
+ *
+ * @example
+ * ```typescript
+ * type Result = If<true, 'yes', 'no'>; // 'yes'
+ * type Result2 = If<false, 'yes', 'no'>; // 'no'
+ *
+ * // Use with type predicates
+ * type IsString<T> = If<T extends string ? true : false, 'string', 'not string'>;
+ * ```
+ *
+ * @template Condition - Boolean condition to check
+ * @template Then - Type to return if condition is true
+ * @template Else - Type to return if condition is false (default: never)
+ */
+export type If<
+  Condition extends boolean,
+  Then,
+  Else = never
+> = Condition extends true ? Then : Else;
+
+/**
+ * Type-level switch statement with multiple cases
+ * Matches T against a tuple of [condition, result] pairs
+ *
+ * @example
+ * ```typescript
+ * type Status = 'idle' | 'loading' | 'success' | 'error';
+ *
+ * type Message<S extends Status> = Switch<S, [
+ *   ['idle', 'Ready'],
+ *   ['loading', 'Loading...'],
+ *   ['success', 'Done!'],
+ *   ['error', 'Failed']
+ * ]>;
+ *
+ * type M1 = Message<'loading'>; // 'Loading...'
+ * ```
+ *
+ * @template T - Value to match against
+ * @template Cases - Tuple of [pattern, result] pairs
+ * @template Default - Default result if no match (default: never)
+ */
+export type Switch<
+  T,
+  Cases extends readonly [unknown, unknown][],
+  Default = never
+> = Cases extends readonly [infer First, ...infer Rest]
+  ? First extends readonly [infer Pattern, infer Result]
+    ? T extends Pattern
+      ? Result
+      : Rest extends readonly [unknown, unknown][]
+      ? Switch<T, Rest, Default>
+      : Default
+    : Default
+  : Default;
+
+/**
+ * Pattern matching utility with exhaustiveness checking
+ * Similar to Switch but with better type inference
+ *
+ * @example
+ * ```typescript
+ * type Shape =
+ *   | { kind: 'circle'; radius: number }
+ *   | { kind: 'square'; size: number }
+ *   | { kind: 'rectangle'; width: number; height: number };
+ *
+ * type Area<S extends Shape> = Match<S['kind'], [
+ *   ['circle', 'π × r²'],
+ *   ['square', 's²'],
+ *   ['rectangle', 'w × h']
+ * ]>;
+ * ```
+ *
+ * @template T - Value to match
+ * @template Patterns - Tuple of [pattern, result] pairs
+ */
+export type Match<
+  T,
+  Patterns extends readonly [unknown, unknown][]
+> = Patterns extends readonly [infer First, ...infer Rest]
+  ? First extends readonly [infer Pattern, infer Result]
+    ? T extends Pattern
+      ? Result
+      : Rest extends readonly [unknown, unknown][]
+      ? Match<T, Rest>
+      : never
+    : never
+  : never;
+
+/**
+ * Type-level NOT operator
+ * Inverts a boolean type
+ *
+ * @example
+ * ```typescript
+ * type T1 = Not<true>; // false
+ * type T2 = Not<false>; // true
+ * ```
+ */
+export type Not<T extends boolean> = T extends true ? false : true;
+
+/**
+ * Type-level AND operator
+ * Returns true only if both inputs are true
+ *
+ * @example
+ * ```typescript
+ * type T1 = And<true, true>; // true
+ * type T2 = And<true, false>; // false
+ * ```
+ */
+export type And<A extends boolean, B extends boolean> =
+  A extends true ? (B extends true ? true : false) : false;
+
+/**
+ * Type-level OR operator
+ * Returns true if either input is true
+ *
+ * @example
+ * ```typescript
+ * type T1 = Or<true, false>; // true
+ * type T2 = Or<false, false>; // false
+ * ```
+ */
+export type Or<A extends boolean, B extends boolean> =
+  A extends true ? true : B extends true ? true : false;
+
+// ============================================================================
+// TYPE-LEVEL TESTS FOR CONDITIONAL HELPERS
+// ============================================================================
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+namespace ConditionalTypeTests {
+  // Test If
+  type IfTrue = If<true, 'yes', 'no'>; // 'yes'
+  type IfFalse = If<false, 'yes', 'no'>; // 'no'
+  type IfDefault = If<true, 'yes'>; // 'yes'
+
+  // Test Switch
+  type Status = 'idle' | 'loading' | 'success' | 'error';
+  type StatusMessage<S extends Status> = Switch<S, [
+    ['idle', 'Ready'],
+    ['loading', 'Loading...'],
+    ['success', 'Done!'],
+    ['error', 'Failed']
+  ]>;
+
+  type IdleMessage = StatusMessage<'idle'>; // 'Ready'
+  type LoadingMessage = StatusMessage<'loading'>; // 'Loading...'
+
+  // Test Match
+  type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+  type IsSafe<M extends HttpMethod> = Match<M, [
+    ['GET', true],
+    ['POST', false],
+    ['PUT', false],
+    ['DELETE', false]
+  ]>;
+
+  type GetIsSafe = IsSafe<'GET'>; // true
+  type PostIsSafe = IsSafe<'POST'>; // false
+
+  // Test logical operators
+  type NotTrue = Not<true>; // false
+  type NotFalse = Not<false>; // true
+
+  type AndResult1 = And<true, true>; // true
+  type AndResult2 = And<true, false>; // false
+
+  type OrResult1 = Or<true, false>; // true
+  type OrResult2 = Or<false, false>; // false
+
+  // Complex conditional
+  type IsStringOrNumber<T> = Or<
+    T extends string ? true : false,
+    T extends number ? true : false
+  >;
+
+  type Test1 = IsStringOrNumber<string>; // true
+  type Test2 = IsStringOrNumber<number>; // true
+  type Test3 = IsStringOrNumber<boolean>; // false
+}
+/* eslint-enable @typescript-eslint/no-unused-vars */
