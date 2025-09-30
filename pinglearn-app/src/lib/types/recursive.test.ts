@@ -11,7 +11,7 @@
  * - Edge cases
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect } from 'vitest';
 import type { TreeNode, Tree, FlatNode } from './recursive';
 import {
   MAX_DEPTH,
@@ -227,10 +227,14 @@ describe('Traversal Functions', () => {
 
   it('should filter tree nodes', () => {
     const root = buildTestTree();
+    // buildTestTree: root(1) -> child1(2)->leaf1(4), child2(3)->leaf2(5)
+    // Filter for value > 2: child1 doesn't match but has leaf1(4) which does
+    // child2(3) matches, leaf2(5) matches
     const filtered = filterTree(root, (node) => node.data.value > 2);
 
     expect(filtered).not.toBeNull();
-    expect(filtered!.children).toHaveLength(1); // Only child2 has value > 2
+    // Both children are kept because they or their descendants match
+    expect(filtered!.children).toHaveLength(2);
   });
 
   it('should find node in tree', () => {
@@ -410,11 +414,12 @@ describe('Edge Cases', () => {
   });
 
   it('should throw error when exceeding max depth', () => {
-    const root = createTestNode('root', 'Root', 1);
-    const newNode = createTreeNode('new', { name: 'New', value: 2 }, [], { depth: MAX_DEPTH + 1, index: 0 });
+    // Create a deep tree at MAX_DEPTH
+    const deepNode = createTreeNode('deep', { name: 'Deep', value: 2 }, [], { depth: MAX_DEPTH, index: 0 });
+    const newNode = createTreeNode('new', { name: 'New', value: 3 }, [], { depth: 0, index: 0 });
 
     expect(() => {
-      insertNode(root, 'root', newNode);
+      insertNode(deepNode, 'deep', newNode);
     }).toThrow();
   });
 
