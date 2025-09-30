@@ -469,3 +469,276 @@ namespace PromiseInferenceTests {
   // { items: string[] }
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */
+
+// ============================================================================
+// ARRAY & TUPLE TYPE INFERENCE
+// ============================================================================
+
+/**
+ * Infer array element type
+ *
+ * Extracts the element type from both regular and readonly arrays.
+ * Works with Array<T> and T[] syntax.
+ *
+ * @example
+ * ```typescript
+ * type E1 = InferElementType<string[]>; // string
+ * type E2 = InferElementType<ReadonlyArray<number>>; // number
+ * type E3 = InferElementType<Array<{ id: string }>>; // { id: string }
+ * ```
+ *
+ * @template T - Array type to infer from
+ * @returns Element type, or never if not an array
+ */
+export type InferElementType<T> = T extends (infer E)[]
+  ? E
+  : T extends ReadonlyArray<infer E>
+  ? E
+  : never;
+
+/**
+ * Infer element type from nested array
+ *
+ * Recursively extracts element type from multi-dimensional arrays.
+ * T[][] -> T
+ *
+ * @example
+ * ```typescript
+ * type Deep1 = InferDeepElement<string[][]>; // string
+ * type Deep2 = InferDeepElement<number[][][]>; // number
+ * ```
+ *
+ * @template T - Nested array type
+ * @returns Deeply nested element type
+ */
+export type InferDeepElement<T> = T extends (infer E)[][]
+  ? InferDeepElement<E[]>
+  : T extends (infer E)[]
+  ? E
+  : T;
+
+/**
+ * Infer array dimension count
+ *
+ * Counts the nesting level of arrays.
+ * Limited depth to prevent excessive recursion.
+ *
+ * @example
+ * ```typescript
+ * type D1 = InferArrayDepth<string[]>; // 1
+ * type D2 = InferArrayDepth<number[][]>; // 2
+ * ```
+ *
+ * @template T - Array type
+ * @template D - Current depth accumulator
+ * @returns Number representing array depth
+ */
+export type InferArrayDepth<T, D extends number = 0> =
+  T extends (infer E)[]
+    ? E extends any[]
+      ? InferArrayDepth<E, [D, 1][1]>
+      : [D, 1][1]
+    : D;
+
+/**
+ * Infer first tuple element
+ *
+ * Extracts the first element type from a tuple.
+ * Returns never for empty tuples.
+ *
+ * @example
+ * ```typescript
+ * type First1 = InferFirst<[string, number, boolean]>; // string
+ * type First2 = InferFirst<[{ id: number }]>; // { id: number }
+ * ```
+ *
+ * @template T - Tuple type
+ * @returns Type of first element, or never if empty tuple
+ */
+export type InferFirst<T> = T extends [infer F, ...any[]]
+  ? F
+  : never;
+
+/**
+ * Infer last tuple element
+ *
+ * Extracts the last element type from a tuple.
+ * Returns never for empty tuples.
+ *
+ * @example
+ * ```typescript
+ * type Last1 = InferLast<[string, number, boolean]>; // boolean
+ * type Last2 = InferLast<[number]>; // number
+ * ```
+ *
+ * @template T - Tuple type
+ * @returns Type of last element, or never if empty tuple
+ */
+export type InferLast<T> = T extends [...any[], infer L]
+  ? L
+  : never;
+
+/**
+ * Infer rest elements (all except first)
+ *
+ * Extracts all tuple elements after the first as a new tuple.
+ * Returns empty tuple if original has only one element.
+ *
+ * @example
+ * ```typescript
+ * type Rest1 = InferRest<[string, number, boolean]>; // [number, boolean]
+ * type Rest2 = InferRest<[string]>; // []
+ * ```
+ *
+ * @template T - Tuple type
+ * @returns Tuple of elements after first, or empty tuple
+ */
+export type InferRest<T> = T extends [any, ...infer R]
+  ? R
+  : [];
+
+/**
+ * Infer tuple length
+ *
+ * Gets the length of a tuple as a number literal type.
+ * Returns number for variable-length arrays.
+ *
+ * @example
+ * ```typescript
+ * type Len1 = InferTupleLength<[string, number, boolean]>; // 3
+ * type Len2 = InferTupleLength<[string]>; // 1
+ * type Len3 = InferTupleLength<[]>; // 0
+ * ```
+ *
+ * @template T - Tuple type
+ * @returns Length as number literal, or number for arrays
+ */
+export type InferTupleLength<T> = T extends readonly any[]
+  ? T['length']
+  : never;
+
+/**
+ * Infer tuple element at index
+ *
+ * Extracts the type at a specific tuple index.
+ * Returns undefined if index is out of bounds.
+ *
+ * @example
+ * ```typescript
+ * type Elem0 = InferTupleElement<[string, number, boolean], 0>; // string
+ * type Elem1 = InferTupleElement<[string, number, boolean], 1>; // number
+ * type Elem2 = InferTupleElement<[string, number, boolean], 2>; // boolean
+ * ```
+ *
+ * @template T - Tuple type
+ * @template N - Index number (0-based)
+ * @returns Type at index N, or undefined if out of bounds
+ */
+export type InferTupleElement<T, N extends number> =
+  T extends readonly any[]
+    ? T[N]
+    : never;
+
+/**
+ * Infer if type is tuple (fixed length)
+ *
+ * Distinguishes between tuples (fixed length) and arrays (variable length).
+ * Returns true for tuples, false for arrays.
+ *
+ * @example
+ * ```typescript
+ * type IsTuple1 = InferIsTuple<[string, number]>; // true
+ * type IsTuple2 = InferIsTuple<string[]>; // false
+ * type IsTuple3 = InferIsTuple<readonly [number]>; // true
+ * ```
+ *
+ * @template T - Type to check
+ * @returns true if tuple, false if array or non-array
+ */
+export type InferIsTuple<T> = T extends readonly any[]
+  ? number extends T['length']
+    ? false
+    : true
+  : false;
+
+// ============================================================================
+// TYPE-LEVEL TESTS FOR ARRAY & TUPLE INFERENCE
+// ============================================================================
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+namespace ArrayTupleInferenceTests {
+  // Test InferElementType
+  type E1 = InferElementType<string[]>; // string
+  type E2 = InferElementType<ReadonlyArray<number>>; // number
+  type E3 = InferElementType<Array<{ id: string }>>; // { id: string }
+  type E4 = InferElementType<readonly boolean[]>; // boolean
+
+  // Test InferDeepElement
+  type Deep1 = InferDeepElement<string[][]>; // string
+  type Deep2 = InferDeepElement<number[][][]>; // number
+  type Deep3 = InferDeepElement<{ id: number }[]>; // { id: number }
+
+  // Test InferArrayDepth
+  type Depth1 = InferArrayDepth<string[]>; // 1
+  type Depth2 = InferArrayDepth<number[][]>; // 2
+
+  // Test tuple inference
+  type Tuple1 = [string, number, boolean];
+  type Tuple2 = [{ id: string }];
+  type EmptyTuple = [];
+
+  // Test InferFirst
+  type First1 = InferFirst<Tuple1>; // string
+  type First2 = InferFirst<Tuple2>; // { id: string }
+  type First3 = InferFirst<EmptyTuple>; // never
+
+  // Test InferLast
+  type Last1 = InferLast<Tuple1>; // boolean
+  type Last2 = InferLast<Tuple2>; // { id: string }
+  type Last3 = InferLast<EmptyTuple>; // never
+
+  // Test InferRest
+  type Rest1 = InferRest<Tuple1>; // [number, boolean]
+  type Rest2 = InferRest<Tuple2>; // []
+  type Rest3 = InferRest<[string]>; // []
+
+  // Test InferTupleLength
+  type Len1 = InferTupleLength<Tuple1>; // 3
+  type Len2 = InferTupleLength<Tuple2>; // 1
+  type Len3 = InferTupleLength<EmptyTuple>; // 0
+  type Len4 = InferTupleLength<string[]>; // number (variable length)
+
+  // Test InferTupleElement
+  type Elem0 = InferTupleElement<Tuple1, 0>; // string
+  type Elem1 = InferTupleElement<Tuple1, 1>; // number
+  type Elem2 = InferTupleElement<Tuple1, 2>; // boolean
+
+  // Test InferIsTuple
+  type IsTuple1 = InferIsTuple<[string, number]>; // true
+  type IsTuple2 = InferIsTuple<string[]>; // false
+  type IsTuple3 = InferIsTuple<readonly [number]>; // true
+  type IsTuple4 = InferIsTuple<Array<boolean>>; // false
+
+  // Complex tuple scenario
+  type ComplexTuple = [
+    string,
+    { id: number; data: string[] },
+    boolean | null
+  ];
+
+  type ComplexFirst = InferFirst<ComplexTuple>; // string
+  type ComplexLast = InferLast<ComplexTuple>; // boolean | null
+  type ComplexRest = InferRest<ComplexTuple>; // [{ id: number; data: string[] }, boolean | null]
+  type ComplexLen = InferTupleLength<ComplexTuple>; // 3
+
+  // Edge case: nested tuples
+  type NestedTuple = [[string, number], [boolean]];
+  type NestedFirst = InferFirst<NestedTuple>; // [string, number]
+  type NestedLast = InferLast<NestedTuple>; // [boolean]
+
+  // Edge case: readonly tuples
+  type ReadonlyTup = readonly [string, number];
+  type ReadonlyFirst = InferFirst<ReadonlyTup>; // string
+  type ReadonlyIsTuple = InferIsTuple<ReadonlyTup>; // true
+}
+/* eslint-enable @typescript-eslint/no-unused-vars */
