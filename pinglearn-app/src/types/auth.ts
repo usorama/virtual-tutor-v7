@@ -119,3 +119,31 @@ export interface PrivacySettings {
   readonly analyticsOptIn: boolean;
   readonly dataSharingOptIn: boolean;
 }
+
+/**
+ * Token validation error codes
+ */
+export type TokenValidationError =
+  | 'TOKEN_EXPIRED'
+  | 'TOKEN_EXPIRING_SOON'
+  | 'INVALID_SIGNATURE'
+  | 'INVALID_CLAIMS'
+  | 'MISSING_TOKEN'
+  | 'MALFORMED_TOKEN'
+  | 'INVALID_ISSUER'
+  | 'INVALID_AUDIENCE'
+
+/**
+ * Rate limiting error codes
+ */
+export type RateLimitError = 'RATE_LIMIT_EXCEEDED'
+
+/**
+ * Enhanced auth error with token validation details
+ */
+export interface EnhancedAuthError extends AuthError {
+  readonly validationError?: TokenValidationError
+  readonly rateLimitError?: RateLimitError
+  readonly expiresIn?: number
+  readonly resetIn?: number
+}
