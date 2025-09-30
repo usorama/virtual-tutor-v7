@@ -19,20 +19,6 @@
       "last_update": "2025-09-30T10:15:00Z"
     },
     {
-      "agent_id": "story_sec001_001",
-      "agent_type": "story-implementer",
-      "task_id": "SEC-001",
-      "status": "running",
-      "started_at": "2025-09-30T13:59:53Z",
-      "files_locked": [
-        "src/components/transcription/TranscriptionInput.tsx",
-        "src/components/transcription/TranscriptionDisplay.tsx",
-        "src/lib/security/input-sanitization.ts"
-      ],
-      "progress": "70% - Implementation complete, starting tests",
-      "last_update": "2025-09-30T14:45:00Z"
-    },
-    {
       "agent_id": "story_sec002_001",
       "agent_type": "story-implementer",
       "task_id": "SEC-002",
@@ -49,6 +35,19 @@
     }
   ],
   "completed_agents": [
+    {
+      "agent_id": "story_sec001_001",
+      "agent_type": "story-implementer",
+      "task_id": "SEC-001",
+      "started_at": "2025-09-30T13:59:53Z",
+      "completed_at": "2025-09-30T15:00:00Z",
+      "status": "completed",
+      "duration_minutes": 120,
+      "files_modified": 4,
+      "files_created": 3,
+      "tests_added": 44,
+      "git_commits": ["f487769", "e412365", "5056efd", "3b0236b"]
+    },
     {
       "agent_id": "boundary-enforcer-001",
       "agent_type": "protected-core-boundary-enforcer",

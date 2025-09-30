@@ -4,21 +4,6 @@
   "tracking_version": "1.0",
   "last_updated": "2025-09-30T00:00:00Z",
   "file_locks": {
-    "src/components/transcription/TranscriptionInput.tsx": {
-      "locked_by": "story_sec001_001",
-      "locked_at": "2025-09-30T13:59:53Z",
-      "task_id": "SEC-001"
-    },
-    "src/components/transcription/TranscriptionDisplay.tsx": {
-      "locked_by": "story_sec001_001",
-      "locked_at": "2025-09-30T13:59:53Z",
-      "task_id": "SEC-001"
-    },
-    "src/lib/security/input-sanitization.ts": {
-      "locked_by": "story_sec001_001",
-      "locked_at": "2025-09-30T13:59:53Z",
-      "task_id": "SEC-001"
-    },
     "src/components/transcription/MathRenderer.tsx": {
       "locked_by": "story_sec002_001",
       "locked_at": "2025-09-30T14:00:00Z",
