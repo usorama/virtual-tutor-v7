@@ -48,6 +48,11 @@ export interface SessionSnapshot {
 }
 
 /**
+ * Type definition for recovery event listeners
+ */
+type RecoveryEventListener = (...args: unknown[]) => void | Promise<void>;
+
+/**
  * SessionRecoveryService - Comprehensive session recovery and persistence
  */
 export class SessionRecoveryService {
@@ -59,7 +64,7 @@ export class SessionRecoveryService {
   private recoveryState: RecoveryState;
   private heartbeatInterval?: NodeJS.Timeout;
   private connectionMonitor?: NodeJS.Timeout;
-  private eventListeners: Map<string, Function[]> = new Map();
+  private eventListeners: Map<string, RecoveryEventListener[]> = new Map();
 
   private constructor(config?: Partial<RecoveryConfig>) {
     this.voiceSessionManager = VoiceSessionManager.getInstance();
@@ -288,7 +293,7 @@ export class SessionRecoveryService {
   /**
    * Add event listener
    */
-  public addEventListener(event: string, callback: Function): void {
+  public addEventListener(event: string, callback: RecoveryEventListener): void {
     if (!this.eventListeners.has(event)) {
       this.eventListeners.set(event, []);
     }
@@ -298,7 +303,7 @@ export class SessionRecoveryService {
   /**
    * Remove event listener
    */
-  public removeEventListener(event: string, callback: Function): void {
+  public removeEventListener(event: string, callback: RecoveryEventListener): void {
     const listeners = this.eventListeners.get(event);
     if (listeners) {
       const index = listeners.indexOf(callback);

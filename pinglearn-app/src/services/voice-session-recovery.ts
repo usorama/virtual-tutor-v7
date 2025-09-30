@@ -71,6 +71,11 @@ export interface SwitchToTextModeOptions {
 }
 
 /**
+ * Type definition for recovery event listeners
+ */
+type RecoveryEventListener = (...args: unknown[]) => void | Promise<void>;
+
+/**
  * VoiceSessionRecovery class provides comprehensive error recovery capabilities
  * for voice sessions, including automatic reconnection, state preservation,
  * and graceful degradation strategies.
@@ -83,7 +88,7 @@ export class VoiceSessionRecovery {
   private retryAttempts: Map<string, number> = new Map();
   private circuitBreaker: Map<string, boolean> = new Map();
   private recoveryMetrics: Map<string, { attempts: number; successRate: number; lastRecovery: number }> = new Map();
-  private eventListeners: Map<string, Function[]> = new Map();
+  private eventListeners: Map<string, RecoveryEventListener[]> = new Map();
 
   constructor(config: RecoveryConfig) {
     this.config = config;
@@ -93,7 +98,7 @@ export class VoiceSessionRecovery {
   /**
    * Add event listener for recovery events
    */
-  on(event: string, listener: Function): void {
+  on(event: string, listener: RecoveryEventListener): void {
     if (!this.eventListeners.has(event)) {
       this.eventListeners.set(event, []);
     }
@@ -103,7 +108,7 @@ export class VoiceSessionRecovery {
   /**
    * Remove event listener
    */
-  off(event: string, listener: Function): void {
+  off(event: string, listener: RecoveryEventListener): void {
     const listeners = this.eventListeners.get(event);
     if (listeners) {
       const index = listeners.indexOf(listener);

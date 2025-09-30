@@ -359,7 +359,7 @@ describe('VoiceSessionRecovery', () => {
       // Mock setTimeout to track delays
       const originalSetTimeout = global.setTimeout;
       const delays: number[] = [];
-      vi.stubGlobal('setTimeout', (fn: Function, delay: number) => {
+      vi.stubGlobal('setTimeout', (fn: () => void, delay: number) => {
         delays.push(delay);
         return originalSetTimeout(fn, 0); // Execute immediately for test
       });
@@ -385,7 +385,7 @@ describe('VoiceSessionRecovery', () => {
       wsInstance.reconnect.mockRejectedValue(new Error('Always fails'));
 
       const delays: number[] = [];
-      vi.stubGlobal('setTimeout', (fn: Function, delay: number) => {
+      vi.stubGlobal('setTimeout', (fn: () => void, delay: number) => {
         delays.push(delay);
         return setTimeout(fn, 0);
       });

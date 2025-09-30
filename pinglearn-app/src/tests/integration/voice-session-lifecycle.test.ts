@@ -1404,7 +1404,7 @@ describe('Voice Session Lifecycle Integration Tests', () => {
 
       // Mock circuit breaker behavior
       const circuitBreaker = {
-        call: async (operation: Function) => {
+        call: async <T>(operation: () => Promise<T>): Promise<T> => {
           try {
             if (failureCount >= maxFailures) {
               throw new Error('Circuit breaker open - service unavailable');

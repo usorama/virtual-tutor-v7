@@ -192,7 +192,7 @@ export namespace IDEOptimizations {
    * Simplified hover information
    */
   export type SimplifiedHover<T> = T extends object
-    ? { [K in keyof T]: T[K] extends Function ? 'Function' : T[K] }
+    ? { [K in keyof T]: T[K] extends (...args: never[]) => unknown ? 'Function' : T[K] }
     : T;
 
   /**

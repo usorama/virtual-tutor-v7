@@ -237,29 +237,32 @@ export const PerformanceTestSuite = {
   // Test 5: Compare polling vs subscription performance
   testPollingVsSubscription() {
     console.log('🔄 Testing Polling vs Subscription Performance...');
-    
+
+    // Type definition for buffer subscribers
+    type BufferSubscriber = (items: DisplayBufferItem[]) => void;
+
     class TestBuffer {
       private items: DisplayBufferItem[] = [];
-      private subscribers: Set<Function> = new Set();
+      private subscribers: Set<BufferSubscriber> = new Set();
       private lastChangeId = 0;
-      
+
       addItem(item: DisplayBufferItem) {
         this.items.push(item);
         this.lastChangeId++;
         this.notifySubscribers();
       }
-      
+
       // Polling approach (current)
       getItems() {
         return [...this.items];
       }
-      
+
       // Subscription approach (recommended)
-      subscribe(callback: Function) {
+      subscribe(callback: BufferSubscriber) {
         this.subscribers.add(callback);
         return () => this.subscribers.delete(callback);
       }
-      
+
       private notifySubscribers() {
         this.subscribers.forEach(callback => callback(this.items));
       }

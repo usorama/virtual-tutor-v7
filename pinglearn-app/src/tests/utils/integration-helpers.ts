@@ -668,7 +668,7 @@ export const testDataGenerators = {
   /**
    * Generate batch of realistic test data
    */
-  batch(count: number, generator: Function, ...args: any[]) {
+  batch<T>(count: number, generator: (...args: unknown[]) => T, ...args: unknown[]): T[] {
     return Array.from({ length: count }, () => generator(...args));
   }
 };
@@ -738,7 +738,7 @@ export const realtimeTestUtils = {
   mockSubscription(tableName: string, callback: (payload: any) => void) {
     return {
       subscribe: vi.fn().mockImplementation(() => ({
-        on: vi.fn().mockImplementation((event: string, handler: Function) => {
+        on: vi.fn().mockImplementation((event: string, handler: (payload: any) => void) => {
           // Store handler for later triggering
           return { unsubscribe: vi.fn() };
         })

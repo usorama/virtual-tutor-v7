@@ -72,6 +72,11 @@ export interface SessionControls {
 }
 
 /**
+ * Type definition for voice session event listeners
+ */
+type VoiceSessionEventListener = (...args: unknown[]) => void | Promise<void>;
+
+/**
  * VoiceSessionManager - Comprehensive voice session management
  */
 export class VoiceSessionManager {
@@ -82,7 +87,7 @@ export class VoiceSessionManager {
   private metrics: VoiceSessionMetrics | null = null;
   private currentConfig: VoiceSessionConfig | null = null;
   private retryBackoff: ExponentialBackoff;
-  private eventListeners: Map<string, Function[]> = new Map();
+  private eventListeners: Map<string, VoiceSessionEventListener[]> = new Map();
 
   private constructor() {
     this.sessionOrchestrator = SessionOrchestrator.getInstance();
@@ -481,7 +486,7 @@ export class VoiceSessionManager {
   /**
    * Add event listener
    */
-  public addEventListener(event: string, callback: Function): void {
+  public addEventListener(event: string, callback: VoiceSessionEventListener): void {
     if (!this.eventListeners.has(event)) {
       this.eventListeners.set(event, []);
     }
@@ -491,7 +496,7 @@ export class VoiceSessionManager {
   /**
    * Remove event listener
    */
-  public removeEventListener(event: string, callback: Function): void {
+  public removeEventListener(event: string, callback: VoiceSessionEventListener): void {
     const listeners = this.eventListeners.get(event);
     if (listeners) {
       const index = listeners.indexOf(callback);
