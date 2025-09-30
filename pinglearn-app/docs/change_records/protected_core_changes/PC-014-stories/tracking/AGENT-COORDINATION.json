@@ -5,14 +5,6 @@
   "last_updated": "2025-09-30T00:00:00Z",
   "active_agents": [
     {
-      "agent_id": "boundary-enforcer-001",
-      "agent_type": "protected-core-boundary-enforcer",
-      "task_id": "protected-core-boundary-fix",
-      "started_at": "2025-09-30T10:00:00Z",
-      "status": "in_progress",
-      "phase": "discovery"
-    },
-    {
       "agent_id": "agent_test_fixer_001",
       "agent_type": "test-writer-fixer",
       "task_id": "test-infrastructure-fix",
@@ -27,7 +19,19 @@
       "last_update": "2025-09-30T10:15:00Z"
     }
   ],
-  "completed_agents": [],
+  "completed_agents": [
+    {
+      "agent_id": "boundary-enforcer-001",
+      "agent_type": "protected-core-boundary-enforcer",
+      "task_id": "protected-core-boundary-fix",
+      "started_at": "2025-09-30T10:00:00Z",
+      "completed_at": "2025-09-30T10:30:00Z",
+      "status": "completed",
+      "duration_minutes": 30,
+      "files_modified": 13,
+      "git_commit": "e6b4576"
+    }
+  ],
   "failed_agents": [],
   "agent_queue": [],
   "agent_registry": {

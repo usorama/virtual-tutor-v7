@@ -34,17 +34,29 @@
           "task_id": "protected-core-boundary-fix",
           "description": "Fix 27 protected-core import violations",
           "agent_type": "protected-core-boundary-enforcer",
-          "status": "in_progress",
+          "status": "completed",
           "started_at": "2025-09-30T10:00:00Z",
-          "completed_at": null,
-          "progress": "5%",
+          "completed_at": "2025-09-30T10:30:00Z",
+          "progress": "100%",
           "target": "27 violations → 0 violations",
-          "current_state": "Discovery phase - searching for violations",
+          "current_state": "Completed - 15 files fixed, 0 violations remaining",
           "files_affected": [
-            "Multiple files importing internals directly"
+            "src/components/classroom/ChatInterface.tsx",
+            "src/components/classroom/MessageBubble.tsx",
+            "src/components/classroom/ProgressiveMath.tsx",
+            "src/components/classroom/StreamingMessage.tsx",
+            "src/components/classroom/WordHighlighter.tsx",
+            "src/hooks/useStreamingTranscript.ts",
+            "src/hooks/useWordTiming.ts",
+            "src/tests/session/orchestrator.test.ts",
+            "src/tests/e2e/session.e2e.test.ts",
+            "src/tests/integration/transcript-flow.test.ts",
+            "src/tests/integration/voice-session-recovery.test.ts",
+            "src/tests/transcription/display/buffer.test.ts",
+            "src/lib/error-handling/voice-session-recovery.ts"
           ],
-          "evidence_file": null,
-          "git_checkpoint": null
+          "evidence_file": ".research-plan-manifests/evidence/PHASE-0-BOUNDARY-FIX-EVIDENCE.md",
+          "git_checkpoint": "e6b4576"
         },
         {
           "task_id": "dependency-graph-analysis",
