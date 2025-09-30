@@ -96,6 +96,43 @@ git reset --hard HEAD~1
 
 ---
 
+## 📋 MANDATORY STORY IMPLEMENTATION WORKFLOW
+
+**🚨 CRITICAL**: All PC-014 story implementations MUST follow the 6-phase workflow.
+
+### Workflow Reference Document
+**Location**: `@.research-plan-manifests/WORKFLOW-CHECKLIST.md`
+
+**Phases** (in order, no skipping):
+1. **RESEARCH** (BLOCKING) - Codebase + Context7 + Web research
+2. **PLAN** (BLOCKING) - Architecture + Roadmap + Tests
+3. **IMPLEMENT** (Iterative) - Follow plan exactly
+4. **VERIFY** (Iterative) - TypeScript + Lint + Protected-Core
+5. **TEST** (Iterative) - Unit + Integration + Coverage
+6. **CONFIRM** (Final) - Evidence collection
+
+**Enforcement**:
+- UserPromptSubmit hook blocks implementation without research+plan
+- PostToolUse hook deletes code that violates plan or duplicates protected-core
+- Phases 3-5 loop until all conditions met (max 5 iterations)
+
+### Quick Checklist
+- [ ] Create research manifest: `.research-plan-manifests/research/[STORY-ID]-RESEARCH.md`
+- [ ] Add signature: `[RESEARCH-COMPLETE-{story-id}]`
+- [ ] Create plan manifest: `.research-plan-manifests/plans/[STORY-ID]-PLAN.md`
+- [ ] Add approval: `[PLAN-APPROVED-{story-id}]`
+- [ ] Implement following plan (git checkpoint after each step)
+- [ ] Verify: TypeScript 0 errors + Lint passes + No protected-core violations
+- [ ] Test: 100% passing + >80% coverage
+- [ ] Create evidence: `docs/change_records/protected_core_changes/PC-014-stories/evidence/[STORY-ID]-EVIDENCE.md`
+- [ ] Mark story complete ONLY after evidence exists
+
+**For complete checklist**: See `@.research-plan-manifests/WORKFLOW-CHECKLIST.md`
+
+**This workflow is NOT optional. It's enforced by hooks and is mandatory for all agents.**
+
+---
+
 ## 🛠️ TECHNICAL REFERENCE
 
 ### Protected Core APIs (Use These - Don't Recreate)
