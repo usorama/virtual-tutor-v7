@@ -7,7 +7,7 @@
  * Target: 100% code coverage, <1ms performance per operation
  */
 
-import { describe, it, expect, beforeEach } from '@jest/globals';
+import { describe, it, expect, beforeEach } from 'vitest';
 import {
   Brand,
   UnBrand,
