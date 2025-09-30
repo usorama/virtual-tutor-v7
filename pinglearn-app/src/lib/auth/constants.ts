@@ -28,6 +28,10 @@ export const AUTH_CONSTANTS = {
     EMAIL_ALREADY_EXISTS: 'An account with this email already exists',
     WEAK_PASSWORD: 'Password is too weak',
     INVALID_TOKEN: 'Invalid or expired token',
+    // SEC-005: Enhanced token validation error messages
+    TOKEN_EXPIRED: 'Your session has expired. Please log in again.',
+    TOKEN_INVALID: 'Invalid authentication token.',
+    RATE_LIMIT_EXCEEDED: 'Too many attempts. Please try again later.',
   },
   
   // Success messages

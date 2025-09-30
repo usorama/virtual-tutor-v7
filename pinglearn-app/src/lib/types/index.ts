@@ -13,14 +13,26 @@
 export * from './inference-optimizations';
 export * from './union-optimizations';
 
-// TS-012: Branded type utilities and domain-specific ID types (export first to take precedence)
+// TS-012: Branded type utilities and domain-specific ID types
 export * from './branded';
 export * from './id-types';
 
-// Performance optimizations (exported after branded to avoid Brand type conflict)
-// Note: performance-optimizations.ts has an old Brand type that conflicts with the new one
-// The new Brand type from branded.ts takes precedence
-export * from './performance-optimizations';
+// Performance optimizations (excluding Brand to avoid conflict with branded.ts)
+// Note: performance-optimizations.ts exports Brand<T, B> = T & { __brand: B }
+// We exclude it in favor of the new Brand<T, BrandSymbol> from branded.ts
+// These are type-only namespace exports
+export type {
+  NominalTypes,
+  UnionOptimizations,
+  ConditionalOptimizations,
+  TemplateOptimizations,
+  GenericOptimizations,
+  CompilationOptimizations,
+  IDEOptimizations,
+  TypeLevelCache,
+  AdvancedGenerics,
+  PerformanceMonitoring,
+} from './performance-optimizations';
 
 // Type guards and validators
 export * from './type-guards';
@@ -28,14 +40,6 @@ export * from './validators';
 
 // Performance monitoring and build optimization
 export * from '../utils/typescript-performance';
-
-/**
- * Consolidated type optimization namespace
- */
-// Re-export all optimizations directly
-export * from './inference-optimizations';
-export * from './performance-optimizations';
-export * from './union-optimizations';
 
 export namespace TypeOptimizations {
   /**
