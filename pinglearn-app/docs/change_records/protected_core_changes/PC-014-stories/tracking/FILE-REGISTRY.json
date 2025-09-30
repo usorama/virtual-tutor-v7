@@ -1,0 +1,409 @@
+{
+  "project": "PingLearn",
+  "change_record": "PC-014",
+  "tracking_version": "1.0",
+  "last_updated": "2025-09-30T00:00:00Z",
+  "file_locks": {},
+  "conflict_matrix": {
+    "SEC-001": {
+      "story_id": "SEC-001",
+      "title": "Input sanitization for transcription components",
+      "files": [
+        "src/components/transcription/TranscriptionInput.tsx",
+        "src/components/transcription/TranscriptionDisplay.tsx",
+        "src/lib/security/input-sanitization.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "SEC-002": {
+      "story_id": "SEC-002",
+      "title": "XSS protection for math rendering",
+      "files": [
+        "src/components/math/MathRenderer.tsx",
+        "src/lib/security/xss-protection.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "SEC-003": {
+      "story_id": "SEC-003",
+      "title": "CSRF protection for API routes",
+      "files": [
+        "src/app/api/**/*.ts",
+        "src/middleware/csrf.ts",
+        "src/lib/security/csrf-token.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "SEC-004": {
+      "story_id": "SEC-004",
+      "title": "Rate limiting for voice sessions",
+      "files": [
+        "src/app/api/voice/**/*.ts",
+        "src/middleware/rate-limit.ts",
+        "src/lib/security/rate-limiter.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "SEC-005": {
+      "story_id": "SEC-005",
+      "title": "Authentication token validation",
+      "files": [
+        "src/middleware/auth.ts",
+        "src/lib/security/token-validation.ts",
+        "src/app/api/auth/**/*.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "SEC-006": {
+      "story_id": "SEC-006",
+      "title": "Secure session storage",
+      "files": [
+        "src/lib/security/session-storage.ts",
+        "src/hooks/useSecureStorage.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "SEC-007": {
+      "story_id": "SEC-007",
+      "title": "SQL injection prevention",
+      "files": [
+        "src/lib/database/query-builder.ts",
+        "src/lib/security/sql-sanitization.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "SEC-008": {
+      "story_id": "SEC-008",
+      "title": "File upload security",
+      "files": [
+        "src/app/api/upload/**/*.ts",
+        "src/lib/security/file-validation.ts",
+        "src/components/upload/**/*.tsx"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "SEC-009": {
+      "story_id": "SEC-009",
+      "title": "WebSocket security hardening",
+      "files": [
+        "src/lib/websocket/security.ts",
+        "src/middleware/websocket-auth.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "SEC-010": {
+      "story_id": "SEC-010",
+      "title": "API key rotation mechanism",
+      "files": [
+        "src/lib/security/api-key-manager.ts",
+        "src/app/api/admin/keys/**/*.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "SEC-011": {
+      "story_id": "SEC-011",
+      "title": "Audit logging system",
+      "files": [
+        "src/lib/security/audit-logger.ts",
+        "src/middleware/audit.ts",
+        "src/app/api/admin/audit/**/*.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "SEC-012": {
+      "story_id": "SEC-012",
+      "title": "Security headers configuration",
+      "files": [
+        "next.config.js",
+        "src/middleware/security-headers.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "TS-010": {
+      "story_id": "TS-010",
+      "title": "Type guard implementation",
+      "files": [
+        "src/lib/types/type-guards.ts",
+        "src/lib/types/validators.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "TS-011": {
+      "story_id": "TS-011",
+      "title": "Generic utility types",
+      "files": [
+        "src/lib/types/utility-types.ts",
+        "src/lib/types/helpers.ts"
+      ],
+      "conflicts_with": ["TS-010"],
+      "parallelizable": false
+    },
+    "TS-012": {
+      "story_id": "TS-012",
+      "title": "Branded types for IDs",
+      "files": [
+        "src/lib/types/branded.ts",
+        "src/lib/types/id-types.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "TS-013": {
+      "story_id": "TS-013",
+      "title": "Discriminated unions",
+      "files": [
+        "src/lib/types/union-types.ts",
+        "src/lib/types/discriminated.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "TS-014": {
+      "story_id": "TS-014",
+      "title": "Recursive type definitions",
+      "files": [
+        "src/lib/types/recursive.ts",
+        "src/lib/types/tree-types.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "TS-015": {
+      "story_id": "TS-015",
+      "title": "Conditional type patterns",
+      "files": [
+        "src/lib/types/conditional.ts",
+        "src/lib/types/conditional-helpers.ts"
+      ],
+      "conflicts_with": ["TS-011"],
+      "parallelizable": false
+    },
+    "TS-016": {
+      "story_id": "TS-016",
+      "title": "Template literal types",
+      "files": [
+        "src/lib/types/template-literals.ts",
+        "src/lib/types/string-types.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "TS-017": {
+      "story_id": "TS-017",
+      "title": "Mapped type optimizations",
+      "files": [
+        "src/lib/types/mapped-types.ts",
+        "src/lib/types/object-transforms.ts"
+      ],
+      "conflicts_with": ["TS-011"],
+      "parallelizable": false
+    },
+    "TS-018": {
+      "story_id": "TS-018",
+      "title": "Type inference improvements",
+      "files": [
+        "src/lib/types/inference.ts",
+        "src/lib/types/inference-helpers.ts"
+      ],
+      "conflicts_with": ["TS-015"],
+      "parallelizable": false
+    },
+    "ERR-003": {
+      "story_id": "ERR-003",
+      "title": "Retry mechanism with exponential backoff",
+      "files": [
+        "src/lib/errors/retry.ts",
+        "src/lib/errors/exponential-backoff.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "ERR-005": {
+      "story_id": "ERR-005",
+      "title": "Error monitoring integration",
+      "files": [
+        "src/lib/errors/monitoring.ts",
+        "src/lib/errors/sentry-integration.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "ERR-007": {
+      "story_id": "ERR-007",
+      "title": "Error context enrichment",
+      "files": [
+        "src/lib/errors/context.ts",
+        "src/lib/errors/enrichment.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "ERR-008": {
+      "story_id": "ERR-008",
+      "title": "User-friendly error messages",
+      "files": [
+        "src/lib/errors/user-messages.ts",
+        "src/components/errors/ErrorDisplay.tsx"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "ERR-009": {
+      "story_id": "ERR-009",
+      "title": "Error boundary enhancements",
+      "files": [
+        "src/components/errors/ErrorBoundary.tsx",
+        "src/components/errors/ErrorFallback.tsx"
+      ],
+      "conflicts_with": ["ERR-008"],
+      "parallelizable": false
+    },
+    "ARCH-002": {
+      "story_id": "ARCH-002",
+      "title": "Service layer architecture",
+      "files": [
+        "src/services/**/*.ts",
+        "src/lib/services/base-service.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "ARCH-003": {
+      "story_id": "ARCH-003",
+      "title": "Repository pattern implementation",
+      "files": [
+        "src/repositories/**/*.ts",
+        "src/lib/repositories/base-repository.ts"
+      ],
+      "conflicts_with": ["ARCH-002"],
+      "parallelizable": false
+    },
+    "ARCH-004": {
+      "story_id": "ARCH-004",
+      "title": "Dependency injection setup",
+      "files": [
+        "src/lib/di/container.ts",
+        "src/lib/di/injector.ts"
+      ],
+      "conflicts_with": ["ARCH-002", "ARCH-003"],
+      "parallelizable": false
+    },
+    "ARCH-005": {
+      "story_id": "ARCH-005",
+      "title": "Event-driven architecture",
+      "files": [
+        "src/lib/events/event-bus.ts",
+        "src/lib/events/event-emitter.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "ARCH-006": {
+      "story_id": "ARCH-006",
+      "title": "Cache layer implementation",
+      "files": [
+        "src/lib/cache/cache-manager.ts",
+        "src/lib/cache/strategies.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "ARCH-007": {
+      "story_id": "ARCH-007",
+      "title": "API versioning strategy",
+      "files": [
+        "src/app/api/v1/**/*.ts",
+        "src/app/api/v2/**/*.ts",
+        "src/middleware/versioning.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "ARCH-008": {
+      "story_id": "ARCH-008",
+      "title": "Performance monitoring",
+      "files": [
+        "src/lib/monitoring/performance.ts",
+        "src/lib/monitoring/metrics.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "TEST-005": {
+      "story_id": "TEST-005",
+      "title": "Performance testing suite",
+      "files": [
+        "tests/performance/**/*.test.ts",
+        "tests/helpers/performance.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    },
+    "TEST-006": {
+      "story_id": "TEST-006",
+      "title": "Load testing framework",
+      "files": [
+        "tests/load/**/*.test.ts",
+        "tests/helpers/load-testing.ts"
+      ],
+      "conflicts_with": [],
+      "parallelizable": true
+    }
+  },
+  "file_status": {
+    "src/tests/mocks/protected-core.ts": {
+      "locked_by": null,
+      "last_modified": "2025-09-30T00:00:00Z",
+      "modification_count": 0,
+      "risk_level": "HIGH",
+      "notes": "Critical mock file affecting 256 tests"
+    },
+    "src/tests/helpers/database.ts": {
+      "locked_by": null,
+      "last_modified": "2025-09-30T00:00:00Z",
+      "modification_count": 0,
+      "risk_level": "HIGH",
+      "notes": "Database transaction helpers"
+    },
+    "src/tests/mocks/websocket.ts": {
+      "locked_by": null,
+      "last_modified": "2025-09-30T00:00:00Z",
+      "modification_count": 0,
+      "risk_level": "HIGH",
+      "notes": "WebSocket manager mock"
+    }
+  },
+  "protected_core_files": [
+    "src/protected-core/voice-engine/**",
+    "src/protected-core/transcription/**",
+    "src/protected-core/websocket/manager/singleton-manager.ts",
+    "src/protected-core/session/**",
+    "src/protected-core/contracts/**"
+  ],
+  "high_risk_files": [
+    "src/tests/mocks/protected-core.ts",
+    "src/tests/helpers/database.ts",
+    "src/tests/mocks/websocket.ts",
+    "next.config.js",
+    "src/middleware/**"
+  ],
+  "locking_strategy": {
+    "mode": "pessimistic",
+    "timeout_seconds": 300,
+    "auto_release": true,
+    "conflict_resolution": "first_come_first_served"
+  }
+}

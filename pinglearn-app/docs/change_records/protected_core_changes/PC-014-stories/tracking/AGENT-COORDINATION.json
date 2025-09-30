@@ -1,0 +1,63 @@
+{
+  "project": "PingLearn",
+  "change_record": "PC-014",
+  "tracking_version": "1.0",
+  "last_updated": "2025-09-30T00:00:00Z",
+  "active_agents": [
+    {
+      "agent_id": "boundary-enforcer-001",
+      "agent_type": "protected-core-boundary-enforcer",
+      "task_id": "protected-core-boundary-fix",
+      "started_at": "2025-09-30T10:00:00Z",
+      "status": "in_progress",
+      "phase": "discovery"
+    }
+  ],
+  "completed_agents": [],
+  "failed_agents": [],
+  "agent_queue": [],
+  "agent_registry": {
+    "test-infrastructure-fixer": {
+      "agent_type": "test-writer-fixer",
+      "description": "Fix 256 test failures by repairing protected-core mocks",
+      "max_instances": 1,
+      "priority": "CRITICAL",
+      "estimated_duration": "30-45 minutes"
+    },
+    "protected-core-boundary-enforcer": {
+      "agent_type": "code-refactorer",
+      "description": "Fix 27 protected-core import violations",
+      "max_instances": 1,
+      "priority": "CRITICAL",
+      "estimated_duration": "20-30 minutes"
+    },
+    "dependency-graph-analyzer": {
+      "agent_type": "architect-agent",
+      "description": "Analyze 53 stories to create dependency matrix",
+      "max_instances": 1,
+      "priority": "HIGH",
+      "estimated_duration": "10-15 minutes"
+    }
+  },
+  "coordination_rules": {
+    "max_concurrent_agents": 10,
+    "max_agents_per_file": 1,
+    "conflict_resolution": "first_come_first_served",
+    "auto_queue": true,
+    "retry_on_failure": true,
+    "max_retries": 3
+  },
+  "agent_communication": {
+    "event_bus": "file_based_json",
+    "heartbeat_interval_seconds": 60,
+    "timeout_minutes": 60,
+    "status_update_frequency": "on_progress_change"
+  },
+  "metrics": {
+    "total_agents_spawned": 0,
+    "total_agents_completed": 0,
+    "total_agents_failed": 0,
+    "average_agent_duration_minutes": 0,
+    "total_processing_time_minutes": 0
+  }
+}

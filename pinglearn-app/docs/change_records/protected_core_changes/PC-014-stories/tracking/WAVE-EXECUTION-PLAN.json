@@ -1,0 +1,43 @@
+{
+  "project": "PingLearn",
+  "change_record": "PC-014",
+  "tracking_version": "1.0",
+  "last_updated": "2025-09-30T00:00:00Z",
+  "total_stories": 53,
+  "completed_stories": 17,
+  "remaining_stories": 36,
+  "waves": [],
+  "dependency_analysis": {
+    "status": "pending",
+    "analyzed_by": null,
+    "analyzed_at": null,
+    "total_dependencies": 0,
+    "critical_path_length": 0,
+    "max_parallelization": 0
+  },
+  "notes": [
+    "This file will be populated by the dependency-graph-analyzer agent",
+    "Wave structure will be created based on story dependencies from MASTER-TRACKER.json",
+    "Each wave will contain stories that can be executed in parallel",
+    "Waves are ordered by dependency relationships"
+  ],
+  "wave_template": {
+    "wave_id": "WAVE_N_DESCRIPTION",
+    "parallelizable": true,
+    "estimated_duration_minutes": 0,
+    "dependencies": [],
+    "stories": [
+      {
+        "story_id": "STORY-ID",
+        "title": "Story title",
+        "category": "category",
+        "priority": "P0/P1/P2",
+        "estimated_hours": 0,
+        "depends_on": [],
+        "blocks": [],
+        "agent_type": "agent-name",
+        "files_to_modify": []
+      }
+    ]
+  }
+}

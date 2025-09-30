@@ -1,0 +1,182 @@
+{
+  "project": "PingLearn",
+  "change_record": "PC-014",
+  "tracking_version": "1.0",
+  "last_updated": "2025-09-30T00:00:00Z",
+  "current_phase": "PHASE_0_UNBLOCK",
+  "phases": {
+    "PHASE_0_UNBLOCK": {
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null,
+      "description": "Unblock development by fixing test infrastructure and protected-core violations",
+      "blocking_next": ["PHASE_1_RESEARCH"],
+      "tasks": [
+        {
+          "task_id": "test-infrastructure-fix",
+          "description": "Fix 256 test failures (48% failure rate) by repairing mocks",
+          "agent_type": "test-infrastructure-fixer",
+          "status": "pending",
+          "started_at": null,
+          "completed_at": null,
+          "progress": "0%",
+          "target": "256 failures → 0 failures",
+          "current_state": "Not started",
+          "files_affected": [
+            "src/tests/mocks/protected-core.ts",
+            "src/tests/helpers/database.ts",
+            "src/tests/mocks/websocket.ts"
+          ],
+          "evidence_file": null,
+          "git_checkpoint": null
+        },
+        {
+          "task_id": "protected-core-boundary-fix",
+          "description": "Fix 27 protected-core import violations",
+          "agent_type": "protected-core-boundary-enforcer",
+          "status": "in_progress",
+          "started_at": "2025-09-30T10:00:00Z",
+          "completed_at": null,
+          "progress": "5%",
+          "target": "27 violations → 0 violations",
+          "current_state": "Discovery phase - searching for violations",
+          "files_affected": [
+            "Multiple files importing internals directly"
+          ],
+          "evidence_file": null,
+          "git_checkpoint": null
+        },
+        {
+          "task_id": "dependency-graph-analysis",
+          "description": "Analyze 53 stories to create wave execution plan",
+          "agent_type": "dependency-graph-analyzer",
+          "status": "pending",
+          "started_at": null,
+          "completed_at": null,
+          "progress": "0%",
+          "target": "53 stories analyzed, dependency matrix created",
+          "current_state": "Not started",
+          "files_affected": [
+            "MASTER-TRACKER.json"
+          ],
+          "evidence_file": null,
+          "git_checkpoint": null
+        }
+      ],
+      "completion_criteria": {
+        "tests_passing": "100% (534/534)",
+        "protected_core_violations": 0,
+        "dependency_matrix_created": true
+      }
+    },
+    "PHASE_1_RESEARCH": {
+      "status": "blocked",
+      "blocked_by": ["PHASE_0_UNBLOCK"],
+      "description": "Research all 52 remaining stories in parallel batches",
+      "blocking_next": ["PHASE_2_PLAN"],
+      "stories_count": 52,
+      "batches": {
+        "BATCH_1A_SECURITY": {
+          "story_ids": ["SEC-001", "SEC-002", "SEC-003", "SEC-004", "SEC-005", "SEC-006", "SEC-007", "SEC-008", "SEC-009", "SEC-010", "SEC-011", "SEC-012"],
+          "agent_count": 12,
+          "parallelizable": true,
+          "status": "blocked"
+        },
+        "BATCH_1B_ARCHITECTURE": {
+          "story_ids": ["ARCH-002", "ARCH-003", "ARCH-004", "ARCH-005", "ARCH-006", "ARCH-007", "ARCH-008"],
+          "agent_count": 7,
+          "parallelizable": true,
+          "status": "blocked"
+        },
+        "BATCH_1C_TYPESCRIPT": {
+          "story_ids": ["TS-010", "TS-011", "TS-012", "TS-013", "TS-014", "TS-015", "TS-016", "TS-017", "TS-018"],
+          "agent_count": 9,
+          "parallelizable": true,
+          "status": "blocked"
+        },
+        "BATCH_1D_ERROR_HANDLING": {
+          "story_ids": ["ERR-003", "ERR-005", "ERR-007", "ERR-008", "ERR-009"],
+          "agent_count": 5,
+          "parallelizable": true,
+          "status": "blocked"
+        },
+        "BATCH_1E_TESTING": {
+          "story_ids": ["TEST-005", "TEST-006"],
+          "agent_count": 2,
+          "parallelizable": true,
+          "status": "blocked"
+        }
+      },
+      "completion_criteria": {
+        "research_manifests_created": 52,
+        "research_signatures_present": 52
+      }
+    },
+    "PHASE_2_PLAN": {
+      "status": "blocked",
+      "blocked_by": ["PHASE_1_RESEARCH"],
+      "description": "Create detailed plans for all 52 stories",
+      "blocking_next": ["PHASE_3_IMPLEMENT"],
+      "completion_criteria": {
+        "plan_manifests_created": 52,
+        "plan_approval_signatures": 52,
+        "human_review_complete": true
+      }
+    },
+    "PHASE_3_IMPLEMENT": {
+      "status": "blocked",
+      "blocked_by": ["PHASE_2_PLAN"],
+      "description": "Execute stories in dependency-based waves",
+      "blocking_next": ["PHASE_4_VERIFY"],
+      "execution_mode": "wave_based_parallel",
+      "completion_criteria": {
+        "stories_implemented": 52,
+        "git_checkpoints_created": 52
+      }
+    },
+    "PHASE_4_VERIFY": {
+      "status": "blocked",
+      "blocked_by": ["PHASE_3_IMPLEMENT"],
+      "description": "Verify all implementations against requirements",
+      "blocking_next": ["PHASE_5_TEST"],
+      "completion_criteria": {
+        "typescript_errors": 0,
+        "lint_passes": true,
+        "protected_core_violations": 0
+      }
+    },
+    "PHASE_5_TEST": {
+      "status": "blocked",
+      "blocked_by": ["PHASE_4_VERIFY"],
+      "description": "Comprehensive testing (unit + integration + E2E)",
+      "blocking_next": ["PHASE_6_CONFIRM"],
+      "completion_criteria": {
+        "unit_tests_passing": "100%",
+        "integration_tests_passing": "100%",
+        "e2e_tests_passing": "100%",
+        "test_coverage": ">80%"
+      }
+    },
+    "PHASE_6_CONFIRM": {
+      "status": "blocked",
+      "blocked_by": ["PHASE_5_TEST"],
+      "description": "Final verification and evidence collection",
+      "blocking_next": [],
+      "completion_criteria": {
+        "evidence_documents_created": 52,
+        "manual_verification_complete": true,
+        "completion_enforcer_veto": "PASS"
+      }
+    }
+  },
+  "overall_progress": {
+    "total_stories": 53,
+    "completed_stories": 17,
+    "remaining_stories": 36,
+    "completion_percentage": 32.1,
+    "current_blockers": [
+      "256 test failures (48% failure rate)",
+      "27 protected-core import violations"
+    ]
+  }
+}
