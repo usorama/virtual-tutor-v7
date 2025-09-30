@@ -49,8 +49,9 @@ export interface SessionSnapshot {
 
 /**
  * Type definition for recovery event listeners
+ * Uses any[] for rest parameters to allow flexible event payloads
  */
-type RecoveryEventListener = (...args: unknown[]) => void | Promise<void>;
+type RecoveryEventListener = (...args: any[]) => void | Promise<void>;
 
 /**
  * SessionRecoveryService - Comprehensive session recovery and persistence

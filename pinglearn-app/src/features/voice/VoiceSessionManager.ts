@@ -73,8 +73,9 @@ export interface SessionControls {
 
 /**
  * Type definition for voice session event listeners
+ * Uses any[] for rest parameters to allow flexible event payloads
  */
-type VoiceSessionEventListener = (...args: unknown[]) => void | Promise<void>;
+type VoiceSessionEventListener = (...args: any[]) => void | Promise<void>;
 
 /**
  * VoiceSessionManager - Comprehensive voice session management
