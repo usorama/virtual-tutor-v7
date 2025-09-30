@@ -251,7 +251,7 @@ export class SafeQueryBuilder<T extends Record<string, unknown>> {
       // Execute insert
       const { data: result, error } = await this.client
         .from(table)
-        .insert(data as Record<string, unknown>)
+        .insert(data as never)
         .select()
         .single();
 

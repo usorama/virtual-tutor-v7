@@ -406,8 +406,8 @@ export function validatePagination(params: unknown): { limit: number; offset: nu
   if (typeof params === 'object' && params !== null) {
     const obj = params as Record<string, unknown>;
     const normalized = {
-      limit: obj.limit !== undefined ? Number(obj.limit) : 10,
-      offset: obj.offset !== undefined ? Number(obj.offset) : 0
+      limit: obj.limit !== undefined ? Number(obj.limit) : undefined,
+      offset: obj.offset !== undefined ? Number(obj.offset) : undefined
     };
 
     const result = validateDatabaseInput(normalized, paginationSchema);
@@ -416,7 +416,11 @@ export function validatePagination(params: unknown): { limit: number; offset: nu
       throw new ValidationError('pagination', result.errors, params);
     }
 
-    return result.data;
+    // Ensure defaults are applied from schema
+    return {
+      limit: result.data.limit,
+      offset: result.data.offset
+    };
   }
 
   // Default values if no params
@@ -445,7 +449,11 @@ export function validateSort(sort: unknown): { field: string; direction: 'asc' |
     throw new ValidationError('sort', result.errors, sort);
   }
 
-  return result.data;
+  // Ensure direction has a default value
+  return {
+    field: result.data.field,
+    direction: result.data.direction || 'asc'
+  };
 }
 
 /**
