@@ -95,6 +95,10 @@ export * from './tree-types';
 export * from './template-literals';
 export * from './string-types';
 
+// Generic utility types (TS-011)
+export * from './utility-types';
+export * from './helpers';
+
 // Performance monitoring and build optimization
 export * from '../utils/typescript-performance';
 
@@ -123,6 +127,16 @@ export namespace TypeOptimizations {
     export type DistributeUnion<T, U> = import('./union-optimizations').UnionDistribution.DistributeUnion<T, U>;
     export type IsMember<T, Union> = import('./union-optimizations').PerformantUnionUtils.IsMember<T, Union>;
     export type EfficientExclude<T, U> = import('./union-optimizations').PerformantUnionUtils.EfficientExclude<T, U>;
+
+    // TS-011: Generic utility types
+    export type DeepPartial<T> = import('./utility-types').DeepPartial<T>;
+    export type DeepReadonly<T> = import('./utility-types').DeepReadonly<T>;
+    export type DeepRequired<T> = import('./utility-types').DeepRequired<T>;
+    export type If<Condition extends boolean, Then, Else = never> = import('./utility-types').If<Condition, Then, Else>;
+    export type AsyncResult<T extends (...args: any[]) => Promise<any>> = import('./utility-types').AsyncResult<T>;
+    export type IsNever<T> = import('./utility-types').IsNever<T>;
+    export type IsAny<T> = import('./utility-types').IsAny<T>;
+    export type IsEqual<T, U> = import('./utility-types').IsEqual<T, U>;
   }
 
   /**
@@ -275,14 +289,19 @@ export namespace PerformanceTests {
 /**
  * Export version information
  */
-export const TYPE_OPTIMIZATIONS_VERSION = '1.0.0';
+export const TYPE_OPTIMIZATIONS_VERSION = '1.1.0';
 export const OPTIMIZATION_FEATURES = [
   'Advanced type inference',
   'Union type optimizations',
   'Performance monitoring',
   'IDE responsiveness improvements',
   'Compilation time reduction',
-  'Type-level caching'
+  'Type-level caching',
+  'Generic utility types (TS-011)',
+  'Conditional type helpers',
+  'Promise and async utilities',
+  'Type constraint helpers',
+  'Runtime helper functions'
 ] as const;
 
 // Default export
