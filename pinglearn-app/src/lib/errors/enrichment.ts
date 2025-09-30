@@ -69,10 +69,9 @@ export interface EnrichmentOptions {
 
 /**
  * In-memory breadcrumb store
- * Using WeakMap for client-side (automatic garbage collection)
- * Using Map for server-side (limited size)
+ * Works in both server and client environments
  */
-const serverBreadcrumbs = new Map<string, Breadcrumb[]>();
+const breadcrumbStore = new Map<string, Breadcrumb[]>();
 const MAX_BREADCRUMBS = 50;
 const BREADCRUMB_TTL = 3600000; // 1 hour
 
@@ -235,25 +234,23 @@ export function addErrorBreadcrumb(
   try {
     const breadcrumb = createBreadcrumb(message, data, options);
 
-    // Store breadcrumb (server-side only for now)
-    if (typeof window === 'undefined') {
-      const key = 'global'; // In production, use request context or session ID
-      let breadcrumbs = serverBreadcrumbs.get(key) || [];
+    // Store breadcrumb (works in both server and client)
+    const key = 'global'; // In production, use request context or session ID
+    let breadcrumbs = breadcrumbStore.get(key) || [];
 
-      // Add new breadcrumb
-      breadcrumbs.push(breadcrumb);
+    // Add new breadcrumb
+    breadcrumbs.push(breadcrumb);
 
-      // Limit to MAX_BREADCRUMBS
-      if (breadcrumbs.length > MAX_BREADCRUMBS) {
-        breadcrumbs = breadcrumbs.slice(-MAX_BREADCRUMBS);
-      }
-
-      // Clean up old breadcrumbs
-      const now = Date.now();
-      breadcrumbs = breadcrumbs.filter(b => now - b.timestamp < BREADCRUMB_TTL);
-
-      serverBreadcrumbs.set(key, breadcrumbs);
+    // Limit to MAX_BREADCRUMBS
+    if (breadcrumbs.length > MAX_BREADCRUMBS) {
+      breadcrumbs = breadcrumbs.slice(-MAX_BREADCRUMBS);
     }
+
+    // Clean up old breadcrumbs
+    const now = Date.now();
+    breadcrumbs = breadcrumbs.filter(b => now - b.timestamp < BREADCRUMB_TTL);
+
+    breadcrumbStore.set(key, breadcrumbs);
   } catch (error) {
     console.warn('[Enrichment] Failed to add breadcrumb:', error);
   }
@@ -266,11 +263,8 @@ export function addErrorBreadcrumb(
  */
 export function getErrorBreadcrumbs(): Breadcrumb[] {
   try {
-    if (typeof window === 'undefined') {
-      const key = 'global';
-      return serverBreadcrumbs.get(key) || [];
-    }
-    return [];
+    const key = 'global';
+    return breadcrumbStore.get(key) || [];
   } catch (error) {
     console.warn('[Enrichment] Failed to get breadcrumbs:', error);
     return [];
