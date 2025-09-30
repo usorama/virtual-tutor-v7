@@ -341,16 +341,59 @@ export type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType exten
 
 /**
  * Brand type for type-safe IDs
+ *
+ * @deprecated Use the new branded types from @/lib/types instead.
+ * This old implementation uses __brand pattern which is visible in IntelliSense.
+ * New implementation uses unique symbol pattern for better developer experience.
+ *
+ * Migration: import { Brand } from '@/lib/types';
  */
 export type Brand<T, U> = T & { readonly __brand: U };
 
 /**
  * Common ID types
+ *
+ * @deprecated These types are deprecated. Use the new branded types from @/lib/types instead.
+ *
+ * Migration:
+ * - import { UserId, SessionId, TextbookId, ChapterId } from '@/lib/types';
+ * - Use createUserId(), createSessionId(), etc. for validated creation
+ * - Use unsafeCreateUserId(), etc. for trusted sources (DB reads)
+ * - Use isUserId(), etc. for runtime type checking
+ *
+ * Benefits of new implementation:
+ * - Unique symbol branding (hidden from IntelliSense)
+ * - Runtime validation with factory functions
+ * - Type guards for runtime checks
+ * - Better developer experience
  */
 export type UserId = Brand<string, 'UserId'>;
 export type SessionId = Brand<string, 'SessionId'>;
 export type TextbookId = Brand<string, 'TextbookId'>;
 export type ChapterId = Brand<string, 'ChapterId'>;
+
+// Re-export new branded types for backwards compatibility
+export {
+  UserId as BrandedUserId,
+  SessionId as BrandedSessionId,
+  TextbookId as BrandedTextbookId,
+  ChapterId as BrandedChapterId,
+  // Factories
+  createUserId,
+  createSessionId,
+  createTextbookId,
+  createChapterId,
+  // Unsafe factories
+  unsafeCreateUserId,
+  unsafeCreateSessionId,
+  unsafeCreateTextbookId,
+  unsafeCreateChapterId,
+  // Type guards
+  isUserId,
+  isSessionId,
+  isTextbookId,
+  isChapterId,
+} from '@/lib/types';
 
 // ==================================================
 // THEME & STYLING TYPES

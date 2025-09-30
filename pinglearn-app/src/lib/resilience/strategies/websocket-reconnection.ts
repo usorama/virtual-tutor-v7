@@ -36,10 +36,10 @@ export class WebSocketReconnectionStrategy implements HealingStrategy {
 
     // Also check context for WebSocket-related components
     const isWebSocketContext =
-      context.component?.includes('websocket') ||
-      context.component?.includes('voice') ||
-      context.feature?.includes('websocket') ||
-      context.feature?.includes('voice');
+      (context.component?.includes('websocket') ?? false) ||
+      (context.component?.includes('voice') ?? false) ||
+      (context.feature?.includes('websocket') ?? false) ||
+      (context.feature?.includes('voice') ?? false);
 
     return isWebSocketError || isWebSocketContext;
   }
