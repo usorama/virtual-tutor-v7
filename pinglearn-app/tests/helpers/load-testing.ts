@@ -7,7 +7,8 @@
  * - Performance monitoring and capacity analysis
  */
 
-import autocannon, { type Result as AutocannonResult } from 'autocannon';
+import autocannon from 'autocannon';
+import type { Result as AutocannonResult } from 'autocannon';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 import { readFileSync } from 'fs';
@@ -29,7 +30,7 @@ export interface AutocannonConfig {
   pipelining?: number;
   headers?: Record<string, string>;
   body?: string | Buffer;
-  method?: string;
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS';
   timeout?: number;
   bailout?: number;
   maxConnectionRequests?: number;
@@ -233,9 +234,9 @@ function parseAutocannonResult(
       p50: result.latency.p50,
       p75: result.latency.p75,
       p90: result.latency.p90,
-      p95: result.latency.p95,
+      p95: result.latency.p97_5, // autocannon uses p97_5, closest to p95
       p99: result.latency.p99,
-      p999: result.latency.p99_9 || result.latency.p99,
+      p999: result.latency.p99_9,
     },
     resourceUsage: {
       memoryStart: metadata.memoryStart.heapUsed,
