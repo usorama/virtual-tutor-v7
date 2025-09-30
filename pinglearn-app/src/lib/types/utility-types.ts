@@ -643,3 +643,215 @@ namespace ExtractionTypeTests {
   const testConstructor: TestConstructorParams = ['test'];
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */
+
+// ============================================================================
+// PROMISE AND ASYNC TYPE UTILITIES
+// ============================================================================
+
+/**
+ * Unwraps Promise types to get the resolved value type
+ * Re-exported for consistency with other utility types
+ *
+ * @example
+ * ```typescript
+ * type T1 = Awaited<Promise<string>>; // string
+ * type T2 = Awaited<Promise<Promise<number>>>; // number (recursive unwrap)
+ * ```
+ */
+export type { Awaited };
+
+/**
+ * Extracts the value type from a Promise
+ *
+ * @example
+ * ```typescript
+ * type T1 = PromiseValue<Promise<string>>; // string
+ * type T2 = PromiseValue<Promise<{ id: number }>>; // { id: number }
+ * ```
+ */
+export type PromiseValue<T extends Promise<any>> =
+  T extends Promise<infer V> ? V : never;
+
+/**
+ * Combines ReturnType and Awaited to extract resolved return type of async functions
+ * This is a convenience type that handles the common pattern of getting async function results
+ *
+ * @example
+ * ```typescript
+ * async function getUser() {
+ *   return { id: 1, name: 'Alice' };
+ * }
+ *
+ * type User = AsyncReturnType<typeof getUser>; // { id: number; name: string }
+ * ```
+ */
+export type AsyncReturnType<T extends (...args: any[]) => Promise<any>> =
+  Awaited<ReturnType<T>>;
+
+/**
+ * Wraps a function's return type in a Promise
+ * Useful for converting sync functions to async signatures
+ *
+ * @example
+ * ```typescript
+ * function getNumber(): number { return 42; }
+ *
+ * type AsyncVersion = PromisifyReturnType<typeof getNumber>; // Promise<number>
+ * ```
+ */
+export type PromisifyReturnType<T extends (...args: any[]) => any> =
+  (...args: Parameters<T>) => Promise<ReturnType<T>>;
+
+/**
+ * Unwraps nested Promise types to their deepest value
+ * Handles multiple levels of Promise wrapping
+ *
+ * @example
+ * ```typescript
+ * type T1 = UnwrapPromise<Promise<Promise<string>>>; // string
+ * type T2 = UnwrapPromise<Promise<number>>; // number
+ * type T3 = UnwrapPromise<string>; // string (already unwrapped)
+ * ```
+ */
+export type UnwrapPromise<T> = T extends Promise<infer U>
+  ? UnwrapPromise<U>
+  : T;
+
+/**
+ * Converts all Promise properties in an object to their resolved types
+ * Useful for typing objects with async properties
+ *
+ * @example
+ * ```typescript
+ * interface AsyncData {
+ *   user: Promise<{ name: string }>;
+ *   posts: Promise<string[]>;
+ *   count: number;
+ * }
+ *
+ * type ResolvedData = AwaitedProps<AsyncData>;
+ * // {
+ * //   user: { name: string };
+ * //   posts: string[];
+ * //   count: number;
+ * // }
+ * ```
+ */
+export type AwaitedProps<T> = {
+  [K in keyof T]: Awaited<T[K]>;
+};
+
+/**
+ * Makes all function return types in an object async
+ * Wraps sync functions to return Promises
+ *
+ * @example
+ * ```typescript
+ * interface API {
+ *   getUser(): { id: number };
+ *   deleteUser(id: number): boolean;
+ * }
+ *
+ * type AsyncAPI = PromisifyMethods<API>;
+ * // {
+ * //   getUser(): Promise<{ id: number }>;
+ * //   deleteUser(id: number): Promise<boolean>;
+ * // }
+ * ```
+ */
+export type PromisifyMethods<T> = {
+  [K in keyof T]: T[K] extends (...args: infer A) => infer R
+    ? (...args: A) => Promise<R>
+    : T[K];
+};
+
+/**
+ * Checks if a type is a Promise
+ *
+ * @example
+ * ```typescript
+ * type T1 = IsPromise<Promise<string>>; // true
+ * type T2 = IsPromise<string>; // false
+ * ```
+ */
+export type IsPromise<T> = T extends Promise<any> ? true : false;
+
+// ============================================================================
+// TYPE-LEVEL TESTS FOR PROMISE UTILITIES
+// ============================================================================
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+namespace PromiseTypeTests {
+  // Test PromiseValue
+  type Value1 = PromiseValue<Promise<string>>; // string
+  type Value2 = PromiseValue<Promise<{ id: number }>>; // { id: number }
+
+  // Test AsyncReturnType
+  async function getUser() {
+    return { id: 1, name: 'Alice' };
+  }
+
+  type UserType = AsyncReturnType<typeof getUser>; // { id: number; name: string }
+  const testUser: UserType = { id: 1, name: 'Alice' };
+
+  // Test PromisifyReturnType
+  function syncGetNumber(): number {
+    return 42;
+  }
+
+  type AsyncGetNumber = PromisifyReturnType<typeof syncGetNumber>;
+  // (args: []) => Promise<number>
+
+  // Test UnwrapPromise
+  type Unwrapped1 = UnwrapPromise<Promise<Promise<string>>>; // string
+  type Unwrapped2 = UnwrapPromise<Promise<number>>; // number
+  type Unwrapped3 = UnwrapPromise<string>; // string
+
+  // Test AwaitedProps
+  interface AsyncData {
+    user: Promise<{ name: string }>;
+    posts: Promise<string[]>;
+    count: number;
+    active: boolean;
+  }
+
+  type ResolvedData = AwaitedProps<AsyncData>;
+  const testResolved: ResolvedData = {
+    user: { name: 'Alice' },
+    posts: ['post1', 'post2'],
+    count: 2,
+    active: true
+  };
+
+  // Test PromisifyMethods
+  interface SyncAPI {
+    getUser(id: string): { name: string };
+    deleteUser(id: string): boolean;
+    count: number; // Non-function property
+  }
+
+  type AsyncAPI = PromisifyMethods<SyncAPI>;
+  const testAsyncAPI: AsyncAPI = {
+    getUser: async (id: string) => ({ name: 'test' }),
+    deleteUser: async (id: string) => true,
+    count: 5
+  };
+
+  // Test IsPromise
+  type IsPromise1 = IsPromise<Promise<string>>; // true
+  type IsPromise2 = IsPromise<string>; // false
+  type IsPromise3 = IsPromise<Promise<Promise<number>>>; // true
+
+  // Complex async scenario
+  async function complexAsync(
+    id: string,
+    options: { deep: boolean }
+  ): Promise<{ data: { nested: string } }> {
+    return { data: { nested: 'value' } };
+  }
+
+  type ComplexParams = Params<typeof complexAsync>; // [string, { deep: boolean }]
+  type ComplexResult = AsyncReturnType<typeof complexAsync>; // { data: { nested: string } }
+  const testComplex: ComplexResult = { data: { nested: 'test' } };
+}
+/* eslint-enable @typescript-eslint/no-unused-vars */
