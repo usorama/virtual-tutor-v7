@@ -447,3 +447,199 @@ namespace ConditionalTypeTests {
   type Test3 = IsStringOrNumber<boolean>; // false
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */
+
+// ============================================================================
+// TYPE EXTRACTION UTILITIES
+// ============================================================================
+
+/**
+ * Extracts function parameter types as a tuple
+ * More readable alias for built-in Parameters<T>
+ *
+ * @example
+ * ```typescript
+ * function greet(name: string, age: number) { }
+ * type P = Params<typeof greet>; // [string, number]
+ * ```
+ */
+export type Params<T extends (...args: any[]) => any> = Parameters<T>;
+
+/**
+ * Extracts return type from a function, with special handling for async functions
+ * Automatically unwraps Promise types from async functions
+ *
+ * @example
+ * ```typescript
+ * function sync() { return 'hello'; }
+ * async function async() { return 'hello'; }
+ *
+ * type R1 = Result<typeof sync>; // 'hello'
+ * type R2 = Result<typeof async>; // 'hello' (Promise unwrapped)
+ * ```
+ */
+export type Result<T extends (...args: any[]) => any> =
+  ReturnType<T> extends Promise<infer R> ? R : ReturnType<T>;
+
+/**
+ * Extracts the resolved value type from an async function's return type
+ * Explicitly unwraps Promise wrapper
+ *
+ * @example
+ * ```typescript
+ * async function getUser() {
+ *   return { id: 1, name: 'Alice' };
+ * }
+ *
+ * type User = AsyncResult<typeof getUser>; // { id: number; name: string }
+ * ```
+ */
+export type AsyncResult<T extends (...args: any[]) => Promise<any>> =
+  T extends (...args: any[]) => Promise<infer R> ? R : never;
+
+/**
+ * Extracts the first parameter type from a function
+ *
+ * @example
+ * ```typescript
+ * function process(data: string, options: object) { }
+ * type First = FirstParam<typeof process>; // string
+ * ```
+ */
+export type FirstParam<T extends (...args: any[]) => any> =
+  Parameters<T> extends [infer First, ...any[]] ? First : never;
+
+/**
+ * Extracts the last parameter type from a function
+ *
+ * @example
+ * ```typescript
+ * function process(data: string, options: object) { }
+ * type Last = LastParam<typeof process>; // object
+ * ```
+ */
+export type LastParam<T extends (...args: any[]) => any> =
+  Parameters<T> extends [...any[], infer Last] ? Last : never;
+
+/**
+ * Extracts the second parameter type from a function
+ *
+ * @example
+ * ```typescript
+ * function request(url: string, options: RequestInit, signal: AbortSignal) { }
+ * type Second = SecondParam<typeof request>; // RequestInit
+ * ```
+ */
+export type SecondParam<T extends (...args: any[]) => any> =
+  Parameters<T> extends [any, infer Second, ...any[]] ? Second : never;
+
+/**
+ * Extracts parameter type at specific index N
+ *
+ * @example
+ * ```typescript
+ * function fn(a: string, b: number, c: boolean) { }
+ * type P0 = ParamAt<typeof fn, 0>; // string
+ * type P1 = ParamAt<typeof fn, 1>; // number
+ * ```
+ */
+export type ParamAt<
+  T extends (...args: any[]) => any,
+  N extends number
+> = Parameters<T>[N];
+
+/**
+ * Extracts the instance type from a constructor function
+ *
+ * @example
+ * ```typescript
+ * class User {
+ *   name: string;
+ *   constructor(name: string) {
+ *     this.name = name;
+ *   }
+ * }
+ *
+ * type UserInstance = InstanceOf<typeof User>; // User
+ * ```
+ */
+export type InstanceOf<T extends abstract new (...args: any[]) => any> =
+  InstanceType<T>;
+
+/**
+ * Extracts constructor parameter types
+ *
+ * @example
+ * ```typescript
+ * class Database {
+ *   constructor(host: string, port: number) { }
+ * }
+ *
+ * type DbParams = ConstructorParams<typeof Database>; // [string, number]
+ * ```
+ */
+export type ConstructorParams<T extends abstract new (...args: any[]) => any> =
+  ConstructorParameters<T>;
+
+// ============================================================================
+// TYPE-LEVEL TESTS FOR EXTRACTION UTILITIES
+// ============================================================================
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+namespace ExtractionTypeTests {
+  // Test functions for extraction
+  function greet(name: string, age: number): string {
+    return `Hello ${name}, ${age}`;
+  }
+
+  async function fetchUser(id: string): Promise<{ id: string; name: string }> {
+    return { id, name: 'test' };
+  }
+
+  function multiParam(a: string, b: number, c: boolean, d: object): void { }
+
+  // Test Params
+  type GreetParams = Params<typeof greet>; // [string, number]
+  const testParams: GreetParams = ['Alice', 30];
+
+  // Test Result
+  type GreetResult = Result<typeof greet>; // string
+  type FetchResult = Result<typeof fetchUser>; // { id: string; name: string } (unwrapped)
+  const testResult: GreetResult = 'hello';
+
+  // Test AsyncResult
+  type UserType = AsyncResult<typeof fetchUser>; // { id: string; name: string }
+  const testAsync: UserType = { id: '1', name: 'Alice' };
+
+  // Test FirstParam
+  type FirstP = FirstParam<typeof greet>; // string
+  const testFirst: FirstP = 'name';
+
+  // Test LastParam
+  type LastP = LastParam<typeof greet>; // number
+  const testLast: LastP = 30;
+
+  // Test SecondParam
+  type SecondP = SecondParam<typeof multiParam>; // number
+  const testSecond: SecondP = 42;
+
+  // Test ParamAt
+  type Param0 = ParamAt<typeof multiParam, 0>; // string
+  type Param2 = ParamAt<typeof multiParam, 2>; // boolean
+  const testParamAt: Param2 = true;
+
+  // Test InstanceOf
+  class TestClass {
+    value: string;
+    constructor(value: string) {
+      this.value = value;
+    }
+  }
+
+  type TestInstance = InstanceOf<typeof TestClass>; // TestClass
+  const testInstance: TestInstance = new TestClass('test');
+
+  // Test ConstructorParams
+  type TestConstructorParams = ConstructorParams<typeof TestClass>; // [string]
+  const testConstructor: TestConstructorParams = ['test'];
+}
+/* eslint-enable @typescript-eslint/no-unused-vars */
