@@ -96,8 +96,71 @@ export * from './template-literals';
 export * from './string-types';
 
 // Generic utility types (TS-011)
-export * from './utility-types';
-export * from './helpers';
+// Note: Selective exports to avoid conflicts with union-types (Result, assertNever already exported there)
+export type {
+  DeepPartial,
+  DeepReadonly,
+  DeepRequired,
+  DeepMutable,
+  If,
+  Switch,
+  Match,
+  Not,
+  And,
+  Or,
+  Params,
+  // Result - already exported from union-types
+  AsyncResult,
+  FirstParam,
+  LastParam,
+  SecondParam,
+  ParamAt,
+  InstanceOf,
+  ConstructorParams,
+  PromiseValue,
+  AsyncReturnType,
+  PromisifyReturnType,
+  UnwrapPromise,
+  AwaitedProps,
+  PromisifyMethods,
+  IsPromise,
+  IsNever,
+  IsAny,
+  IsUnknown,
+  IsEqual,
+  IsExtends,
+  IsNull,
+  IsUndefined,
+  IsNullable,
+  IsArray,
+  IsTuple,
+  IsFunction,
+  IsObject,
+  IsUnion,
+  AllExtend,
+  AnyExtends
+} from './utility-types';
+
+export {
+  deepPartial,
+  deepFreeze,
+  isNever,
+  isNull,
+  isUndefined,
+  isNullable,
+  isPromise,
+  isFunction,
+  // isArray - already exported from type-guards
+  // isObject - already exported from type-guards
+  promisify,
+  awaitProps,
+  getFirstParam,
+  getLastParam,
+  memoize,
+  deepEqual,
+  deepClone
+  // assertNever - already exported from union-types
+} from './helpers';
 
 // Performance monitoring and build optimization
 export * from '../utils/typescript-performance';

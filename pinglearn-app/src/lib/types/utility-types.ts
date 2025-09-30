@@ -650,7 +650,8 @@ namespace ExtractionTypeTests {
 
 /**
  * Unwraps Promise types to get the resolved value type
- * Re-exported for consistency with other utility types
+ * Note: This is a built-in TypeScript type (available globally)
+ * Documented here for completeness
  *
  * @example
  * ```typescript
@@ -658,7 +659,7 @@ namespace ExtractionTypeTests {
  * type T2 = Awaited<Promise<Promise<number>>>; // number (recursive unwrap)
  * ```
  */
-export type { Awaited };
+// Note: Awaited is a built-in TypeScript type, available without import
 
 /**
  * Extracts the value type from a Promise
