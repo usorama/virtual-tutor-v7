@@ -38,6 +38,14 @@ export type {
 export * from './type-guards';
 export * from './validators';
 
+// Discriminated unions (TS-013)
+export * from './discriminated';
+export * from './union-types';
+
+// Recursive types (TS-014)
+export * from './recursive';
+export * from './tree-types';
+
 // Performance monitoring and build optimization
 export * from '../utils/typescript-performance';
 

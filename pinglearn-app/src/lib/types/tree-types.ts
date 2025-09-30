@@ -77,7 +77,7 @@ export interface LessonData {
   readonly lessonNumber: number;
   readonly summary?: string;
   readonly estimatedDuration?: number;
-  readonly difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  readonly difficulty?: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   readonly prerequisites?: readonly string[];
 }
 
@@ -364,11 +364,13 @@ export function createSubtopicNode(
   data: SubtopicData,
   metadata?: Partial<TreeNodeMetadata>
 ): SubtopicNode {
+  const emptyChildren: readonly never[] = [] as const;
+
   return {
     type: CurriculumNodeType.SUBTOPIC,
     id,
     data,
-    children: [],
+    children: emptyChildren,
     metadata: {
       depth: 4,
       index: data.subtopicNumber - 1,
