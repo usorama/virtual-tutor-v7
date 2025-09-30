@@ -65,8 +65,15 @@ describe('Brand<T, BrandSymbol>', () => {
     const testId: TestId = 'test_123' as TestId;
 
     // Assert - Brand symbol should not exist at runtime
-    expect(Object.keys(testId as object)).toHaveLength(0);
-    expect(Object.getOwnPropertySymbols(testId as object)).toHaveLength(0);
+    // Strings are primitives so they don't have own properties
+    // The brand exists only at the type level
+    expect(typeof testId).toBe('string');
+    expect(testId).toBe('test_123');
+
+    // Verify the brand doesn't add runtime overhead
+    const numericId: NumericId = 42 as NumericId;
+    expect(typeof numericId).toBe('number');
+    expect(numericId).toBe(42);
   });
 });
 
