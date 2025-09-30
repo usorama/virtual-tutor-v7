@@ -293,3 +293,156 @@ export function startSpan(name: string, op: string = 'http'): string | null {
     return null;
   }
 }
+
+/**
+ * Track self-healing success/failure (ERR-005 integration)
+ * @param errorCode - Error code that was healed
+ * @param strategy - Healing strategy used
+ * @param success - Whether healing was successful
+ * @param duration - Time taken in milliseconds
+ */
+export function trackSelfHealing(
+  errorCode: string,
+  strategy: string,
+  success: boolean,
+  duration: number
+): void {
+  try {
+    if (!defaultConfig.enabled) {
+      return;
+    }
+
+    addBreadcrumb(`Self-Healing: ${success ? 'Success' : 'Failed'}`, {
+      errorCode,
+      strategy,
+      duration,
+      success,
+    });
+
+    // Track as custom metric
+    trackPerformance({
+      name: 'self_healing',
+      value: duration,
+      unit: 'ms',
+      timestamp: Date.now(),
+      context: {
+        errorCode,
+        strategy,
+        success: success ? 'true' : 'false',
+      },
+    });
+
+    if (defaultConfig.debug) {
+      console.log('[ErrorTracker] Self-healing tracked:', {
+        errorCode,
+        strategy,
+        success,
+        duration,
+      });
+    }
+  } catch (error) {
+    console.error('[ErrorTracker] Failed to track self-healing:', error);
+  }
+}
+
+/**
+ * Track recovery orchestration result (ERR-005 integration)
+ * @param errorCode - Error code
+ * @param method - Recovery method used
+ * @param status - Recovery status
+ * @param duration - Time taken in milliseconds
+ */
+export function trackRecovery(
+  errorCode: string,
+  method: string,
+  status: string,
+  duration: number
+): void {
+  try {
+    if (!defaultConfig.enabled) {
+      return;
+    }
+
+    addBreadcrumb(`Recovery: ${method} - ${status}`, {
+      errorCode,
+      method,
+      status,
+      duration,
+    });
+
+    // Track as custom metric
+    trackPerformance({
+      name: 'recovery',
+      value: duration,
+      unit: 'ms',
+      timestamp: Date.now(),
+      context: {
+        errorCode,
+        method,
+        status,
+      },
+    });
+
+    if (defaultConfig.debug) {
+      console.log('[ErrorTracker] Recovery tracked:', {
+        errorCode,
+        method,
+        status,
+        duration,
+      });
+    }
+  } catch (error) {
+    console.error('[ErrorTracker] Failed to track recovery:', error);
+  }
+}
+
+/**
+ * Track predictive alert (ERR-005 integration)
+ * @param riskLevel - Risk level detected
+ * @param riskScore - Risk score (0.0 to 1.0)
+ * @param predictedErrors - Array of predicted error types
+ */
+export function trackPredictiveAlert(
+  riskLevel: string,
+  riskScore: number,
+  predictedErrors: string[]
+): void {
+  try {
+    if (!defaultConfig.enabled) {
+      return;
+    }
+
+    addBreadcrumb(`Predictive Alert: ${riskLevel}`, {
+      riskLevel,
+      riskScore,
+      predictedErrors,
+    });
+
+    // Capture as Sentry message for high/critical risk
+    if (riskLevel === 'HIGH' || riskLevel === 'CRITICAL') {
+      Sentry.captureMessage(`Predictive Alert: ${riskLevel} risk detected`, {
+        level: riskLevel === 'CRITICAL' ? 'error' : 'warning',
+        tags: {
+          riskLevel,
+          errorCategory: 'prediction',
+        },
+        contexts: {
+          prediction: {
+            riskScore,
+            predictedErrors,
+          },
+        },
+      });
+    }
+
+    if (defaultConfig.debug) {
+      console.log('[ErrorTracker] Predictive alert tracked:', {
+        riskLevel,
+        riskScore,
+        predictedErrors,
+      });
+    }
+  } catch (error) {
+    console.error('[ErrorTracker] Failed to track predictive alert:', error);
+  }
+}
