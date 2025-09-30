@@ -2,6 +2,12 @@ import React, { useState, useEffect, useMemo } from 'react';
 import katex from 'katex';
 import { MathFragmentData } from '@/protected-core';
 import 'katex/dist/katex.min.css';
+import {
+  validateLatexForXSS,
+  getSecureKatexOptions,
+  sanitizeMathHTML,
+  reportMathXSSAttempt
+} from '@/lib/security/xss-protection';
 
 interface ProgressiveMathProps {
   fragments: MathFragmentData;
@@ -19,8 +25,29 @@ export const ProgressiveMath: React.FC<ProgressiveMathProps> = ({
   const [visibleFragments, setVisibleFragments] = useState<number>(0);
   const [startTime] = useState(Date.now());
   const [isComplete, setIsComplete] = useState(false);
+  const [securityBlocked, setSecurityBlocked] = useState(false);
+
+  // SECURITY: Validate fullLatex on mount
+  useEffect(() => {
+    const xssValidation = validateLatexForXSS(fullLatex);
+    if (!xssValidation.safe) {
+      reportMathXSSAttempt(fullLatex, xssValidation.threats[0]?.pattern || 'unknown', {
+        component: 'ProgressiveMath',
+        fragmentCount: fragments?.fragments?.length,
+        threatCount: xssValidation.threats.length,
+        riskScore: xssValidation.riskScore
+      }).catch(console.error);
+
+      // Set error state and stop progressive reveal
+      setSecurityBlocked(true);
+      setIsComplete(true);
+      console.error('Progressive math blocked for security:', xssValidation.threats);
+    }
+  }, [fullLatex, fragments]);
 
   useEffect(() => {
+    if (securityBlocked) return; // Don't reveal if blocked
+
     if (!fragments || !fragments.timings || fragments.timings.length === 0) {
       // If no fragments, show full equation
       setVisibleFragments(fragments?.fragments?.length || 0);
@@ -49,7 +76,7 @@ export const ProgressiveMath: React.FC<ProgressiveMathProps> = ({
     return () => {
       timers.forEach(timer => clearTimeout(timer));
     };
-  }, [fragments, timingOffset]);
+  }, [fragments, timingOffset, securityBlocked]);
 
   const currentLatex = useMemo(() => {
     if (!fragments || !fragments.fragments) {
@@ -69,18 +96,40 @@ export const ProgressiveMath: React.FC<ProgressiveMathProps> = ({
   const mathHtml = useMemo(() => {
     if (!currentLatex) return '';
 
+    // SECURITY LAYER 1: XSS Validation on current fragment
+    const xssValidation = validateLatexForXSS(currentLatex);
+    if (!xssValidation.safe) {
+      return `<span class="text-red-500">[Math Blocked]</span>`;
+    }
+
     try {
-      return katex.renderToString(currentLatex || '', {
-        throwOnError: false,
-        displayMode: true,
-        trust: true,
-        strict: false
-      });
+      // SECURITY LAYER 2: Secure KaTeX Configuration
+      const secureOptions = getSecureKatexOptions(true);
+
+      // Render with sanitized input and secure options
+      const html = katex.renderToString(
+        xssValidation.sanitized,
+        secureOptions
+      );
+
+      // SECURITY LAYER 3: HTML Output Sanitization
+      return sanitizeMathHTML(html);
     } catch (error) {
       console.warn('KaTeX rendering error in ProgressiveMath:', error);
       return `<span class="text-red-500">[Math Error: ${currentLatex}]</span>`;
     }
   }, [currentLatex]);
+
+  // Show security error if blocked
+  if (securityBlocked) {
+    return (
+      <div className={`progressive-math ${className}`}>
+        <div className="text-red-500 font-mono text-sm">
+          [Math expression blocked for security]
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`progressive-math ${className}`}>
