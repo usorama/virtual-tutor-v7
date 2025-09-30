@@ -113,12 +113,12 @@ export function enrichErrorWithContext(
       ? captureSessionContext(options.session)
       : {};
 
-    // Merge all contexts
+    // Merge all contexts (convert to Partial<ErrorContext> first)
     const mergedContext = mergeErrorContext(
-      environmentContext,
-      browserContext,
-      requestContext,
-      sessionContext,
+      environmentContext as Partial<ErrorContext>,
+      browserContext as Partial<ErrorContext>,
+      requestContext as Partial<ErrorContext>,
+      sessionContext as Partial<ErrorContext>,
       options.additionalContext || {}
     );
 
