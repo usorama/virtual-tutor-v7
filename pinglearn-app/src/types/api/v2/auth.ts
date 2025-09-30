@@ -15,7 +15,7 @@ import type { User, Session } from '@supabase/supabase-js';
  * - Wrapped in ApiResponse<LoginResponseV2>
  */
 export interface LoginResponseV2 {
-  user: User | undefined;
+  user: User | null | undefined;
   session: Session | null | undefined;
   message: string;
 }
@@ -29,7 +29,7 @@ export interface LoginResponseV2 {
  * - Wrapped in ApiResponse<RegisterResponseV2>
  */
 export interface RegisterResponseV2 {
-  user: User | undefined;
+  user: User | null | undefined;
   session: Session | null | undefined;
   message: string;
 }
