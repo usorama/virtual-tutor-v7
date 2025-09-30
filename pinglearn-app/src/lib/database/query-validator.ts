@@ -418,8 +418,8 @@ export function validatePagination(params: unknown): { limit: number; offset: nu
 
     // Ensure defaults are applied from schema
     return {
-      limit: result.data.limit,
-      offset: result.data.offset
+      limit: result.data.limit ?? 10,
+      offset: result.data.offset ?? 0
     };
   }
 

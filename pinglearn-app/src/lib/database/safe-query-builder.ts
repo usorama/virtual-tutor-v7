@@ -346,7 +346,7 @@ export class SafeQueryBuilder<T extends Record<string, unknown>> {
       // Execute update
       const { data: result, error } = await this.client
         .from(table)
-        .update(data as Record<string, unknown>)
+        .update(data as never)
         .eq('id', id)
         .select()
         .single();
