@@ -136,3 +136,88 @@ export interface PerformanceMetric {
   // Context
   context?: Record<string, unknown>;
 }
+
+/**
+ * Performance Monitoring Types
+ * ARCH-008: Performance Monitoring System
+ */
+
+export interface PerformanceConfig {
+  enabled: boolean;
+  sampleRate: number; // 0.0 to 1.0
+  retentionMs: number; // How long to keep metrics (default 1 hour)
+  maxMetrics: number; // Max metrics in memory per type
+}
+
+export interface RequestMetric {
+  route: string;
+  method: string;
+  duration: number;
+  statusCode: number;
+  timestamp: number;
+}
+
+export interface QueryMetric {
+  query: string; // Sanitized query name (no SQL, no PII)
+  duration: number;
+  timestamp: number;
+  success: boolean;
+}
+
+export interface MemoryMetric {
+  heapUsed: number;
+  heapTotal: number;
+  external: number;
+  rss: number;
+  timestamp: number;
+}
+
+export interface PerformanceMetrics {
+  requests: RequestMetric[];
+  queries: QueryMetric[];
+  memory: MemoryMetric[];
+}
+
+export interface PerformanceThreshold {
+  metric: string;
+  operator: 'gt' | 'lt' | 'gte' | 'lte' | 'eq';
+  value: number;
+  level: 'info' | 'warning' | 'critical';
+  message: string;
+}
+
+export interface AlertEvent {
+  threshold: PerformanceThreshold;
+  currentValue: number;
+  timestamp: number;
+  context?: Record<string, unknown>;
+}
+
+export type AlertCallback = (alert: AlertEvent) => void;
+
+// Metrics collection types
+export type MetricType = 'counter' | 'gauge' | 'histogram';
+
+export interface Metric {
+  name: string;
+  type: MetricType;
+  value: number;
+  labels?: Record<string, string>;
+  timestamp: number;
+}
+
+export interface AggregatedMetrics {
+  count: number;
+  sum: number;
+  avg: number;
+  min: number;
+  max: number;
+  p50: number;
+  p95: number;
+  p99: number;
+}
+
+export interface HistogramBucket {
+  le: number; // Less than or equal to
+  count: number;
+}
