@@ -23,7 +23,7 @@ import {
 // ============================================================================
 
 async function requireAdmin(request: NextRequest): Promise<{ userId: string; isAdmin: boolean }> {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data: { user }, error: authError } = await supabase.auth.getUser()
 
@@ -82,7 +82,7 @@ export async function GET(
     }
 
     // Get all keys (active + inactive) for audit trail
-    const supabase = createClient()
+    const supabase = await createClient()
     const { data, error } = await supabase
       .from('api_key_versions')
       .select('id, service, key_id, status, role, created_at, activated_at, deprecated_at, revoked_at, expires_at, metadata')
@@ -94,8 +94,8 @@ export async function GET(
     }
 
     // DO NOT return decrypted keys in list (security)
-    const keys = data.map(k => {
-      const createdAt = new Date(k.created_at)
+    const keys = data.map((k: Record<string, unknown>) => {
+      const createdAt = new Date(k.created_at as string)
       const now = Date.now()
       const ageInDays = Math.floor((now - createdAt.getTime()) / (1000 * 60 * 60 * 24))
 

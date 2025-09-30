@@ -164,7 +164,7 @@ function decryptApiKey(encrypted: EncryptedData): string {
  * @returns Array of active keys (decrypted), sorted by role (primary first)
  */
 export async function getActiveKeys(service: ServiceType): Promise<ApiKeyVersion[]> {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('api_key_versions')
@@ -182,22 +182,22 @@ export async function getActiveKeys(service: ServiceType): Promise<ApiKeyVersion
   }
 
   // Decrypt keys
-  return data.map(row => ({
-    id: row.id,
+  return data.map((row: Record<string, unknown>) => ({
+    id: row.id as string,
     service: row.service as ServiceType,
     keyValue: decryptApiKey({
-      ciphertext: row.key_value,
-      iv: row.encryption_iv,
-      tag: row.encryption_tag
+      ciphertext: row.key_value as string,
+      iv: row.encryption_iv as string,
+      tag: row.encryption_tag as string
     }),
-    keyId: row.key_id,
+    keyId: (row.key_id as string | null) || null,
     status: row.status as KeyStatus,
     role: row.role as KeyRole,
-    createdAt: new Date(row.created_at),
-    activatedAt: row.activated_at ? new Date(row.activated_at) : null,
-    deprecatedAt: row.deprecated_at ? new Date(row.deprecated_at) : null,
-    revokedAt: row.revoked_at ? new Date(row.revoked_at) : null,
-    expiresAt: new Date(row.expires_at),
+    createdAt: new Date(row.created_at as string),
+    activatedAt: row.activated_at ? new Date(row.activated_at as string) : null,
+    deprecatedAt: row.deprecated_at ? new Date(row.deprecated_at as string) : null,
+    revokedAt: row.revoked_at ? new Date(row.revoked_at as string) : null,
+    expiresAt: new Date(row.expires_at as string),
     metadata: row.metadata as KeyMetadata
   }))
 }
@@ -228,7 +228,7 @@ export async function generateNewKey(
   createdBy: string,
   keyId?: string
 ): Promise<ApiKeyVersion> {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   // Encrypt key
   const encrypted = encryptApiKey(plainKey)
@@ -289,7 +289,7 @@ export async function generateNewKey(
  * @param activatedBy - Admin user ID
  */
 export async function activateKey(keyId: string, activatedBy: string): Promise<void> {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   // Get key to activate
   const { data: keyToActivate, error: fetchError } = await supabase
@@ -345,7 +345,7 @@ export async function activateKey(keyId: string, activatedBy: string): Promise<v
  * @param deprecatedBy - Admin user ID
  */
 export async function deprecateKey(keyId: string, deprecatedBy: string): Promise<void> {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const now = new Date().toISOString()
   const { error } = await supabase
@@ -370,7 +370,7 @@ export async function deprecateKey(keyId: string, deprecatedBy: string): Promise
  * @param revokedBy - Admin user ID
  */
 export async function revokeKey(keyId: string, revokedBy: string): Promise<void> {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const now = new Date().toISOString()
   const { error } = await supabase
@@ -457,7 +457,7 @@ export async function validateKey(
  * @param success - Whether operation succeeded
  */
 export async function recordKeyUsage(keyId: string, success: boolean): Promise<void> {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const now = new Date().toISOString()
 
@@ -485,7 +485,7 @@ export async function recordKeyUsage(keyId: string, success: boolean): Promise<v
  * @returns Health check results for all keys
  */
 export async function checkKeyHealth(): Promise<KeyHealthCheck[]> {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('api_key_versions')
@@ -498,9 +498,9 @@ export async function checkKeyHealth(): Promise<KeyHealthCheck[]> {
 
   const now = Date.now()
 
-  return data.map(row => {
+  return data.map((row: Record<string, unknown>) => {
     const alerts: KeyAlert[] = []
-    const createdAt = new Date(row.created_at).getTime()
+    const createdAt = new Date(row.created_at as string).getTime()
     const ageInDays = Math.floor((now - createdAt) / (1000 * 60 * 60 * 24))
 
     const metadata = row.metadata as KeyMetadata
@@ -536,7 +536,7 @@ export async function checkKeyHealth(): Promise<KeyHealthCheck[]> {
     }
 
     return {
-      keyId: row.id,
+      keyId: row.id as string,
       service: row.service as ServiceType,
       ageInDays,
       status: row.status as KeyStatus,
@@ -574,7 +574,7 @@ async function logAuditEvent(
   action: string,
   metadata?: Record<string, unknown>
 ): Promise<void> {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   await supabase.from('api_key_audit_log').insert({
     key_id: keyId,
