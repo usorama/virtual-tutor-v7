@@ -5,7 +5,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Bot } from 'lucide-react';
 import { MessageBubble } from './MessageBubble';
 import type { DisplayBuffer } from '@/protected-core';
-import type { DisplayItem } from '@/protected-core/contracts/transcription.contract';
+import type { DisplayItem } from '@/protected-core';
 
 interface ChatInterfaceProps {
   sessionId?: string;

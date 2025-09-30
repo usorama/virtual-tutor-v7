@@ -5,9 +5,7 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { EventEmitter } from 'events';
-import { SessionOrchestrator } from '@/protected-core/session/orchestrator';
-import { getDisplayBuffer } from '@/protected-core/transcription/display';
-import { TranscriptionService } from '@/protected-core/transcription';
+import { SessionOrchestrator, getDisplayBuffer, TranscriptionService } from '@/protected-core';
 
 // Create test event bus
 const liveKitEventBus = new EventEmitter();

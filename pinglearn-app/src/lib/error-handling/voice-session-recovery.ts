@@ -9,7 +9,7 @@
  * Built on top of protected core services without modifying them.
  */
 
-import { ExponentialBackoff, type RetryConfig } from '@/protected-core/websocket/retry/exponential-backoff';
+import { ExponentialBackoff, type RetryConfig } from '@/protected-core';
 import { ErrorCode, ErrorSeverity, type ContextualError } from '@/lib/errors/error-types';
 
 // Types for voice session recovery

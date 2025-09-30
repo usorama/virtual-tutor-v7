@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi, Mock } from 'vitest';
-import { SessionOrchestrator } from '@/protected-core/session/orchestrator';
+import { SessionOrchestrator } from '@/protected-core';
 import { EventEmitter } from 'events';
 
 // Mock the LiveKitRoom module

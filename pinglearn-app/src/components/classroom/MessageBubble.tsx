@@ -4,7 +4,7 @@ import { WordHighlighter } from './WordHighlighter';
 import { ProgressiveMath } from './ProgressiveMath';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Bot, User } from 'lucide-react';
-import type { DisplayItem } from '@/protected-core/contracts/transcription.contract';
+import type { DisplayItem } from '@/protected-core';
 
 interface MessageBubbleProps {
   message: DisplayItem;

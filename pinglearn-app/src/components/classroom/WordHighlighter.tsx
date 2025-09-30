@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { DisplayItem, WordTiming } from '@/protected-core/contracts/transcription.contract';
+import { DisplayItem, WordTiming } from '@/protected-core';
 import { useWordTiming } from '@/hooks/useWordTiming';
 
 interface WordHighlighterProps {

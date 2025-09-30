@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import type { DisplayItem } from '@/protected-core/contracts/transcription.contract';
+import type { DisplayItem } from '@/protected-core';
 
 interface UseStreamingTranscriptReturn {
   messages: DisplayItem[];

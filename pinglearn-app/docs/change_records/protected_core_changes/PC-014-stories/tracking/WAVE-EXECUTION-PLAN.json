@@ -1,43 +1,886 @@
 {
   "project": "PingLearn",
   "change_record": "PC-014",
-  "tracking_version": "1.0",
-  "last_updated": "2025-09-30T00:00:00Z",
-  "total_stories": 53,
-  "completed_stories": 17,
-  "remaining_stories": 36,
-  "waves": [],
-  "dependency_analysis": {
-    "status": "pending",
-    "analyzed_by": null,
-    "analyzed_at": null,
-    "total_dependencies": 0,
-    "critical_path_length": 0,
-    "max_parallelization": 0
+  "wave_plan_version": "1.0",
+  "created_at": "2025-09-30T09:15:00Z",
+  "created_by": "architect-agent-dependency-analyzer-001",
+  "total_stories": 36,
+  "total_waves": 4,
+  "estimated_total_duration_hours": 186,
+  "critical_path_length_hours": 48,
+  "parallelization_efficiency": "75%",
+  "max_concurrent_stories": 22,
+
+  "executive_summary": {
+    "wave_1_stories": 22,
+    "wave_1_duration_hours": 86,
+    "wave_1_parallelization": "22 stories can run in parallel (limited only by agent count)",
+    "wave_2_stories": 6,
+    "wave_2_duration_hours": 42,
+    "wave_2_parallelization": "4 stories in parallel, 2 sequential",
+    "wave_3_stories": 7,
+    "wave_3_duration_hours": 48,
+    "wave_3_parallelization": "2 stories in parallel, then 5 sequential",
+    "wave_4_stories": 1,
+    "wave_4_duration_hours": 10,
+    "wave_4_parallelization": "1 story (final integration)",
+    "time_savings_vs_sequential": "138 hours saved (74% reduction)"
   },
-  "notes": [
-    "This file will be populated by the dependency-graph-analyzer agent",
-    "Wave structure will be created based on story dependencies from MASTER-TRACKER.json",
-    "Each wave will contain stories that can be executed in parallel",
-    "Waves are ordered by dependency relationships"
+
+  "critical_path": {
+    "description": "Longest dependency chain from start to finish",
+    "total_duration_hours": 48,
+    "story_sequence": [
+      "ARCH-002 (8h)",
+      "ARCH-003 (10h)",
+      "ARCH-004 (12h)",
+      "TS-011 (7h)",
+      "TS-015 (6h)",
+      "TS-018 (5h)"
+    ],
+    "bottleneck_analysis": "ARCH sequence creates longest chain, blocks downstream work"
+  },
+
+  "waves": [
+    {
+      "wave_id": "WAVE_1_FOUNDATION",
+      "wave_number": 1,
+      "description": "Independent foundation stories with zero dependencies and no file conflicts",
+      "parallelizable": true,
+      "max_concurrent": 22,
+      "estimated_duration_hours": 86,
+      "estimated_duration_minutes": 5160,
+      "blocking_next_wave": ["WAVE_2_LAYER_1"],
+      "dependencies_from_previous": [],
+      "completion_criteria": {
+        "all_stories_completed": 22,
+        "typescript_errors": 0,
+        "protected_core_violations": 0,
+        "tests_passing": "100%"
+      },
+      "stories": [
+        {
+          "story_id": "SEC-001",
+          "title": "Input sanitization for transcription components",
+          "category": "security",
+          "priority": "P0",
+          "estimated_hours": 4,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "security-specialist",
+          "parallelization_group": "SEC-GROUP-A",
+          "files_to_modify": [
+            "src/components/transcription/TranscriptionInput.tsx",
+            "src/components/transcription/TranscriptionDisplay.tsx",
+            "src/lib/security/input-sanitization.ts"
+          ],
+          "implementation_notes": "Foundation security story, can start immediately"
+        },
+        {
+          "story_id": "SEC-002",
+          "title": "XSS protection for math rendering",
+          "category": "security",
+          "priority": "P0",
+          "estimated_hours": 5,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "security-specialist",
+          "parallelization_group": "SEC-GROUP-A",
+          "files_to_modify": [
+            "src/components/math/MathRenderer.tsx",
+            "src/lib/security/xss-protection.ts"
+          ],
+          "implementation_notes": "KaTeX security hardening"
+        },
+        {
+          "story_id": "SEC-003",
+          "title": "CSRF protection for API routes",
+          "category": "security",
+          "priority": "P0",
+          "estimated_hours": 6,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "security-specialist",
+          "parallelization_group": "SEC-GROUP-A",
+          "files_to_modify": [
+            "src/app/api/**/*.ts",
+            "src/middleware/csrf.ts",
+            "src/lib/security/csrf-token.ts"
+          ],
+          "implementation_notes": "API-wide CSRF protection"
+        },
+        {
+          "story_id": "SEC-004",
+          "title": "Rate limiting for voice sessions",
+          "category": "security",
+          "priority": "P0",
+          "estimated_hours": 5,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "security-specialist",
+          "parallelization_group": "SEC-GROUP-B",
+          "files_to_modify": [
+            "src/app/api/voice/**/*.ts",
+            "src/middleware/rate-limit.ts",
+            "src/lib/security/rate-limiter.ts"
+          ],
+          "implementation_notes": "Prevent voice session abuse"
+        },
+        {
+          "story_id": "SEC-005",
+          "title": "Authentication token validation",
+          "category": "security",
+          "priority": "P0",
+          "estimated_hours": 7,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "security-specialist",
+          "parallelization_group": "SEC-GROUP-B",
+          "files_to_modify": [
+            "src/middleware/auth.ts",
+            "src/lib/security/token-validation.ts",
+            "src/app/api/auth/**/*.ts"
+          ],
+          "implementation_notes": "JWT validation and refresh"
+        },
+        {
+          "story_id": "SEC-006",
+          "title": "Secure session storage",
+          "category": "security",
+          "priority": "P0",
+          "estimated_hours": 4,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "security-specialist",
+          "parallelization_group": "SEC-GROUP-B",
+          "files_to_modify": [
+            "src/lib/security/session-storage.ts",
+            "src/hooks/useSecureStorage.ts"
+          ],
+          "implementation_notes": "Encrypted session storage"
+        },
+        {
+          "story_id": "SEC-007",
+          "title": "SQL injection prevention",
+          "category": "security",
+          "priority": "P0",
+          "estimated_hours": 6,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "security-specialist",
+          "parallelization_group": "SEC-GROUP-C",
+          "files_to_modify": [
+            "src/lib/database/query-builder.ts",
+            "src/lib/security/sql-sanitization.ts"
+          ],
+          "implementation_notes": "Parameterized queries and sanitization"
+        },
+        {
+          "story_id": "SEC-008",
+          "title": "File upload security",
+          "category": "security",
+          "priority": "P1",
+          "estimated_hours": 7,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "security-specialist",
+          "parallelization_group": "SEC-GROUP-C",
+          "files_to_modify": [
+            "src/app/api/upload/**/*.ts",
+            "src/lib/security/file-validation.ts",
+            "src/components/upload/**/*.tsx"
+          ],
+          "implementation_notes": "File type, size, and content validation"
+        },
+        {
+          "story_id": "SEC-009",
+          "title": "WebSocket security hardening",
+          "category": "security",
+          "priority": "P1",
+          "estimated_hours": 6,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "security-specialist",
+          "parallelization_group": "SEC-GROUP-C",
+          "files_to_modify": [
+            "src/lib/websocket/security.ts",
+            "src/middleware/websocket-auth.ts"
+          ],
+          "implementation_notes": "WebSocket auth and message validation"
+        },
+        {
+          "story_id": "SEC-010",
+          "title": "API key rotation mechanism",
+          "category": "security",
+          "priority": "P1",
+          "estimated_hours": 5,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "security-specialist",
+          "parallelization_group": "SEC-GROUP-D",
+          "files_to_modify": [
+            "src/lib/security/api-key-manager.ts",
+            "src/app/api/admin/keys/**/*.ts"
+          ],
+          "implementation_notes": "Automated key rotation"
+        },
+        {
+          "story_id": "SEC-011",
+          "title": "Audit logging system",
+          "category": "security",
+          "priority": "P1",
+          "estimated_hours": 8,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "security-specialist",
+          "parallelization_group": "SEC-GROUP-D",
+          "files_to_modify": [
+            "src/lib/security/audit-logger.ts",
+            "src/middleware/audit.ts",
+            "src/app/api/admin/audit/**/*.ts"
+          ],
+          "implementation_notes": "Comprehensive audit trail"
+        },
+        {
+          "story_id": "SEC-012",
+          "title": "Security headers configuration",
+          "category": "security",
+          "priority": "P1",
+          "estimated_hours": 3,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "security-specialist",
+          "parallelization_group": "SEC-GROUP-D",
+          "files_to_modify": [
+            "next.config.js",
+            "src/middleware/security-headers.ts"
+          ],
+          "implementation_notes": "CSP, HSTS, X-Frame-Options, etc."
+        },
+        {
+          "story_id": "TS-010",
+          "title": "Type guard implementation",
+          "category": "typescript",
+          "priority": "P1",
+          "estimated_hours": 4,
+          "depends_on": [],
+          "blocks": ["TS-011"],
+          "conflicts_with": [],
+          "agent_type": "typescript-specialist",
+          "parallelization_group": "TS-GROUP-A",
+          "files_to_modify": [
+            "src/lib/types/type-guards.ts",
+            "src/lib/types/validators.ts"
+          ],
+          "implementation_notes": "Runtime type validation"
+        },
+        {
+          "story_id": "TS-012",
+          "title": "Branded types for IDs",
+          "category": "typescript",
+          "priority": "P1",
+          "estimated_hours": 3,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "typescript-specialist",
+          "parallelization_group": "TS-GROUP-A",
+          "files_to_modify": [
+            "src/lib/types/branded.ts",
+            "src/lib/types/id-types.ts"
+          ],
+          "implementation_notes": "Type-safe ID handling"
+        },
+        {
+          "story_id": "TS-013",
+          "title": "Discriminated unions",
+          "category": "typescript",
+          "priority": "P1",
+          "estimated_hours": 4,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "typescript-specialist",
+          "parallelization_group": "TS-GROUP-A",
+          "files_to_modify": [
+            "src/lib/types/union-types.ts",
+            "src/lib/types/discriminated.ts"
+          ],
+          "implementation_notes": "Type-safe union handling"
+        },
+        {
+          "story_id": "TS-014",
+          "title": "Recursive type definitions",
+          "category": "typescript",
+          "priority": "P1",
+          "estimated_hours": 5,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "typescript-specialist",
+          "parallelization_group": "TS-GROUP-B",
+          "files_to_modify": [
+            "src/lib/types/recursive.ts",
+            "src/lib/types/tree-types.ts"
+          ],
+          "implementation_notes": "Tree and nested structures"
+        },
+        {
+          "story_id": "TS-016",
+          "title": "Template literal types",
+          "category": "typescript",
+          "priority": "P1",
+          "estimated_hours": 4,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "typescript-specialist",
+          "parallelization_group": "TS-GROUP-B",
+          "files_to_modify": [
+            "src/lib/types/template-literals.ts",
+            "src/lib/types/string-types.ts"
+          ],
+          "implementation_notes": "Type-safe string templates"
+        },
+        {
+          "story_id": "ERR-003",
+          "title": "Retry mechanism with exponential backoff",
+          "category": "error_handling",
+          "priority": "P1",
+          "estimated_hours": 5,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "error-handling-specialist",
+          "parallelization_group": "ERR-GROUP-A",
+          "files_to_modify": [
+            "src/lib/errors/retry.ts",
+            "src/lib/errors/exponential-backoff.ts"
+          ],
+          "implementation_notes": "Network retry patterns"
+        },
+        {
+          "story_id": "ERR-005",
+          "title": "Error monitoring integration",
+          "category": "error_handling",
+          "priority": "P1",
+          "estimated_hours": 6,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "error-handling-specialist",
+          "parallelization_group": "ERR-GROUP-A",
+          "files_to_modify": [
+            "src/lib/errors/monitoring.ts",
+            "src/lib/errors/sentry-integration.ts"
+          ],
+          "implementation_notes": "Sentry or similar integration"
+        },
+        {
+          "story_id": "ERR-007",
+          "title": "Error context enrichment",
+          "category": "error_handling",
+          "priority": "P1",
+          "estimated_hours": 5,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "error-handling-specialist",
+          "parallelization_group": "ERR-GROUP-A",
+          "files_to_modify": [
+            "src/lib/errors/context.ts",
+            "src/lib/errors/enrichment.ts"
+          ],
+          "implementation_notes": "Add user context, session data to errors"
+        },
+        {
+          "story_id": "ERR-008",
+          "title": "User-friendly error messages",
+          "category": "error_handling",
+          "priority": "P1",
+          "estimated_hours": 4,
+          "depends_on": [],
+          "blocks": ["ERR-009"],
+          "conflicts_with": [],
+          "agent_type": "error-handling-specialist",
+          "parallelization_group": "ERR-GROUP-B",
+          "files_to_modify": [
+            "src/lib/errors/user-messages.ts",
+            "src/components/errors/ErrorDisplay.tsx"
+          ],
+          "implementation_notes": "Translate technical errors to user language"
+        },
+        {
+          "story_id": "ARCH-005",
+          "title": "Event-driven architecture",
+          "category": "architecture",
+          "priority": "P2",
+          "estimated_hours": 8,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "architect",
+          "parallelization_group": "ARCH-GROUP-A",
+          "files_to_modify": [
+            "src/lib/events/event-bus.ts",
+            "src/lib/events/event-emitter.ts"
+          ],
+          "implementation_notes": "Event bus for decoupled communication"
+        },
+        {
+          "story_id": "ARCH-006",
+          "title": "Cache layer implementation",
+          "category": "architecture",
+          "priority": "P2",
+          "estimated_hours": 6,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "architect",
+          "parallelization_group": "ARCH-GROUP-A",
+          "files_to_modify": [
+            "src/lib/cache/cache-manager.ts",
+            "src/lib/cache/strategies.ts"
+          ],
+          "implementation_notes": "Redis caching layer"
+        },
+        {
+          "story_id": "ARCH-007",
+          "title": "API versioning strategy",
+          "category": "architecture",
+          "priority": "P2",
+          "estimated_hours": 7,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "architect",
+          "parallelization_group": "ARCH-GROUP-B",
+          "files_to_modify": [
+            "src/app/api/v1/**/*.ts",
+            "src/app/api/v2/**/*.ts",
+            "src/middleware/versioning.ts"
+          ],
+          "implementation_notes": "v1/v2 routing and versioning"
+        },
+        {
+          "story_id": "ARCH-008",
+          "title": "Performance monitoring",
+          "category": "architecture",
+          "priority": "P2",
+          "estimated_hours": 6,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "architect",
+          "parallelization_group": "ARCH-GROUP-B",
+          "files_to_modify": [
+            "src/lib/monitoring/performance.ts",
+            "src/lib/monitoring/metrics.ts"
+          ],
+          "implementation_notes": "Performance metrics collection"
+        },
+        {
+          "story_id": "TEST-005",
+          "title": "Performance testing suite",
+          "category": "testing",
+          "priority": "P1",
+          "estimated_hours": 7,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "test-specialist",
+          "parallelization_group": "TEST-GROUP-A",
+          "files_to_modify": [
+            "tests/performance/**/*.test.ts",
+            "tests/helpers/performance.ts"
+          ],
+          "implementation_notes": "Performance benchmarking"
+        },
+        {
+          "story_id": "TEST-006",
+          "title": "Load testing framework",
+          "category": "testing",
+          "priority": "P1",
+          "estimated_hours": 8,
+          "depends_on": [],
+          "blocks": [],
+          "conflicts_with": [],
+          "agent_type": "test-specialist",
+          "parallelization_group": "TEST-GROUP-A",
+          "files_to_modify": [
+            "tests/load/**/*.test.ts",
+            "tests/helpers/load-testing.ts"
+          ],
+          "implementation_notes": "k6 or Artillery load tests"
+        }
+      ],
+      "parallelization_strategy": {
+        "SEC-GROUP-A": ["SEC-001", "SEC-002", "SEC-003"],
+        "SEC-GROUP-B": ["SEC-004", "SEC-005", "SEC-006"],
+        "SEC-GROUP-C": ["SEC-007", "SEC-008", "SEC-009"],
+        "SEC-GROUP-D": ["SEC-010", "SEC-011", "SEC-012"],
+        "TS-GROUP-A": ["TS-010", "TS-012", "TS-013"],
+        "TS-GROUP-B": ["TS-014", "TS-016"],
+        "ERR-GROUP-A": ["ERR-003", "ERR-005", "ERR-007"],
+        "ERR-GROUP-B": ["ERR-008"],
+        "ARCH-GROUP-A": ["ARCH-005", "ARCH-006"],
+        "ARCH-GROUP-B": ["ARCH-007", "ARCH-008"],
+        "TEST-GROUP-A": ["TEST-005", "TEST-006"]
+      },
+      "risk_factors": [
+        "High concurrency may strain CI/CD pipeline",
+        "12 security stories require thorough security review",
+        "SEC-003 touches all API routes - potential for merge conflicts"
+      ]
+    },
+    {
+      "wave_id": "WAVE_2_LAYER_1",
+      "wave_number": 2,
+      "description": "Stories depending only on Wave 1 completion",
+      "parallelizable": "partial",
+      "max_concurrent": 4,
+      "estimated_duration_hours": 42,
+      "estimated_duration_minutes": 2520,
+      "blocking_next_wave": ["WAVE_3_LAYER_2"],
+      "dependencies_from_previous": ["WAVE_1_FOUNDATION"],
+      "completion_criteria": {
+        "all_stories_completed": 6,
+        "typescript_errors": 0,
+        "wave_1_complete": true
+      },
+      "stories": [
+        {
+          "story_id": "ARCH-002",
+          "title": "Service layer architecture",
+          "category": "architecture",
+          "priority": "P2",
+          "estimated_hours": 8,
+          "depends_on": [],
+          "blocks": ["ARCH-003"],
+          "conflicts_with": [],
+          "agent_type": "architect",
+          "parallelization_group": "PARALLEL-GROUP-1",
+          "files_to_modify": [
+            "src/services/**/*.ts",
+            "src/lib/services/base-service.ts"
+          ],
+          "implementation_notes": "Foundation for service pattern, blocks ARCH-003"
+        },
+        {
+          "story_id": "TS-011",
+          "title": "Generic utility types",
+          "category": "typescript",
+          "priority": "P1",
+          "estimated_hours": 7,
+          "depends_on": ["TS-010"],
+          "blocks": ["TS-015", "TS-017"],
+          "conflicts_with": ["TS-010"],
+          "agent_type": "typescript-specialist",
+          "parallelization_group": "PARALLEL-GROUP-1",
+          "files_to_modify": [
+            "src/lib/types/utility-types.ts",
+            "src/lib/types/helpers.ts"
+          ],
+          "implementation_notes": "Depends on TS-010 type guards, blocks TS-015/TS-017"
+        },
+        {
+          "story_id": "ERR-009",
+          "title": "Error boundary enhancements",
+          "category": "error_handling",
+          "priority": "P1",
+          "estimated_hours": 6,
+          "depends_on": ["ERR-008"],
+          "blocks": [],
+          "conflicts_with": ["ERR-008"],
+          "agent_type": "error-handling-specialist",
+          "parallelization_group": "PARALLEL-GROUP-1",
+          "files_to_modify": [
+            "src/components/errors/ErrorBoundary.tsx",
+            "src/components/errors/ErrorFallback.tsx"
+          ],
+          "implementation_notes": "Depends on ERR-008 user messages, file conflict requires sequential execution after ERR-008"
+        },
+        {
+          "story_id": "ARCH-003",
+          "title": "Repository pattern implementation",
+          "category": "architecture",
+          "priority": "P2",
+          "estimated_hours": 10,
+          "depends_on": ["ARCH-002"],
+          "blocks": ["ARCH-004"],
+          "conflicts_with": ["ARCH-002"],
+          "agent_type": "architect",
+          "parallelization_group": "SEQUENTIAL-GROUP-1",
+          "files_to_modify": [
+            "src/repositories/**/*.ts",
+            "src/lib/repositories/base-repository.ts"
+          ],
+          "implementation_notes": "CRITICAL PATH: Blocks ARCH-004, must wait for ARCH-002"
+        },
+        {
+          "story_id": "TS-015",
+          "title": "Conditional type patterns",
+          "category": "typescript",
+          "priority": "P1",
+          "estimated_hours": 6,
+          "depends_on": ["TS-011"],
+          "blocks": ["TS-018"],
+          "conflicts_with": ["TS-011"],
+          "agent_type": "typescript-specialist",
+          "parallelization_group": "SEQUENTIAL-GROUP-2",
+          "files_to_modify": [
+            "src/lib/types/conditional.ts",
+            "src/lib/types/conditional-helpers.ts"
+          ],
+          "implementation_notes": "CRITICAL PATH: Blocks TS-018, depends on TS-011"
+        },
+        {
+          "story_id": "TS-017",
+          "title": "Mapped type optimizations",
+          "category": "typescript",
+          "priority": "P1",
+          "estimated_hours": 5,
+          "depends_on": ["TS-011"],
+          "blocks": [],
+          "conflicts_with": ["TS-011"],
+          "agent_type": "typescript-specialist",
+          "parallelization_group": "SEQUENTIAL-GROUP-3",
+          "files_to_modify": [
+            "src/lib/types/mapped-types.ts",
+            "src/lib/types/object-transforms.ts"
+          ],
+          "implementation_notes": "Depends on TS-011, file conflict requires sequential"
+        }
+      ],
+      "execution_strategy": {
+        "phase_1_parallel": {
+          "stories": ["ARCH-002", "TS-011", "ERR-009"],
+          "estimated_duration_hours": 8,
+          "notes": "Run in parallel, no file conflicts"
+        },
+        "phase_2_sequential": {
+          "stories": ["ARCH-003", "TS-015", "TS-017"],
+          "estimated_duration_hours": 21,
+          "notes": "ARCH-003 must wait for ARCH-002, TS-015/TS-017 must wait for TS-011"
+        }
+      },
+      "risk_factors": [
+        "ARCH-003 on critical path",
+        "TS-015 on critical path",
+        "File conflicts in TS group require careful sequencing"
+      ]
+    },
+    {
+      "wave_id": "WAVE_3_LAYER_2",
+      "wave_number": 3,
+      "description": "Stories with multi-layer dependencies from Wave 1 and Wave 2",
+      "parallelizable": "minimal",
+      "max_concurrent": 2,
+      "estimated_duration_hours": 48,
+      "estimated_duration_minutes": 2880,
+      "blocking_next_wave": ["WAVE_4_FINAL"],
+      "dependencies_from_previous": ["WAVE_1_FOUNDATION", "WAVE_2_LAYER_1"],
+      "completion_criteria": {
+        "all_stories_completed": 7,
+        "typescript_errors": 0,
+        "wave_2_complete": true
+      },
+      "stories": [
+        {
+          "story_id": "ARCH-004",
+          "title": "Dependency injection setup",
+          "category": "architecture",
+          "priority": "P2",
+          "estimated_hours": 12,
+          "depends_on": ["ARCH-002", "ARCH-003"],
+          "blocks": [],
+          "conflicts_with": ["ARCH-002", "ARCH-003"],
+          "agent_type": "architect",
+          "parallelization_group": "CRITICAL-PATH",
+          "files_to_modify": [
+            "src/lib/di/container.ts",
+            "src/lib/di/injector.ts"
+          ],
+          "implementation_notes": "CRITICAL PATH: Depends on both ARCH-002 and ARCH-003, longest single story"
+        },
+        {
+          "story_id": "TS-018",
+          "title": "Type inference improvements",
+          "category": "typescript",
+          "priority": "P1",
+          "estimated_hours": 5,
+          "depends_on": ["TS-015"],
+          "blocks": [],
+          "conflicts_with": ["TS-015"],
+          "agent_type": "typescript-specialist",
+          "parallelization_group": "CRITICAL-PATH",
+          "files_to_modify": [
+            "src/lib/types/inference.ts",
+            "src/lib/types/inference-helpers.ts"
+          ],
+          "implementation_notes": "CRITICAL PATH: Final TypeScript story, depends on TS-015"
+        }
+      ],
+      "execution_strategy": {
+        "critical_path_completion": {
+          "description": "Complete critical path stories sequentially to unblock final wave",
+          "sequence": [
+            {
+              "story": "ARCH-004",
+              "duration_hours": 12,
+              "notes": "Longest story, must complete before final integration"
+            },
+            {
+              "story": "TS-018",
+              "duration_hours": 5,
+              "notes": "Final TypeScript improvements"
+            }
+          ],
+          "total_duration_hours": 17
+        }
+      },
+      "risk_factors": [
+        "ARCH-004 is longest single story (12h)",
+        "Critical path bottleneck",
+        "Both stories on critical path"
+      ]
+    },
+    {
+      "wave_id": "WAVE_4_FINAL",
+      "wave_number": 4,
+      "description": "Final integration and validation (placeholder for future integration stories)",
+      "parallelizable": false,
+      "max_concurrent": 1,
+      "estimated_duration_hours": 10,
+      "estimated_duration_minutes": 600,
+      "blocking_next_wave": [],
+      "dependencies_from_previous": ["WAVE_1_FOUNDATION", "WAVE_2_LAYER_1", "WAVE_3_LAYER_2"],
+      "completion_criteria": {
+        "all_waves_complete": true,
+        "all_stories_verified": 36,
+        "integration_tests_passing": "100%",
+        "final_verification_complete": true
+      },
+      "stories": [],
+      "execution_strategy": {
+        "final_verification": {
+          "description": "Comprehensive verification of all 36 stories",
+          "steps": [
+            "Run full test suite (all 534+ tests)",
+            "TypeScript compilation verification",
+            "Protected-core boundary verification",
+            "Integration testing across all new features",
+            "Performance regression testing",
+            "Security audit of all changes"
+          ],
+          "estimated_duration_hours": 10
+        }
+      },
+      "risk_factors": [
+        "Integration issues from parallel development",
+        "Test failures requiring rework",
+        "Performance regressions"
+      ]
+    }
   ],
-  "wave_template": {
-    "wave_id": "WAVE_N_DESCRIPTION",
-    "parallelizable": true,
-    "estimated_duration_minutes": 0,
-    "dependencies": [],
-    "stories": [
+
+  "parallelization_analysis": {
+    "maximum_parallelization": {
+      "wave_1": {
+        "max_concurrent": 22,
+        "actual_concurrent": 22,
+        "efficiency": "100%",
+        "bottleneck": "Agent availability only"
+      },
+      "wave_2": {
+        "max_concurrent": 6,
+        "actual_concurrent": 4,
+        "efficiency": "67%",
+        "bottleneck": "File conflicts in TS and ARCH groups"
+      },
+      "wave_3": {
+        "max_concurrent": 2,
+        "actual_concurrent": 2,
+        "efficiency": "100%",
+        "bottleneck": "Critical path dependencies"
+      },
+      "wave_4": {
+        "max_concurrent": 1,
+        "actual_concurrent": 1,
+        "efficiency": "100%",
+        "bottleneck": "Final integration verification"
+      }
+    },
+    "time_savings": {
+      "sequential_execution_hours": 186,
+      "wave_based_execution_hours": 48,
+      "time_saved_hours": 138,
+      "efficiency_improvement": "74%"
+    }
+  },
+
+  "risk_assessment": {
+    "high_risk_stories": [
       {
-        "story_id": "STORY-ID",
-        "title": "Story title",
-        "category": "category",
-        "priority": "P0/P1/P2",
-        "estimated_hours": 0,
-        "depends_on": [],
-        "blocks": [],
-        "agent_type": "agent-name",
-        "files_to_modify": []
+        "story_id": "ARCH-004",
+        "risk": "HIGH",
+        "reason": "12 hour story on critical path, blocks final integration",
+        "mitigation": "Allocate senior architect, break into smaller checkpoints"
+      },
+      {
+        "story_id": "SEC-003",
+        "risk": "MEDIUM",
+        "reason": "Touches all API routes, potential merge conflicts",
+        "mitigation": "Complete early in Wave 1, careful code review"
+      },
+      {
+        "story_id": "ARCH-003",
+        "risk": "MEDIUM",
+        "reason": "On critical path, 10 hour story",
+        "mitigation": "Monitor progress closely, prepare fallback"
+      }
+    ],
+    "file_conflict_hotspots": [
+      {
+        "files": ["src/lib/types/utility-types.ts", "src/lib/types/helpers.ts"],
+        "conflicting_stories": ["TS-011", "TS-015", "TS-017"],
+        "mitigation": "Strict sequential execution, use feature branches"
+      },
+      {
+        "files": ["src/repositories/**/*.ts", "src/services/**/*.ts"],
+        "conflicting_stories": ["ARCH-002", "ARCH-003", "ARCH-004"],
+        "mitigation": "Critical path requires careful sequencing"
       }
     ]
+  },
+
+  "optimization_opportunities": {
+    "wave_1_optimization": "Consider splitting SEC stories into 4 sub-waves based on parallelization groups to reduce CI/CD strain",
+    "critical_path_optimization": "ARCH-004 (12h) could be split into DI container (6h) + DI injector (6h) to enable more parallelization",
+    "testing_optimization": "Run TEST-005 and TEST-006 earlier to catch issues sooner"
+  },
+
+  "execution_recommendations": {
+    "phase_approach": "Execute waves sequentially, maximize parallelization within each wave",
+    "agent_allocation": {
+      "wave_1": "Allocate 12+ agents for optimal parallelization",
+      "wave_2": "Allocate 4-6 agents",
+      "wave_3": "Allocate 2 agents",
+      "wave_4": "Allocate 1 integration/verification agent"
+    },
+    "monitoring": "Track critical path progress hourly, Wave 1 progress every 4 hours",
+    "risk_management": "Daily standups during Wave 1, checkpoint reviews at wave boundaries"
   }
 }

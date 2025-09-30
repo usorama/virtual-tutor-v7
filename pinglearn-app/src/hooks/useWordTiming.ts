@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { DisplayItem } from '@/protected-core/contracts/transcription.contract';
+import { DisplayItem } from '@/protected-core';
 
 interface WordTimingState {
   currentWordIndex: number;

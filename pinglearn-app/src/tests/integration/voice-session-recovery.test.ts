@@ -17,7 +17,7 @@ import {
   type NotificationPayload
 } from '@/lib/error-handling/voice-session-recovery';
 import { ErrorCode, ErrorSeverity } from '@/lib/errors/error-types';
-import { ExponentialBackoff } from '@/protected-core/websocket/retry/exponential-backoff';
+import { ExponentialBackoff } from '@/protected-core';
 
 // Mock window events for browser environment
 const mockEventDispatcher = vi.fn();

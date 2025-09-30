@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import katex from 'katex';
-import { MathFragmentData } from '@/protected-core/contracts/transcription.contract';
+import { MathFragmentData } from '@/protected-core';
 import 'katex/dist/katex.min.css';
 
 interface ProgressiveMathProps {

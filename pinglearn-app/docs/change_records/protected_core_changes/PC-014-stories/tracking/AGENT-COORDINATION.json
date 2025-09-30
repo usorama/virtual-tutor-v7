@@ -11,6 +11,20 @@
       "started_at": "2025-09-30T10:00:00Z",
       "status": "in_progress",
       "phase": "discovery"
+    },
+    {
+      "agent_id": "agent_test_fixer_001",
+      "agent_type": "test-writer-fixer",
+      "task_id": "test-infrastructure-fix",
+      "status": "running",
+      "started_at": "2025-09-30T10:15:00Z",
+      "files_locked": [
+        "src/tests/mocks/protected-core.ts",
+        "src/tests/helpers/database.ts",
+        "src/tests/mocks/websocket.ts"
+      ],
+      "progress": "10% - Research phase started",
+      "last_update": "2025-09-30T10:15:00Z"
     }
   ],
   "completed_agents": [],

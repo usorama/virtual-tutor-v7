@@ -4,8 +4,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { DisplayBuffer } from '@/protected-core/transcription/display/buffer';
-import type { DisplayItem } from '@/protected-core/transcription/display/types';
+import { DisplayBuffer, type DisplayItem } from '@/protected-core';
 
 describe('DisplayBuffer Deduplication', () => {
   let buffer: DisplayBuffer;

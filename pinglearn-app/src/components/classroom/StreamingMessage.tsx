@@ -5,7 +5,7 @@ import rehypeKatex from 'rehype-katex';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Bot } from 'lucide-react';
 import 'katex/dist/katex.min.css';
-import type { MathFragmentData } from '@/protected-core/contracts/transcription.contract';
+import type { MathFragmentData } from '@/protected-core';
 
 interface StreamingMessageProps {
   content: string;
