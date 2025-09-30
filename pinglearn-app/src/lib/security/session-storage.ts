@@ -136,8 +136,12 @@ async function encrypt(
     combined.set(iv, 0);
     combined.set(new Uint8Array(encrypted), iv.length);
 
-    // Encode as base64
-    return btoa(String.fromCharCode(...combined));
+    // Encode as base64 (handle large arrays without stack overflow)
+    let binary = '';
+    for (let i = 0; i < combined.length; i++) {
+      binary += String.fromCharCode(combined[i]);
+    }
+    return btoa(binary);
   } catch (error) {
     throw new SecureStorageError(
       'ENCRYPTION_FAILED',
