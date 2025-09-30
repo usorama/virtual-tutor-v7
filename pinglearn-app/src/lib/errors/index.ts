@@ -44,6 +44,29 @@ export {
   useRetryableErrorHandler
 } from '../../hooks/useErrorHandler';
 
+// Exponential backoff (re-exported from protected-core)
+export {
+  ExponentialBackoff,
+  type RetryConfig,
+  type RetryAttempt,
+  DEFAULT_RETRY_CONFIG,
+  AGGRESSIVE_RETRY_CONFIG,
+  QUICK_RETRY_CONFIG
+} from './exponential-backoff';
+
+// Retry functions
+export {
+  withRetry,
+  retryOnError,
+  RetryWithCircuitBreaker,
+  type RetryOptions,
+  type RetryResult,
+  type CircuitBreakerConfig,
+  CircuitState,
+  DEFAULT_RETRYABLE_ERRORS,
+  NON_RETRYABLE_ERRORS
+} from './retry';
+
 // Re-export for convenience
 import { ErrorCode } from './error-types';
 import { handleAPIError } from './api-error-handler';
