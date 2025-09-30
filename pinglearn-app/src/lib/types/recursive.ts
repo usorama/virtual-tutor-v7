@@ -449,3 +449,658 @@ export function getMaxDepth<T>(node: TreeNode<T>): number {
   }
   return Math.max(...node.children.map(child => getMaxDepth(child)));
 }
+
+// =============================================================================
+// TRAVERSAL FUNCTIONS
+// =============================================================================
+
+/**
+ * Traverses tree in depth-first order (pre-order, in-order, or post-order)
+ *
+ * @typeParam T - The data type stored in tree nodes
+ * @param node - The root node to start traversal
+ * @param visit - Function called for each node
+ * @param order - Traversal order ('pre-order' or 'post-order')
+ * @param path - Current path (used internally for recursion)
+ *
+ * @example
+ * ```typescript
+ * traverseDFS(root, (node, path, depth) => {
+ *   console.log(`Visiting: ${node.id} at depth ${depth}`);
+ * }, 'pre-order');
+ * ```
+ */
+export function traverseDFS<T>(
+  node: TreeNode<T>,
+  visit: VisitFunction<T>,
+  order: 'pre-order' | 'post-order' = 'pre-order',
+  path: TreePath = []
+): void {
+  const currentPath = [...path, node.id];
+
+  // Depth limit check
+  if (node.metadata.depth > MAX_DEPTH) {
+    throw new Error(`Maximum depth ${MAX_DEPTH} exceeded at node ${node.id}`);
+  }
+
+  // Pre-order: visit before children
+  if (order === 'pre-order') {
+    visit(node, currentPath, node.metadata.depth);
+  }
+
+  // Recurse into children
+  for (const child of node.children) {
+    traverseDFS(child, visit, order, currentPath);
+  }
+
+  // Post-order: visit after children
+  if (order === 'post-order') {
+    visit(node, currentPath, node.metadata.depth);
+  }
+}
+
+/**
+ * Traverses tree in breadth-first order (level by level)
+ *
+ * @typeParam T - The data type stored in tree nodes
+ * @param root - The root node to start traversal
+ * @param visit - Function called for each node
+ *
+ * @example
+ * ```typescript
+ * traverseBFS(root, (node, path, depth) => {
+ *   console.log(`Level ${depth}: ${node.id}`);
+ * });
+ * ```
+ */
+export function traverseBFS<T>(
+  root: TreeNode<T>,
+  visit: VisitFunction<T>
+): void {
+  interface QueueItem {
+    node: TreeNode<T>;
+    path: TreePath;
+  }
+
+  const queue: QueueItem[] = [{ node: root, path: [root.id] }];
+
+  while (queue.length > 0) {
+    const current = queue.shift();
+    if (!current) continue;
+
+    const { node, path } = current;
+
+    // Depth limit check
+    if (node.metadata.depth > MAX_DEPTH) {
+      throw new Error(`Maximum depth ${MAX_DEPTH} exceeded at node ${node.id}`);
+    }
+
+    visit(node, path, node.metadata.depth);
+
+    // Enqueue children
+    for (const child of node.children) {
+      queue.push({
+        node: child,
+        path: [...path, child.id],
+      });
+    }
+  }
+}
+
+/**
+ * Maps a tree to a new tree with transformed data
+ *
+ * @typeParam T - The input data type
+ * @typeParam U - The output data type
+ * @param node - The root node to transform
+ * @param transform - Transformation function
+ * @param path - Current path (used internally)
+ * @returns New tree with transformed data
+ *
+ * @example
+ * ```typescript
+ * const stringTree = mapTree(numberTree, (node) => node.data.toString());
+ * ```
+ */
+export function mapTree<T, U>(
+  node: TreeNode<T>,
+  transform: NodeTransformer<T, U>,
+  path: TreePath = []
+): TreeNode<U> {
+  const currentPath = [...path, node.id];
+
+  return {
+    id: node.id,
+    data: transform(node, currentPath),
+    children: node.children.map(child => mapTree(child, transform, currentPath)),
+    metadata: node.metadata,
+  };
+}
+
+/**
+ * Filters tree nodes based on a predicate
+ *
+ * @typeParam T - The data type stored in tree nodes
+ * @param node - The root node to filter
+ * @param predicate - Predicate function
+ * @param path - Current path (used internally)
+ * @returns New tree with filtered nodes, or null if root doesn't match
+ *
+ * @example
+ * ```typescript
+ * const filtered = filterTree(root, (node) => node.data.type === 'folder');
+ * ```
+ */
+export function filterTree<T>(
+  node: TreeNode<T>,
+  predicate: NodePredicate<T>,
+  path: TreePath = []
+): TreeNode<T> | null {
+  const currentPath = [...path, node.id];
+
+  // Filter children recursively
+  const filteredChildren = node.children
+    .map(child => filterTree(child, predicate, currentPath))
+    .filter((child): child is TreeNode<T> => child !== null);
+
+  // If node doesn't match predicate and has no matching children, exclude it
+  if (!predicate(node, currentPath) && filteredChildren.length === 0) {
+    return null;
+  }
+
+  // Return node with filtered children
+  return {
+    ...node,
+    children: filteredChildren,
+    metadata: {
+      ...node.metadata,
+      hasChildren: filteredChildren.length > 0,
+      childCount: filteredChildren.length,
+    },
+  };
+}
+
+/**
+ * Finds first node matching predicate
+ *
+ * @typeParam T - The data type stored in tree nodes
+ * @param node - The root node to search
+ * @param predicate - Predicate function
+ * @param path - Current path (used internally)
+ * @returns Matching node or null
+ *
+ * @example
+ * ```typescript
+ * const found = findInTree(root, (node) => node.id === 'target-id');
+ * ```
+ */
+export function findInTree<T>(
+  node: TreeNode<T>,
+  predicate: NodePredicate<T>,
+  path: TreePath = []
+): TreeNode<T> | null {
+  const currentPath = [...path, node.id];
+
+  if (predicate(node, currentPath)) {
+    return node;
+  }
+
+  for (const child of node.children) {
+    const found = findInTree(child, predicate, currentPath);
+    if (found) {
+      return found;
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Reduces tree to a single value
+ *
+ * @typeParam T - The data type stored in tree nodes
+ * @typeParam U - The accumulator type
+ * @param node - The root node to reduce
+ * @param reducer - Reducer function
+ * @param initialValue - Initial accumulator value
+ * @param path - Current path (used internally)
+ * @returns Final accumulated value
+ *
+ * @example
+ * ```typescript
+ * const totalSize = reduceTree(
+ *   root,
+ *   (sum, node) => sum + node.data.size,
+ *   0
+ * );
+ * ```
+ */
+export function reduceTree<T, U>(
+  node: TreeNode<T>,
+  reducer: NodeReducer<T, U>,
+  initialValue: U,
+  path: TreePath = []
+): U {
+  const currentPath = [...path, node.id];
+
+  // Reduce current node
+  let accumulator = reducer(initialValue, node, currentPath);
+
+  // Reduce children
+  for (const child of node.children) {
+    accumulator = reduceTree(child, reducer, accumulator, currentPath);
+  }
+
+  return accumulator;
+}
+
+/**
+ * Flattens tree into array of flat nodes
+ *
+ * @typeParam T - The data type stored in tree nodes
+ * @param node - The root node to flatten
+ * @param parentId - Parent node ID (null for root)
+ * @param path - Current path (used internally)
+ * @returns Array of flattened nodes
+ *
+ * @example
+ * ```typescript
+ * const flatNodes = flattenTree(root);
+ * flatNodes.forEach(node => {
+ *   console.log(`${node.id} at depth ${node.depth}`);
+ * });
+ * ```
+ */
+export function flattenTree<T>(
+  node: TreeNode<T>,
+  parentId: string | null = null,
+  path: TreePath = []
+): FlatNode<T>[] {
+  const currentPath = [...path, node.id];
+
+  const flatNode: FlatNode<T> = {
+    id: node.id,
+    data: node.data,
+    path: currentPath,
+    depth: node.metadata.depth,
+    parentId,
+    hasChildren: node.children.length > 0,
+    childCount: node.children.length,
+  };
+
+  const childFlats = node.children.flatMap(child =>
+    flattenTree(child, node.id, currentPath)
+  );
+
+  return [flatNode, ...childFlats];
+}
+
+// =============================================================================
+// QUERY FUNCTIONS
+// =============================================================================
+
+/**
+ * Finds node by ID
+ *
+ * @typeParam T - The data type stored in tree nodes
+ * @param node - The root node to search
+ * @param id - The ID to find
+ * @returns Matching node or null
+ *
+ * @example
+ * ```typescript
+ * const targetNode = findById(root, 'chapter-2');
+ * ```
+ */
+export function findById<T>(node: TreeNode<T>, id: string): TreeNode<T> | null {
+  return findInTree(node, n => n.id === id);
+}
+
+/**
+ * Finds node by path
+ *
+ * @typeParam T - The data type stored in tree nodes
+ * @param node - The root node to search
+ * @param targetPath - Path of node IDs
+ * @returns Matching node or null
+ *
+ * @example
+ * ```typescript
+ * const node = findByPath(root, ['textbook-1', 'chapter-2', 'lesson-3']);
+ * ```
+ */
+export function findByPath<T>(
+  node: TreeNode<T>,
+  targetPath: TreePath
+): TreeNode<T> | null {
+  if (targetPath.length === 0) {
+    return null;
+  }
+
+  if (node.id !== targetPath[0]) {
+    return null;
+  }
+
+  if (targetPath.length === 1) {
+    return node;
+  }
+
+  for (const child of node.children) {
+    const found = findByPath(child, targetPath.slice(1));
+    if (found) {
+      return found;
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Gets all ancestors of a node
+ *
+ * @typeParam T - The data type stored in tree nodes
+ * @param root - The root node to search from
+ * @param targetId - The target node ID
+ * @param path - Current path (used internally)
+ * @returns Array of ancestor nodes (from root to parent)
+ *
+ * @example
+ * ```typescript
+ * const ancestors = getAncestors(root, 'topic-5');
+ * // Returns [textbook, chapter, lesson]
+ * ```
+ */
+export function getAncestors<T>(
+  root: TreeNode<T>,
+  targetId: string,
+  path: TreeNode<T>[] = []
+): TreeNode<T>[] {
+  if (root.id === targetId) {
+    return path;
+  }
+
+  for (const child of root.children) {
+    const found = getAncestors(child, targetId, [...path, root]);
+    if (found.length > 0 || child.id === targetId) {
+      return found.length > 0 ? found : [...path, root];
+    }
+  }
+
+  return [];
+}
+
+/**
+ * Gets all descendants of a node
+ *
+ * @typeParam T - The data type stored in tree nodes
+ * @param node - The node to get descendants from
+ * @returns Array of all descendant nodes
+ *
+ * @example
+ * ```typescript
+ * const descendants = getDescendants(chapterNode);
+ * // Returns all lessons and topics within the chapter
+ * ```
+ */
+export function getDescendants<T>(node: TreeNode<T>): TreeNode<T>[] {
+  const descendants: TreeNode<T>[] = [];
+
+  for (const child of node.children) {
+    descendants.push(child);
+    descendants.push(...getDescendants(child));
+  }
+
+  return descendants;
+}
+
+/**
+ * Gets siblings of a node
+ *
+ * @typeParam T - The data type stored in tree nodes
+ * @param root - The root node to search from
+ * @param targetId - The target node ID
+ * @returns Array of sibling nodes (excluding target)
+ *
+ * @example
+ * ```typescript
+ * const siblings = getSiblings(root, 'chapter-2');
+ * // Returns other chapters in the same textbook
+ * ```
+ */
+export function getSiblings<T>(
+  root: TreeNode<T>,
+  targetId: string
+): TreeNode<T>[] {
+  const parent = findParent(root, targetId);
+  if (!parent) {
+    return [];
+  }
+
+  return parent.children.filter(child => child.id !== targetId);
+}
+
+/**
+ * Finds parent of a node (helper function)
+ */
+function findParent<T>(node: TreeNode<T>, targetId: string): TreeNode<T> | null {
+  for (const child of node.children) {
+    if (child.id === targetId) {
+      return node;
+    }
+
+    const found = findParent(child, targetId);
+    if (found) {
+      return found;
+    }
+  }
+
+  return null;
+}
+
+// =============================================================================
+// MUTATION FUNCTIONS (Immutable - Return New Trees)
+// =============================================================================
+
+/**
+ * Inserts a new node as child of parent node
+ *
+ * @typeParam T - The data type stored in tree nodes
+ * @param root - The root node
+ * @param parentId - The parent node ID
+ * @param newNode - The new node to insert
+ * @returns New tree with inserted node, or null if parent not found
+ *
+ * @example
+ * ```typescript
+ * const newTree = insertNode(root, 'chapter-1', newLessonNode);
+ * ```
+ */
+export function insertNode<T>(
+  root: TreeNode<T>,
+  parentId: string,
+  newNode: TreeNode<T>
+): TreeNode<T> | null {
+  if (root.id === parentId) {
+    // Check depth limit for new node
+    if (root.metadata.depth + 1 > MAX_DEPTH) {
+      throw new Error(`Cannot insert node: would exceed maximum depth ${MAX_DEPTH}`);
+    }
+
+    return {
+      ...root,
+      children: [...root.children, newNode],
+      metadata: {
+        ...root.metadata,
+        hasChildren: true,
+        childCount: root.children.length + 1,
+        updatedAt: new Date().toISOString(),
+      },
+    };
+  }
+
+  const updatedChildren = root.children
+    .map(child => insertNode(child, parentId, newNode))
+    .map((child, index) => child ?? root.children[index]);
+
+  return {
+    ...root,
+    children: updatedChildren,
+  };
+}
+
+/**
+ * Removes a node from the tree
+ *
+ * @typeParam T - The data type stored in tree nodes
+ * @param root - The root node
+ * @param targetId - The node ID to remove
+ * @returns New tree without the node, or null if root should be removed
+ *
+ * @example
+ * ```typescript
+ * const newTree = removeNode(root, 'lesson-3');
+ * ```
+ */
+export function removeNode<T>(
+  root: TreeNode<T>,
+  targetId: string
+): TreeNode<T> | null {
+  if (root.id === targetId) {
+    return null;
+  }
+
+  const filteredChildren = root.children
+    .map(child => removeNode(child, targetId))
+    .filter((child): child is TreeNode<T> => child !== null);
+
+  return {
+    ...root,
+    children: filteredChildren,
+    metadata: {
+      ...root.metadata,
+      hasChildren: filteredChildren.length > 0,
+      childCount: filteredChildren.length,
+      updatedAt: new Date().toISOString(),
+    },
+  };
+}
+
+/**
+ * Moves a node to a new parent
+ *
+ * @typeParam T - The data type stored in tree nodes
+ * @param root - The root node
+ * @param nodeId - The node ID to move
+ * @param newParentId - The new parent node ID
+ * @returns New tree with moved node, or null if operation failed
+ *
+ * @example
+ * ```typescript
+ * const newTree = moveNode(root, 'lesson-3', 'chapter-2');
+ * ```
+ */
+export function moveNode<T>(
+  root: TreeNode<T>,
+  nodeId: string,
+  newParentId: string
+): TreeNode<T> | null {
+  // Find the node to move
+  const nodeToMove = findById(root, nodeId);
+  if (!nodeToMove) {
+    return null;
+  }
+
+  // Remove node from current location
+  const withoutNode = removeNode(root, nodeId);
+  if (!withoutNode) {
+    return null;
+  }
+
+  // Insert node at new location
+  return insertNode(withoutNode, newParentId, nodeToMove);
+}
+
+/**
+ * Updates a node's data
+ *
+ * @typeParam T - The data type stored in tree nodes
+ * @param root - The root node
+ * @param targetId - The node ID to update
+ * @param updater - Function to update node data
+ * @returns New tree with updated node, or null if node not found
+ *
+ * @example
+ * ```typescript
+ * const newTree = updateNode(root, 'lesson-3', (data) => ({
+ *   ...data,
+ *   title: 'Updated Lesson Title'
+ * }));
+ * ```
+ */
+export function updateNode<T>(
+  root: TreeNode<T>,
+  targetId: string,
+  updater: (data: T) => T
+): TreeNode<T> | null {
+  if (root.id === targetId) {
+    return {
+      ...root,
+      data: updater(root.data),
+      metadata: {
+        ...root.metadata,
+        updatedAt: new Date().toISOString(),
+      },
+    };
+  }
+
+  const updatedChildren = root.children
+    .map(child => updateNode(child, targetId, updater))
+    .map((child, index) => child ?? root.children[index]);
+
+  return {
+    ...root,
+    children: updatedChildren,
+  };
+}
+
+/**
+ * Updates node metadata
+ *
+ * @typeParam T - The data type stored in tree nodes
+ * @param root - The root node
+ * @param targetId - The node ID to update
+ * @param metadataUpdater - Function to update metadata
+ * @returns New tree with updated metadata
+ *
+ * @example
+ * ```typescript
+ * const newTree = updateNodeMetadata(root, 'lesson-3', (meta) => ({
+ *   ...meta,
+ *   starred: true
+ * }));
+ * ```
+ */
+export function updateNodeMetadata<T>(
+  root: TreeNode<T>,
+  targetId: string,
+  metadataUpdater: (metadata: TreeNodeMetadata) => TreeNodeMetadata
+): TreeNode<T> | null {
+  if (root.id === targetId) {
+    return {
+      ...root,
+      metadata: {
+        ...metadataUpdater(root.metadata),
+        updatedAt: new Date().toISOString(),
+      },
+    };
+  }
+
+  const updatedChildren = root.children
+    .map(child => updateNodeMetadata(child, targetId, metadataUpdater))
+    .map((child, index) => child ?? root.children[index]);
+
+  return {
+    ...root,
+    children: updatedChildren,
+  };
+}
