@@ -289,7 +289,7 @@ Progress: 16-20% → 18-22% (one legitimate story added)
 
 ## 📞 When to Ask for Help
 
-- After 3 failed Implement→Verify→Test iterations
+- After 3 failed Implement→Verify→Test iterations, do a deep web research first before proceeding
 - If hooks block and you don't understand why
 - If ERR-006 requirements conflict with protected-core boundaries
 - If evidence is unclear or incomplete
