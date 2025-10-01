@@ -41,17 +41,13 @@ export enum DIErrorCode {
  * Extends Error with DI-specific error code and severity.
  */
 export class DIError extends Error {
-  /**
-   * Error name (overrides Error.name)
-   */
-  public override readonly name = 'DIError';
-
   constructor(
     message: string,
     public readonly code: DIErrorCode,
     public readonly severity: ErrorSeverity
   ) {
     super(message);
+    this.name = 'DIError';
 
     // Maintain proper prototype chain for instanceof checks
     Object.setPrototypeOf(this, new.target.prototype);
@@ -75,8 +71,6 @@ export class DIError extends Error {
  * ```
  */
 export class RegistrationError extends DIError {
-  public override readonly name = 'RegistrationError';
-
   constructor(
     public readonly token: Token,
     public readonly reason: string
@@ -86,6 +80,7 @@ export class RegistrationError extends DIError {
       DIErrorCode.REGISTRATION_FAILED,
       ErrorSeverity.HIGH
     );
+    this.name = 'RegistrationError';
   }
 }
 
@@ -101,8 +96,6 @@ export class RegistrationError extends DIError {
  * ```
  */
 export class ResolutionError extends DIError {
-  public override readonly name = 'ResolutionError';
-
   constructor(
     public readonly token: Token,
     public readonly reason: string
@@ -112,6 +105,7 @@ export class ResolutionError extends DIError {
       DIErrorCode.RESOLUTION_FAILED,
       ErrorSeverity.HIGH
     );
+    this.name = 'ResolutionError';
   }
 }
 
@@ -129,8 +123,6 @@ export class ResolutionError extends DIError {
  * ```
  */
 export class CircularDependencyError extends DIError {
-  public override readonly name = 'CircularDependencyError';
-
   constructor(public readonly dependencyChain: Token[]) {
     const chain = dependencyChain.join(' -> ');
     super(
@@ -138,6 +130,7 @@ export class CircularDependencyError extends DIError {
       DIErrorCode.CIRCULAR_DEPENDENCY,
       ErrorSeverity.CRITICAL
     );
+    this.name = 'CircularDependencyError';
   }
 }
 
@@ -153,14 +146,13 @@ export class CircularDependencyError extends DIError {
  * ```
  */
 export class TokenNotFoundError extends DIError {
-  public override readonly name = 'TokenNotFoundError';
-
   constructor(public readonly token: Token) {
     super(
       `Token '${token}' not found in container. Did you forget to register it?`,
       DIErrorCode.NOT_FOUND,
       ErrorSeverity.HIGH
     );
+    this.name = 'TokenNotFoundError';
   }
 }
 
@@ -177,14 +169,13 @@ export class TokenNotFoundError extends DIError {
  * ```
  */
 export class DuplicateRegistrationError extends DIError {
-  public override readonly name = 'DuplicateRegistrationError';
-
   constructor(public readonly token: Token) {
     super(
       `Token '${token}' is already registered. Use clear() to re-register.`,
       DIErrorCode.DUPLICATE_REGISTRATION,
       ErrorSeverity.MEDIUM
     );
+    this.name = 'DuplicateRegistrationError';
   }
 }
 
@@ -200,9 +191,8 @@ export class DuplicateRegistrationError extends DIError {
  * ```
  */
 export class ScopeError extends DIError {
-  public override readonly name = 'ScopeError';
-
   constructor(message: string) {
     super(message, DIErrorCode.SCOPE_ERROR, ErrorSeverity.MEDIUM);
+    this.name = 'ScopeError';
   }
 }
