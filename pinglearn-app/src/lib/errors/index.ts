@@ -81,6 +81,24 @@ export type {
   MessageIcon
 } from './user-messages';
 
+// Error boundary utilities (ERR-009)
+export {
+  detectErrorCode,
+  selectRecoveryStrategy,
+  enrichErrorForBoundary,
+  generateErrorId,
+  getErrorSeverity,
+  getErrorCategory,
+  getRedirectUrl,
+  getRedirectLabel,
+  isTransientError,
+  requiresUserAction
+} from './error-boundary-utils';
+
+export type {
+  RecoveryStrategyType
+} from './error-boundary-utils';
+
 // Re-export for convenience
 import { ErrorCode } from './error-types';
 import { handleAPIError } from './api-error-handler';
