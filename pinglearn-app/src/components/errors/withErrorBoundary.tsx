@@ -15,7 +15,7 @@ import React, { type ComponentType, type ErrorInfo } from 'react';
 import { ErrorBoundary, type EnhancedErrorBoundaryProps } from './ErrorBoundary';
 import { CompactErrorFallback } from './ErrorFallback';
 import type { EnrichedError } from '@/lib/monitoring/types';
-import { captureError, addBreadcrumb } from '@/lib/monitoring';
+import { trackError, addBreadcrumb } from '@/lib/monitoring';
 
 /**
  * Options for withErrorBoundary HOC
@@ -84,7 +84,7 @@ export function withAppLevelErrorBoundary<P extends object>(
     enableAutoRecovery: true,
     maxRetries: 3,
     onError: (error: EnrichedError) => {
-      captureError(error);
+      trackError(error);
       addBreadcrumb('App-level error caught', {
         code: error.code,
         severity: error.severity,

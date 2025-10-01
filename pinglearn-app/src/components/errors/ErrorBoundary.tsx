@@ -17,7 +17,7 @@ import React, { Component, type ErrorInfo, type ReactNode, type ComponentType } 
 import { useRouter } from 'next/navigation';
 import { ErrorCode } from '@/lib/errors/error-types';
 import type { EnrichedError } from '@/lib/monitoring/types';
-import { captureError, addBreadcrumb } from '@/lib/monitoring';
+import { trackError, addBreadcrumb } from '@/lib/monitoring';
 import {
   detectErrorCode,
   selectRecoveryStrategy,
@@ -34,7 +34,6 @@ import {
   type ErrorBoundaryLevel,
 } from './ErrorBoundaryContext';
 import { showRecoverySuccessNotification, showErrorNotification } from '../error/ErrorNotification';
-import { isResilienceEnabled } from '@/lib/resilience/config';
 import { RecoveryOrchestrator } from '@/lib/resilience';
 
 /**
@@ -227,11 +226,11 @@ export class ErrorBoundary extends Component<EnhancedErrorBoundaryProps, Enhance
 
     // Capture in Sentry (ERR-006)
     try {
-      const sentryEventId = captureError(enrichedError);
+      const sentryEventId = trackError(enrichedError);
       addBreadcrumb(`Error caught by ${level} boundary`, {
         errorCode,
         errorId,
-        sentryEventId,
+        sentryEventId: sentryEventId || undefined,
         isProtectedCore: isProtectedCoreError,
       });
     } catch (monitoringError) {
@@ -312,12 +311,6 @@ export class ErrorBoundary extends Component<EnhancedErrorBoundaryProps, Enhance
       return false;
     }
 
-    // Check if ERR-005 is enabled
-    if (!isResilienceEnabled('recoveryOrchestrator')) {
-      addBreadcrumb('Auto-recovery disabled (ERR-005 not enabled)', { errorCode });
-      return false;
-    }
-
     // Check if error is transient
     if (!isTransientError(errorCode)) {
       addBreadcrumb('Auto-recovery skipped (not transient error)', { errorCode });
@@ -329,13 +322,21 @@ export class ErrorBoundary extends Component<EnhancedErrorBoundaryProps, Enhance
 
     try {
       const orchestrator = RecoveryOrchestrator.getInstance();
-      const result = await orchestrator.orchestrateRecovery(
-        { code: errorCode, message: error.message },
-        { attemptNumber: attemptCount + 1 },
-        `error-boundary-${level}` // operation context
+
+      // Create enriched error for recovery
+      const enrichedError = enrichErrorForBoundary(
+        error,
+        errorCode,
+        undefined,
+        this.getUserContext()
       );
 
-      if (result.success) {
+      const result = await orchestrator.orchestrateRecovery(
+        enrichedError,
+        { attemptNumber: attemptCount + 1 }
+      );
+
+      if (result.status === 'recovered') {
         // Recovery succeeded!
         addBreadcrumb('Auto-recovery succeeded', { errorCode, level });
 
@@ -366,7 +367,7 @@ export class ErrorBoundary extends Component<EnhancedErrorBoundaryProps, Enhance
         // Recovery failed
         addBreadcrumb('Auto-recovery failed', {
           errorCode,
-          reason: result.error?.message || 'unknown',
+          reason: result.error || 'unknown',
         });
         this.setState({ isRecovering: false });
         return false;
