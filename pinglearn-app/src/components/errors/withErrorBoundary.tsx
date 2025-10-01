@@ -119,7 +119,7 @@ export function withPageErrorBoundary<P extends object>(
     enableAutoRecovery: true,
     maxRetries: 2,
     onError: (error: EnrichedError) => {
-      captureError(error);
+      trackError(error);
       addBreadcrumb('Page-level error caught', {
         code: error.code,
         severity: error.severity,
@@ -155,7 +155,7 @@ export function withFeatureErrorBoundary<P extends object>(
     enableAutoRecovery: true,
     maxRetries: 2,
     onError: (error: EnrichedError) => {
-      captureError(error);
+      trackError(error);
       addBreadcrumb(`${featureName} feature error`, {
         code: error.code,
         severity: error.severity,
@@ -189,7 +189,7 @@ export function withProtectedCoreErrorBoundary<P extends object>(
     isolateProtectedCore: true,
     enableAutoRecovery: false, // Don't auto-recover protected-core errors
     onError: (error: EnrichedError) => {
-      captureError(error);
+      trackError(error);
       addBreadcrumb('Protected-core error', {
         code: error.code,
         severity: error.severity,
@@ -226,7 +226,7 @@ export function withComponentErrorBoundary<P extends object>(
     onError: (error: EnrichedError) => {
       // Only capture medium+ severity errors
       if (error.severity === 'medium' || error.severity === 'high' || error.severity === 'critical') {
-        captureError(error);
+        trackError(error);
       }
 
       addBreadcrumb('Component-level error caught', {
@@ -291,7 +291,7 @@ export function withAsyncErrorBoundary<P extends object>(
         async: true,
       });
 
-      captureError(error);
+      trackError(error);
 
       // Call custom onError if provided
       options.onError?.(error, errorInfo);
