@@ -270,8 +270,12 @@ describe('ErrorBoundary', () => {
   });
 
   it('shows boundary level in development mode', () => {
+    // Mock NODE_ENV using Object.defineProperty since it's read-only
     const originalEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = 'development';
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: 'development',
+      configurable: true
+    });
 
     const ThrowError = () => {
       throw new Error('Test error');
@@ -286,7 +290,11 @@ describe('ErrorBoundary', () => {
     // Boundary level badge should be shown
     expect(screen.getByText('feature boundary')).toBeInTheDocument();
 
-    process.env.NODE_ENV = originalEnv;
+    // Restore original NODE_ENV
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: originalEnv,
+      configurable: true
+    });
   });
 });
 
