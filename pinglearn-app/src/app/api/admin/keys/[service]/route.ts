@@ -65,13 +65,13 @@ function validateRotationReason(reason: string): reason is RotationReason {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { service: string } }
+  { params }: { params: Promise<{ service: string }> }
 ): Promise<NextResponse> {
   try {
     // Authenticate admin
     await requireAdmin(request)
 
-    const service = params.service
+    const { service } = await params
 
     // Validate service type
     if (!validateService(service)) {
@@ -141,11 +141,11 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { service: string } }
+  { params }: { params: Promise<{ service: string }> }
 ): Promise<NextResponse> {
   try {
     const { userId } = await requireAdmin(request)
-    const service = params.service
+    const { service } = await params
 
     // Validate service
     if (!validateService(service)) {
@@ -207,11 +207,11 @@ export async function POST(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { service: string } }
+  { params }: { params: Promise<{ service: string }> }
 ): Promise<NextResponse> {
   try {
     const { userId } = await requireAdmin(request)
-    const service = params.service
+    const { service } = await params
 
     // Validate service
     if (!validateService(service)) {
