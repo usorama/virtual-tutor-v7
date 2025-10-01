@@ -1,7 +1,7 @@
 {
-  "sessionId": "e2e-session-1759312464026",
-  "startTime": "2025-10-01T09:54:24.026Z",
-  "setupDuration": 2363,
+  "sessionId": "e2e-session-1759314040953",
+  "startTime": "2025-10-01T10:20:40.953Z",
+  "setupDuration": 2437,
   "environment": {
     "baseURL": "http://localhost:3006",
     "nodeEnv": "test",

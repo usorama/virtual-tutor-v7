@@ -1,0 +1,41 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - heading "Virtual Tutor" [level=1] [ref=e5]
+      - paragraph [ref=e6]: Your AI-powered learning companion
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - heading "Create an Account" [level=3] [ref=e10]
+        - paragraph [ref=e11]: Enter your details to get started
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - generic [ref=e14]:
+            - generic [ref=e15]: Email
+            - generic [ref=e16]:
+              - img [ref=e17]
+              - textbox "Email" [active] [ref=e20]: invalid-email
+          - generic [ref=e21]:
+            - generic [ref=e22]: Password
+            - generic [ref=e23]:
+              - img [ref=e24]
+              - textbox "Password" [ref=e27]: TestPassword123!
+            - paragraph [ref=e28]: Must be at least 8 characters long
+          - generic [ref=e29]:
+            - generic [ref=e30]: Confirm Password
+            - generic [ref=e31]:
+              - img [ref=e32]
+              - textbox "Confirm Password" [ref=e35]: TestPassword123!
+        - generic [ref=e36]:
+          - button "Sign Up" [ref=e37] [cursor=pointer]
+          - generic [ref=e38]:
+            - text: Already have an account?
+            - link "Sign in" [ref=e39] [cursor=pointer]:
+              - /url: /login
+          - paragraph [ref=e40]: By signing up, you agree to our Terms of Service and Privacy Policy
+  - button "Open Next.js Dev Tools" [ref=e46] [cursor=pointer]:
+    - img [ref=e47] [cursor=pointer]
+  - alert [ref=e50]
+```

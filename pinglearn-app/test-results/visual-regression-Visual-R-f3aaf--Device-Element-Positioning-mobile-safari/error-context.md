@@ -1,0 +1,551 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e5]:
+        - link "PingLearn" [ref=e6]:
+          - /url: /
+          - img "PingLearn" [ref=e7]
+        - button "Toggle mobile menu" [ref=e8]:
+          - img [ref=e9]
+    - generic [ref=e32]:
+      - generic [ref=e33]:
+        - img [ref=e34]
+        - generic [ref=e36]: The future of learning is personal
+      - heading "Meet Your Child's Avai AI Teacher" [level=1] [ref=e38]:
+        - generic [ref=e39]: Meet Your Child's
+        - generic [ref=e42]: Avai
+        - generic [ref=e44]: AI Teacher
+      - paragraph [ref=e46]:
+        - generic [ref=e47]: Beyond tutoring. Beyond homework help.
+        - generic [ref=e48]: A learning companion that understands, adapts, and never gives up on your child.
+      - generic [ref=e49]:
+        - link "Start Free Trial" [ref=e50]:
+          - /url: /register
+          - generic [ref=e55]: Start Free Trial
+        - button "Watch Demo See PingLearn in action" [ref=e56]:
+          - img [ref=e57]
+          - generic [ref=e59]: Watch Demo
+          - generic [ref=e60]: See PingLearn in action
+      - generic [ref=e61]:
+        - generic [ref=e62]:
+          - img [ref=e63]
+          - generic [ref=e68]: 50,000+ Students
+        - generic [ref=e69]:
+          - img [ref=e70]
+          - generic [ref=e72]: 4.9★ Parent Rating
+        - generic [ref=e73]:
+          - img [ref=e74]
+          - generic [ref=e77]: CBSE Aligned
+        - generic [ref=e78]:
+          - img [ref=e79]
+          - generic [ref=e82]: COPPA Compliant
+      - generic [ref=e86]:
+        - generic [ref=e87]:
+          - generic [ref=e88]: 🎙️
+          - generic [ref=e89]: Voice conversations
+        - generic [ref=e90]:
+          - generic [ref=e91]: 📐
+          - generic [ref=e92]: Real-time math rendering
+        - generic [ref=e93]:
+          - generic [ref=e94]: 🧠
+          - generic [ref=e95]: Adaptive learning
+        - generic [ref=e96]:
+          - generic [ref=e97]: 📊
+          - generic [ref=e98]: Progress tracking
+        - generic [ref=e99]:
+          - generic [ref=e100]: 🌙
+          - generic [ref=e101]: 24/7 availability
+        - generic [ref=e102]:
+          - generic [ref=e103]: 🎯
+          - generic [ref=e104]: Exam preparation
+        - generic [ref=e105]:
+          - generic [ref=e106]: 💬
+          - generic [ref=e107]: Instant feedback
+        - generic [ref=e108]:
+          - generic [ref=e109]: 👨‍🏫
+          - generic [ref=e110]: Patient teaching
+        - generic [ref=e111]:
+          - generic [ref=e112]: 🎙️
+          - generic [ref=e113]: Voice conversations
+        - generic [ref=e114]:
+          - generic [ref=e115]: 📐
+          - generic [ref=e116]: Real-time math rendering
+        - generic [ref=e117]:
+          - generic [ref=e118]: 🧠
+          - generic [ref=e119]: Adaptive learning
+        - generic [ref=e120]:
+          - generic [ref=e121]: 📊
+          - generic [ref=e122]: Progress tracking
+        - generic [ref=e123]:
+          - generic [ref=e124]: 🌙
+          - generic [ref=e125]: 24/7 availability
+        - generic [ref=e126]:
+          - generic [ref=e127]: 🎯
+          - generic [ref=e128]: Exam preparation
+        - generic [ref=e129]:
+          - generic [ref=e130]: 💬
+          - generic [ref=e131]: Instant feedback
+        - generic [ref=e132]:
+          - generic [ref=e133]: 👨‍🏫
+          - generic [ref=e134]: Patient teaching
+    - generic [ref=e136]:
+      - generic [ref=e137]:
+        - paragraph [ref=e138]: Complete Learning Solution
+        - heading "PingLearn Solves Everything" [level=2] [ref=e139]:
+          - text: PingLearn Solves
+          - generic [ref=e140]: Everything
+        - paragraph [ref=e141]: One platform that addresses every challenge in your child's educational journey with innovative technology and empathetic teaching.
+      - generic [ref=e143]:
+        - generic [ref=e146]:
+          - generic [ref=e147]:
+            - img [ref=e148]
+            - generic [ref=e150]: 100%
+          - heading "Adaptive" [level=2] [ref=e151]
+          - paragraph [ref=e152]: PingLearn adapts to each student's unique learning style and pace in real-time
+        - generic [ref=e155]:
+          - img [ref=e157]
+          - generic [ref=e159]:
+            - heading "Secure by Default" [level=2] [ref=e160]
+            - paragraph [ref=e161]: COPPA compliant with enterprise-grade security. Your child's data and privacy are our top priority.
+        - generic [ref=e164]:
+          - generic [ref=e167]:
+            - img [ref=e168]
+            - generic [ref=e170]: 400ms
+          - generic [ref=e171]:
+            - heading "Lightning Fast" [level=2] [ref=e172]
+            - paragraph [ref=e173]: 400ms response time with instant math rendering. No waiting, no lag, just seamless learning.
+        - generic [ref=e176]:
+          - generic [ref=e177]:
+            - img [ref=e179]
+            - generic [ref=e182]:
+              - heading "Always Available" [level=2] [ref=e183]
+              - paragraph [ref=e184]: Learn at 3 PM or 3 AM. PingLearn is ready whenever your child is inspired to learn.
+          - generic [ref=e190]:
+            - generic [ref=e191]:
+              - generic [ref=e193]: "24"
+              - generic [ref=e194]: Hours Available
+            - generic [ref=e195]:
+              - generic [ref=e197]: "7"
+              - generic [ref=e198]: Days a Week
+            - generic [ref=e199]:
+              - generic [ref=e201]: ∞
+              - generic [ref=e202]: Patience Level
+        - generic [ref=e205]:
+          - generic [ref=e206]:
+            - img [ref=e208]
+            - generic [ref=e214]:
+              - heading "Proven Results" [level=2] [ref=e215]
+              - paragraph [ref=e216]: 92% grade improvement average. Students gain confidence and excel beyond expectations.
+          - generic [ref=e218]:
+            - generic [ref=e219]:
+              - generic [ref=e220]: A+ Student
+              - img [ref=e223]
+            - generic [ref=e225]:
+              - img [ref=e228]
+              - generic [ref=e230]: Math Expert
+            - generic [ref=e231]:
+              - generic [ref=e232]: Confident
+              - img [ref=e235]
+      - generic [ref=e244]:
+        - img [ref=e245]
+        - generic [ref=e247]: Join 50,000+ students already excelling with PingLearn
+    - generic [ref=e249]:
+      - generic [ref=e250]:
+        - paragraph [ref=e251]: Real Impact
+        - heading "The PingLearn Difference" [level=2] [ref=e252]:
+          - text: The PingLearn
+          - generic [ref=e253]: Difference
+        - paragraph [ref=e254]: See how students transform from struggling to thriving with personalized AI support
+      - generic [ref=e255]:
+        - generic [ref=e256]:
+          - generic [ref=e258]:
+            - generic [ref=e259]:
+              - generic [ref=e260]:
+                - paragraph [ref=e261]: Before PingLearn
+                - heading "Traditional Learning" [level=3] [ref=e262]
+              - img [ref=e264]
+            - generic [ref=e267]:
+              - generic [ref=e268]:
+                - img [ref=e269]
+                - generic [ref=e272]: Struggling with math concepts
+              - generic [ref=e273]:
+                - img [ref=e274]
+                - generic [ref=e276]: Grades dropping consistently
+              - generic [ref=e277]:
+                - img [ref=e278]
+                - generic [ref=e282]: Avoiding homework
+              - generic [ref=e283]:
+                - img [ref=e284]
+                - generic [ref=e287]: Hours of frustration daily
+              - generic [ref=e288]:
+                - img [ref=e289]
+                - generic [ref=e292]: Losing confidence
+            - generic [ref=e294]:
+              - generic [ref=e295]:
+                - img [ref=e297]
+                - generic [ref=e300]:
+                  - paragraph [ref=e301]: Average Student
+                  - paragraph [ref=e302]: "Grade: C-"
+              - img [ref=e303]
+          - generic [ref=e308]:
+            - generic [ref=e309]:
+              - generic [ref=e310]:
+                - paragraph [ref=e311]: After PingLearn
+                - heading "AI-Powered Success" [level=3] [ref=e312]
+              - img [ref=e314]
+            - generic [ref=e316]:
+              - generic [ref=e317]:
+                - img [ref=e318]
+                - generic [ref=e321]: Mastering complex problems
+              - generic [ref=e322]:
+                - img [ref=e323]
+                - generic [ref=e329]: 92% grade improvement
+              - generic [ref=e330]:
+                - img [ref=e331]
+                - generic [ref=e333]: Excited about learning
+              - generic [ref=e334]:
+                - img [ref=e335]
+                - generic [ref=e337]: Quick problem solving
+              - generic [ref=e338]:
+                - img [ref=e339]
+                - generic [ref=e342]: Building real confidence
+            - generic [ref=e344]:
+              - generic [ref=e345]:
+                - img [ref=e347]
+                - generic [ref=e350]:
+                  - paragraph [ref=e351]: PingLearn Student
+                  - paragraph [ref=e352]: "Grade: A+"
+              - img [ref=e353]
+        - img [ref=e358]
+        - generic [ref=e361]:
+          - generic [ref=e362]:
+            - paragraph [ref=e363]: 92%
+            - paragraph [ref=e364]: Grade Improvement
+          - generic [ref=e365]:
+            - paragraph [ref=e366]: 3x
+            - paragraph [ref=e367]: Faster Learning
+          - generic [ref=e368]:
+            - paragraph [ref=e369]: 50k+
+            - paragraph [ref=e370]: Happy Students
+          - generic [ref=e371]:
+            - paragraph [ref=e372]: 4.9★
+            - paragraph [ref=e373]: Parent Rating
+    - generic [ref=e375]:
+      - generic [ref=e376]:
+        - heading "Get Started in 4 Simple Steps" [level=2] [ref=e377]:
+          - text: Get Started in
+          - generic [ref=e378]: 4 Simple Steps
+        - paragraph [ref=e379]: From signup to success, we've made it incredibly easy to start your AI-powered learning journey.
+      - generic [ref=e380]:
+        - generic [ref=e383]:
+          - img [ref=e385]
+          - heading "Sign Up in 30 Seconds" [level=3] [ref=e388]
+          - paragraph [ref=e389]: Create your account with email or Google. No credit card required for the free trial.
+          - list [ref=e391]:
+            - listitem [ref=e392]:
+              - generic [ref=e394]: Quick email verification
+            - listitem [ref=e395]:
+              - generic [ref=e397]: Google sign-in option
+            - listitem [ref=e398]:
+              - generic [ref=e400]: Instant access to platform
+          - img [ref=e402]
+        - generic [ref=e406]:
+          - img [ref=e408]
+          - heading "Tell Us About Your Goals" [level=3] [ref=e411]
+          - paragraph [ref=e412]: Share your grade level, subjects of interest, and learning preferences with our smart onboarding.
+          - list [ref=e414]:
+            - listitem [ref=e415]:
+              - generic [ref=e417]: Grade level selection (9-12)
+            - listitem [ref=e418]:
+              - generic [ref=e420]: Subject preferences
+            - listitem [ref=e421]:
+              - generic [ref=e423]: Learning style assessment
+          - img [ref=e425]
+        - generic [ref=e429]:
+          - img [ref=e431]
+          - heading "Start Learning Instantly" [level=3] [ref=e433]
+          - paragraph [ref=e434]: Begin with a friendly conversation with PingLearn. Ask questions, solve problems, and learn at your pace.
+          - list [ref=e436]:
+            - listitem [ref=e437]:
+              - generic [ref=e439]: Voice or text interaction
+            - listitem [ref=e440]:
+              - generic [ref=e442]: Instant math rendering
+            - listitem [ref=e443]:
+              - generic [ref=e445]: Personalized difficulty
+          - img [ref=e447]
+        - generic [ref=e451]:
+          - img [ref=e453]
+          - heading "Track & Celebrate Progress" [level=3] [ref=e456]
+          - paragraph [ref=e457]: Watch your confidence and grades improve with detailed analytics and achievement tracking.
+          - list [ref=e459]:
+            - listitem [ref=e460]:
+              - generic [ref=e462]: Real-time progress updates
+            - listitem [ref=e463]:
+              - generic [ref=e465]: Parent dashboard access
+            - listitem [ref=e466]:
+              - generic [ref=e468]: Achievement badges & rewards
+      - generic [ref=e470]:
+        - heading "Ready to Get Started?" [level=3] [ref=e471]
+        - paragraph [ref=e472]: Join thousands of students who are already experiencing better grades and increased confidence.
+        - generic [ref=e473]:
+          - link "Start Free Trial Now" [ref=e474]:
+            - /url: /register
+            - generic [ref=e479]: Start Free Trial Now
+          - button "Watch Demo First" [ref=e480]
+        - paragraph [ref=e481]: No credit card required • 7-day free trial • Cancel anytime
+    - generic [ref=e483]:
+      - generic [ref=e484]:
+        - paragraph [ref=e485]: Get In Touch
+        - heading "We're Here to Help" [level=2] [ref=e486]:
+          - text: We're Here to
+          - generic [ref=e487]: Help
+        - paragraph [ref=e488]: Questions about our platform? Need help getting started? Our support team is ready to assist you.
+      - generic [ref=e489]:
+        - generic [ref=e490]:
+          - img [ref=e492]
+          - heading "Email Support" [level=3] [ref=e495]
+          - paragraph [ref=e496]: support@pinglearn.com
+          - paragraph [ref=e497]: Response within 2 hours
+        - generic [ref=e498]:
+          - img [ref=e500]
+          - heading "Live Chat" [level=3] [ref=e502]
+          - paragraph [ref=e503]: Available 24/7
+          - paragraph [ref=e504]: Instant response
+        - generic [ref=e505]:
+          - img [ref=e507]
+          - heading "Phone Support" [level=3] [ref=e509]
+          - paragraph [ref=e510]: +91 1800-PINGLEARN
+          - paragraph [ref=e511]: Mon-Fri, 9 AM - 6 PM IST
+      - generic [ref=e512]:
+        - generic [ref=e514]:
+          - heading "Send us a Message" [level=3] [ref=e515]
+          - generic [ref=e516]:
+            - generic [ref=e517]:
+              - generic [ref=e518]: Your Name
+              - generic [ref=e519]:
+                - img [ref=e520]
+                - textbox "Your Name" [ref=e523]
+            - generic [ref=e524]:
+              - generic [ref=e525]: Email Address
+              - generic [ref=e526]:
+                - img [ref=e527]
+                - textbox "Email Address" [ref=e530]
+            - generic [ref=e531]:
+              - generic [ref=e532]: I am a
+              - generic [ref=e533]:
+                - img [ref=e534]
+                - combobox "I am a" [ref=e539] [cursor=pointer]:
+                  - option "Parent" [selected]
+                  - option "Student"
+                  - option "Teacher"
+                  - option "School Administrator"
+            - generic [ref=e540]:
+              - generic [ref=e541]: Subject
+              - textbox "Subject" [ref=e542]
+            - generic [ref=e543]:
+              - generic [ref=e544]: Your Message
+              - textbox "Your Message" [ref=e545]
+            - button "Send Message" [ref=e546]:
+              - img [ref=e547]
+              - generic [ref=e550]: Send Message
+        - generic [ref=e552]:
+          - generic [ref=e553]:
+            - heading "Frequently Asked Questions" [level=3] [ref=e554]
+            - paragraph [ref=e555]: Quick answers to common questions
+          - generic [ref=e556]:
+            - generic [ref=e558] [cursor=pointer]:
+              - img [ref=e559] [cursor=pointer]
+              - generic [ref=e562] [cursor=pointer]: How do I start my free trial?
+            - generic [ref=e564] [cursor=pointer]:
+              - img [ref=e565] [cursor=pointer]
+              - generic [ref=e568] [cursor=pointer]: What subjects are covered?
+            - generic [ref=e570] [cursor=pointer]:
+              - img [ref=e571] [cursor=pointer]
+              - generic [ref=e574] [cursor=pointer]: How does voice learning work?
+            - generic [ref=e576] [cursor=pointer]:
+              - img [ref=e577] [cursor=pointer]
+              - generic [ref=e580] [cursor=pointer]: Can multiple children use one account?
+            - generic [ref=e582] [cursor=pointer]:
+              - img [ref=e583] [cursor=pointer]
+              - generic [ref=e586] [cursor=pointer]: What's your refund policy?
+            - generic [ref=e588] [cursor=pointer]:
+              - img [ref=e589] [cursor=pointer]
+              - generic [ref=e592] [cursor=pointer]: How do I track my child's progress?
+          - generic [ref=e593]:
+            - generic [ref=e594]:
+              - img [ref=e595]
+              - heading "Our Promise" [level=4] [ref=e598]
+            - paragraph [ref=e599]:
+              - text: We respond to all inquiries within
+              - generic [ref=e600]: 2 hours
+              - text: during business hours and
+              - generic [ref=e601]: 30 seconds
+              - text: on live chat.
+          - generic [ref=e602]:
+            - generic [ref=e603]:
+              - img [ref=e604]
+              - heading "For Schools" [level=4] [ref=e609]
+            - paragraph [ref=e610]: Looking for bulk licenses or custom solutions for your institution?
+            - link "Contact our Enterprise Team →" [ref=e611]:
+              - /url: "#"
+    - contentinfo [ref=e612]:
+      - generic [ref=e615]:
+        - heading "Get Learning Tips & Updates" [level=3] [ref=e616]
+        - paragraph [ref=e617]: Subscribe to our newsletter for the latest educational insights, study tips, and product updates.
+        - generic [ref=e618]:
+          - textbox "Enter your email" [ref=e619]
+          - button "Subscribe" [ref=e620]
+        - paragraph [ref=e621]: No spam, unsubscribe anytime. We respect your privacy.
+      - generic [ref=e623]:
+        - generic [ref=e625]:
+          - link "PingLearn" [ref=e626]:
+            - /url: /
+            - img "PingLearn" [ref=e627]
+          - paragraph [ref=e628]: Empowering students with AI-powered personalized learning. Making quality education accessible to everyone.
+          - generic [ref=e629]:
+            - generic [ref=e630]:
+              - img [ref=e631]
+              - link "support@pinglearn.app" [ref=e634]:
+                - /url: mailto:support@pinglearn.app
+            - generic [ref=e635]:
+              - img [ref=e636]
+              - link "+91 98765 43210" [ref=e638]:
+                - /url: tel:+919876543210
+        - generic [ref=e639]:
+          - heading "Product" [level=4] [ref=e640]
+          - list [ref=e641]:
+            - listitem [ref=e642]:
+              - link "Features" [ref=e643]:
+                - /url: "#features"
+            - listitem [ref=e644]:
+              - link "How It Works" [ref=e645]:
+                - /url: "#how-it-works"
+            - listitem [ref=e646]:
+              - link "Pricing" [ref=e647]:
+                - /url: "#pricing"
+            - listitem [ref=e648]:
+              - link "Success Stories" [ref=e649]:
+                - /url: "#testimonials"
+            - listitem [ref=e650]:
+              - link "FAQ" [ref=e651]:
+                - /url: "#faq"
+        - generic [ref=e652]:
+          - heading "Subjects" [level=4] [ref=e653]
+          - list [ref=e654]:
+            - listitem [ref=e655]:
+              - link "Mathematics" [ref=e656]:
+                - /url: "#mathematics"
+            - listitem [ref=e657]:
+              - link "Science" [ref=e658]:
+                - /url: "#science"
+            - listitem [ref=e659]:
+              - link "Physics" [ref=e660]:
+                - /url: "#physics"
+            - listitem [ref=e661]:
+              - link "Chemistry" [ref=e662]:
+                - /url: "#chemistry"
+            - listitem [ref=e663]:
+              - link "English" [ref=e664]:
+                - /url: "#english"
+        - generic [ref=e665]:
+          - heading "Company" [level=4] [ref=e666]
+          - list [ref=e667]:
+            - listitem [ref=e668]:
+              - link "About Us" [ref=e669]:
+                - /url: /about
+            - listitem [ref=e670]:
+              - link "Careers" [ref=e671]:
+                - /url: /careers
+            - listitem [ref=e672]:
+              - link "Blog" [ref=e673]:
+                - /url: /blog
+            - listitem [ref=e674]:
+              - link "Press" [ref=e675]:
+                - /url: /press
+            - listitem [ref=e676]:
+              - link "Contact" [ref=e677]:
+                - /url: "#contact"
+        - generic [ref=e678]:
+          - heading "Support" [level=4] [ref=e679]
+          - list [ref=e680]:
+            - listitem [ref=e681]:
+              - link "Help Center" [ref=e682]:
+                - /url: /help
+            - listitem [ref=e683]:
+              - link "Parent Guide" [ref=e684]:
+                - /url: /resources/parents
+            - listitem [ref=e685]:
+              - link "Student Resources" [ref=e686]:
+                - /url: /resources/students
+            - listitem [ref=e687]:
+              - link "Technical Support" [ref=e688]:
+                - /url: /support
+            - listitem [ref=e689]:
+              - link "Feedback" [ref=e690]:
+                - /url: /feedback
+        - generic [ref=e691]:
+          - heading "Legal" [level=4] [ref=e692]
+          - list [ref=e693]:
+            - listitem [ref=e694]:
+              - link "Privacy Policy" [ref=e695]:
+                - /url: /privacy
+            - listitem [ref=e696]:
+              - link "Terms of Service" [ref=e697]:
+                - /url: /terms
+            - listitem [ref=e698]:
+              - link "COPPA Compliance" [ref=e699]:
+                - /url: /coppa
+            - listitem [ref=e700]:
+              - link "Data Security" [ref=e701]:
+                - /url: /security
+            - listitem [ref=e702]:
+              - link "Cookie Policy" [ref=e703]:
+                - /url: /cookies
+      - generic [ref=e706]:
+        - generic [ref=e708]:
+          - generic [ref=e709]: © 2025
+          - img "PingLearn" [ref=e710]
+          - generic [ref=e711]: All rights reserved.
+          - generic [ref=e712]:
+            - text: Made with
+            - img [ref=e713]
+            - text: for learners everywhere.
+        - generic [ref=e715]:
+          - generic [ref=e716]:
+            - generic [ref=e717]: 🛡️
+            - generic [ref=e718]: COPPA Compliant
+          - generic [ref=e719]:
+            - generic [ref=e720]: 🔒
+            - generic [ref=e721]: ISO 27001 Certified
+          - generic [ref=e722]:
+            - generic [ref=e723]: 🔐
+            - generic [ref=e724]: SSL Secured
+        - generic [ref=e725]:
+          - link "Twitter" [ref=e726]:
+            - /url: https://twitter.com/pinglearn
+            - img [ref=e727]
+          - link "LinkedIn" [ref=e729]:
+            - /url: https://linkedin.com/company/pinglearn
+            - img [ref=e730]
+          - link "YouTube" [ref=e734]:
+            - /url: https://youtube.com/@pinglearn
+            - img [ref=e735]
+          - link "Instagram" [ref=e738]:
+            - /url: https://instagram.com/pinglearn
+            - img [ref=e739]
+  - generic [ref=e746] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e747] [cursor=pointer]:
+      - img [ref=e748] [cursor=pointer]
+    - generic [ref=e753] [cursor=pointer]:
+      - button "Open issues overlay" [ref=e754] [cursor=pointer]:
+        - generic [ref=e755] [cursor=pointer]:
+          - generic [ref=e756] [cursor=pointer]: "0"
+          - generic [ref=e757] [cursor=pointer]: "1"
+        - generic [ref=e758] [cursor=pointer]: Issue
+      - button "Collapse issues badge" [ref=e759] [cursor=pointer]:
+        - img [ref=e760] [cursor=pointer]
+  - alert [ref=e762]
+```

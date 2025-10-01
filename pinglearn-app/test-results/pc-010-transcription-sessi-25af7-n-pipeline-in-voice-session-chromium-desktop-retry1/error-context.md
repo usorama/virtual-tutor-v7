@@ -1,7 +1,7 @@
 # Page snapshot
 
 ```yaml
-- generic [ref=e1]:
+- generic [active] [ref=e1]:
   - generic [ref=e2]:
     - navigation [ref=e3]:
       - generic [ref=e5]:
@@ -377,7 +377,7 @@
               - generic [ref=e599]: Email Address
               - generic [ref=e600]:
                 - img [ref=e601]
-                - textbox "Email Address" [active] [ref=e604]: test@example.com
+                - textbox "Email Address" [ref=e604]
             - generic [ref=e605]:
               - generic [ref=e606]: I am a
               - generic [ref=e607]:

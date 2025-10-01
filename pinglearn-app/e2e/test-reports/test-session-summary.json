@@ -1,0 +1,48 @@
+{
+  "sessionId": "e2e-session-1759314040953",
+  "startTime": "2025-10-01T10:20:40.953Z",
+  "endTime": "2025-10-01T10:33:50.598Z",
+  "totalDuration": 789645,
+  "environment": {
+    "baseURL": "http://localhost:3006",
+    "nodeEnv": "test",
+    "ci": false,
+    "headless": true
+  },
+  "results": {
+    "totalTests": 2,
+    "passedTests": 0,
+    "failedTests": 0,
+    "skippedTests": 0,
+    "successRate": 0
+  },
+  "coverage": {
+    "workflows": 9,
+    "browsers": 5,
+    "devices": 9
+  },
+  "artifacts": {
+    "screenshots": 60,
+    "videos": 0,
+    "reports": [
+      "TEST-004-COMPREHENSIVE-EVIDENCE-REPORT.md",
+      "api-integration/api-integration-report.md",
+      "comprehensive-e2e/comprehensive-e2e-report.md",
+      "comprehensive-ui-ux-analysis-report.md",
+      "critical-path-analysis-report.md",
+      "error-recovery/error-recovery-report.md",
+      "performance-analysis-report.md",
+      "playwright-report/index.html",
+      "test-results.json",
+      "test-session-meta.json",
+      "ui-analysis-report.md",
+      "visual-regression/visual-regression-report.md"
+    ],
+    "totalSize": "7.50 MB"
+  },
+  "recommendations": [
+    "❌ Success rate below 70% - investigate failing tests immediately",
+    "📸 High screenshot count may indicate frequent failures - investigate test stability",
+    "📊 Low test count - consider expanding test coverage"
+  ]
+}
