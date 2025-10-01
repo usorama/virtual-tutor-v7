@@ -1,0 +1,34 @@
+{
+  "sessionId": "e2e-session-1759312464026",
+  "startTime": "2025-10-01T09:54:24.026Z",
+  "setupDuration": 2363,
+  "environment": {
+    "baseURL": "http://localhost:3006",
+    "nodeEnv": "test",
+    "ci": false,
+    "headless": true
+  },
+  "configuration": {
+    "browsers": [
+      "chromium-desktop",
+      "firefox-desktop",
+      "webkit-desktop",
+      "mobile-chrome",
+      "mobile-safari",
+      "tablet-chrome",
+      "api-testing",
+      "performance-testing",
+      "error-recovery"
+    ],
+    "parallel": true,
+    "retries": 1,
+    "timeout": 30000
+  },
+  "healthCheck": {
+    "appReady": true,
+    "hasTitle": true,
+    "hasContent": true,
+    "hasNavigation": true,
+    "endpointsChecked": 2
+  }
+}
