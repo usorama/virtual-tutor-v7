@@ -120,15 +120,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} font-sans antialiased min-h-screen bg-background text-foreground`}
       >
-        <ErrorBoundary
-          onError={(error, errorInfo) => {
-            // Log to error reporting service in production
-            if (process.env.NODE_ENV === 'production') {
-              console.error('App-level error caught:', error, errorInfo);
-              // TODO: Send to error reporting service (e.g., Sentry)
-            }
-          }}
-        >
+        <ErrorBoundary>
           <ThemeProvider>
             <AuthProvider>
               {children}
