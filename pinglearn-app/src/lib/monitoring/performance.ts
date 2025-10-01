@@ -179,10 +179,23 @@ export class PerformanceTracker {
 
   /**
    * Track current memory usage
+   *
+   * Note: Memory tracking is not available in Edge Runtime (Next.js middleware)
+   * as it runs in a serverless environment without access to process.memoryUsage().
+   * This is intentional - serverless functions don't have meaningful heap metrics.
+   *
+   * Memory tracking still works in:
+   * - Node.js API routes (app/api/*)
+   * - Server-side code in App Router
+   * - Server Components
    */
   trackMemory(): void {
     if (!this.config.enabled) return;
-    if (typeof process === 'undefined' || !process.memoryUsage) return;
+
+    // Skip in Edge Runtime (serverless - no meaningful memory tracking)
+    if (typeof process === 'undefined' || !process.memoryUsage) {
+      return;
+    }
 
     const usage = process.memoryUsage();
     const metric: MemoryMetric = {

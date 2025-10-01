@@ -14,7 +14,7 @@
  * @see https://nextjs.org/docs/app/guides/content-security-policy
  */
 
-import { randomUUID } from 'crypto';
+// Web Crypto API is globally available - no import needed
 
 /**
  * Content Security Policy directives structure
@@ -61,17 +61,24 @@ export interface ExternalDomains {
 /**
  * Generate a cryptographically secure nonce for CSP
  *
- * Uses Node.js crypto.randomUUID() to generate a unique identifier,
- * then encodes it as base64 for use in Content-Security-Policy headers.
+ * Uses Web Crypto API (crypto.randomUUID()) which is:
+ * - Available in Edge Runtime (Next.js middleware)
+ * - Available in all modern browsers
+ * - Available in Node.js 19+ (our minimum version)
+ * - Standards-compliant and secure
  *
- * @returns Base64-encoded nonce string
+ * Previous implementation used Node.js crypto module, which is not
+ * available in Edge Runtime. The UUID format is perfectly suitable
+ * for CSP nonces as they only need to be unique per request.
+ *
+ * @returns UUID string (e.g., "550e8400-e29b-41d4-a716-446655440000")
  *
  * @example
  * const nonce = generateNonce();
- * // Returns: "Yzg5MTVhZTAtMjc3Yi00YmE3LTk2ZWMtNjMyYjcyOTU5YmI0"
+ * // Returns: "550e8400-e29b-41d4-a716-446655440000"
  */
 export function generateNonce(): string {
-  return Buffer.from(randomUUID()).toString('base64');
+  return crypto.randomUUID();
 }
 
 /**
