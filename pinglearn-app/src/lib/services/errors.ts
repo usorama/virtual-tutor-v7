@@ -6,7 +6,8 @@
  */
 
 import { ErrorSeverity } from '@/lib/errors/error-types';
-import type { ServiceErrorCode, ServiceState } from './types';
+import type { ServiceState } from './types';
+import { ServiceErrorCode } from './types';
 
 /**
  * Base Service Error
@@ -85,7 +86,7 @@ export class ServiceInitializationError extends ServiceError {
   constructor(serviceName: string, originalError?: unknown) {
     super(
       `Failed to initialize ${serviceName}`,
-      'INITIALIZATION_FAILED',
+      ServiceErrorCode.INITIALIZATION_FAILED,
       ErrorSeverity.CRITICAL,
       serviceName,
       originalError
@@ -107,7 +108,7 @@ export class ServiceStateError extends ServiceError {
   ) {
     super(
       `Invalid state transition: expected ${expectedState}, got ${actualState}`,
-      'INVALID_STATE',
+      ServiceErrorCode.INVALID_STATE,
       ErrorSeverity.MEDIUM,
       serviceName,
       undefined,
@@ -126,7 +127,7 @@ export class ServiceDependencyError extends ServiceError {
   constructor(serviceName: string, dependencyName: string) {
     super(
       `Missing required dependency: ${dependencyName}`,
-      'DEPENDENCY_MISSING',
+      ServiceErrorCode.DEPENDENCY_MISSING,
       ErrorSeverity.HIGH,
       serviceName,
       undefined,
@@ -145,7 +146,7 @@ export class ServiceNotFoundError extends ServiceError {
   constructor(serviceName: string) {
     super(
       `Service ${serviceName} not found in registry`,
-      'SERVICE_NOT_FOUND',
+      ServiceErrorCode.SERVICE_NOT_FOUND,
       ErrorSeverity.HIGH,
       'ServiceRegistry',
       undefined,
@@ -164,7 +165,7 @@ export class ServiceDuplicateError extends ServiceError {
   constructor(serviceName: string) {
     super(
       `Service ${serviceName} is already registered`,
-      'DUPLICATE_REGISTRATION',
+      ServiceErrorCode.DUPLICATE_REGISTRATION,
       ErrorSeverity.HIGH,
       'ServiceRegistry',
       undefined,
@@ -187,7 +188,7 @@ export class ServiceTransactionError extends ServiceError {
   ) {
     super(
       `Transaction ${transactionId} failed`,
-      'TRANSACTION_FAILED',
+      ServiceErrorCode.TRANSACTION_FAILED,
       ErrorSeverity.HIGH,
       serviceName,
       originalError,

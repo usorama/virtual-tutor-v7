@@ -7,13 +7,14 @@
  */
 
 import type { BaseService } from './base-service';
-import type { ServiceHealth, AggregatedHealth } from './types';
+import type { ServiceHealth, AggregatedHealth, ServiceErrorCode } from './types';
 import {
   ServiceError,
   ServiceNotFoundError,
   ServiceDuplicateError,
   ServiceDependencyError,
 } from './errors';
+import { ServiceErrorCode as ErrorCode } from './types';
 import { ErrorSeverity } from '@/lib/errors/error-types';
 
 /**
@@ -153,7 +154,7 @@ export class ServiceRegistry {
           `[ServiceRegistry] ✗ Failed to initialize: ${name}`,
           error
         );
-        throw ServiceError.from(error, 'ServiceRegistry', 'INITIALIZATION_FAILED');
+        throw ServiceError.from(error, 'ServiceRegistry', ErrorCode.INITIALIZATION_FAILED);
       }
     }
 

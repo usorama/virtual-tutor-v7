@@ -20,6 +20,7 @@ import {
   ServiceStateError,
   ServiceTransactionError,
 } from './errors';
+import { ServiceErrorCode } from './types';
 import { ErrorSeverity } from '@/lib/errors/error-types';
 
 /**
@@ -185,7 +186,7 @@ export abstract class BaseService<
       const serviceError = ServiceError.from(
         error,
         this.serviceName,
-        'INITIALIZATION_FAILED'
+        ServiceErrorCode.INITIALIZATION_FAILED
       );
       this.emit({ type: 'error', error: serviceError, timestamp: new Date() });
       throw serviceError;
@@ -220,7 +221,7 @@ export abstract class BaseService<
       const serviceError = ServiceError.from(
         error,
         this.serviceName,
-        'START_FAILED'
+        ServiceErrorCode.START_FAILED
       );
       this.emit({ type: 'error', error: serviceError, timestamp: new Date() });
       throw serviceError;
@@ -259,7 +260,7 @@ export abstract class BaseService<
       const serviceError = ServiceError.from(
         error,
         this.serviceName,
-        'STOP_FAILED'
+        ServiceErrorCode.STOP_FAILED
       );
       this.emit({ type: 'error', error: serviceError, timestamp: new Date() });
       throw serviceError;

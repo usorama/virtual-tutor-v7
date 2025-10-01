@@ -97,7 +97,7 @@ export class SessionService extends BaseService<SessionServiceConfig> {
     }
 
     // Populate active sessions map
-    sessions?.forEach((session) => {
+    sessions?.forEach((session: LearningSession) => {
       this.activeSessions.set(session.id, {
         id: session.id,
         status: 'active',
@@ -192,8 +192,15 @@ export class SessionService extends BaseService<SessionServiceConfig> {
 
     return this.executeInTransaction(async (tx) => {
       const sessionData: SessionInsert = {
-        user_id: userId,
+        student_id: userId,
         topic,
+        session_data: {
+          topics_discussed: [],
+          student_questions: [],
+          ai_responses: [],
+          progress_markers: [],
+          difficulty_adjustments: [],
+        },
         status: 'active',
         started_at: new Date().toISOString(),
       };
@@ -316,7 +323,7 @@ export class SessionService extends BaseService<SessionServiceConfig> {
     const { data: sessions, error } = await this.supabase
       .from('learning_sessions')
       .select('*')
-      .eq('user_id', userId)
+      .eq('student_id', userId)
       .eq('status', 'active');
 
     if (error) {

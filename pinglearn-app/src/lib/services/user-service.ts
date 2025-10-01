@@ -31,9 +31,6 @@ export interface CreateUserData {
   id: string;
   email: string;
   full_name: string;
-  role: 'student' | 'dentist' | 'admin';
-  grade?: number;
-  school?: string;
 }
 
 /**
@@ -176,9 +173,6 @@ export class UserService extends BaseService<UserServiceConfig> {
       id: data.id,
       email: data.email,
       full_name: data.full_name,
-      role: data.role,
-      grade: data.grade,
-      school: data.school,
     };
 
     const { data: user, error } = await this.supabase
