@@ -219,19 +219,24 @@ export class DIContainer implements IDIContainer {
       throw new TokenNotFoundError(token);
     }
 
-    // Try to resolve from parent first (for scoped containers)
-    if (this.parent && this.parent.has(token) && !this.registrations.has(token)) {
-      return this.parent.resolve<T>(token);
+    // Get metadata from this container or parent
+    let metadata = this.registrations.get(token);
+    if (!metadata && this.parent) {
+      metadata = this.parent.registrations.get(token);
     }
 
-    const metadata = this.registrations.get(token) as RegistrationMetadata<T>;
+    if (!metadata) {
+      throw new TokenNotFoundError(token);
+    }
+
+    const typedMetadata = metadata as RegistrationMetadata<T>;
 
     try {
       // Use lifetime manager to resolve with caching
       return this.lifetimeManager.resolve(
         token,
-        metadata.registration,
-        () => this.createInstance<T>(token, metadata)
+        typedMetadata.registration,
+        () => this.createInstance<T>(token, typedMetadata)
       );
     } catch (error) {
       // Wrap errors in ResolutionError for consistent error handling
