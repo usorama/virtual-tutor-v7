@@ -220,7 +220,7 @@ export class ErrorBoundary extends Component<EnhancedErrorBoundaryProps, Enhance
     const enrichedError = enrichErrorForBoundary(
       error,
       errorCode,
-      errorInfo.componentStack,
+      errorInfo.componentStack ?? undefined,
       this.getUserContext()
     );
 
