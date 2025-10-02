@@ -122,7 +122,7 @@ export function TopicSelector({
 
                         return (
                           <div
-                            key={topic}
+                            key={`${subject}-${topic}`}
                             className={cn(
                               'flex items-center space-x-2 p-2 rounded-md transition-colors',
                               {
