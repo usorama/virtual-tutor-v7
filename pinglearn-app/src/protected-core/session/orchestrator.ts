@@ -12,6 +12,7 @@ import { getEventBus } from '@/lib/events/event-bus';
 import { getDisplayBuffer } from '../transcription/display/buffer';
 import { FeatureFlagService } from '../../shared/services/feature-flags';
 import type { VoiceConfig } from '../contracts/voice.contract';
+import type { LiveKitTranscriptionData, LiveKitTranscriptSegment } from '../contracts/livekit.types';
 // Import types for future use
 // import type { DisplayItem } from '../transcription/display/buffer';
 // import type { ProcessedText } from '../contracts/transcription.contract';
@@ -59,7 +60,7 @@ export class SessionOrchestrator {
   private messageCount = 0;
   private mathEquationCount = 0;
   private errorCount = 0;
-  private liveKitDataListener: any = null;
+  private liveKitDataListener: ((data: LiveKitTranscriptionData) => void) | null = null;
 
   private constructor() {
     this.wsManager = WebSocketManager.getInstance();
@@ -420,6 +421,7 @@ export class SessionOrchestrator {
    * FS-00-AB-1: Setup LiveKit data channel listener using event bus
    * This method is called from startSession() after successful LiveKit initialization
    * PC-016 Phase 3: Fixed to use centralized EventBus singleton (works with both client and server)
+   * P1.1 Batch 1: Fixed type safety - data parameter now properly typed
    */
   private setupLiveKitDataChannelListener(): void {
     console.log('[FS-00-AB-1] Setting up LiveKit data channel listener');
@@ -431,10 +433,11 @@ export class SessionOrchestrator {
       eventBus.off('livekit:transcript', this.liveKitDataListener);
     }
 
-    // Create new listener
-    this.liveKitDataListener = (data: any) => {
+    // Create new listener with proper types (P1.1 Fix)
+    this.liveKitDataListener = (data: LiveKitTranscriptionData) => {
       console.log('[FS-00-AB-1] ✅ Received transcript from LiveKit data channel');
 
+      // Type-safe validation
       if (!data.segments || !Array.isArray(data.segments)) {
         console.warn('[FS-00-AB-1] Invalid transcript data structure');
         return;
@@ -446,8 +449,8 @@ export class SessionOrchestrator {
         speaker: data.speaker || 'teacher'
       });
 
-      // Process each segment
-      data.segments.forEach((segment: any, index: number) => {
+      // Process each segment with proper typing (P1.1 Fix)
+      data.segments.forEach((segment: LiveKitTranscriptSegment, index: number) => {
         // Validate segment
         if (!segment.content) {
           console.warn('[FS-00-AB-1] Segment missing content');

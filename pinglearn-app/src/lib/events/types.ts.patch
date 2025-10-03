@@ -1,0 +1,26 @@
+73a74
+> // P1.1 Batch 1: Use protected-core type definitions for better type safety
+75,85c76,83
+< /**
+<  * LiveKit Transcript Event
+<  * PC-016: LiveKit data channel transcript payload
+<  */
+< export interface LiveKitTranscriptPayload {
+<   segments: Array<{
+<     type: 'text' | 'math';
+<     content: string;
+<     confidence?: number;
+<   }>;
+<   speaker: 'teacher' | 'student';
+<   timestamp?: number;
+< }
+---
+> // Import LiveKit types from protected-core (more complete than previous definition)
+> import type { LiveKitTranscriptionData } from '@/protected-core/contracts/livekit.types';
+> 
+> /**
+>  * LiveKit Transcript Event
+>  * PC-016: LiveKit data channel transcript payload
+>  * P1.1 Batch 1: Updated to use protected-core type definitions
+>  */
+> export type LiveKitTranscriptPayload = LiveKitTranscriptionData;

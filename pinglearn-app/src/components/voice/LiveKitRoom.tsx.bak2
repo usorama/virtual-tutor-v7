@@ -181,7 +181,6 @@ export function LiveKitRoom({
 
           // Emit event for SessionOrchestrator
           const eventData = {
-            type: 'transcript' as const,
             segments: data.segments,
             speaker: data.speaker || 'teacher',
             timestamp: Date.now(),

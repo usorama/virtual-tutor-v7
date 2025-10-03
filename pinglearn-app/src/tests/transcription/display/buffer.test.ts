@@ -4,6 +4,11 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+
+// Unmock the protected-core module for this test file
+// We want to test the ACTUAL DisplayBuffer implementation, not the mock
+vi.unmock('@/protected-core');
+
 import { DisplayBuffer, type DisplayItem } from '@/protected-core';
 
 describe('DisplayBuffer Deduplication', () => {

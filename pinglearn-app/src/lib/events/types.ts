@@ -1,3 +1,6 @@
+// P1.1 Batch 1: Import protected-core types for LiveKit
+import type { LiveKitTranscriptionData } from '@/protected-core/contracts/livekit.types';
+
 /**
  * Event System Type Definitions
  * ARCH-005: Event-driven architecture
@@ -73,16 +76,10 @@ export interface TranscriptionErrorPayload {
 /**
  * LiveKit Transcript Event
  * PC-016: LiveKit data channel transcript payload
+ * P1.1 Batch 1: Now uses protected-core type for consistency
  */
-export interface LiveKitTranscriptPayload {
-  segments: Array<{
-    type: 'text' | 'math';
-    content: string;
-    confidence?: number;
-  }>;
-  speaker: 'teacher' | 'student';
-  timestamp?: number;
-}
+export type LiveKitTranscriptPayload = LiveKitTranscriptionData;
+
 
 /**
  * Authentication Events
