@@ -32,6 +32,18 @@
 - Message bubble renders first (white bar), then text appears progressively
 - This is the ShowThenTell feature working as designed
 
+#### ✅ Issue #1: FIXED - Metadata Now Flows Correctly (Commit 03c908c)
+
+**Root Cause Found**: Python agent was reading `room.metadata` (empty) instead of `participant.metadata` (has session context)
+
+**Fix Applied**:
+- Reordered agent.py: connect → wait for participant → read metadata
+- Changed from `ctx.room.metadata` to `participant.metadata`
+- Frontend sets metadata via `AccessToken({ metadata })` → sets participant metadata
+- Agent now reads from correct source
+
+**Result**: ✅ AI teacher now introduces with correct subject (e.g., "English Language")
+
 #### ❌ Issue #3: STILL INVESTIGATING - No Transcripts in UI
 
 ### Python Agent Analysis
@@ -172,10 +184,17 @@ liveKitEventBus.emit('livekit:transcript', {
 
 | Issue | Status | Next Action |
 |-------|--------|-------------|
-| Metadata flow | ✅ FIXED | Test with user |
-| White bar | ✅ NOT A BUG | Document as feature |
-| No transcripts | ⚠️ INVESTIGATING | Add debug logs |
+| Metadata flow | ✅ FIXED (03c908c) | ✅ Verified - Teacher says "English" |
+| White bar | ✅ NOT A BUG | ShowThenTell feature (WordHighlighter) |
+| No transcripts | ⚠️ INVESTIGATING | Add LiveKitRoom debug logs |
 | Old polling code | ⚠️ TODO | Remove/migrate |
+
+**Latest Update (2025-10-03)**:
+- Metadata fix verified working - AI teacher now identifies correctly
+- User reports white bars still showing (empty transcript area)
+- Python agent sending transcripts (11 chunks confirmed in logs)
+- Frontend NOT receiving data - no LiveKitRoom logs appearing
+- Next: Add debug logs to LiveKitRoom data reception
 
 ## 🚀 Quick Fix Recommendations
 

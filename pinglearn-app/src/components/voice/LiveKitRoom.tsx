@@ -212,11 +212,20 @@ export function LiveKitRoom({
 
     // Handle data packets (transcriptions)
     const handleDataReceived = (payload: Uint8Array) => {
+      console.log('[DEBUG-TRANSCRIPT] Data packet received, size:', payload.length, 'bytes');
+
       try {
         const decoder = new TextDecoder();
-        const data = JSON.parse(decoder.decode(payload));
+        const rawData = decoder.decode(payload);
+        console.log('[DEBUG-TRANSCRIPT] Decoded data:', rawData);
+
+        const data = JSON.parse(rawData);
+        console.log('[DEBUG-TRANSCRIPT] Parsed data:', JSON.stringify(data));
 
         if (data.type === 'transcript') {
+          console.log('[DEBUG-TRANSCRIPT] ✅ Transcript type confirmed');
+          console.log('[DEBUG-TRANSCRIPT] Segments:', data.segments);
+          console.log('[DEBUG-TRANSCRIPT] Speaker:', data.speaker);
           console.log('[LiveKitRoom] Transcript received, emitting to SessionOrchestrator');
 
           // 🎯 SHOW-THEN-TELL TIMING MEASUREMENT: Record text arrival time
@@ -238,17 +247,24 @@ export function LiveKitRoom({
           }
 
           // Emit event for SessionOrchestrator
-          liveKitEventBus.emit('livekit:transcript', {
+          const eventData = {
             segments: data.segments,
             speaker: data.speaker || 'teacher',
             timestamp: Date.now(),
             showThenTell: data.showThenTell || false,
             audioDelay: data.audioDelay || 0,
             textTimestamp // Pass timing for further analysis
-          });
+          };
+
+          console.log('[DEBUG-TRANSCRIPT] Emitting to event bus:', JSON.stringify(eventData));
+          liveKitEventBus.emit('livekit:transcript', eventData);
+          console.log('[DEBUG-TRANSCRIPT] Event emitted successfully');
+        } else {
+          console.log('[DEBUG-TRANSCRIPT] ❌ Data type is not "transcript":', data.type);
         }
       } catch (error) {
-        console.error('[LiveKitRoom] Error processing data packet:', error);
+        console.error('[DEBUG-TRANSCRIPT] ❌ Error processing data packet:', error);
+        console.error('[DEBUG-TRANSCRIPT] Payload bytes:', Array.from(payload).slice(0, 100));
       }
     };
 
@@ -258,6 +274,8 @@ export function LiveKitRoom({
     room.on(RoomEvent.Disconnected, handleDisconnected);
     room.on(RoomEvent.ConnectionQualityChanged, handleConnectionQualityChanged);
     room.on(RoomEvent.DataReceived, handleDataReceived);
+
+    console.log('[DEBUG-TRANSCRIPT] Event listeners attached, DataReceived handler ready');
 
     return () => {
       room.off(RoomEvent.TrackSubscribed, handleTrackSubscribed);
