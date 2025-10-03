@@ -24,7 +24,11 @@
     "test:load:normal": "vitest run tests/load/scenarios/normal-load.test.ts",
     "test:load:peak": "vitest run tests/load/scenarios/peak-load.test.ts",
     "test:load:stress": "vitest run tests/load/scenarios/stress-load.test.ts",
-    "test:load:spike": "vitest run tests/load/scenarios/spike-load.test.ts"
+    "test:load:spike": "vitest run tests/load/scenarios/spike-load.test.ts",
+    "lint:oxlint": "oxlint --tsconfig tsconfig.json src/",
+    "lint:ci": "oxlint --tsconfig tsconfig.json --deny-warnings src/",
+    "verify:types": "npm run typecheck && npm run lint:oxlint",
+    "lint:oxlint:type-aware": "oxlint --tsconfig tsconfig.json --type-aware src/"
   },
   "dependencies": {
     "@google/genai": "^1.21.0",

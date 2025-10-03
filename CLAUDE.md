@@ -184,6 +184,39 @@ tests/features/   # ✅ Feature tests
 
 ---
 
+## 🔒 TYPE SAFETY STANDARDS
+
+**COMPREHENSIVE DOCUMENTATION**: `~/.claude/type-safety-standards.md`
+
+**MANDATORY READING** for all TypeScript work. This document defines:
+- ❌ Forbidden patterns (explicit 'any', unsafe assertions, @ts-ignore)
+- ✅ Required patterns (Zod validation, type guards, explicit returns)
+- 📂 Type definition locations and organization
+- 🎯 Conversion priorities when fixing 'any' types
+- 🔒 Runtime validation requirements (APIs, user input, env vars)
+- 🧪 Compiler requirements and validation workflow
+- 📊 Measurement commands and tracking
+- 🚦 CI/CD quality gates
+
+**Quick Reference**:
+```bash
+# View full documentation
+cat ~/.claude/type-safety-standards.md
+
+# Enforce type-strict mode
+claude --type-strict [your task]
+```
+
+**Current Status** (PingLearn):
+- Baseline: 166 'any' types → Target: 0
+- Type Coverage: 97.25% → Target: 99%+
+- Protected Core: ✅ 0 'any' types (maintained)
+- Initiative Files: `pinglearn-app/.type-safety-initiative/`
+
+**All agents MUST read and follow the type safety standards when working with TypeScript.**
+
+---
+
 ## 📋 APPENDIX
 
 ### Testing Credentials
