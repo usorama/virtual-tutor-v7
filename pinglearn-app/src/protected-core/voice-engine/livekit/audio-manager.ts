@@ -6,6 +6,14 @@
 import { Room, RoomEvent, Track, LocalAudioTrack, RemoteAudioTrack, ConnectionQuality } from 'livekit-client';
 import { AudioStats } from '../../../types/livekit';
 
+/**
+ * Browser API extension for webkit AudioContext
+ * Required for Safari and older browsers
+ */
+interface WindowWithWebkit extends Window {
+  webkitAudioContext?: typeof AudioContext;
+}
+
 export interface AudioConfig {
   echoCancellation?: boolean;
   noiseSuppression?: boolean;
@@ -51,9 +59,12 @@ export class AudioStreamManager {
     
     // Initialize Web Audio API
     if (typeof window !== 'undefined') {
-      this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-      this.analyser = this.audioContext.createAnalyser();
-      this.analyser.fftSize = 256;
+      const AudioContextClass = window.AudioContext || (window as WindowWithWebkit).webkitAudioContext;
+      if (AudioContextClass) {
+        this.audioContext = new AudioContextClass();
+        this.analyser = this.audioContext.createAnalyser();
+        this.analyser.fftSize = 256;
+      }
     }
   }
   

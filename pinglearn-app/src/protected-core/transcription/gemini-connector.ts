@@ -33,19 +33,25 @@ export class GeminiTranscriptionConnector {
   private eventHandlers: Map<string, Array<(event: TranscriptionEvent) => void>> = new Map();
   private transcriptionBuffer: TranscriptionSegment[] = [];
   private currentSegmentId = 0;
+  private handleGeminiTranscription: (event: GeminiEvents['transcription']) => void;
+
+  constructor() {
+    // Initialize with default no-op handler
+    this.handleGeminiTranscription = this.processGeminiTranscription.bind(this);
+  }
 
   /**
    * Connect to Gemini transcription events
    */
   connect(onTranscription: (event: GeminiEvents['transcription']) => void): void {
     // This will be called by the Gemini service
-    this.handleGeminiTranscription = onTranscription as any;
+    this.handleGeminiTranscription = onTranscription;
   }
 
   /**
    * Handle incoming transcription from Gemini
    */
-  private handleGeminiTranscription(event: GeminiEvents['transcription']): void {
+  private processGeminiTranscription(event: GeminiEvents['transcription']): void {
     // Parse the transcription data
     const parsed = this.parseTranscriptionData(event);
 
