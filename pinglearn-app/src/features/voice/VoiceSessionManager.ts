@@ -125,7 +125,9 @@ export class VoiceSessionManager {
       const learningSessionId = `temp_${Date.now()}_${config.studentId}`;
 
       // Generate unique room name
-      const roomName = `voice-${learningSessionId}-${Date.now()}`;
+      // CRITICAL FIX: Use 'session_*' prefix to trigger LiveKit Cloud agent dispatch
+      // LiveKit agents are configured to only activate for rooms starting with 'session_'
+      const roomName = `session_voice_${learningSessionId}`;
 
       // First, create a proper learning session in the database
       const { data: learningSession, error: learningSessionError } = await this.supabase

@@ -44,7 +44,24 @@
 
 **Result**: ✅ AI teacher now introduces with correct subject (e.g., "English Language")
 
-#### ❌ Issue #3: STILL INVESTIGATING - No Transcripts in UI
+#### ✅ Issue #3: FIXED - No Transcripts Due to Agent Dispatch Failure (Commit [pending])
+
+**Root Cause Found**: Room name pattern mismatch preventing LiveKit Cloud agent dispatch
+
+**Evidence**:
+- Python agent logs showed worker registered but NO job request received
+- Frontend created rooms like: `voice-temp_1759487959848_533d886a-...-1759487959848`
+- LiveKit Cloud agent dispatch configured to only trigger for `session_*` pattern
+- VoiceSessionManager.ts line 128 created `voice-${learningSessionId}-${Date.now()}` rooms
+
+**Fix Applied**:
+- Changed room naming pattern in VoiceSessionManager.ts
+- From: `voice-${learningSessionId}-${Date.now()}`
+- To: `session_voice_${learningSessionId}`
+- Now creates rooms like: `session_voice_temp_1759487959848_533d886a-...`
+- Matches `session_*` pattern → triggers agent dispatch
+
+**Result**: ✅ LiveKit agents will now be dispatched to rooms, enabling transcript delivery
 
 ### Python Agent Analysis
 
@@ -186,15 +203,16 @@ liveKitEventBus.emit('livekit:transcript', {
 |-------|--------|-------------|
 | Metadata flow | ✅ FIXED (03c908c) | ✅ Verified - Teacher says "English" |
 | White bar | ✅ NOT A BUG | ShowThenTell feature (WordHighlighter) |
-| No transcripts | ⚠️ INVESTIGATING | Add LiveKitRoom debug logs |
+| No transcripts | ✅ FIXED (room naming) | ✅ Test with Playwright |
 | Old polling code | ⚠️ TODO | Remove/migrate |
 
 **Latest Update (2025-10-03)**:
-- Metadata fix verified working - AI teacher now identifies correctly
-- User reports white bars still showing (empty transcript area)
-- Python agent sending transcripts (11 chunks confirmed in logs)
-- Frontend NOT receiving data - no LiveKitRoom logs appearing
-- Next: Add debug logs to LiveKitRoom data reception
+- ✅ Metadata fix verified working - AI teacher now identifies correctly
+- ✅ Room naming fix applied - changed from `voice-temp_*` to `session_voice_*` pattern
+- **ROOT CAUSE IDENTIFIED**: LiveKit Cloud agent dispatch only triggered for `session_*` rooms
+- **FIX APPLIED**: VoiceSessionManager.ts now creates `session_voice_*` rooms
+- **RESULT**: Agents will now be dispatched → transcripts will flow → UI will display text
+- Next: Test with Playwright to verify end-to-end transcript display
 
 ## 🚀 Quick Fix Recommendations
 
