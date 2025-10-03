@@ -379,27 +379,21 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
     switch (item.type) {
       case 'heading':
         return (
-          <h2 className={`text-2xl font-bold mb-4 text-primary overflow-wrap-anywhere word-break-break-word max-w-full ${
-            isCurrentlySpoken ? 'bg-blue-50 dark:bg-blue-950/50 px-3 py-2 rounded-lg' : ''
-          }`}>
+          <h2 className="text-2xl font-bold mb-4 text-primary overflow-wrap-anywhere word-break-break-word max-w-full">
             {item.content}
           </h2>
         );
 
       case 'text':
         return (
-          <p className={`text-base leading-relaxed mb-3 overflow-wrap-anywhere word-break-break-word hyphens-auto max-w-full ${
-            isCurrentlySpoken ? 'bg-blue-50 dark:bg-blue-950/50 px-3 py-2 rounded-lg' : ''
-          }`}>
+          <p className="text-base leading-relaxed mb-3 overflow-wrap-anywhere word-break-break-word hyphens-auto max-w-full">
             {item.content}
           </p>
         );
 
       case 'math':
         return (
-          <div className={`my-4 py-4 px-6 overflow-x-auto overflow-y-hidden max-w-full ${
-            isCurrentlySpoken ? 'bg-blue-50 dark:bg-blue-950/50 rounded-lg' : ''
-          }`}>
+          <div className="my-4 py-4 px-6 overflow-x-auto overflow-y-hidden max-w-full">
             <div
               className="katex-display text-center text-lg min-w-0"
               dangerouslySetInnerHTML={{ __html: renderMath(item.content) }}
@@ -409,9 +403,7 @@ export function TeachingBoardSimple({ sessionId, topic, className = '' }: Teachi
 
       case 'step':
         return (
-          <div className={`flex items-start space-x-3 mb-3 ${
-            isCurrentlySpoken ? 'bg-green-50 dark:bg-green-950/50 px-3 py-2 rounded-lg' : ''
-          }`}>
+          <div className="flex items-start space-x-3 mb-3">
             <span className="text-green-600 font-bold">•</span>
             <p className="text-base overflow-wrap-anywhere word-break-break-word max-w-full">{item.content}</p>
           </div>
