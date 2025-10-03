@@ -18,77 +18,80 @@ export function ChatInterface({ sessionId, className = '' }: ChatInterfaceProps)
   const [error, setError] = useState<string | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const displayBufferRef = useRef<DisplayBuffer | null>(null);
-  const lastItemCountRef = useRef<number>(0);
 
-  // Check for updates from DisplayBuffer
-  const checkForUpdates = useCallback(() => {
-    try {
-      if (!displayBufferRef.current) {
-        setError('Display buffer not initialized');
-        return;
+  // PC-015: Process buffer items with subscription callback
+  const processBufferItems = useCallback((items: DisplayItem[]) => {
+    // Filter for teacher/AI and student messages
+    const chatMessages = items.filter(item =>
+      item.speaker === 'teacher' ||
+      item.speaker === 'student'
+    );
+
+    setMessages(chatMessages);
+    setError(null);
+    setIsLoading(false);
+
+    // Auto scroll to bottom
+    if (scrollAreaRef.current && chatMessages.length > 0) {
+      const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (scrollContainer) {
+        setTimeout(() => {
+          scrollContainer.scrollTo({
+            top: scrollContainer.scrollHeight,
+            behavior: 'smooth'
+          });
+        }, 100);
       }
-
-      const items = displayBufferRef.current.getItems() as DisplayItem[];
-      const currentItemCount = items.length;
-
-      if (currentItemCount !== lastItemCountRef.current) {
-        // Filter for teacher/AI messages only
-        const teacherMessages = items.filter(item =>
-          item.speaker === 'teacher' ||
-          item.speaker === 'student'
-        );
-
-        setMessages(teacherMessages);
-        lastItemCountRef.current = currentItemCount;
-        setError(null);
-        setIsLoading(false);
-
-        // Auto scroll to bottom
-        if (scrollAreaRef.current && teacherMessages.length > 0) {
-          const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
-          if (scrollContainer) {
-            setTimeout(() => {
-              scrollContainer.scrollTo({
-                top: scrollContainer.scrollHeight,
-                behavior: 'smooth'
-              });
-            }, 100);
-          }
-        }
-      }
-    } catch (err) {
-      console.error('Error updating chat interface:', err);
-      setError('Failed to update chat interface');
-      setIsLoading(false);
     }
   }, []);
 
-  // Initialize display buffer and set up polling
+  // PC-015: Initialize display buffer with reactive subscription (no polling)
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsLoading(true);
+    if (typeof window === 'undefined') return;
 
-      import('@/protected-core').then(({ getDisplayBuffer }) => {
+    let unsubscribe: (() => void) | null = null;
+
+    setIsLoading(true);
+    console.log('[ChatInterface] Initializing display buffer subscription');
+
+    import('@/protected-core')
+      .then(({ getDisplayBuffer }) => {
         try {
-          displayBufferRef.current = getDisplayBuffer();
+          const displayBuffer = getDisplayBuffer();
+          displayBufferRef.current = displayBuffer;
 
-          // Initial check
-          checkForUpdates();
+          // Get initial items
+          const initialItems = displayBuffer.getItems() as DisplayItem[];
+          console.log('[ChatInterface] Initial items:', initialItems.length);
+          processBufferItems(initialItems);
 
-          // Poll for updates (100ms for smooth streaming as per FC-002 spec)
-          const updateInterval = setInterval(checkForUpdates, 100);
+          // PC-015: Subscribe to future updates (reactive, no polling)
+          unsubscribe = displayBuffer.subscribe((items) => {
+            console.log('[ChatInterface] Buffer update received:', items.length, 'items');
+            processBufferItems(items as DisplayItem[]);
+          });
 
-          return () => {
-            clearInterval(updateInterval);
-          };
+          console.log('[ChatInterface] Successfully subscribed to display buffer');
         } catch (err) {
-          console.error('Failed to initialize display buffer:', err);
+          console.error('[ChatInterface] Failed to initialize display buffer:', err);
           setError('Failed to initialize chat');
           setIsLoading(false);
         }
+      })
+      .catch(err => {
+        console.error('[ChatInterface] Failed to import protected-core:', err);
+        setError('Failed to load chat module');
+        setIsLoading(false);
       });
-    }
-  }, [sessionId, checkForUpdates]);
+
+    // PC-015: Cleanup subscription (no setInterval to clear)
+    return () => {
+      console.log('[ChatInterface] Cleaning up subscription');
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, [processBufferItems, sessionId]);
 
   return (
     <div className={`h-full bg-background flex flex-col ${className}`}>

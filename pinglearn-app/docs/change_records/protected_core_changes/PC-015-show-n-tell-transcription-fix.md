@@ -23,8 +23,8 @@ CHECKPOINT: Safety rollback point before implementing PC-015
 🚨 This commit serves as the rollback point for PC-015"
 ```
 
-**Checkpoint Hash**: [To be filled after commit]
-**Rollback Command**: `git reset --hard [checkpoint-hash]`
+**Checkpoint Hash**: `2e399b8`
+**Rollback Command**: `git reset --hard 2e399b8`
 
 ---
 

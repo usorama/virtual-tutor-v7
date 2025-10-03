@@ -16,82 +16,82 @@ export function useStreamingTranscript(sessionId?: string): UseStreamingTranscri
 
   // Refs for tracking state
   const displayBufferRef = useRef<any>(null);
-  const lastProcessedRef = useRef<number>(0);
-  const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const processDisplayBuffer = useCallback(() => {
-    try {
-      if (!displayBufferRef.current) {
-        return;
-      }
-
-      const items = displayBufferRef.current.getItems() as DisplayItem[];
-
-      if (items.length === 0) {
-        setMessages([]);
-        setStreamingContent(null);
-        return;
-      }
-
-      // Check if last item is still streaming (less than 500ms old)
-      const lastItem = items[items.length - 1];
-      const isStreaming = Date.now() - lastItem.timestamp < 500;
-
-      if (isStreaming && items.length > 0) {
-        // Set as streaming content, exclude from completed messages
-        setStreamingContent(lastItem);
-        setMessages(items.slice(0, -1));
-      } else {
-        // All messages are complete
-        setStreamingContent(null);
-        setMessages(items);
-      }
-
-      lastProcessedRef.current = items.length;
+  // PC-015: Process buffer items with subscription callback
+  const processDisplayBuffer = useCallback((items: DisplayItem[]) => {
+    if (items.length === 0) {
+      setMessages([]);
+      setStreamingContent(null);
       setError(null);
       setIsLoading(false);
-    } catch (err) {
-      console.error('Error processing display buffer:', err);
-      setError('Failed to process transcription data');
-      setIsLoading(false);
+      return;
     }
+
+    // Check if last item is still streaming (less than 500ms old)
+    const lastItem = items[items.length - 1];
+    const isStreaming = Date.now() - lastItem.timestamp < 500;
+
+    if (isStreaming && items.length > 0) {
+      // Set as streaming content, exclude from completed messages
+      setStreamingContent(lastItem);
+      setMessages(items.slice(0, -1));
+    } else {
+      // All messages are complete
+      setStreamingContent(null);
+      setMessages(items);
+    }
+
+    setError(null);
+    setIsLoading(false);
   }, []);
 
+  // PC-015: Initialize display buffer with reactive subscription (no polling)
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsLoading(true);
+    if (typeof window === 'undefined') return;
 
-      // Dynamic import to avoid SSR issues
-      import('@/protected-core').then(({ getDisplayBuffer }) => {
+    let unsubscribe: (() => void) | null = null;
+
+    setIsLoading(true);
+    console.log('[useStreamingTranscript] Initializing display buffer subscription');
+
+    import('@/protected-core')
+      .then(({ getDisplayBuffer }) => {
         try {
-          displayBufferRef.current = getDisplayBuffer();
+          const displayBuffer = getDisplayBuffer();
+          displayBufferRef.current = displayBuffer;
 
-          // Process immediately
-          processDisplayBuffer();
+          // Get initial items
+          const initialItems = displayBuffer.getItems() as DisplayItem[];
+          console.log('[useStreamingTranscript] Initial items:', initialItems.length);
+          processDisplayBuffer(initialItems);
 
-          // Set up polling interval for real-time updates
-          pollIntervalRef.current = setInterval(processDisplayBuffer, 100);
+          // PC-015: Subscribe to future updates (reactive, no polling)
+          unsubscribe = displayBuffer.subscribe((items) => {
+            console.log('[useStreamingTranscript] Buffer update received:', items.length, 'items');
+            processDisplayBuffer(items as DisplayItem[]);
+          });
 
+          console.log('[useStreamingTranscript] Successfully subscribed to display buffer');
         } catch (err) {
-          console.error('Failed to initialize display buffer:', err);
+          console.error('[useStreamingTranscript] Failed to initialize display buffer:', err);
           setError('Failed to connect to transcription service');
           setIsLoading(false);
         }
-      }).catch((err) => {
-        console.error('Failed to import protected core:', err);
+      })
+      .catch((err) => {
+        console.error('[useStreamingTranscript] Failed to import protected core:', err);
         setError('Failed to load transcription service');
         setIsLoading(false);
       });
-    }
 
-    // Cleanup function
+    // PC-015: Cleanup subscription (no setInterval to clear)
     return () => {
-      if (pollIntervalRef.current) {
-        clearInterval(pollIntervalRef.current);
-        pollIntervalRef.current = null;
+      console.log('[useStreamingTranscript] Cleaning up subscription');
+      if (unsubscribe) {
+        unsubscribe();
       }
     };
-  }, [sessionId, processDisplayBuffer]);
+  }, [processDisplayBuffer, sessionId]);
 
   return {
     messages,

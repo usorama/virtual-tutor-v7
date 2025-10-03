@@ -38,13 +38,25 @@ logger = logging.getLogger(__name__)
 # Gemini API configuration
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "AIzaSyAdkzyMQTYBbf5dPkW7UOxXHb9rnTLxWoY")
 
-# System prompt for the AI Tutor
-TUTOR_SYSTEM_PROMPT = """
-You are a friendly and patient NCERT mathematics tutor for Class 10 students in India.
+# PC-015: Dynamic tutor prompt based on user preferences
+def create_tutor_prompt(grade: str, subject: str, topic: str) -> str:
+    """
+    Generate dynamic system prompt based on student's grade, subject, and topic selection.
+
+    Args:
+        grade: Student's grade level (e.g., "Grade 10", "Grade 12")
+        subject: Subject area (e.g., "Mathematics", "English Language", "NABH")
+        topic: Specific topic or chapter (e.g., "Quadratic Equations")
+
+    Returns:
+        Customized system prompt for the AI tutor
+    """
+    return f"""
+You are a friendly and patient NCERT tutor for {grade} students in India, specializing in {subject}.
 
 Your teaching approach:
-- Use simple, clear explanations suitable for 10th grade students
-- Reference specific NCERT Class X Mathematics textbook examples
+- Use simple, clear explanations suitable for {grade} level students
+- Reference specific NCERT {grade} {subject} textbook examples when applicable
 - Encourage and motivate students when they make progress
 - Ask clarifying questions to check understanding
 - Break down complex problems into smaller steps
@@ -52,27 +64,13 @@ Your teaching approach:
 - Be patient with mistakes and use them as learning opportunities
 
 Important guidelines:
-- Stay focused on Class 10 Mathematics topics only
-- Keep responses concise and age-appropriate
+- Stay focused on {subject} topics, especially {topic}
+- Keep responses concise and age-appropriate for {grade} students
 - If asked about non-educational topics, politely redirect to learning
 - Speak naturally and conversationally, as if tutoring in person
 - Use encouraging phrases like "Great question!" or "You're on the right track!"
 
-You have access to the complete NCERT Class X Mathematics textbook content including:
-- Real Numbers
-- Polynomials
-- Pair of Linear Equations in Two Variables
-- Quadratic Equations
-- Arithmetic Progressions
-- Triangles
-- Coordinate Geometry
-- Introduction to Trigonometry
-- Applications of Trigonometry
-- Circles
-- Areas Related to Circles
-- Surface Areas and Volumes
-- Statistics
-- Probability
+Current session focus: {topic} from {grade} {subject}
 
 Remember to make learning enjoyable and build the student's confidence!
 """
@@ -442,9 +440,27 @@ async def entrypoint(ctx: JobContext):
 
     logger.info(f"Agent started for room: {ctx.room.name}")
 
-    # Create agent with system instructions
+    # PC-015: Read session metadata for dynamic prompts
+    session_metadata = {}
+    if ctx.room.metadata:
+        try:
+            session_metadata = json.loads(ctx.room.metadata)
+            logger.info(f"[METADATA] Loaded session context: {session_metadata}")
+        except json.JSONDecodeError:
+            logger.warning(f"[METADATA] Failed to parse room metadata: {ctx.room.metadata}")
+
+    # PC-015: Extract preferences from metadata (with fallbacks)
+    topic = session_metadata.get('topic', 'General Learning')
+    subject = session_metadata.get('subject', 'General Studies')
+    grade = session_metadata.get('grade', 'Grade 10')
+
+    # PC-015: Generate dynamic system prompt based on user preferences
+    dynamic_prompt = create_tutor_prompt(grade, subject, topic)
+    logger.info(f"[PC-015] Using dynamic prompt: {grade} {subject} - {topic}")
+
+    # Create agent with dynamic system instructions
     agent = Agent(
-        instructions=TUTOR_SYSTEM_PROMPT,
+        instructions=dynamic_prompt,
     )
 
     # Configure the session with Gemini Live API (using dual-stream processing)
@@ -453,7 +469,7 @@ async def entrypoint(ctx: JobContext):
             model="gemini-2.0-flash-exp",
             voice="Kore",  # Female English voice
             temperature=0.8,
-            instructions=TUTOR_SYSTEM_PROMPT,
+            instructions=dynamic_prompt,  # PC-015: Use dynamic prompt
             # Note: Real-time output transcription will use dual-stream processing
         ),
         # Voice Activity Detection
@@ -587,10 +603,10 @@ async def entrypoint(ctx: JobContext):
     # Send proactive greeting after session starts
     await asyncio.sleep(1.5)  # Brief pause to ensure connection is stable
 
-    # Generate proactive greeting using the session
-    greeting_instructions = """Greet the student warmly and welcome them to today's mathematics session.
-    Introduce yourself as their AI mathematics teacher.
-    Ask them what specific topic from their Class 10 Mathematics curriculum they'd like to explore today.
+    # PC-015: Generate dynamic greeting based on user preferences
+    greeting_instructions = f"""Greet the student warmly and welcome them to today's {subject} session.
+    Introduce yourself as their AI {subject} teacher for {grade}.
+    Mention that you're ready to help them with {topic}.
     Be encouraging and enthusiastic about learning together."""
 
     await session.generate_reply(instructions=greeting_instructions)

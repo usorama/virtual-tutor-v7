@@ -25,57 +25,71 @@ export function TranscriptSimple({ sessionId, className = '' }: TranscriptSimple
   const [isLoading, setIsLoading] = useState(true);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const displayBufferRef = useRef<DisplayBuffer | null>(null);
-  const lastItemCountRef = useRef<number>(0);
 
-  // Check for updates
-  const checkForUpdates = useCallback(() => {
-    try {
-      if (!displayBufferRef.current) return;
+  // PC-015: Process buffer items with subscription callback
+  const processBufferItems = useCallback((allItems: DisplayItem[]) => {
+    setItems(allItems);
+    setIsLoading(false);
 
-      const allItems = displayBufferRef.current.getItems();
-      const currentCount = allItems.length;
-
-      if (currentCount !== lastItemCountRef.current) {
-        setItems(allItems);
-        lastItemCountRef.current = currentCount;
-        setIsLoading(false);
-
-        // Auto scroll to bottom
-        if (scrollAreaRef.current) {
-          const container = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
-          if (container) {
-            setTimeout(() => {
-              container.scrollTo({
-                top: container.scrollHeight,
-                behavior: 'smooth'
-              });
-            }, 100);
-          }
-        }
+    // Auto scroll to bottom
+    if (scrollAreaRef.current) {
+      const container = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (container) {
+        setTimeout(() => {
+          container.scrollTo({
+            top: container.scrollHeight,
+            behavior: 'smooth'
+          });
+        }, 100);
       }
-    } catch (err) {
-      console.error('Error updating transcript:', err);
-      setIsLoading(false);
     }
   }, []);
 
-  // Initialize display buffer
+  // PC-015: Initialize display buffer with reactive subscription (no polling)
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsLoading(true);
-      import('@/protected-core').then(({ getDisplayBuffer }) => {
+    if (typeof window === 'undefined') return;
+
+    let unsubscribe: (() => void) | null = null;
+
+    setIsLoading(true);
+    console.log('[TranscriptSimple] Initializing display buffer subscription');
+
+    import('@/protected-core')
+      .then(({ getDisplayBuffer }) => {
         try {
-          displayBufferRef.current = getDisplayBuffer();
-          checkForUpdates();
-          const interval = setInterval(checkForUpdates, 250);
-          return () => clearInterval(interval);
+          const displayBuffer = getDisplayBuffer();
+          displayBufferRef.current = displayBuffer;
+
+          // Get initial items
+          const initialItems = displayBuffer.getItems() as DisplayItem[];
+          console.log('[TranscriptSimple] Initial items:', initialItems.length);
+          processBufferItems(initialItems);
+
+          // PC-015: Subscribe to future updates (reactive, no polling)
+          unsubscribe = displayBuffer.subscribe((items) => {
+            console.log('[TranscriptSimple] Buffer update received:', items.length, 'items');
+            processBufferItems(items as DisplayItem[]);
+          });
+
+          console.log('[TranscriptSimple] Successfully subscribed to display buffer');
         } catch (err) {
-          console.error('Failed to initialize display buffer:', err);
+          console.error('[TranscriptSimple] Failed to initialize display buffer:', err);
           setIsLoading(false);
         }
+      })
+      .catch(err => {
+        console.error('[TranscriptSimple] Failed to import protected-core:', err);
+        setIsLoading(false);
       });
-    }
-  }, [sessionId, checkForUpdates]);
+
+    // PC-015: Cleanup subscription (no setInterval to clear)
+    return () => {
+      console.log('[TranscriptSimple] Cleaning up subscription');
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, [processBufferItems, sessionId]);
 
   // Format time
   const formatTime = (timestamp: number) => {

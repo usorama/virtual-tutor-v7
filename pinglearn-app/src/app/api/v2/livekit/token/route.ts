@@ -11,7 +11,8 @@ import { withVoiceRateLimit } from '@/lib/rate-limit/voice-rate-limit';
  */
 async function handlePOST(request: NextRequest) {
   try {
-    const { participantId, sessionId, roomName, participantName } = await request.json();
+    // PC-015: Accept metadata parameter for session context
+    const { participantId, sessionId, roomName, participantName, metadata } = await request.json();
 
     if (!participantId || !roomName) {
       return NextResponse.json(
@@ -27,10 +28,11 @@ async function handlePOST(request: NextRequest) {
       throw new Error('LiveKit credentials not configured');
     }
 
-    // Create access token
+    // PC-015: Create access token with session metadata
     const at = new AccessToken(apiKey, apiSecret, {
       identity: participantId,
       name: participantName || participantId,
+      metadata: metadata ? JSON.stringify(metadata) : undefined, // PC-015: Pass session context to agent
     });
 
     // Grant room permissions

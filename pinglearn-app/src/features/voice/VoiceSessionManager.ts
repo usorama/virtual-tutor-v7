@@ -237,6 +237,13 @@ export class VoiceSessionManager {
 
       await this.updateSessionStatus('active');
 
+      // PC-015: Prepare session metadata for Python agent
+      const sessionMetadata = {
+        topic: this.currentConfig.topic,
+        subject: this.extractSubject(this.currentConfig.topic),
+        grade: this.extractGrade(this.currentConfig.topic),
+      };
+
       // Notify Python agent about new session via webhook
       await fetch('/api/session/start', {
         method: 'POST',
@@ -245,7 +252,8 @@ export class VoiceSessionManager {
           sessionId: this.currentSession.sessionId,
           roomName: this.currentSession.livekitRoomName,
           studentId: this.currentConfig.studentId,
-          topic: this.currentConfig.topic
+          topic: this.currentConfig.topic,
+          metadata: sessionMetadata, // PC-015: Include session context
         })
       });
 
@@ -508,6 +516,55 @@ export class VoiceSessionManager {
   }
 
   // Private methods
+
+  /**
+   * PC-015: Extract subject from topic string based on curriculum mappings
+   */
+  private extractSubject(topic: string): string {
+    const topicLower = topic.toLowerCase();
+
+    // Mathematics indicators
+    if (topicLower.includes('quadratic') ||
+        topicLower.includes('algebra') ||
+        topicLower.includes('geometry') ||
+        topicLower.includes('trigonometry') ||
+        topicLower.includes('calculus') ||
+        topicLower.includes('equation') ||
+        topicLower.includes('polynomial') ||
+        topicLower.includes('arithmetic')) {
+      return 'Mathematics';
+    }
+
+    // Science indicators
+    if (topicLower.includes('physics') ||
+        topicLower.includes('chemistry') ||
+        topicLower.includes('biology') ||
+        topicLower.includes('science')) {
+      return 'Science';
+    }
+
+    // English indicators
+    if (topicLower.includes('grammar') ||
+        topicLower.includes('literature') ||
+        topicLower.includes('poetry') ||
+        topicLower.includes('writing') ||
+        topicLower.includes('comprehension')) {
+      return 'English Language';
+    }
+
+    // Default fallback
+    return 'General Studies';
+  }
+
+  /**
+   * PC-015: Extract grade from topic string or use default
+   * In production, this should be passed explicitly from wizard
+   */
+  private extractGrade(topic: string): string {
+    // This could be enhanced to parse grade from topic string
+    // For now, return default - will be replaced by explicit grade selection in wizard
+    return 'Grade 10';
+  }
 
   private setupEventListeners(): void {
     // Listen to SessionOrchestrator events for state synchronization
