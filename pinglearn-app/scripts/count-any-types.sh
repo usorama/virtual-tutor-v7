@@ -1,6 +1,6 @@
 #!/bin/bash
 # Count 'any' type violations in PingLearn codebase
-# Version: 1.0
+# Version: 1.1 - Excludes documentation files
 # Date: 2025-10-03
 
 # Colors for output
@@ -18,17 +18,32 @@ echo ""
 BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$BASE_DIR" || exit 1
 
-echo -e "${YELLOW}Searching in: $BASE_DIR/src${NC}"
+echo -e "${YELLOW}Searching in: $BASE_DIR/src (excluding docs, scripts)${NC}"
 echo ""
 
-# Count explicit ': any' declarations
-EXPLICIT_COUNT=$(grep -rn ": any" src/ --include="*.ts" --include="*.tsx" 2>/dev/null | grep -v "// " | grep -v "/\*" | wc -l | tr -d ' ')
+# Count explicit ': any' declarations (exclude documentation and markdown files)
+EXPLICIT_COUNT=$(grep -rn ": any" src/ --include="*.ts" --include="*.tsx" --exclude-dir=node_modules 2>/dev/null | \
+  grep -v ".md:" | \
+  grep -v ".json:" | \
+  grep -v "// " | \
+  grep -v "/\*" | \
+  wc -l | tr -d ' ')
 
-# Count type assertions 'as any'
-ASSERTION_COUNT=$(grep -rn "as any" src/ --include="*.ts" --include="*.tsx" 2>/dev/null | grep -v "// " | grep -v "/\*" | wc -l | tr -d ' ')
+# Count type assertions 'as any' (exclude documentation)
+ASSERTION_COUNT=$(grep -rn "as any" src/ --include="*.ts" --include="*.tsx" --exclude-dir=node_modules 2>/dev/null | \
+  grep -v ".md:" | \
+  grep -v ".json:" | \
+  grep -v "// " | \
+  grep -v "/\*" | \
+  wc -l | tr -d ' ')
 
-# Count generic types with any (simplified)
-GENERIC_COUNT=$(grep -rn "Promise<any>\|Array<any>\|Record<.*any" src/ --include="*.ts" --include="*.tsx" 2>/dev/null | grep -v "// " | grep -v "/\*" | wc -l | tr -d ' ')
+# Count generic types with any (exclude documentation)
+GENERIC_COUNT=$(grep -rn "Promise<any>\|Array<any>\|Record<.*any" src/ --include="*.ts" --include="*.tsx" --exclude-dir=node_modules 2>/dev/null | \
+  grep -v ".md:" | \
+  grep -v ".json:" | \
+  grep -v "// " | \
+  grep -v "/\*" | \
+  wc -l | tr -d ' ')
 
 # Calculate total
 TOTAL_COUNT=$((EXPLICIT_COUNT + ASSERTION_COUNT + GENERIC_COUNT))
@@ -43,7 +58,12 @@ echo -e "  ${RED}TOTAL VIOLATIONS      : $TOTAL_COUNT${NC}"
 echo ""
 
 # Check protected-core violations
-PROTECTED_CORE_COUNT=$(grep -rn ": any\|as any" src/protected-core/ --include="*.ts" --include="*.tsx" 2>/dev/null | grep -v "// " | grep -v "/\*" | wc -l | tr -d ' ')
+PROTECTED_CORE_COUNT=$(grep -rn ": any\|as any" src/protected-core/ --include="*.ts" --include="*.tsx" 2>/dev/null | \
+  grep -v ".md:" | \
+  grep -v ".json:" | \
+  grep -v "// " | \
+  grep -v "/\*" | \
+  wc -l | tr -d ' ')
 
 echo -e "${YELLOW}Protected Core Violations:${NC}"
 if [ "$PROTECTED_CORE_COUNT" -eq 0 ]; then
@@ -54,7 +74,12 @@ fi
 echo ""
 
 # Check test files
-TEST_COUNT=$(grep -rn ": any\|as any" src/ --include="*.test.ts" --include="*.spec.ts" 2>/dev/null | grep -v "// " | grep -v "/\*" | wc -l | tr -d ' ')
+TEST_COUNT=$(grep -rn ": any\|as any" src/ --include="*.test.ts" --include="*.spec.ts" 2>/dev/null | \
+  grep -v ".md:" | \
+  grep -v ".json:" | \
+  grep -v "// " | \
+  grep -v "/\*" | \
+  wc -l | tr -d ' ')
 PRODUCTION_COUNT=$((TOTAL_COUNT - TEST_COUNT))
 
 echo -e "${YELLOW}Production vs Test:${NC}"
@@ -65,10 +90,14 @@ echo ""
 # Goal tracking
 GOAL=0
 REMAINING=$((TOTAL_COUNT - GOAL))
-PERCENTAGE_COMPLETE=$(awk "BEGIN {printf \"%.1f\", (1 - $TOTAL_COUNT/345) * 100}")
+if [ "$TOTAL_COUNT" -eq 0 ]; then
+  PERCENTAGE_COMPLETE=100.0
+else
+  PERCENTAGE_COMPLETE=$(awk "BEGIN {printf \"%.1f\", (1 - $TOTAL_COUNT/372) * 100}")
+fi
 
 echo -e "${YELLOW}Progress to Goal:${NC}"
-echo -e "  Starting count (Oct 3): 345"
+echo -e "  Starting count (baseline): 372"
 echo -e "  Current count         : ${RED}$TOTAL_COUNT${NC}"
 echo -e "  Goal                  : ${GREEN}$GOAL${NC}"
 echo -e "  Remaining             : ${RED}$REMAINING${NC}"
