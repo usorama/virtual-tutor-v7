@@ -9,12 +9,12 @@ import { PurposeSelector } from '@/components/wizard/PurposeSelector'
 import { SubjectSelector } from '@/components/wizard/SubjectSelector'
 import { TopicSelector } from '@/components/wizard/TopicSelector'
 import { WizardSummary } from '@/components/wizard/WizardSummary'
-import { WIZARD_STEPS, WIZARD_STEP_NAMES, CurriculumData } from '@/types/wizard'
-import { 
-  getCurriculumData, 
+import { WIZARD_STEPS, WIZARD_STEP_NAMES, CurriculumData, LearningPurpose } from '@/types/wizard'
+import {
+  getCurriculumData,
   saveWizardSelections,
   getUserProfile,
-  completeWizard 
+  completeWizard
 } from '@/lib/wizard/actions'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -37,6 +37,11 @@ function getStepDescription(stepIndex: number): string {
 function getStepProgress(stepIndex: number): number {
   const progressValues = [20, 40, 60, 80, 100]
   return progressValues[stepIndex] || 0
+}
+
+// Type guard to check if a string is a valid LearningPurpose
+function isValidLearningPurpose(value: string): value is LearningPurpose {
+  return value === 'new_class' || value === 'revision' || value === 'exam_prep';
 }
 
 export default function WizardPage() {
@@ -68,13 +73,13 @@ export default function WizardPage() {
         if (data && data.grade) {
           // User has existing preferences - populate the wizard with current data
           updateGrade(data.grade)
-          if (data.learning_purpose) {
-            updatePurpose(data.learning_purpose as any) // Type assertion needed since DB returns string
+          if (data.learning_purpose && isValidLearningPurpose(data.learning_purpose)) {
+            updatePurpose(data.learning_purpose)
           }
           if (data.preferred_subjects && data.preferred_subjects.length > 0) {
             updateSubjects(data.preferred_subjects)
           }
-          
+
           // Load selected topics for each subject
           if (data.selected_topics && data.preferred_subjects) {
             data.preferred_subjects.forEach(subject => {
@@ -92,9 +97,9 @@ export default function WizardPage() {
         setIsLoadingProfile(false)
       }
     }
-    
+
     loadProfile()
-  }, [router, updateGrade, updateSubjects, updateTopics])
+  }, [updateGrade, updatePurpose, updateSubjects, updateTopics])
 
   // Fetch curriculum data when grade is selected
   useEffect(() => {
@@ -107,7 +112,7 @@ export default function WizardPage() {
     setIsLoading(true)
     try {
       const { data, error } = await getCurriculumData(grade)
-      
+
       if (error) {
         toast.error('Failed to load curriculum data')
         console.error(error)
@@ -125,7 +130,7 @@ export default function WizardPage() {
       setIsSaving(true)
       try {
         const { success, error } = await saveWizardSelections(state)
-        
+
         if (success) {
           toast.success('Your preferences have been saved!')
           await completeWizard() // This will redirect to dashboard

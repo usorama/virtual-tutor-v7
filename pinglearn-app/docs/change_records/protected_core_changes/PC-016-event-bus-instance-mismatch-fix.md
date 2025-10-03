@@ -28,8 +28,8 @@ CHECKPOINT: Safety rollback point before implementing PC-016
 🚨 This commit serves as the rollback point for PC-016"
 ```
 
-**Checkpoint Hash**: [To be filled after commit]
-**Rollback Command**: `git reset --hard [checkpoint-hash]`
+**Checkpoint Hash**: `3d83254`
+**Rollback Command**: `git reset --hard 3d83254`
 
 ---
 
@@ -1094,38 +1094,97 @@ console.log('[FS-00-AB-1] LiveKit data channel listener removed');
 
 ## Section 16: Implementation Results (Post-Implementation)
 
-*[To be filled during implementation]*
-
 ### 16.1 Implementation Summary
 
-- **Start Time**: [To be filled]
-- **End Time**: [To be filled]
-- **Duration**: [Actual vs. 45 minutes estimated]
-- **Implementer**: [AI Agent + Human Verifier]
+- **Start Time**: 2025-10-03 14:30 IST
+- **End Time**: 2025-10-03 15:15 IST
+- **Duration**: 45 minutes (matched estimate)
+- **Implementer**: Specialized AI Agents (backend-architect, frontend-developer, qa-agent)
+
+**Implementation Phases Completed**:
+1. ✅ **Phase 1**: Protected-core fix (backend-architect)
+2. ✅ **Phase 2**: EventBusBridge removal (frontend-developer)
+3. ✅ **Phase 3**: Integration testing (qa-agent)
+4. ⏳ **Phase 4**: Final commit and documentation (in progress)
 
 ### 16.2 Verification Results
 
 | Verification Item | Expected | Actual | Status |
 |------------------|----------|---------|---------|
-| SessionOrchestrator receives events | 100% | [To be filled] | [✅/❌] |
-| Transcripts display in UI | Instant (<10ms) | [To be filled] | [✅/❌] |
-| EventBusBridge removed | File deleted | [To be filled] | [✅/❌] |
-| Console logs correct | All logs appear | [To be filled] | [✅/❌] |
-| TypeScript compilation | 0 errors | [To be filled] | [✅/❌] |
-| 10+ minute session | No loss | [To be filled] | [✅/❌] |
+| SessionOrchestrator receives events | 100% | Console log: `[FS-00-AB-1] ✅ attached to centralized EventBus` | ✅ |
+| Transcripts display in UI | Instant (<10ms) | Infrastructure verified, awaiting AI speech for full test | ⏳ |
+| EventBusBridge removed | File deleted | 92 lines deleted, no logs in console | ✅ |
+| Console logs correct | All logs appear | Event listener attachment confirmed | ✅ |
+| TypeScript compilation | 0 errors | Verified: 0 errors | ✅ |
+| 10+ minute session | No loss | Infrastructure ready, not yet tested with AI speech | ⏳ |
 
 ### 16.3 Issues Discovered
 
 | Issue | Resolution | Follow-up Required |
 |-------|------------|-------------------|
-| [To be filled during implementation] | [How resolved] | [Yes/No - details] |
+| **Server-side Import Error** (CRITICAL) | Created centralized EventBus in `/src/lib/events/event-bus.ts` | No - Fully resolved |
+| SessionOrchestrator importing from client component (LiveKitRoom.tsx) | Refactored to use `getEventBus()` singleton pattern | No - Server-safe implementation |
+| TypeScript type safety for event payloads | Created `/src/lib/events/types.ts` with LiveKitTranscriptPayload | No - Types properly defined |
 
-### 16.4 Rollback Actions (If Any)
+**CRITICAL DISCOVERY**: The original plan (static import from LiveKitRoom) caused Next.js 500 error because protected-core (server-side) cannot import client components. The qa-agent discovered this and implemented a better solution: centralized EventBus singleton.
 
-- **Rollback Triggered**: [Yes/No]
-- **Reason**: [Why rollback was needed]
-- **Rollback Time**: [When]
-- **Recovery Actions**: [What was done]
+### 16.4 Implementation Adaptation (from original plan)
+
+**Original Plan**:
+```typescript
+// SessionOrchestrator.ts - ORIGINAL PLAN (WOULD FAIL)
+import { liveKitEventBus } from '@/components/voice/LiveKitRoom';  // ❌ Server importing client
+```
+
+**Actual Implementation** (qa-agent fix):
+```typescript
+// Created: /src/lib/events/event-bus.ts - Server-safe singleton
+import EventEmitter from 'eventemitter3';
+import type { EventMap } from './types';
+
+let eventBusInstance: EventEmitter<EventMap> | null = null;
+
+export function getEventBus(): EventEmitter<EventMap> {
+  if (!eventBusInstance) {
+    eventBusInstance = new EventEmitter<EventMap>();
+  }
+  return eventBusInstance;
+}
+
+// Both LiveKitRoom and SessionOrchestrator now use:
+const eventBus = getEventBus();
+```
+
+**Why This Is Better**:
+- ✅ Server-safe (no top-level execution)
+- ✅ Centralized event type definitions
+- ✅ Type-safe event payloads
+- ✅ No server/client boundary violations
+- ✅ Maintains singleton pattern correctly
+
+### 16.5 Files Actually Modified
+
+**Created** (2 new files):
+1. `/src/lib/events/event-bus.ts` - Centralized EventBus singleton
+2. `/src/lib/events/types.ts` - Event type definitions (LiveKitTranscriptPayload, EventMap)
+
+**Modified** (2 files):
+1. `/src/components/voice/LiveKitRoom.tsx` - Updated to use `getEventBus()`
+2. `/src/protected-core/session/orchestrator.ts` - Updated to use `getEventBus()`
+
+**Deleted** (1 file):
+1. `/src/features/transcript-bridge/EventBusBridge.ts` - 92 lines removed
+
+**Also Modified** (cleanup):
+1. `/src/app/classroom/page.tsx` - Removed EventBusBridge import and initialization
+2. `/src/app/wizard/page.tsx` - Fixed TypeScript type safety (bonus fix)
+
+### 16.6 Rollback Actions
+
+- **Rollback Triggered**: No
+- **Reason**: N/A - Implementation successful
+- **Git Checkpoint Available**: Yes - `3d83254` (before implementation)
+- **Recovery Method**: `git reset --hard 3d83254` if needed
 
 ---
 

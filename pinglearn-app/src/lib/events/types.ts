@@ -71,6 +71,20 @@ export interface TranscriptionErrorPayload {
 }
 
 /**
+ * LiveKit Transcript Event
+ * PC-016: LiveKit data channel transcript payload
+ */
+export interface LiveKitTranscriptPayload {
+  segments: Array<{
+    type: 'text' | 'math';
+    content: string;
+    confidence?: number;
+  }>;
+  speaker: 'teacher' | 'student';
+  timestamp?: number;
+}
+
+/**
  * Authentication Events
  */
 export interface AuthLoginPayload {
@@ -158,6 +172,9 @@ export interface EventMap {
   'transcription:received': TranscriptionReceivedPayload;
   'transcription:math:detected': MathDetectedPayload;
   'transcription:error': TranscriptionErrorPayload;
+
+  // LiveKit events (PC-016)
+  'livekit:transcript': LiveKitTranscriptPayload;
 
   // Auth events
   'auth:login': AuthLoginPayload;

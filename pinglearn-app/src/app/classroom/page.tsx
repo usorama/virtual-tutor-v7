@@ -20,7 +20,6 @@ import { TabsContainer } from '@/components/classroom/TabsContainer';
 import { FloatingControls } from '@/components/classroom/FloatingControls';
 import { ShowThenTellTimingToggle } from '@/components/dev/ShowThenTellTimingDashboard';
 import { ErrorBoundary } from '@/lib/error-handling/error-boundary';
-import { EventBusBridge } from '@/features/transcript-bridge/EventBusBridge';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -86,17 +85,6 @@ function ClassroomPageContent() {
   useEffect(() => {
     checkAuth();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Initialize Event Bus Bridge to fix transcript display bug
-  // See: /docs/evidence/CRITICAL-BUG-EVENT-BUS-MISMATCH.md
-  useEffect(() => {
-    EventBusBridge.initialize();
-    console.log('[Classroom] EventBusBridge initialized');
-
-    return () => {
-      EventBusBridge.cleanup();
-    };
   }, []);
 
   // Clear voice errors when user dismisses them

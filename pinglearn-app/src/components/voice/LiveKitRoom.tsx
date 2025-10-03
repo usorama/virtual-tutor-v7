@@ -2,12 +2,13 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { Room, RoomEvent, RemoteTrack, RemoteTrackPublication } from 'livekit-client';
-import { EventEmitter } from 'events';
 import performanceMonitor from '@/lib/performance/performance-monitor';
 import { FEATURES } from '@/config/features';
+import { getEventBus } from '@/lib/events/event-bus';
 
-// Create shared event bus for LiveKit data communication
-export const liveKitEventBus = new EventEmitter();
+// PC-016: Use centralized EventBus singleton instead of local EventEmitter
+// This allows both client and server code to share the same event bus
+export const liveKitEventBus = getEventBus();
 
 interface LiveKitRoomProps {
   roomName: string;
@@ -55,8 +56,8 @@ export function LiveKitRoom({
     return () => {
       room.disconnect();
 
-      // Clean up event bus listeners when component unmounts
-      liveKitEventBus.removeAllListeners();
+      // PC-016: Don't clear entire event bus on unmount (it's a singleton)
+      // Individual listeners are cleaned up by their respective components
     };
   }, [room]);
 

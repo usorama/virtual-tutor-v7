@@ -8,6 +8,7 @@
 import { WebSocketManager, ConnectionEvent } from '../websocket/manager/singleton-manager';
 import { LiveKitVoiceService } from '../voice-engine/livekit/service';
 import { GeminiVoiceService } from '../voice-engine/gemini/service';
+import { getEventBus } from '@/lib/events/event-bus';
 import { getDisplayBuffer } from '../transcription/display/buffer';
 import { FeatureFlagService } from '../../shared/services/feature-flags';
 import type { VoiceConfig } from '../contracts/voice.contract';
@@ -207,17 +208,8 @@ export class SessionOrchestrator {
       this.currentSession.status = 'ended';
       this.currentSession.endTime = Date.now();
 
-      // Clean up LiveKit data channel listener
-      if (this.liveKitDataListener) {
-        try {
-          import('@/components/voice/LiveKitRoom').then(({ liveKitEventBus }) => {
-            liveKitEventBus.off('livekit:transcript', this.liveKitDataListener);
-            this.liveKitDataListener = null;
-          });
-        } catch (error) {
-          console.warn('Error removing LiveKit listener:', error);
-        }
-      }
+      // ✅ NEW: Cleanup LiveKit event listener
+      this.cleanupLiveKitDataChannelListener();
 
       // Stop voice services
       if (this.livekitService) {
@@ -427,56 +419,71 @@ export class SessionOrchestrator {
   /**
    * FS-00-AB-1: Setup LiveKit data channel listener using event bus
    * This method is called from startSession() after successful LiveKit initialization
+   * PC-016 Phase 3: Fixed to use centralized EventBus singleton (works with both client and server)
    */
   private setupLiveKitDataChannelListener(): void {
     console.log('[FS-00-AB-1] Setting up LiveKit data channel listener');
 
-    // Import the event bus dynamically to avoid circular dependencies
-    import('@/components/voice/LiveKitRoom').then(({ liveKitEventBus }) => {
-      // Remove old listener if exists
-      if (this.liveKitDataListener) {
-        liveKitEventBus.off('livekit:transcript', this.liveKitDataListener);
+    const eventBus = getEventBus();
+
+    // Remove old listener if exists
+    if (this.liveKitDataListener) {
+      eventBus.off('livekit:transcript', this.liveKitDataListener);
+    }
+
+    // Create new listener
+    this.liveKitDataListener = (data: any) => {
+      console.log('[FS-00-AB-1] ✅ Received transcript from LiveKit data channel');
+
+      if (!data.segments || !Array.isArray(data.segments)) {
+        console.warn('[FS-00-AB-1] Invalid transcript data structure');
+        return;
       }
 
-      // Create new listener
-      this.liveKitDataListener = (data: any) => {
-        console.log('[FS-00-AB-1] Received transcript from LiveKit data channel');
+      console.log('[FS-00-AB-1] Data:', {
+        hasSegments: true,
+        segmentCount: data.segments.length,
+        speaker: data.speaker || 'teacher'
+      });
 
-        if (!data.segments || !Array.isArray(data.segments)) {
-          console.warn('[FS-00-AB-1] Invalid transcript data structure');
+      // Process each segment
+      data.segments.forEach((segment: any, index: number) => {
+        // Validate segment
+        if (!segment.content) {
+          console.warn('[FS-00-AB-1] Segment missing content');
           return;
         }
 
-        // Process each segment
-        data.segments.forEach((segment: any) => {
-          // Validate segment
-          if (!segment.content) {
-            console.warn('[FS-00-AB-1] Segment missing content');
-            return;
-          }
-
-          // Add to display buffer with deduplication check
-          const itemId = this.addTranscriptionItem({
-            type: segment.type || 'text',
-            content: segment.content,
-            speaker: data.speaker || 'teacher',
-            confidence: segment.confidence || 1.0
-          });
-
-          console.log('[FS-00-AB-1] Added transcript item to DisplayBuffer:', {
-            id: itemId,
-            type: segment.type,
-            contentLength: segment.content.length
-          });
+        // Add to display buffer with deduplication check
+        const itemId = this.addTranscriptionItem({
+          type: segment.type || 'text',
+          content: segment.content,
+          speaker: data.speaker || 'teacher',
+          confidence: segment.confidence || 1.0
         });
-      };
 
-      // Attach listener
-      liveKitEventBus.on('livekit:transcript', this.liveKitDataListener);
-      console.log('[FS-00-AB-1] LiveKit data channel listener attached');
-    }).catch(error => {
-      console.error('[FS-00-AB-1] Failed to setup LiveKit data channel listener:', error);
-    });
+        console.log(`[FS-00-AB-1] ✅ Added segment ${index + 1}/${data.segments.length} to DisplayBuffer`, {
+          id: itemId,
+          type: segment.type,
+          contentLength: segment.content.length
+        });
+      });
+    };
+
+    // PC-016 Phase 3: Use centralized EventBus singleton
+    eventBus.on('livekit:transcript', this.liveKitDataListener);
+    console.log('[FS-00-AB-1] ✅ LiveKit data channel listener attached to centralized EventBus');
+  }
+
+  /**
+   * PC-016 Phase 3: Cleanup LiveKit data channel listener
+   */
+  private cleanupLiveKitDataChannelListener(): void {
+    if (this.liveKitDataListener) {
+      const eventBus = getEventBus();
+      eventBus.off('livekit:transcript', this.liveKitDataListener);
+      console.log('[FS-00-AB-1] LiveKit data channel listener removed');
+    }
   }
 
   /**
