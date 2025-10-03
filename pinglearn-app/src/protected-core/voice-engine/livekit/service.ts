@@ -7,6 +7,8 @@
 
 import { Room, RoomEvent, Track, ConnectionState, LocalAudioTrack, RemoteAudioTrack } from 'livekit-client';
 import { VoiceServiceContract, VoiceConfig, VoiceSession } from '../../contracts/voice.contract';
+import { LiveKitSegment } from '@/protected-core/contracts/livekit.types';
+
 import { AudioStreamManager, AudioConfig } from './audio-manager';
 import { EventEmitter } from 'events';
 
@@ -330,7 +332,7 @@ export class LiveKitVoiceService extends EventEmitter implements VoiceServiceCon
           console.log('[PC-010] Processing', data.segments.length, 'segments');
 
           // Process each segment from the Python agent
-          data.segments.forEach((segment: any) => {
+          data.segments.forEach((segment: LiveKitSegment) => {
             // Emit a custom event that SessionOrchestrator can listen to
             // This maintains separation of concerns and follows existing patterns
             this.emit('transcriptionReceived', {
