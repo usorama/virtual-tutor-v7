@@ -39,10 +39,6 @@ export function LiveKitRoom({
   const [isConnected, setIsConnected] = useState(false);
   const audioElementRef = useRef<HTMLAudioElement>(null);
 
-  // FC-005: Show-Then-Tell client-side audio delay
-  const [audioDelayActive, setAudioDelayActive] = useState(false);
-  const audioDelayTimerRef = useRef<NodeJS.Timeout | null>(null);
-
   // Enable performance monitoring for show-then-tell timing
   useEffect(() => {
     const timingEnabled = FEATURES.showThenTellTiming;
@@ -60,16 +56,6 @@ export function LiveKitRoom({
       // Individual listeners are cleaned up by their respective components
     };
   }, [room]);
-
-  // FC-005: Cleanup audio delay timer on unmount
-  useEffect(() => {
-    return () => {
-      if (audioDelayTimerRef.current) {
-        clearTimeout(audioDelayTimerRef.current);
-        audioDelayTimerRef.current = null;
-      }
-    };
-  }, []);
 
   // Auto-connect when component mounts
   useEffect(() => {
@@ -130,98 +116,10 @@ export function LiveKitRoom({
       publication: RemoteTrackPublication
     ) => {
       if (track.kind === 'audio' && audioElementRef.current) {
-        // FC-005: Implement client-side show-then-tell audio delay
-        const SHOW_THEN_TELL_DELAY = 400; // milliseconds
-
-        console.log('[FC-005] Audio track received - applying 400ms show-then-tell delay');
-
-        // 🎯 SHOW-THEN-TELL TIMING MEASUREMENT: Record audio attachment time
-        const audioTimestamp = performance.now();
-
-        // Attach audio track but mute initially
+        // Natural audio attachment - no artificial delay
+        console.log('[LiveKitRoom] Audio track received - attaching naturally');
         track.attach(audioElementRef.current);
-        const audioElement = audioElementRef.current;
-        const originalVolume = audioElement.volume || 1.0;
-        audioElement.volume = 0; // Mute for show-then-tell delay
-
-        console.log('[FC-005] Audio track attached and muted - visual content will appear first');
-
-        // Record show-then-tell audio timing metric
-        performanceMonitor.addMetric({
-          name: 'show-then-tell-audio-attachment',
-          value: audioTimestamp,
-          unit: 'ms',
-          timestamp: Date.now(),
-          category: 'user-interaction'
-        });
-
-        // FC-005: Unmute audio after show-then-tell delay
-        setAudioDelayActive(true);
-        audioDelayTimerRef.current = setTimeout(() => {
-          if (audioElement) {
-            audioElement.volume = originalVolume;
-            setAudioDelayActive(false);
-            console.log('[FC-005] Audio unmuted - 400ms visual lead complete');
-
-            // Record unmute timing
-            performanceMonitor.addMetric({
-              name: 'show-then-tell-audio-unmuted',
-              value: performance.now(),
-              unit: 'ms',
-              timestamp: Date.now(),
-              category: 'user-interaction'
-            });
-          }
-        }, SHOW_THEN_TELL_DELAY);
-
-        // Add audio playback event listener for precise timing
-        if (audioElementRef.current) {
-          const audioElement = audioElementRef.current;
-
-          const handleAudioStart = () => {
-            const audioStartTimestamp = performance.now();
-            console.log('[LiveKitRoom] Audio playback started');
-
-            // Record actual audio start timing
-            performanceMonitor.addMetric({
-              name: 'show-then-tell-audio-start',
-              value: audioStartTimestamp,
-              unit: 'ms',
-              timestamp: Date.now(),
-              category: 'user-interaction'
-            });
-
-            // Calculate and record show-then-tell lead time
-            const lastTextMetric = performanceMonitor.generateReport().metrics
-              .filter(m => m.name === 'show-then-tell-text-arrival')
-              .slice(-1)[0];
-
-            if (lastTextMetric) {
-              const leadTime = audioStartTimestamp - lastTextMetric.value;
-              console.log(`[SHOW-THEN-TELL] Visual lead time: ${leadTime.toFixed(1)}ms`);
-
-              performanceMonitor.addMetric({
-                name: 'show-then-tell-lead-time',
-                value: leadTime,
-                unit: 'ms',
-                timestamp: Date.now(),
-                category: 'user-interaction'
-              });
-
-              // Validate timing is within expected range
-              if (leadTime >= 300 && leadTime <= 500) {
-                console.log('✅ Show-Then-Tell timing is within optimal range (300-500ms)');
-              } else {
-                console.warn(`⚠️ Show-Then-Tell timing drift detected: ${leadTime.toFixed(1)}ms`);
-              }
-            }
-
-            // Clean up listener
-            audioElement.removeEventListener('playing', handleAudioStart);
-          };
-
-          audioElement.addEventListener('playing', handleAudioStart);
-        }
+        console.log('[LiveKitRoom] Audio track attached - text and audio sync naturally');
       }
     };
 
