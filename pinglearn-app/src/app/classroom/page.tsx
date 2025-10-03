@@ -535,27 +535,47 @@ function ClassroomPageContent() {
 
 
         {/* LiveKit Voice Connection (Hidden) */}
-        {roomName && userId && isActive && (
-          <div className="hidden">
-            <LiveKitRoom
-              roomName={roomName}
-              participantId={userId}
-              participantName={`Student-${userId.slice(0, 8)}`}
-              onConnected={() => {
-                setVoiceConnected(true);
-                console.log('LiveKit voice connected');
-              }}
-              onDisconnected={() => {
-                setVoiceConnected(false);
-                console.log('LiveKit voice disconnected');
-              }}
-              onError={(error) => {
-                console.error('LiveKit error:', error);
-                setErrorBoundary({ hasError: true, error });
-              }}
-            />
-          </div>
-        )}
+        {roomName && userId && isActive && (() => {
+          // PC-015: Extract metadata from currentTopic for Python agent dynamic prompts
+          const extractGrade = (topic: string): string => {
+            const match = topic.match(/Grade\s+(\d+)/i);
+            return match ? `Grade ${match[1]}` : 'Grade 10';
+          };
+
+          const extractSubject = (topic: string): string => {
+            const match = topic.match(/Grade\s+\d+\s+(.+)/i);
+            return match ? match[1].trim() : 'General Studies';
+          };
+
+          const metadata = {
+            topic: currentTopic,
+            grade: extractGrade(currentTopic),
+            subject: extractSubject(currentTopic)
+          };
+
+          return (
+            <div className="hidden">
+              <LiveKitRoom
+                roomName={roomName}
+                participantId={userId}
+                participantName={`Student-${userId.slice(0, 8)}`}
+                metadata={metadata}
+                onConnected={() => {
+                  setVoiceConnected(true);
+                  console.log('LiveKit voice connected with metadata:', metadata);
+                }}
+                onDisconnected={() => {
+                  setVoiceConnected(false);
+                  console.log('LiveKit voice disconnected');
+                }}
+                onError={(error) => {
+                  console.error('LiveKit error:', error);
+                  setErrorBoundary({ hasError: true, error });
+                }}
+              />
+            </div>
+          );
+        })()}
 
         {/* Status Messages */}
         <div className="fixed bottom-20 right-4 space-y-2 max-w-md z-40">

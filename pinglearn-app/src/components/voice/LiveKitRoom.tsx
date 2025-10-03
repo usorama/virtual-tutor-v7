@@ -16,6 +16,12 @@ interface LiveKitRoomProps {
   onConnected: () => void;
   onDisconnected: () => void;
   onError: (error: Error) => void;
+  // PC-015: Metadata for dynamic prompt generation in Python agent
+  metadata?: {
+    topic: string;
+    subject: string;
+    grade: string;
+  };
 }
 
 export function LiveKitRoom({
@@ -24,7 +30,8 @@ export function LiveKitRoom({
   participantName,
   onConnected,
   onDisconnected,
-  onError
+  onError,
+  metadata
 }: LiveKitRoomProps) {
   const [room] = useState(() => new Room());
   const [isConnecting, setIsConnecting] = useState(false);
@@ -65,14 +72,15 @@ export function LiveKitRoom({
     try {
       setIsConnecting(true);
 
-      // Get token from PC-005 endpoint
-      const tokenResponse = await fetch('/api/livekit/token', {
+      // PC-015: Get token from v2 endpoint with metadata for dynamic prompts
+      const tokenResponse = await fetch('/api/v2/livekit/token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           roomName,
           participantId,
-          participantName
+          participantName,
+          metadata // Pass metadata so Python agent can use dynamic prompts
         })
       });
 
