@@ -39,9 +39,9 @@ export function LiveKitRoom({
   const [isConnected, setIsConnected] = useState(false);
   const audioElementRef = useRef<HTMLAudioElement>(null);
 
-  // FC-010: Show-Then-Tell is now handled server-side
-  // The Python agent sends transcripts 400ms before audio
-  // No client-side delay needed
+  // FC-005: Show-Then-Tell client-side audio delay
+  const [audioDelayActive, setAudioDelayActive] = useState(false);
+  const audioDelayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Enable performance monitoring for show-then-tell timing
   useEffect(() => {
@@ -60,6 +60,16 @@ export function LiveKitRoom({
       // Individual listeners are cleaned up by their respective components
     };
   }, [room]);
+
+  // FC-005: Cleanup audio delay timer on unmount
+  useEffect(() => {
+    return () => {
+      if (audioDelayTimerRef.current) {
+        clearTimeout(audioDelayTimerRef.current);
+        audioDelayTimerRef.current = null;
+      }
+    };
+  }, []);
 
   // Auto-connect when component mounts
   useEffect(() => {
@@ -120,16 +130,21 @@ export function LiveKitRoom({
       publication: RemoteTrackPublication
     ) => {
       if (track.kind === 'audio' && audioElementRef.current) {
-        console.log('[LiveKitRoom] Audio track received - attaching immediately');
+        // FC-005: Implement client-side show-then-tell audio delay
+        const SHOW_THEN_TELL_DELAY = 400; // milliseconds
+
+        console.log('[FC-005] Audio track received - applying 400ms show-then-tell delay');
 
         // 🎯 SHOW-THEN-TELL TIMING MEASUREMENT: Record audio attachment time
         const audioTimestamp = performance.now();
 
-        // FC-010: Attach audio immediately
-        // The server-side transcript advance creates the Show-Then-Tell effect
-        // Transcripts are sent 400ms before audio from the Python agent
+        // Attach audio track but mute initially
         track.attach(audioElementRef.current);
-        console.log('[LiveKitRoom] Audio track attached - Show-Then-Tell timing handled server-side');
+        const audioElement = audioElementRef.current;
+        const originalVolume = audioElement.volume || 1.0;
+        audioElement.volume = 0; // Mute for show-then-tell delay
+
+        console.log('[FC-005] Audio track attached and muted - visual content will appear first');
 
         // Record show-then-tell audio timing metric
         performanceMonitor.addMetric({
@@ -139,6 +154,25 @@ export function LiveKitRoom({
           timestamp: Date.now(),
           category: 'user-interaction'
         });
+
+        // FC-005: Unmute audio after show-then-tell delay
+        setAudioDelayActive(true);
+        audioDelayTimerRef.current = setTimeout(() => {
+          if (audioElement) {
+            audioElement.volume = originalVolume;
+            setAudioDelayActive(false);
+            console.log('[FC-005] Audio unmuted - 400ms visual lead complete');
+
+            // Record unmute timing
+            performanceMonitor.addMetric({
+              name: 'show-then-tell-audio-unmuted',
+              value: performance.now(),
+              unit: 'ms',
+              timestamp: Date.now(),
+              category: 'user-interaction'
+            });
+          }
+        }, SHOW_THEN_TELL_DELAY);
 
         // Add audio playback event listener for precise timing
         if (audioElementRef.current) {
