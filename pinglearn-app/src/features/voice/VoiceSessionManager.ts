@@ -518,37 +518,39 @@ export class VoiceSessionManager {
   // Private methods
 
   /**
-   * PC-015: Extract subject from topic string based on curriculum mappings
+   * PC-015: Extract subject from topic string formatted as "Grade X Subject"
+   * E.g., "Grade 10 Mathematics" → "Mathematics"
    */
   private extractSubject(topic: string): string {
+    // First try: Parse from "Grade X Subject" format
+    const subjectMatch = topic.match(/Grade\s+\d+\s+(.+)/i);
+
+    if (subjectMatch && subjectMatch[1]) {
+      return subjectMatch[1].trim();
+    }
+
+    // Second try: Keyword-based detection for fallback
     const topicLower = topic.toLowerCase();
 
     // Mathematics indicators
-    if (topicLower.includes('quadratic') ||
-        topicLower.includes('algebra') ||
-        topicLower.includes('geometry') ||
-        topicLower.includes('trigonometry') ||
-        topicLower.includes('calculus') ||
-        topicLower.includes('equation') ||
-        topicLower.includes('polynomial') ||
-        topicLower.includes('arithmetic')) {
+    if (topicLower.includes('mathematics') || topicLower.includes('math') ||
+        topicLower.includes('quadratic') || topicLower.includes('algebra') ||
+        topicLower.includes('geometry') || topicLower.includes('trigonometry') ||
+        topicLower.includes('calculus') || topicLower.includes('equation') ||
+        topicLower.includes('polynomial') || topicLower.includes('arithmetic')) {
       return 'Mathematics';
     }
 
     // Science indicators
-    if (topicLower.includes('physics') ||
-        topicLower.includes('chemistry') ||
-        topicLower.includes('biology') ||
-        topicLower.includes('science')) {
+    if (topicLower.includes('science') || topicLower.includes('physics') ||
+        topicLower.includes('chemistry') || topicLower.includes('biology')) {
       return 'Science';
     }
 
     // English indicators
-    if (topicLower.includes('grammar') ||
-        topicLower.includes('literature') ||
-        topicLower.includes('poetry') ||
-        topicLower.includes('writing') ||
-        topicLower.includes('comprehension')) {
+    if (topicLower.includes('english') || topicLower.includes('grammar') ||
+        topicLower.includes('literature') || topicLower.includes('poetry') ||
+        topicLower.includes('writing') || topicLower.includes('comprehension')) {
       return 'English Language';
     }
 
@@ -557,12 +559,18 @@ export class VoiceSessionManager {
   }
 
   /**
-   * PC-015: Extract grade from topic string or use default
-   * In production, this should be passed explicitly from wizard
+   * PC-015: Extract grade from topic string formatted as "Grade X Subject"
+   * E.g., "Grade 10 Mathematics" → "Grade 10"
    */
   private extractGrade(topic: string): string {
-    // This could be enhanced to parse grade from topic string
-    // For now, return default - will be replaced by explicit grade selection in wizard
+    // Match "Grade" followed by digits (e.g., "Grade 10", "Grade 12")
+    const gradeMatch = topic.match(/Grade\s+(\d+)/i);
+
+    if (gradeMatch) {
+      return `Grade ${gradeMatch[1]}`;
+    }
+
+    // Fallback to Grade 10 if no match
     return 'Grade 10';
   }
 
