@@ -20,6 +20,7 @@ import { TabsContainer } from '@/components/classroom/TabsContainer';
 import { FloatingControls } from '@/components/classroom/FloatingControls';
 import { ShowThenTellTimingToggle } from '@/components/dev/ShowThenTellTimingDashboard';
 import { ErrorBoundary } from '@/lib/error-handling/error-boundary';
+import { EventBusBridge } from '@/features/transcript-bridge/EventBusBridge';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -85,6 +86,17 @@ function ClassroomPageContent() {
   useEffect(() => {
     checkAuth();
   // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Initialize Event Bus Bridge to fix transcript display bug
+  // See: /docs/evidence/CRITICAL-BUG-EVENT-BUS-MISMATCH.md
+  useEffect(() => {
+    EventBusBridge.initialize();
+    console.log('[Classroom] EventBusBridge initialized');
+
+    return () => {
+      EventBusBridge.cleanup();
+    };
   }, []);
 
   // Clear voice errors when user dismisses them
@@ -156,14 +168,21 @@ function ClassroomPageContent() {
     setUserId(user.id);
 
     // Load user profile for topic preference
-    const { data: profile } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('grade, preferred_subjects, selected_topics')
       .eq('id', user.id)
       .single();
 
+    console.log('[DEBUG-METADATA] Profile loaded:', profile);
+    console.log('[DEBUG-METADATA] Profile error:', profileError);
+
     if (profile?.preferred_subjects && profile.preferred_subjects.length > 0) {
-      setCurrentTopic(`Grade ${profile.grade} ${profile.preferred_subjects[0]}`);
+      const topic = `Grade ${profile.grade} ${profile.preferred_subjects[0]}`;
+      console.log('[DEBUG-METADATA] Setting currentTopic to:', topic);
+      setCurrentTopic(topic);
+    } else {
+      console.warn('[DEBUG-METADATA] No preferred subjects found, keeping default:', profile);
     }
   }
 
@@ -552,6 +571,11 @@ function ClassroomPageContent() {
             grade: extractGrade(currentTopic),
             subject: extractSubject(currentTopic)
           };
+
+          console.log('[DEBUG-METADATA] currentTopic value:', currentTopic);
+          console.log('[DEBUG-METADATA] Extracted grade:', extractGrade(currentTopic));
+          console.log('[DEBUG-METADATA] Extracted subject:', extractSubject(currentTopic));
+          console.log('[DEBUG-METADATA] Final metadata:', metadata);
 
           return (
             <div className="hidden">

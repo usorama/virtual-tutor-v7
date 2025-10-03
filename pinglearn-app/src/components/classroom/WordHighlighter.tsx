@@ -22,19 +22,17 @@ export const WordHighlighter: React.FC<WordHighlighterProps> = ({
       const isPending = index > currentWordIndex;
 
       // Dynamic class names based on timing state
+      // REMOVED fade-in animation for ChatGPT-like instant text display
       const wordClasses = [
         'inline-block transition-all duration-300 px-0.5',
         isActive && 'bg-yellow-200 dark:bg-yellow-900 scale-110 font-semibold shadow-md',
         isHighlighted && !isActive && 'text-foreground/80',
-        isPending && 'opacity-0 translate-y-1',
+        // REMOVED: isPending && 'opacity-0 translate-y-1', // No more invisible text!
         timing.isMath && 'font-mono text-blue-600 dark:text-blue-400'
       ].filter(Boolean).join(' ');
 
-      // Animation delay for pending words
-      const animationStyle = isPending ? {
-        animationDelay: `${timing.startTime}ms`,
-        animation: 'fadeInUp 0.4s forwards'
-      } : undefined;
+      // No animation delays - text appears instantly
+      const animationStyle = undefined;
 
       return (
         <span
