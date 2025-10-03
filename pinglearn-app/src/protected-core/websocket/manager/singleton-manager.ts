@@ -63,6 +63,19 @@ export class WebSocketManager extends EventEmitter {
   }
 
   /**
+   * Reset singleton instance (FOR TESTING ONLY)
+   * P1.1 Batch 1: Type-safe alternative to (WebSocketManager as any).instance
+   * @internal
+   */
+  static resetInstance(): void {
+    if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') {
+      console.warn('[WebSocketManager] resetInstance() should only be called in tests');
+    }
+    WebSocketManager.instance = undefined as unknown as WebSocketManager;
+    console.log('[WebSocketManager] Singleton instance reset');
+  }
+
+  /**
    * Connect to WebSocket server with comprehensive error handling
    */
   async connect(url: string, protocols?: string[]): Promise<void> {
@@ -303,6 +316,6 @@ export class WebSocketManager extends EventEmitter {
     this.disconnect();
     this.removeAllListeners();
     // Reset the singleton instance
-    (WebSocketManager as any).instance = undefined;
+    WebSocketManager.resetInstance();
   }
 }
