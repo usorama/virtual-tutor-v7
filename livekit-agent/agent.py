@@ -440,14 +440,24 @@ async def entrypoint(ctx: JobContext):
 
     logger.info(f"Agent started for room: {ctx.room.name}")
 
-    # PC-015: Read session metadata for dynamic prompts
+    # CRITICAL: Enable audio subscription for proper track handling
+    await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
+
+    # Wait for participant to ensure connection (MUST happen before reading metadata)
+    participant = await ctx.wait_for_participant()
+    logger.info(f"Participant connected: {participant.identity}")
+
+    # PC-015: Read session metadata from PARTICIPANT (not room)
+    # The frontend sets participant metadata via AccessToken, not room metadata
     session_metadata = {}
-    if ctx.room.metadata:
+    if participant.metadata:
         try:
-            session_metadata = json.loads(ctx.room.metadata)
-            logger.info(f"[METADATA] Loaded session context: {session_metadata}")
+            session_metadata = json.loads(participant.metadata)
+            logger.info(f"[PC-015] Loaded session context from participant: {session_metadata}")
         except json.JSONDecodeError:
-            logger.warning(f"[METADATA] Failed to parse room metadata: {ctx.room.metadata}")
+            logger.warning(f"[PC-015] Failed to parse participant metadata: {participant.metadata}")
+    else:
+        logger.warning(f"[PC-015] No participant metadata found, using fallback values")
 
     # PC-015: Extract preferences from metadata (with fallbacks)
     topic = session_metadata.get('topic', 'General Learning')
@@ -480,13 +490,6 @@ async def entrypoint(ctx: JobContext):
         min_endpointing_delay=0.3,  # Reduced for faster response
         max_endpointing_delay=2.0,  # Reduced for faster response
     )
-
-    # CRITICAL: Enable audio subscription for proper track handling
-    await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
-
-    # Wait for participant to ensure connection
-    participant = await ctx.wait_for_participant()
-    logger.info(f"Participant connected: {participant.identity}")
 
     # Start the session - this publishes audio tracks
     await session.start(agent=agent, room=ctx.room)
