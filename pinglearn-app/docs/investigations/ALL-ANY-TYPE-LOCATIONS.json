@@ -1,0 +1,3474 @@
+{
+  "metadata": {
+    "generatedAt": "2025-10-03T19:54:33.270725",
+    "totalCount": 345,
+    "methods": {},
+    "breakdown": {
+      "explicit": 146,
+      "implicit": 5,
+      "assertion": 152,
+      "generic": 42
+    },
+    "bySeverity": {
+      "critical": 7,
+      "high": 27,
+      "medium": 107,
+      "low": 204
+    },
+    "protectedCore": 7,
+    "testFiles": 204,
+    "productionCode": 141
+  },
+  "locations": [
+    {
+      "file": "src/protected-core/session/orchestrator.ts",
+      "line": 62,
+      "code": "private liveKitDataListener: any = null;",
+      "category": "explicit",
+      "protectedCore": true,
+      "isTest": false,
+      "severity": "critical",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/protected-core/session/orchestrator.ts",
+      "line": 435,
+      "code": "this.liveKitDataListener = (data: any) => {",
+      "category": "explicit",
+      "protectedCore": true,
+      "isTest": false,
+      "severity": "critical",
+      "suggestedType": "unknown (then narrow with type guard)"
+    },
+    {
+      "file": "src/protected-core/session/orchestrator.ts",
+      "line": 450,
+      "code": "data.segments.forEach((segment: any, index: number) => {",
+      "category": "explicit",
+      "protectedCore": true,
+      "isTest": false,
+      "severity": "critical",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/protected-core/transcription/gemini-connector.ts",
+      "line": 42,
+      "code": "this.handleGeminiTranscription = onTranscription as any;",
+      "category": "assertion",
+      "protectedCore": true,
+      "isTest": false,
+      "severity": "critical",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/protected-core/voice-engine/livekit/audio-manager.ts",
+      "line": 54,
+      "code": "this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();",
+      "category": "assertion",
+      "protectedCore": true,
+      "isTest": false,
+      "severity": "critical",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/protected-core/voice-engine/livekit/service.ts",
+      "line": 333,
+      "code": "data.segments.forEach((segment: any) => {",
+      "category": "explicit",
+      "protectedCore": true,
+      "isTest": false,
+      "severity": "critical",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/protected-core/websocket/manager/singleton-manager.ts",
+      "line": 306,
+      "code": "(WebSocketManager as any).instance = undefined;",
+      "category": "assertion",
+      "protectedCore": true,
+      "isTest": false,
+      "severity": "critical",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/components/classroom/SessionInfoPanel.tsx",
+      "line": 29,
+      "code": "sessionState: any; // Type from useSessionState",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/components/classroom/TabsContainer.tsx",
+      "line": 16,
+      "code": "sessionState: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/components/dashboard/AppleLightGlass.tsx",
+      "line": 71,
+      "code": "? React.cloneElement(icon, { className: 'w-4 h-4' } as any)",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/components/dashboard/AppleMetricCard.tsx",
+      "line": 59,
+      "code": "? React.cloneElement(icon, { className: 'w-4 h-4' } as any)",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/components/dashboard/AppleMetricCard.tsx",
+      "line": 137,
+      "code": "? React.cloneElement(icon, { className: 'w-4 h-4' } as any)",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/components/security/SecurityErrorBoundary.tsx",
+      "line": 46,
+      "code": "onSecurityError?: (error: SecurityError, assessment: any) => void;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/components/security/SecurityErrorBoundary.tsx",
+      "line": 328,
+      "code": "private async initiateSecurityRecovery(securityError: SecurityError, assessment: any) {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/components/session/SessionHistory.tsx",
+      "line": 156,
+      "code": "<Badge variant={getQualityColor(session.quality_score) as any}>",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/components/textbook/EnhancedUploadFlow.tsx",
+      "line": 192,
+      "code": "? suggestedMetadata.chapters.map((ch: any) => ({",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/components/textbook/EnhancedUploadFlow.tsx",
+      "line": 225,
+      "code": "extractedData?: any[]",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/components/voice/LiveKitRoom.tsx",
+      "line": 142,
+      "code": "const handleConnectionQualityChanged = (quality: any) => {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/components/voice/VoiceSessionRecoveryProvider.tsx",
+      "line": 30,
+      "code": "sessionData?: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/components/voice/VoiceSessionRecoveryProvider.tsx",
+      "line": 277,
+      "code": "const handleSupportContact = useCallback((sessionId: string, sessionData: any) => {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/components/voice/VoiceSessionRecoveryProvider.tsx",
+      "line": 347,
+      "code": "<div>Active Sessions: {(sessionStats as any).totalSessions || 0}</div>",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/components/voice/VoiceSessionRecoveryProvider.tsx",
+      "line": 348,
+      "code": "<div>Recovery Rate: {((sessionStats as any).overallMetrics?.averageSuccessRate * 100 || 0).toFixed(1)}%</div>",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/components/voice/VoiceSessionRecoveryProvider.tsx",
+      "line": 351,
+      "code": "<div>Retry Attempts: {(sessionStats as any).retryAttempts || 0}</div>",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/components/voice/VoiceSessionRecoveryProvider.tsx",
+      "line": 352,
+      "code": "<div>Circuit Breaker: {(sessionStats as any).circuitBreakerOpen ? 'Open' : 'Closed'}</div>",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/components/voice/VoiceSessionRecoveryProvider.tsx",
+      "line": 353,
+      "code": "{(sessionStats as any).retryAttempts > 0 && (",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/features/notes/NotesGenerationService.ts",
+      "line": 94,
+      "code": "this.wsManager.on('transcription', (data: any) => {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "unknown (then narrow with type guard)"
+    },
+    {
+      "file": "src/features/notes/NotesGenerationService.ts",
+      "line": 99,
+      "code": "this.wsManager.on('displayBuffer', (data: any) => {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "unknown (then narrow with type guard)"
+    },
+    {
+      "file": "src/features/notes/NotesGenerationService.ts",
+      "line": 113,
+      "code": "private async processTranscriptionItem(item: any) {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/features/notes/NotesGenerationService.ts",
+      "line": 150,
+      "code": "private extractKeyConcepts(content: string, item: any): Note[] {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/features/notes/NotesGenerationService.ts",
+      "line": 170,
+      "code": "mathSegments.forEach((segment: any, index: number) => {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/features/notes/NotesGenerationService.ts",
+      "line": 205,
+      "code": "private extractExamples(content: string, item: any): Note[] {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/features/notes/NotesGenerationService.ts",
+      "line": 440,
+      "code": "private processTranscriptionData(data: any) {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "unknown (then narrow with type guard)"
+    },
+    {
+      "file": "src/features/voice/SessionRecoveryService.ts",
+      "line": 54,
+      "code": "type RecoveryEventListener = (...args: any[]) => void | Promise<void>;",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Event or specific event type"
+    },
+    {
+      "file": "src/features/voice/VoiceSessionManager.ts",
+      "line": 78,
+      "code": "type VoiceSessionEventListener = (...args: any[]) => void | Promise<void>;",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "high",
+      "suggestedType": "Event or specific event type"
+    },
+    {
+      "file": "src/hooks/useGenericQuery.ts",
+      "line": 76,
+      "code": "refetchInterval?: number | false | ((data: TData | undefined, query: any) => number | false);",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "unknown (then narrow with type guard)"
+    },
+    {
+      "file": "src/hooks/useGenericQuery.ts",
+      "line": 113,
+      "code": "private subscribers = new Map<string, Set<(data: any) => void>>();",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "unknown (then narrow with type guard)"
+    },
+    {
+      "file": "src/hooks/useGenericQuery.ts",
+      "line": 155,
+      "code": "private notifySubscribers(key: string, data: any): void {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "unknown (then narrow with type guard)"
+    },
+    {
+      "file": "src/hooks/useGenericQuery.ts",
+      "line": 313,
+      "code": "onSuccessRef.current(processedData as any);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/hooks/useGenericQuery.ts",
+      "line": 372,
+      "code": "onSettledRef.current(state.data as any, state.error);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/hooks/useSecurityHandler.ts",
+      "line": 506,
+      "code": "const handleError = useCallback(async (error: Error, errorInfo: any) => {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/hooks/useVoiceSessionRecovery.ts",
+      "line": 230,
+      "code": "totalAttempts: (stats.metrics as any)?.attempts || 0,",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/hooks/useVoiceSessionRecovery.ts",
+      "line": 231,
+      "code": "successRate: (stats.metrics as any)?.successRate || 0,",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/hooks/useVoiceSessionRecovery.ts",
+      "line": 232,
+      "code": "lastRecovery: (stats.metrics as any)?.lastRecovery || null",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/dashboard/actions.ts",
+      "line": 66,
+      "code": "const totalVoiceMinutes = voiceSessions?.reduce((total: number, session: any) => {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/dashboard/actions.ts",
+      "line": 90,
+      "code": "const totalMathProblems = analytics?.reduce((total: number, session: any) => {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/dashboard/actions.ts",
+      "line": 110,
+      "code": "recentSessions.map((s: any) => {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/dashboard/actions.ts",
+      "line": 207,
+      "code": "const daySessions = sessions?.filter((s: any) => {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/dashboard/actions.ts",
+      "line": 213,
+      "code": "const topicsToday = topicData?.filter((t: any) => {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/dashboard/actions.ts",
+      "line": 277,
+      "code": "const recentSessions: RecentSession[] = sessions.map((session: any) => {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/embeddings/generator.ts",
+      "line": 294,
+      "code": "(chunk: any) => chunk.has_embedding || (chunk.embedding && chunk.embedding.length > 0)",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/memory-manager.ts",
+      "line": 296,
+      "code": "if (typeof window !== 'undefined' && (window as any).mathCache) {",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/memory-manager.ts",
+      "line": 297,
+      "code": "const cache = (window as any).mathCache;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/memory-manager.ts",
+      "line": 382,
+      "code": "(window as any).gc();",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/memory-manager.ts",
+      "line": 399,
+      "code": "(window as any).gc();",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/memory-manager.ts",
+      "line": 499,
+      "code": "(MemoryManager as any).instance = undefined;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/monitoring/performance.ts",
+      "line": 198,
+      "code": "if (typeof process === 'undefined' || !(process as any)['memoryUsage']) {",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/monitoring/performance.ts",
+      "line": 202,
+      "code": "const usage = (process as any)['memoryUsage']();",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/performance/performance-monitor.ts",
+      "line": 198,
+      "code": "const fidEntry = entry as any; // PerformanceEventTiming",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Event or specific event type"
+    },
+    {
+      "file": "src/lib/performance/performance-monitor.ts",
+      "line": 212,
+      "code": "const clsEntry = entry as any; // LayoutShift",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/performance/performance-monitor.ts",
+      "line": 395,
+      "code": "const memory = (performance as any).memory;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/security/security-recovery.ts",
+      "line": 559,
+      "code": "(logEntry as any).integrity_hash = this.calculateHash(JSON.stringify({",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/security/threat-detector.ts",
+      "line": 517,
+      "code": "(profile as any).successRate = Math.max(0, 1 - (profile.errorCount / profile.requestCount));",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/lib/security/threat-detector.ts",
+      "line": 521,
+      "code": "(profile as any).riskScore = this.calculateClientRiskScore(profile);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/security/threat-detector.ts",
+      "line": 525,
+      "code": "(profile as any).status = 'blocked';",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/security/threat-detector.ts",
+      "line": 527,
+      "code": "(profile as any).status = 'suspicious';",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/security/threat-detector.ts",
+      "line": 529,
+      "code": "(profile as any).status = 'normal';",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/services/repository-base.ts",
+      "line": 119,
+      "code": "field: options.orderBy.field as any,",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/services/repository-base.ts",
+      "line": 499,
+      "code": "} as any);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/services/repository-base.ts",
+      "line": 523,
+      "code": "} as any);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/services/repository-base.ts",
+      "line": 585,
+      "code": "orderBy: options?.orderBy as any,",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/services/repository-base.ts",
+      "line": 697,
+      "code": "where: { email } as any,",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/services/repository-base.ts",
+      "line": 707,
+      "code": "} as any);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/supabase/client.ts",
+      "line": 32,
+      "code": "return createMockClient() as any",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/supabase/server.ts",
+      "line": 33,
+      "code": "return createMockServerClient() as any",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/supabase/typed-client.ts",
+      "line": 108,
+      "code": "select: (query?: string, options?: any) => ({",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/supabase/typed-client.ts",
+      "line": 112,
+      "code": "eq: (column: string, value: any) => ({",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/supabase/typed-client.ts",
+      "line": 126,
+      "code": "insert: (values: any) => ({",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/supabase/typed-client.ts",
+      "line": 136,
+      "code": "update: (values: any) => ({",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/supabase/typed-client.ts",
+      "line": 146,
+      "code": "upsert: (values: any) => ({",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/supabase/typed-client.ts",
+      "line": 160,
+      "code": "} as any as TypedSupabaseClient",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/supabase/typed-client.ts",
+      "line": 184,
+      "code": "queryFn: () => Promise<{ data: T | null; error: any }>,",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "unknown (then narrow with type guard)"
+    },
+    {
+      "file": "src/lib/supabase/typed-client.ts",
+      "line": 205,
+      "code": "queryFn: () => Promise<{ data: T[] | null; error: any }>,",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "unknown (then narrow with type guard)"
+    },
+    {
+      "file": "src/lib/supabase/typed-client.ts",
+      "line": 222,
+      "code": "queryFn: () => Promise<{ count: number | null; error: any }>,",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/lib/textbook/enhanced-processor.ts",
+      "line": 96,
+      "code": "if ('path' in file && typeof (file as any).path === 'string') {",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/textbook/enhanced-processor.ts",
+      "line": 97,
+      "code": "const pathParts = (file as any).path.split('/');",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/textbook/pdf-processor.ts",
+      "line": 413,
+      "code": "const files = textbooks.map((tb: any) => ({",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/types/conditional-helpers.ts",
+      "line": 288,
+      "code": "functions: Extract<T, (...args: any[]) => any>;",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/conditional-helpers.ts",
+      "line": 291,
+      "code": "string | number | boolean | object | ((...args: any[]) => any)",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/index.ts",
+      "line": 328,
+      "code": "export type AsyncResult<T extends (...args: any[]) => Promise<any>> = import('./utility-types').AsyncResult<T>;",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Promise<void> or Promise<SpecificType>"
+    },
+    {
+      "file": "src/lib/types/index.ts",
+      "line": 343,
+      "code": "export const TypeScriptPerformanceMonitor = {} as any;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/types/index.ts",
+      "line": 344,
+      "code": "export const CompilationOptimizer = {} as any;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/types/index.ts",
+      "line": 345,
+      "code": "export const BuildTimeOptimizer = {} as any;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/types/inference-helpers.ts",
+      "line": 150,
+      "code": "T extends (callback: (...args: any[]) => infer R) => any",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/inference-helpers.ts",
+      "line": 214,
+      "code": "? H extends (...args: any[]) => any",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/inference-helpers.ts",
+      "line": 255,
+      "code": "T extends (state: infer S, action: any) => any",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/types/inference-helpers.ts",
+      "line": 275,
+      "code": "T extends (state: any, action: infer A) => any",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/types/inference-optimizations.ts",
+      "line": 220,
+      "code": "const aVal = (a as any)[field];",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/types/inference-optimizations.ts",
+      "line": 221,
+      "code": "const bVal = (b as any)[field];",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/types/inference.ts",
+      "line": 41,
+      "code": "export type InferReturnType<T> = T extends (...args: any[]) => infer R",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/inference.ts",
+      "line": 64,
+      "code": "T extends (...args: any[]) => Promise<infer R>",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/inference.ts",
+      "line": 66,
+      "code": ": T extends (...args: any[]) => infer R",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/inference.ts",
+      "line": 89,
+      "code": "T extends (...args: any[]) => infer R",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/inference.ts",
+      "line": 136,
+      "code": "T extends (first: infer F, ...args: any[]) => any",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/inference.ts",
+      "line": 201,
+      "code": "T extends (first: any, ...rest: infer R) => any",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/types/inference.ts",
+      "line": 842,
+      "code": "T[K] extends (...args: any[]) => infer R",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/inference.ts",
+      "line": 892,
+      "code": "[K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/inference.ts",
+      "line": 968,
+      "code": "T extends new (...args: any[]) => infer I",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/inference.ts",
+      "line": 970,
+      "code": ": T extends abstract new (...args: any[]) => infer I",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/mapped-types.ts",
+      "line": 637,
+      "code": "[K in keyof T as T[K] extends (...args: any[]) => any ? K : never]: T[K]",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/mapped-types.ts",
+      "line": 663,
+      "code": "[K in keyof T as T[K] extends (...args: any[]) => any ? never : K]: T[K]",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/object-transforms.ts",
+      "line": 466,
+      "code": "[K in keyof T as T[K] extends (...args: any[]) => any ? K : never]: T[K]",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/object-transforms.ts",
+      "line": 491,
+      "code": "[K in keyof T as T[K] extends (...args: any[]) => any ? never : K]: T[K]",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/simple-optimizations.ts",
+      "line": 75,
+      "code": "return function<T extends (...args: any[]) => any>(",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/simple-optimizations.ts",
+      "line": 76,
+      "code": "target: any,",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/types/simple-optimizations.ts",
+      "line": 81,
+      "code": "descriptor.value = function(...args: any[]) {",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/utility-types.ts",
+      "line": 465,
+      "code": "export type Params<T extends (...args: any[]) => any> = Parameters<T>;",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/utility-types.ts",
+      "line": 480,
+      "code": "export type Result<T extends (...args: any[]) => any> =",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/utility-types.ts",
+      "line": 496,
+      "code": "export type AsyncResult<T extends (...args: any[]) => Promise<any>> =",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Promise<void> or Promise<SpecificType>"
+    },
+    {
+      "file": "src/lib/types/utility-types.ts",
+      "line": 497,
+      "code": "T extends (...args: any[]) => Promise<infer R> ? R : never;",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/utility-types.ts",
+      "line": 508,
+      "code": "export type FirstParam<T extends (...args: any[]) => any> =",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/utility-types.ts",
+      "line": 520,
+      "code": "export type LastParam<T extends (...args: any[]) => any> =",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/utility-types.ts",
+      "line": 532,
+      "code": "export type SecondParam<T extends (...args: any[]) => any> =",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/utility-types.ts",
+      "line": 546,
+      "code": "T extends (...args: any[]) => any,",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/utility-types.ts",
+      "line": 565,
+      "code": "export type InstanceOf<T extends abstract new (...args: any[]) => any> =",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/utility-types.ts",
+      "line": 580,
+      "code": "export type ConstructorParams<T extends abstract new (...args: any[]) => any> =",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/utility-types.ts",
+      "line": 689,
+      "code": "export type AsyncReturnType<T extends (...args: any[]) => Promise<any>> =",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Promise<void> or Promise<SpecificType>"
+    },
+    {
+      "file": "src/lib/types/utility-types.ts",
+      "line": 703,
+      "code": "export type PromisifyReturnType<T extends (...args: any[]) => any> =",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/types/utility-types.ts",
+      "line": 1019,
+      "code": "export type IsFunction<T> = T extends (...args: any[]) => any ? true : false;",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/utils/typescript-performance.ts",
+      "line": 326,
+      "code": "export const performanceDecorator = <T extends (...args: any[]) => any>(",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/utils/typescript-performance.ts",
+      "line": 329,
+      "code": "return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {",
+      "category": "implicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/utils/typescript-performance.ts",
+      "line": 332,
+      "code": "descriptor.value = function (...args: any[]) {",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/lib/wizard/actions.ts",
+      "line": 43,
+      "code": "const curriculumData: CurriculumData[] = textbooks?.map((textbook: any) => ({",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/wizard/actions.ts",
+      "line": 47,
+      "code": "topics: textbook.chapters?.flatMap((chapter: any) => chapter.topics || []) || []",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/middleware/security-error-handler.ts",
+      "line": 57,
+      "code": "payload?: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/middleware/security-error-handler.ts",
+      "line": 255,
+      "code": "let payload: any = undefined;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/middleware/security-error-handler.ts",
+      "line": 428,
+      "code": "private analyzePayload(payload: any): { riskScore: number; threats: SecurityErrorCode[]; patterns: string[] } {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/middleware/security-error-handler.ts",
+      "line": 949,
+      "code": "code: 'AUTHENTICATION_ERROR' as any,",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/middleware/security-error-handler.ts",
+      "line": 1080,
+      "code": "private async logMiddlewareError(error: any, request: NextRequest): Promise<void> {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/services/voice-session-recovery.ts",
+      "line": 77,
+      "code": "type RecoveryEventListener = (...args: any[]) => void | Promise<void>;",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Event or specific event type"
+    },
+    {
+      "file": "src/services/voice-session-recovery.ts",
+      "line": 301,
+      "code": "let sessionState: any = null;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/services/voice-session-recovery.ts",
+      "line": 302,
+      "code": "this.emit('get_session_state', sessionId, (state: any) => {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": false,
+      "severity": "medium",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/components/errors/__tests__/ErrorBoundary.test.tsx",
+      "line": 330,
+      "code": "delete (window as any).location;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/components/errors/__tests__/ErrorBoundary.test.tsx",
+      "line": 331,
+      "code": "window.location = { href: '' } as any;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/components/textbook/__tests__/ContentManagementDashboard.test.tsx",
+      "line": 59,
+      "code": ") as any;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/security/input-sanitization.test.ts",
+      "line": 49,
+      "code": "const resultNull = sanitizeText(null as any);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/security/input-sanitization.test.ts",
+      "line": 50,
+      "code": "const resultUndefined = sanitizeText(undefined as any);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/security/input-sanitization.test.ts",
+      "line": 106,
+      "code": "const resultNull = sanitizeHtml(null as any);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/security/input-sanitization.test.ts",
+      "line": 107,
+      "code": "const resultUndefined = sanitizeHtml(undefined as any);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/security/input-sanitization.test.ts",
+      "line": 184,
+      "code": "const resultNull = validateUrl(null as any);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/security/input-sanitization.test.ts",
+      "line": 185,
+      "code": "const resultUndefined = validateUrl(undefined as any);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/security/input-sanitization.test.ts",
+      "line": 264,
+      "code": "const resultNull = detectXssAttempt(null as any);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/security/input-sanitization.test.ts",
+      "line": 265,
+      "code": "const resultUndefined = detectXssAttempt(undefined as any);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/security/session-storage.test.ts",
+      "line": 306,
+      "code": "delete (global as any).window;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/types/helpers.test.ts",
+      "line": 83,
+      "code": "(frozen as any).a = 'changed';",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/lib/types/helpers.test.ts",
+      "line": 377,
+      "code": "const obj: any = { a: 1 };",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/lib/types/union-types.test.ts",
+      "line": 949,
+      "code": "match(state, 'status', incompleteHandlers as any)",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/api/livekit-integration.test.ts",
+      "line": 308,
+      "code": "(getDisplayBuffer as any).mockReturnValue(mockDisplayBuffer);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/api/livekit-integration.test.ts",
+      "line": 339,
+      "code": "(getDisplayBuffer as any).mockReturnValue(mockDisplayBuffer);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/api/livekit-integration.test.ts",
+      "line": 341,
+      "code": "(TranscriptionService.processTranscription as any).mockReturnValue({",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/api/livekit-integration.test.ts",
+      "line": 375,
+      "code": "(createClient as any).mockResolvedValueOnce({",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/api/textbooks-hierarchy.test.ts",
+      "line": 44,
+      "code": "let mockUser: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/api/textbooks-hierarchy.test.ts",
+      "line": 45,
+      "code": "let validRequestBody: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/api/textbooks-hierarchy.test.ts",
+      "line": 535,
+      "code": "function createMockSuccessfulQuery(data: any) {",
+      "category": "implicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/api/textbooks-hierarchy.test.ts",
+      "line": 548,
+      "code": "let mockUser: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/components/ContentManagementDashboard.test.tsx",
+      "line": 29,
+      "code": "Button: ({ children, onClick, ...props }: any) => (",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/components/ContentManagementDashboard.test.tsx",
+      "line": 37,
+      "code": "Card: ({ children, ...props }: any) => <div {...props}>{children}</div>,",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/components/ContentManagementDashboard.test.tsx",
+      "line": 38,
+      "code": "CardContent: ({ children, ...props }: any) => <div {...props}>{children}</div>,",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/components/ContentManagementDashboard.test.tsx",
+      "line": 39,
+      "code": "CardDescription: ({ children, ...props }: any) => <div {...props}>{children}</div>,",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/components/ContentManagementDashboard.test.tsx",
+      "line": 40,
+      "code": "CardHeader: ({ children, ...props }: any) => <div {...props}>{children}</div>,",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/components/ContentManagementDashboard.test.tsx",
+      "line": 41,
+      "code": "CardTitle: ({ children, ...props }: any) => <h3 {...props}>{children}</h3>",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/components/ContentManagementDashboard.test.tsx",
+      "line": 45,
+      "code": "Badge: ({ children, variant, ...props }: any) => (",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/components/ContentManagementDashboard.test.tsx",
+      "line": 53,
+      "code": "Tabs: ({ children, value, onValueChange, ...props }: any) => (",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/components/ContentManagementDashboard.test.tsx",
+      "line": 58,
+      "code": "TabsContent: ({ children, value, ...props }: any) => (",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/components/ContentManagementDashboard.test.tsx",
+      "line": 63,
+      "code": "TabsList: ({ children, ...props }: any) => (",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/components/ContentManagementDashboard.test.tsx",
+      "line": 68,
+      "code": "TabsTrigger: ({ children, value, onClick, ...props }: any) => (",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/components/ContentManagementDashboard.test.tsx",
+      "line": 80,
+      "code": "Input: ({ onChange, value, placeholder, ...props }: any) => (",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/components/ContentManagementDashboard.test.tsx",
+      "line": 91,
+      "code": "Label: ({ children, ...props }: any) => <label {...props}>{children}</label>",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/components/ContentManagementDashboard.test.tsx",
+      "line": 96,
+      "code": "const mockUseSWR = useSWR as any;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/components/ContentManagementDashboard.test.tsx",
+      "line": 100,
+      "code": "let mockSWRReturn: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/components/ContentManagementDashboard.test.tsx",
+      "line": 101,
+      "code": "let mockChannel: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/components/ContentManagementDashboard.test.tsx",
+      "line": 315,
+      "code": "(call: any[]) => call[0] === 'postgres_changes'",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/components/ContentManagementDashboard.test.tsx",
+      "line": 337,
+      "code": "(call: any[]) => call[0] === 'postgres_changes'",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/components/ContentManagementDashboard.test.tsx",
+      "line": 357,
+      "code": "(call: any[]) => call[0] === 'postgres_changes'",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/e2e/session.e2e.test.ts",
+      "line": 60,
+      "code": "(SessionOrchestrator as any).instance = undefined;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/factories/index.ts",
+      "line": 163,
+      "code": "export function createMockWebSocketEvent(type: string, data: any = {}) {",
+      "category": "implicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Event or specific event type"
+    },
+    {
+      "file": "src/tests/hooks/useErrorHandler.test.ts",
+      "line": 44,
+      "code": "const mockToast = toast as any;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/hooks/useErrorHandler.test.ts",
+      "line": 45,
+      "code": "const mockHandleClientError = handleClientError as any;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/hooks/useErrorHandler.test.ts",
+      "line": 46,
+      "code": "const mockGetUserFriendlyMessage = getUserFriendlyMessage as any;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/hooks/useErrorHandler.test.ts",
+      "line": 47,
+      "code": "const mockGetErrorRecoveryConfig = getErrorRecoveryConfig as any;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/hooks/useErrorHandler.test.ts",
+      "line": 48,
+      "code": "const mockCreateErrorContext = createErrorContext as any;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/hooks/useErrorHandler.test.ts",
+      "line": 49,
+      "code": "const mockLogError = logError as any;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/hooks/useErrorHandler.test.ts",
+      "line": 148,
+      "code": "let response: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/hooks/useErrorHandler.test.ts",
+      "line": 199,
+      "code": "let response: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/hooks/useErrorHandler.test.ts",
+      "line": 286,
+      "code": "let response: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/hooks/useErrorHandler.test.ts",
+      "line": 492,
+      "code": "(result.current as any).setState({",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/hooks/useErrorHandler.test.ts",
+      "line": 735,
+      "code": "let response1: any, response2: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/integration/api-endpoints.test.ts",
+      "line": 141,
+      "code": "const hasChapterOrganization = !!(invalidRequest.formData as any).chapterOrganization;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/integration/component-workflows.test.ts",
+      "line": 79,
+      "code": "(mockSWR.default as any).mockReturnValue({",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/integration/component-workflows.test.ts",
+      "line": 147,
+      "code": "(mockSWR.default as any).mockReturnValue({",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/integration/component-workflows.test.ts",
+      "line": 174,
+      "code": "let subscriptionCallback: ((payload: any) => void) | null = null;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/integration/transcript-flow.test.ts",
+      "line": 52,
+      "code": "(SessionOrchestrator as any).instance = undefined;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/integration/transcription-service.test.ts",
+      "line": 273,
+      "code": "const invalidInput = null as any;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/integration/voice-session-lifecycle.test.ts",
+      "line": 23,
+      "code": "let testEnv: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/integration/voice-session-lifecycle.test.ts",
+      "line": 24,
+      "code": "let mockStudent: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/integration/voice-session-recovery.test.ts",
+      "line": 78,
+      "code": "window.addEventListener('voice_session_notification', (event: any) => {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Event or specific event type"
+    },
+    {
+      "file": "src/tests/integration/websocket-manager.test.ts",
+      "line": 20,
+      "code": "let mockWS: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/integration/websocket-manager.test.ts",
+      "line": 44,
+      "code": "expect(() => new (WebSocketManager as any)()).toThrow();",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/integration/websocket-manager.test.ts",
+      "line": 76,
+      "code": "mockWS.onerror?.({ error: 'Connection failed' } as any);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/integration/websocket-manager.test.ts",
+      "line": 231,
+      "code": "mockWS.onerror?.(errorEvent as any);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Event or specific event type"
+    },
+    {
+      "file": "src/tests/mocks/protected-core.ts",
+      "line": 111,
+      "code": "// TS-006: Fixed speaker parameter typing (was speaker as any)",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/mocks/protected-core.ts",
+      "line": 162,
+      "code": "// TS-006: Fixed return type to match contract (was any[])",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/mocks/protected-core.ts",
+      "line": 208,
+      "code": "return validSpeakers.includes(speaker as any)",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/mocks/protected-core.ts",
+      "line": 234,
+      "code": "private sessionState: any = null;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/mocks/protected-core.ts",
+      "line": 277,
+      "code": "getSessionState(): any {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/mocks/protected-core.ts",
+      "line": 301,
+      "code": "// TS-006: Fixed typing - was 'config: any'",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/mocks/protected-core.ts",
+      "line": 325,
+      "code": "// TS-006: Fixed typing - was 'message: any'",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/mocks/protected-core.ts",
+      "line": 362,
+      "code": "// TS-006: Fixed typing - was 'data: any'",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "unknown (then narrow with type guard)"
+    },
+    {
+      "file": "src/tests/mocks/protected-core.ts",
+      "line": 375,
+      "code": "// TS-006: Fixed typing - was 'data: any'",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "unknown (then narrow with type guard)"
+    },
+    {
+      "file": "src/tests/mocks/protected-core.ts",
+      "line": 380,
+      "code": "// TS-006: Fixed typing - was 'error: any'",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/performance/load-testing.test.ts",
+      "line": 274,
+      "code": "const voiceSessions = results.filter((r: any) => r.type === 'voice_session');",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/performance/load-testing.test.ts",
+      "line": 275,
+      "code": "const transcriptions = results.filter((r: any) => r.type === 'transcription');",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/performance/load-testing.test.ts",
+      "line": 276,
+      "code": "const dbOperations = results.filter((r: any) => r.type === 'database');",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/performance/load-testing.test.ts",
+      "line": 765,
+      "code": "const averageQueryTime = successfulResults.reduce((sum: number, result: any) =>",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/performance/type-heavy-operations.test.ts",
+      "line": 62,
+      "code": "validateResult?: (result: any) => boolean;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/performance/type-heavy-operations.test.ts",
+      "line": 77,
+      "code": "let result: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/performance/type-heavy-operations.test.ts",
+      "line": 148,
+      "code": "if (typeof performance !== 'undefined' && (performance as any).memory) {",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/performance/type-heavy-operations.test.ts",
+      "line": 149,
+      "code": "return (performance as any).memory.usedJSHeapSize;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/performance/type-heavy-operations.test.ts",
+      "line": 376,
+      "code": "severity: ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'][i % 4] as any,",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/performance/type-heavy-operations.test.ts",
+      "line": 387,
+      "code": "threatLevel: ['suspicious', 'moderate', 'high', 'critical'][i % 4] as any,",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/performance/type-heavy-operations.test.ts",
+      "line": 415,
+      "code": "level: level as any,",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/performance/type-heavy-operations.test.ts",
+      "line": 616,
+      "code": "const countErrors = (obj: any): number => {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/performance/type-heavy-operations.test.ts",
+      "line": 689,
+      "code": "return isEntity(item) && 'name' in item && typeof (item as any).name === 'string';",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/security/security-test-framework.ts",
+      "line": 827,
+      "code": "code: 'AUTHENTICATION_ERROR' as any,",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 50,
+      "code": "let mockSessionState: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 214,
+      "code": "(recoveryService as any).checkpoints.set(sessionId, mockCheckpoint);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 245,
+      "code": "(recoveryService as any).checkpoints.set(sessionId, mockCheckpoint);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 318,
+      "code": "(recoveryService as any).retryAttempts.set(sessionId, mockConfig.maxRetries);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 339,
+      "code": "(recoveryService as any).circuitBreaker.set(sessionId, true);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 368,
+      "code": "const result = await (recoveryService as any).attemptReconnection(sessionId);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 394,
+      "code": "(recoveryService as any).retryAttempts.set(sessionId, 10);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 397,
+      "code": "await (recoveryService as any).attemptReconnection(sessionId);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 418,
+      "code": "await (recoveryService as any).createCheckpoint(sessionId);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 433,
+      "code": "await expect((recoveryService as any).createCheckpoint(sessionId)).resolves.toBeUndefined();",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 446,
+      "code": "(recoveryService as any).checkpoints.set(sessionId, oldCheckpoint);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 449,
+      "code": "await (recoveryService as any).checkActiveSessionsHealth();",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 451,
+      "code": "expect((recoveryService as any).checkpoints.has(sessionId)).toBe(false);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 464,
+      "code": "await (recoveryService as any).fallbackToTextMode(sessionId);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 489,
+      "code": "await (recoveryService as any).fallbackToTextMode(sessionId);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 507,
+      "code": "(recoveryService as any).incrementRetryCount(sessionId);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 510,
+      "code": "(recoveryService as any).openCircuitBreaker(sessionId);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 512,
+      "code": "expect((recoveryService as any).isCircuitBreakerOpen(sessionId)).toBe(true);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 518,
+      "code": "(recoveryService as any).openCircuitBreaker(sessionId);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 519,
+      "code": "expect((recoveryService as any).isCircuitBreakerOpen(sessionId)).toBe(true);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 526,
+      "code": "expect((recoveryService as any).isCircuitBreakerOpen(sessionId)).toBe(true);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 532,
+      "code": "(recoveryService as any).incrementRetryCount(sessionId);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 533,
+      "code": "(recoveryService as any).openCircuitBreaker(sessionId);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 535,
+      "code": "expect((recoveryService as any).getRetryCount(sessionId)).toBeGreaterThan(0);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 537,
+      "code": "(recoveryService as any).resetRetryCounter(sessionId);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 539,
+      "code": "expect((recoveryService as any).getRetryCount(sessionId)).toBe(0);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 540,
+      "code": "expect((recoveryService as any).isCircuitBreakerOpen(sessionId)).toBe(false);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 548,
+      "code": "(recoveryService as any).incrementRetryCount(sessionId);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 549,
+      "code": "(recoveryService as any).checkpoints.set(sessionId, mockCheckpoint);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 577,
+      "code": "(recoveryService as any).openCircuitBreaker(sessionId);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 578,
+      "code": "(recoveryService as any).incrementRetryCount(sessionId);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 583,
+      "code": "expect((recoveryService as any).isCircuitBreakerOpen(sessionId)).toBe(false);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 584,
+      "code": "expect((recoveryService as any).getRetryCount(sessionId)).toBe(0);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 590,
+      "code": "(recoveryService as any).checkpoints.set(sessionId, mockCheckpoint);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 591,
+      "code": "(recoveryService as any).incrementRetryCount(sessionId);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 592,
+      "code": "(recoveryService as any).openCircuitBreaker(sessionId);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 596,
+      "code": "expect((recoveryService as any).checkpoints.size).toBe(0);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 597,
+      "code": "expect((recoveryService as any).retryAttempts.size).toBe(0);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 598,
+      "code": "expect((recoveryService as any).circuitBreaker.size).toBe(0);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 606,
+      "code": "(recoveryService as any).notifyUser('test-session-1', 'connection_lost', {",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 627,
+      "code": "delete (global as any).window;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 631,
+      "code": "(recoveryService as any).notifyUser('test-session-1', 'connection_lost');",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 644,
+      "code": "(recoveryService as any).checkpoints.set(sessionId, mockCheckpoint);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 646,
+      "code": "await (recoveryService as any).escalateToHuman(sessionId, error);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 664,
+      "code": "(recoveryService as any).checkpoints.set(sessionId, mockCheckpoint);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 665,
+      "code": "(recoveryService as any).incrementRetryCount(sessionId);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 669,
+      "code": "await (recoveryService as any).escalateToHuman(sessionId, sessionError);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 671,
+      "code": "const escalationCall = (window.dispatchEvent as any).mock.calls.find(",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Event or specific event type"
+    },
+    {
+      "file": "src/tests/services/voice-session-recovery.test.ts",
+      "line": 672,
+      "code": "(call: any) => call[0].detail.type === 'escalation_required'",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/session/orchestrator.test.ts",
+      "line": 53,
+      "code": "(SessionOrchestrator as any).instance = undefined;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/session/orchestrator.test.ts",
+      "line": 282,
+      "code": "const acceptedCalls = (consoleSpy.mock.calls as any[])",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/typescript/advanced-patterns.test.ts",
+      "line": 131,
+      "code": "protected async executeQuery<TResult>(query: any): Promise<TResult> {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/typescript/advanced-patterns.test.ts",
+      "line": 172,
+      "code": "protected buildSelectQuery(where?: any, select?: string[], options?: any): any {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/typescript/advanced-patterns.test.ts",
+      "line": 176,
+      "code": "protected buildInsertQuery(data: any): any {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "unknown (then narrow with type guard)"
+    },
+    {
+      "file": "src/tests/typescript/advanced-patterns.test.ts",
+      "line": 180,
+      "code": "protected buildUpdateQuery(id: any, data: any): any {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "unknown (then narrow with type guard)"
+    },
+    {
+      "file": "src/tests/typescript/advanced-patterns.test.ts",
+      "line": 184,
+      "code": "protected buildDeleteQuery(id: any): any {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/typescript/advanced-patterns.test.ts",
+      "line": 188,
+      "code": "protected buildBatchInsertQuery(items: any[]): any {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/typescript/advanced-patterns.test.ts",
+      "line": 192,
+      "code": "protected buildCountQuery(where?: any): any {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/typescript/advanced-patterns.test.ts",
+      "line": 245,
+      "code": "} as any)).rejects.toThrow('Email is required');",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/typescript/advanced-patterns.test.ts",
+      "line": 259,
+      "code": "} as any)).rejects.toThrow('Invalid role');",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/utils/enhanced-integration-helpers.ts",
+      "line": 12,
+      "code": "supabase: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/enhanced-integration-helpers.ts",
+      "line": 21,
+      "code": "voice_preferences?: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/enhanced-integration-helpers.ts",
+      "line": 164,
+      "code": "overrides: any = {}",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/enhanced-integration-helpers.ts",
+      "line": 223,
+      "code": "overrides: any = {}",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/enhanced-integration-helpers.ts",
+      "line": 309,
+      "code": "operation: (supabase: any) => Promise<void>",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/enhanced-integration-helpers.ts",
+      "line": 344,
+      "code": "messages: any[] = [];",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/enhanced-integration-helpers.ts",
+      "line": 346,
+      "code": "send(data: any): void {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "unknown (then narrow with type guard)"
+    },
+    {
+      "file": "src/tests/utils/enhanced-integration-helpers.ts",
+      "line": 357,
+      "code": "simulateMessage(data: any): void {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "unknown (then narrow with type guard)"
+    },
+    {
+      "file": "src/tests/utils/enhanced-integration-helpers.ts",
+      "line": 376,
+      "code": "body?: any,",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/enhanced-integration-helpers.ts",
+      "line": 443,
+      "code": "condition: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/error-handling-utilities.test.ts",
+      "line": 21,
+      "code": "details?: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/error-handling-utilities.test.ts",
+      "line": 31,
+      "code": "details?: any,",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/error-handling-utilities.test.ts",
+      "line": 71,
+      "code": "body?: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/error-handling-utilities.test.ts",
+      "line": 277,
+      "code": "errorInfo: any | null;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/utils/error-handling-utilities.test.ts",
+      "line": 294,
+      "code": "componentDidCatch(error: Error, errorInfo: any): ErrorBoundaryState {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/utils/error-handling-utilities.test.ts",
+      "line": 391,
+      "code": "getErrorReport(): any {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/utils/error-handling-utilities.test.ts",
+      "line": 613,
+      "code": "error?: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/utils/error-handling-utilities.test.ts",
+      "line": 625,
+      "code": "error?: any,",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/utils/error-handling-utilities.test.ts",
+      "line": 652,
+      "code": "warn(message: string, error?: any, context?: Record<string, any>): void {",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/utils/error-handling-utilities.test.ts",
+      "line": 656,
+      "code": "error(message: string, error?: any, context?: Record<string, any>): void {",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/utils/error-handling-utilities.test.ts",
+      "line": 660,
+      "code": "fatal(message: string, error?: any, context?: Record<string, any>): void {",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/utils/error-handling-utilities.test.ts",
+      "line": 667,
+      "code": "error?: any,",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/utils/error-handling-utilities.test.ts",
+      "line": 845,
+      "code": "private generateFingerprint(error: Error, context: any): string {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/utils/error-handling-utilities.test.ts",
+      "line": 850,
+      "code": "private calculateSeverity(error: Error, context: any): ErrorReport['severity'] {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/utils/index.ts",
+      "line": 47,
+      "code": "export function mockFetch(response: any, status: number = 200) {",
+      "category": "implicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/index.ts",
+      "line": 118,
+      "code": "(WebSocketMock as any).CONNECTING = 0;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/utils/index.ts",
+      "line": 119,
+      "code": "(WebSocketMock as any).OPEN = 1;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/utils/index.ts",
+      "line": 120,
+      "code": "(WebSocketMock as any).CLOSING = 2;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/utils/index.ts",
+      "line": 121,
+      "code": "(WebSocketMock as any).CLOSED = 3;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/utils/index.ts",
+      "line": 160,
+      "code": "(MediaRecorderMock as any).isTypeSupported = vi.fn().mockReturnValue(true);",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/utils/index.ts",
+      "line": 208,
+      "code": "export function triggerErrorBoundary(component: any, error: Error) {",
+      "category": "implicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/utils/index.ts",
+      "line": 286,
+      "code": "export function mockFunction<T extends (...args: any[]) => any>(",
+      "category": "generic",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Use generic: <T extends unknown[]>"
+    },
+    {
+      "file": "src/tests/utils/index.ts",
+      "line": 321,
+      "code": "(fileList as any)[index] = file;",
+      "category": "assertion",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Remove type assertion and fix actual type"
+    },
+    {
+      "file": "src/tests/utils/integration-helpers.ts",
+      "line": 21,
+      "code": "client: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/integration-helpers.ts",
+      "line": 24,
+      "code": "transaction: <T>(callback: (trx: any) => Promise<T>) => Promise<T>;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/integration-helpers.ts",
+      "line": 57,
+      "code": "voiceService: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/integration-helpers.ts",
+      "line": 58,
+      "code": "transcriptionService: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/integration-helpers.ts",
+      "line": 59,
+      "code": "websocketManager: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/integration-helpers.ts",
+      "line": 60,
+      "code": "sessionOrchestrator: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/integration-helpers.ts",
+      "line": 61,
+      "code": "errorHandler: any;",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Error | unknown"
+    },
+    {
+      "file": "src/tests/utils/integration-helpers.ts",
+      "line": 103,
+      "code": "insert: (data: any) => {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "unknown (then narrow with type guard)"
+    },
+    {
+      "file": "src/tests/utils/integration-helpers.ts",
+      "line": 110,
+      "code": "update: (data: any) => ({",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "unknown (then narrow with type guard)"
+    },
+    {
+      "file": "src/tests/utils/integration-helpers.ts",
+      "line": 172,
+      "code": "async transaction<T>(callback: (trx: any) => Promise<T>): Promise<T> {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/integration-helpers.ts",
+      "line": 191,
+      "code": "insert: (data: any) => {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "unknown (then narrow with type guard)"
+    },
+    {
+      "file": "src/tests/utils/integration-helpers.ts",
+      "line": 198,
+      "code": "update: (data: any) => ({",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "unknown (then narrow with type guard)"
+    },
+    {
+      "file": "src/tests/utils/integration-helpers.ts",
+      "line": 693,
+      "code": "const sessionStudentIds = sessions.data?.map((s: any) => s.student_id) || [];",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/integration-helpers.ts",
+      "line": 694,
+      "code": "const profileIds = profiles.data?.map((p: any) => p.id) || [];",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/integration-helpers.ts",
+      "line": 718,
+      "code": "const sessionIds = sessions.data?.map((s: any) => s.id) || [];",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/integration-helpers.ts",
+      "line": 743,
+      "code": "mockSubscription(tableName: string, callback: (payload: any) => void) {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    },
+    {
+      "file": "src/tests/utils/integration-helpers.ts",
+      "line": 746,
+      "code": "on: vi.fn().mockImplementation((event: string, handler: (payload: any) => void) => {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Event or specific event type"
+    },
+    {
+      "file": "src/tests/utils/integration-helpers.ts",
+      "line": 753,
+      "code": "triggerEvent: (event: string, payload: any) => {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Event or specific event type"
+    },
+    {
+      "file": "src/tests/utils/integration-helpers.ts",
+      "line": 762,
+      "code": "simulateRealtimeUpdate(table: string, operation: 'INSERT' | 'UPDATE' | 'DELETE', record: any) {",
+      "category": "explicit",
+      "protectedCore": false,
+      "isTest": true,
+      "severity": "low",
+      "suggestedType": "Specific type based on context"
+    }
+  ]
+}

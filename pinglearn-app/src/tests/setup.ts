@@ -139,12 +139,42 @@ vi.mock('@/protected-core', async () => {
     BufferManager: vi.fn(),
     getTextProcessor: vi.fn(),
     resetTextProcessor: vi.fn(),
-    DisplayBuffer: vi.fn(),
+    // Mock DisplayBuffer as a class constructor (not just a function)
+    DisplayBuffer: vi.fn().mockImplementation(() => ({
+      // Item management
+      addItem: vi.fn(),
+      getItems: vi.fn(() => []),
+      clearBuffer: vi.fn(),
+      getLastItem: vi.fn(() => undefined),
+
+      // Item operations
+      removeItem: vi.fn(() => true),
+      updateItem: vi.fn(() => true),
+
+      // Filtering methods
+      getItemsByType: vi.fn(() => []),
+      getItemsBySpeaker: vi.fn(() => []),
+      getItemsInTimeRange: vi.fn(() => []),
+
+      // Buffer info
+      getBufferSize: vi.fn(() => 0),
+
+      // Subscription pattern (returns unsubscribe function)
+      subscribe: vi.fn(() => vi.fn()),
+    })),
     getDisplayBuffer: vi.fn(() => ({
       getItems: vi.fn(() => []),
       addItem: vi.fn(),
-      clear: vi.fn(),
+      clearBuffer: vi.fn(),
       getSize: vi.fn(() => 0),
+      getLastItem: vi.fn(() => undefined),
+      removeItem: vi.fn(() => true),
+      updateItem: vi.fn(() => true),
+      getItemsByType: vi.fn(() => []),
+      getItemsBySpeaker: vi.fn(() => []),
+      getItemsInTimeRange: vi.fn(() => []),
+      getBufferSize: vi.fn(() => 0),
+      subscribe: vi.fn(() => vi.fn()),
     })),
     resetDisplayBuffer: vi.fn(),
     DisplayFormatter: vi.fn(),

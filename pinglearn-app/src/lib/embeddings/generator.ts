@@ -5,6 +5,7 @@
 
 import { GoogleGenAI } from '@google/genai';
 import { createClient } from '@/lib/supabase/server';
+import type { OperationResult, EmbeddingGenerationResult } from '@/lib/types/operation-result';
 
 export interface EmbeddingData {
   content: string;
@@ -88,9 +89,24 @@ export class EmbeddingGenerator {
 
   /**
    * Generate and store embeddings for textbook content chunks
+   *
+   * @param textbookId - ID of the textbook to generate embeddings for
+   * @returns OperationResult with success status and detailed metrics
+   *
+   * Success Criteria:
+   * - ≥95% of chunks successfully generate embeddings
+   * - All successful embeddings stored in database
+   * - Textbook marked complete only if success rate met
    */
-  async generateTextbookEmbeddings(textbookId: string): Promise<void> {
+  async generateTextbookEmbeddings(
+    textbookId: string
+  ): Promise<OperationResult<EmbeddingGenerationResult>> {
     const supabase = await createClient();
+
+    // Track successes and failures
+    const failedChunks: Array<{ id: string; reason: string }> = [];
+    let successCount = 0;
+    let totalCount = 0;
 
     try {
       console.log(`🔄 Generating embeddings for textbook ${textbookId}...`);
@@ -108,10 +124,23 @@ export class EmbeddingGenerator {
 
       if (!chunks || chunks.length === 0) {
         console.log(`ℹ️ No content chunks found for textbook ${textbookId}`);
-        return;
+
+        // Return success with zero chunks processed
+        return {
+          success: true,
+          data: {
+            textbookId,
+            totalChunks: 0,
+            successfulEmbeddings: 0,
+            failedEmbeddings: 0,
+            failedChunkIds: [],
+            successRate: 100
+          }
+        };
       }
 
       console.log(`📝 Processing ${chunks.length} content chunks...`);
+      totalCount = chunks.length;
 
       // Generate embeddings for each chunk
       for (const chunk of chunks) {
@@ -128,8 +157,15 @@ export class EmbeddingGenerator {
             .eq('id', chunk.id);
 
           if (updateError) {
+            // Database update failed - track failure
+            failedChunks.push({
+              id: chunk.id,
+              reason: `Database update failed: ${updateError.message}`
+            });
             console.error(`❌ Failed to store embedding for chunk ${chunk.id}:`, updateError);
           } else {
+            // Success!
+            successCount++;
             console.log(`✅ Generated embedding for chunk ${chunk.id}`);
           }
 
@@ -137,20 +173,65 @@ export class EmbeddingGenerator {
           await new Promise(resolve => setTimeout(resolve, 200));
 
         } catch (chunkError) {
+          // Embedding generation failed - track failure
+          const errorMessage = chunkError instanceof Error ? chunkError.message : 'Unknown error';
+          failedChunks.push({
+            id: chunk.id,
+            reason: `Embedding generation failed: ${errorMessage}`
+          });
           console.error(`❌ Failed to generate embedding for chunk ${chunk.id}:`, chunkError);
         }
       }
 
-      // Update textbook status to indicate embeddings are complete
-      await supabase
-        .from('textbooks')
-        .update({
-          has_embeddings: true,
-          processing_status: 'embeddings_complete'
-        })
-        .eq('id', textbookId);
+      // Calculate success rate
+      const successRate = totalCount > 0 ? (successCount / totalCount) * 100 : 0;
+      const isComplete = successRate >= 95; // Require 95% success rate
 
-      console.log(`🎉 Completed embedding generation for textbook ${textbookId}`);
+      console.log(`📊 Embedding generation stats: ${successCount}/${totalCount} successful (${successRate.toFixed(1)}%)`);
+
+      // Update textbook status based on success rate
+      if (isComplete) {
+        // ✅ Success rate acceptable - mark textbook complete
+        await supabase
+          .from('textbooks')
+          .update({
+            has_embeddings: true,
+            processing_status: 'embeddings_complete',
+            error_message: null // Clear any previous errors
+          })
+          .eq('id', textbookId);
+
+        console.log(`🎉 Completed embedding generation for textbook ${textbookId}`);
+      } else {
+        // ❌ Success rate too low - mark as partial failure
+        const errorDetail = `${failedChunks.length}/${totalCount} chunks failed (${successRate.toFixed(1)}% success rate, requires ≥95%)`;
+
+        await supabase
+          .from('textbooks')
+          .update({
+            has_embeddings: false,
+            processing_status: 'embeddings_partial_failure',
+            error_message: errorDetail
+          })
+          .eq('id', textbookId);
+
+        console.error(`⚠️ Embedding generation incomplete: ${errorDetail}`);
+      }
+
+      // Return detailed result
+      return {
+        success: isComplete,
+        data: {
+          textbookId,
+          totalChunks: totalCount,
+          successfulEmbeddings: successCount,
+          failedEmbeddings: failedChunks.length,
+          failedChunkIds: failedChunks.map(f => f.id),
+          successRate
+        },
+        error: isComplete ? undefined : `Embedding generation incomplete: ${successRate.toFixed(1)}% success rate (requires ≥95%)`,
+        failedItems: failedChunks.length > 0 ? failedChunks : undefined
+      };
 
     } catch (error) {
       console.error(`💥 Error generating textbook embeddings:`, error);
@@ -164,7 +245,20 @@ export class EmbeddingGenerator {
         })
         .eq('id', textbookId);
 
-      throw error;
+      // Return failure result
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        data: {
+          textbookId,
+          totalChunks: totalCount,
+          successfulEmbeddings: successCount,
+          failedEmbeddings: failedChunks.length,
+          failedChunkIds: failedChunks.map(f => f.id),
+          successRate: totalCount > 0 ? (successCount / totalCount) * 100 : 0
+        },
+        failedItems: failedChunks.length > 0 ? failedChunks : undefined
+      };
     }
   }
 

@@ -86,7 +86,27 @@ export class RealPDFProcessor {
       onProgress?.('Generating embeddings...', 90);
 
       // Generate embeddings
-      await this.embeddingGenerator.generateTextbookEmbeddings(textbookId);
+      const embeddingResult = await this.embeddingGenerator.generateTextbookEmbeddings(textbookId);
+
+      // Check if embedding generation was successful
+      if (!embeddingResult.success) {
+        console.error(`⚠️ Embedding generation incomplete for textbook ${textbookId}:`, embeddingResult.error);
+        console.error(`Failed chunks: ${embeddingResult.data?.failedChunkIds.join(', ')}`);
+
+        // Log detailed failure information
+        if (embeddingResult.failedItems && embeddingResult.failedItems.length > 0) {
+          console.error('Detailed failures:');
+          embeddingResult.failedItems.forEach(item => {
+            console.error(`  - Chunk ${item.id}: ${item.reason}`);
+          });
+        }
+
+        // Still continue - partial embeddings are better than none
+        // But log the issue prominently
+        console.warn(`⚠️ Proceeding with ${embeddingResult.data?.successRate.toFixed(1)}% embedding success rate`);
+      } else {
+        console.log(`✅ Embeddings generated successfully: ${embeddingResult.data?.successfulEmbeddings}/${embeddingResult.data?.totalChunks} chunks`);
+      }
 
       onProgress?.('Processing complete!', 100);
 
