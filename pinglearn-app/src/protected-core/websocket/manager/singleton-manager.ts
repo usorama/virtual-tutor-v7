@@ -26,7 +26,7 @@ export interface ConnectionEvent {
 }
 
 export class WebSocketManager extends EventEmitter {
-  private static instance: WebSocketManager;
+  private static instance: WebSocketManager | undefined;
   private connection: WebSocket | null = null;
   private reconnectTimer: NodeJS.Timeout | null = null;
   private reconnectAttempts = 0;
@@ -64,14 +64,14 @@ export class WebSocketManager extends EventEmitter {
 
   /**
    * Reset singleton instance (FOR TESTING ONLY)
-   * P1.1 Batch 1: Type-safe alternative to (WebSocketManager as any).instance
+   * P1.1 Batch 1: Type-safe alternative to using type assertions
    * @internal
    */
   static resetInstance(): void {
     if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') {
       console.warn('[WebSocketManager] resetInstance() should only be called in tests');
     }
-    WebSocketManager.instance = undefined as unknown as WebSocketManager;
+    WebSocketManager.instance = undefined;
     console.log('[WebSocketManager] Singleton instance reset');
   }
 

@@ -163,17 +163,27 @@ vi.mock('@/protected-core', async () => {
       subscribe: vi.fn(() => vi.fn()),
     })),
     getDisplayBuffer: vi.fn(() => ({
-      getItems: vi.fn(() => []),
+      // Item management
       addItem: vi.fn(),
+      getItems: vi.fn(() => []),
       clearBuffer: vi.fn(),
-      getSize: vi.fn(() => 0),
+      clear: vi.fn(), // Alias for clearBuffer (some tests might use this)
       getLastItem: vi.fn(() => undefined),
+
+      // Item operations
       removeItem: vi.fn(() => true),
       updateItem: vi.fn(() => true),
+
+      // Filtering methods
       getItemsByType: vi.fn(() => []),
       getItemsBySpeaker: vi.fn(() => []),
       getItemsInTimeRange: vi.fn(() => []),
+
+      // Buffer info
       getBufferSize: vi.fn(() => 0),
+      getSize: vi.fn(() => 0), // Alias for getBufferSize
+
+      // Subscription pattern
       subscribe: vi.fn(() => vi.fn()),
     })),
     resetDisplayBuffer: vi.fn(),
