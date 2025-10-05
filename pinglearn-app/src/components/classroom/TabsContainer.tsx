@@ -7,13 +7,19 @@ import { NotesPanel } from './NotesPanel';
 import { useSmartNotes } from '@/features/notes/useSmartNotes';
 import { cn } from '@/lib/utils';
 import { Info, FileText } from 'lucide-react';
+import type { UseSessionStateReturn } from '@/hooks/useSessionState';
 
+/**
+ * Props for the TabsContainer component
+ * @interface TabsContainerProps
+ */
 interface TabsContainerProps {
   // Session Info Panel props
   sessionId?: string;
   voiceSessionId?: string; // For Smart Notes integration
   topic: string;
-  sessionState: any;
+  /** Session state from useSessionState hook - provides real-time session status */
+  sessionState: UseSessionStateReturn;
   liveMetrics?: {
     duration: number;
     messagesExchanged: number;

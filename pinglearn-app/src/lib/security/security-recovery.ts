@@ -548,18 +548,25 @@ export class SecurityRecoveryManager {
    * Tamper-proof audit log system
    */
   private async auditLog_writeEntry(entry: Omit<AuditLogEntry, 'id' | 'timestamp' | 'integrity_hash'>): Promise<void> {
-    const logEntry: AuditLogEntry = {
+    // Create initial log entry without integrity hash
+    const tempEntry = {
       id: this.generateLogId(),
       timestamp: new Date().toISOString(),
       integrity_hash: '',
       ...entry
     };
 
-    // Calculate integrity hash
-    (logEntry as any).integrity_hash = this.calculateHash(JSON.stringify({
-      ...logEntry,
+    // Calculate integrity hash based on entry without the hash field
+    const integrityHash = this.calculateHash(JSON.stringify({
+      ...tempEntry,
       integrity_hash: undefined
     }));
+
+    // Create final log entry with integrity hash
+    const logEntry: AuditLogEntry = {
+      ...tempEntry,
+      integrity_hash: integrityHash
+    };
 
     // Add to audit log
     this.auditLog.push(logEntry);

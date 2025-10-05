@@ -55,12 +55,14 @@ function ClassroomPageContent() {
     clearError
   } = useVoiceSession();
 
+  // Get full session state for passing to child components
+  const sessionStateHook = useSessionState();
   const {
     state: sessionState,
     sessionId,
     roomName,
     getDetailedStatus
-  } = useSessionState();
+  } = sessionStateHook;
 
   // Metrics now used in SessionInfoPanel
   const { liveMetrics, qualityScore, engagementTrend } = useSessionMetrics();
@@ -497,7 +499,7 @@ function ClassroomPageContent() {
               sessionId={sessionId || undefined}
               voiceSessionId={session?.id}
               topic={currentTopic}
-              sessionState={sessionState}
+              sessionState={sessionStateHook}
               liveMetrics={liveMetrics}
               qualityScore={qualityScore}
               engagementTrend={engagementTrend}

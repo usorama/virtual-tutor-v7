@@ -384,8 +384,15 @@ export class EmbeddingGenerator {
     }
 
     const totalChunks = chunks.length;
-    const chunksWithEmbeddings = chunks.filter(
-      (chunk: any) => chunk.has_embedding || (chunk.embedding && chunk.embedding.length > 0)
+
+    // Type for textbook chunk with embedding info
+    type TextbookChunk = {
+      has_embedding?: boolean;
+      embedding?: number[];
+    };
+
+    const chunksWithEmbeddings = (chunks as TextbookChunk[]).filter(
+      (chunk) => chunk.has_embedding || (chunk.embedding && chunk.embedding.length > 0)
     ).length;
 
     const completionPercentage = totalChunks > 0 ? (chunksWithEmbeddings / totalChunks) * 100 : 0;

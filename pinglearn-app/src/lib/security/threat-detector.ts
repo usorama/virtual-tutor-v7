@@ -514,19 +514,27 @@ export class SecurityThreatDetector {
       }
 
       // Calculate success rate (approximation)
-      (profile as any).successRate = Math.max(0, 1 - (profile.errorCount / profile.requestCount));
-    }
+      const newSuccessRate = Math.max(0, 1 - (profile.errorCount / profile.requestCount));
 
-    // Update risk score based on behavior
-    (profile as any).riskScore = this.calculateClientRiskScore(profile);
+      // Update risk score based on behavior
+      const newRiskScore = this.calculateClientRiskScore(profile);
 
-    // Update status
-    if (profile.riskScore > 80) {
-      (profile as any).status = 'blocked';
-    } else if (profile.riskScore > 50) {
-      (profile as any).status = 'suspicious';
-    } else {
-      (profile as any).status = 'normal';
+      // Determine new status
+      const newStatus: 'normal' | 'suspicious' | 'blocked' =
+        newRiskScore > 80 ? 'blocked' :
+        newRiskScore > 50 ? 'suspicious' :
+        'normal';
+
+      // Create updated profile with new computed values
+      const updatedProfile: ClientBehaviorProfile = {
+        ...profile,
+        successRate: newSuccessRate,
+        riskScore: newRiskScore,
+        status: newStatus
+      };
+
+      this.clientProfiles.set(clientIP, updatedProfile);
+      return;
     }
 
     this.clientProfiles.set(clientIP, profile);

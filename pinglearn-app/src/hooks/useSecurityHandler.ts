@@ -503,7 +503,7 @@ export function useSecurityErrorBoundary() {
     showUserMessages: true
   });
 
-  const handleError = useCallback(async (error: Error, errorInfo: any) => {
+  const handleError = useCallback(async (error: Error, errorInfo: React.ErrorInfo) => {
     // Detect if error might be security-related
     const securityKeywords = ['injection', 'xss', 'csrf', 'auth', 'unauthorized', 'forbidden'];
     const errorMessage = error.message.toLowerCase();

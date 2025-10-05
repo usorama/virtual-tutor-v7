@@ -92,9 +92,12 @@ export class BookGroupDetector {
       return pathParts.join('/');
     }
 
-    // For backwards compatibility, check if file has a path property with proper type checking
-    if ('path' in file && typeof (file as any).path === 'string') {
-      const pathParts = (file as any).path.split('/');
+    // For backwards compatibility, check if the underlying File object has a path property
+    type FileWithPath = File & { path?: string };
+    const fileWithPath = file.file as unknown as FileWithPath;
+
+    if ('path' in fileWithPath && typeof fileWithPath.path === 'string') {
+      const pathParts = fileWithPath.path.split('/');
       pathParts.pop(); // Remove filename
       return pathParts.join('/');
     }

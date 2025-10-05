@@ -430,7 +430,14 @@ export async function processAllPendingTextbooks(): Promise<void> {
 
     console.log(`🔄 Processing ${textbooks.length} pending textbooks...`);
 
-    const files = textbooks.map((tb: any) => ({
+    // Type the textbook records from database
+    type PendingTextbook = {
+      id: string;
+      title: string;
+      file_path: string;
+    };
+
+    const files = (textbooks as PendingTextbook[]).map((tb) => ({
       path: tb.file_path,
       textbookId: tb.id,
       title: tb.title

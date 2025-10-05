@@ -73,7 +73,7 @@ export interface QueryConfig<TData, TError = Error, TVariables = void>
   refetchOnMount?: boolean | 'always';
   refetchOnWindowFocus?: boolean | 'always';
   refetchOnReconnect?: boolean | 'always';
-  refetchInterval?: number | false | ((data: TData | undefined, query: any) => number | false);
+  refetchInterval?: number | false | ((data: TData | undefined, query: { queryKey: readonly unknown[]; queryHash: string }) => number | false);
   refetchIntervalInBackground?: boolean;
   notifyOnChangeProps?: Array<keyof UseQueryResult<TData, TError>> | 'all';
   notifyOnChangePropsExclusions?: Array<keyof UseQueryResult<TData, TError>>;
@@ -109,11 +109,11 @@ interface EnhancedQueryState<TData, TError = Error> extends UseQueryResult<TData
  * Query cache for managing query state
  */
 class QueryCache {
-  private cache = new Map<string, any>();
-  private subscribers = new Map<string, Set<(data: any) => void>>();
+  private cache = new Map<string, unknown>();
+  private subscribers = new Map<string, Set<(data: unknown) => void>>();
 
   get<T>(key: string): T | undefined {
-    return this.cache.get(key);
+    return this.cache.get(key) as T | undefined;
   }
 
   set<T>(key: string, data: T): void {
@@ -141,18 +141,20 @@ class QueryCache {
     }
 
     const subscribers = this.subscribers.get(key)!;
-    subscribers.add(callback);
+    // Type assertion here is safe because we control what goes into the cache
+    const wrappedCallback = (data: unknown) => callback(data as T);
+    subscribers.add(wrappedCallback);
 
     // Return unsubscribe function
     return () => {
-      subscribers.delete(callback);
+      subscribers.delete(wrappedCallback);
       if (subscribers.size === 0) {
         this.subscribers.delete(key);
       }
     };
   }
 
-  private notifySubscribers(key: string, data: any): void {
+  private notifySubscribers(key: string, data: unknown): void {
     const subscribers = this.subscribers.get(key);
     if (subscribers) {
       subscribers.forEach(callback => callback(data));
@@ -271,12 +273,19 @@ export function useGenericQuery<
       error: options.isRetry ? prev.error : null,
     }));
 
+    // Track result and error for finally block
+    let finalData: TData | undefined = undefined;
+    let finalError: TError | null = null;
+
     try {
       // Execute query function with proper typing
       const result: TData = await (currentVariables !== undefined
         ? (queryFnRef.current as (vars: TVariables) => Promise<TData>)(currentVariables)
         : (queryFnRef.current as () => Promise<TData>)()
       );
+
+      // Track for finally block
+      finalData = result;
 
       // Check if request was aborted
       if (abortControllerRef.current?.signal.aborted) {
@@ -308,9 +317,9 @@ export function useGenericQuery<
       // Reset retry count on success
       retryCountRef.current = 0;
 
-      // Call success callback
+      // Call success callback (note: callback expects TData, not TSelected)
       if (onSuccessRef.current) {
-        onSuccessRef.current(processedData as any);
+        onSuccessRef.current(result);
       }
 
     } catch (error) {
@@ -320,6 +329,7 @@ export function useGenericQuery<
       }
 
       const typedError = error as TError;
+      finalError = typedError;
       retryCountRef.current += 1;
 
       // Determine if we should retry
@@ -367,9 +377,9 @@ export function useGenericQuery<
         throw typedError;
       }
     } finally {
-      // Call settled callback
+      // Call settled callback with the actual query result
       if (onSettledRef.current) {
-        onSettledRef.current(state.data as any, state.error);
+        onSettledRef.current(finalData, finalError);
       }
     }
   }, [enabled, queryHash, select, retry, retryDelay, useErrorBoundary, state.data, state.error]);

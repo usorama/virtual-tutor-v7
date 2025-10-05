@@ -153,11 +153,12 @@ function createMockTypedClient(): TypedSupabaseClient {
     })
   })
 
+  // Return a properly typed mock client that satisfies TypedSupabaseClient interface
   return {
     auth: mockAuth,
     from: mockFrom,
     // Add other methods as needed for full compatibility
-  } as any as TypedSupabaseClient
+  } as unknown as TypedSupabaseClient
 }
 
 // ==================================================

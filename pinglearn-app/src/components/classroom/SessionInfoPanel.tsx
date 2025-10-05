@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { AudioControlPanel } from './AudioControlPanel';
+import type { UseSessionStateReturn } from '@/hooks/useSessionState';
 
 interface AudioControlState {
   // Microphone controls (student input)
@@ -23,10 +24,15 @@ interface AudioControlState {
   teacherMuted: boolean;
 }
 
+/**
+ * Props for the SessionInfoPanel component
+ * @interface SessionInfoPanelProps
+ */
 interface SessionInfoPanelProps {
   sessionId?: string;
   topic: string;
-  sessionState: any; // Type from useSessionState
+  /** Session state from useSessionState hook - provides real-time session status */
+  sessionState: UseSessionStateReturn;
   liveMetrics?: {
     duration: number;
     messagesExchanged: number;

@@ -293,8 +293,13 @@ class MemoryManager {
   private clearMathRendererCache(aggressive: boolean = false): void {
     try {
       // Access the global math cache from MathRenderer
-      if (typeof window !== 'undefined' && (window as any).mathCache) {
-        const cache = (window as any).mathCache;
+      type WindowWithMathCache = Window & {
+        mathCache?: Map<string, unknown> & { clear: () => void };
+      };
+      const windowWithCache = window as WindowWithMathCache;
+
+      if (typeof window !== 'undefined' && windowWithCache.mathCache) {
+        const cache = windowWithCache.mathCache;
         if (cache && typeof cache.clear === 'function') {
           if (aggressive) {
             cache.clear();
@@ -377,9 +382,10 @@ class MemoryManager {
   private suggestGarbageCollection(): void {
     try {
       // Use setTimeout to defer GC hint
+      type WindowWithGC = Window & { gc?: () => void };
       setTimeout(() => {
         if (typeof window !== 'undefined' && 'gc' in window) {
-          (window as any).gc();
+          (window as WindowWithGC).gc?.();
         }
       }, 100);
     } catch (error) {
@@ -393,10 +399,11 @@ class MemoryManager {
   private forceGarbageCollection(): void {
     try {
       // Multiple strategies to encourage GC
+      type WindowWithGC = Window & { gc?: () => void };
       for (let i = 0; i < 3; i++) {
         setTimeout(() => {
           if (typeof window !== 'undefined' && 'gc' in window) {
-            (window as any).gc();
+            (window as WindowWithGC).gc?.();
           }
         }, i * 50);
       }
@@ -496,7 +503,8 @@ class MemoryManager {
     this.stopAutoCleanup();
     this.performCleanup();
     this.listeners.clear();
-    (MemoryManager as any).instance = undefined;
+    // Reset the singleton instance
+    (MemoryManager as unknown as { instance: MemoryManager | undefined }).instance = undefined;
   }
 }
 

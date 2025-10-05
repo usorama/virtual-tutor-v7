@@ -2,7 +2,7 @@ import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
 // Mock server client for development when Supabase is not available
-const createMockServerClient = () => {
+const createMockServerClient = (): ReturnType<typeof createServerClient> => {
   const mockAuth = {
     signInWithPassword: async () => ({ data: null, error: new Error('Mock mode - use server actions') }),
     signUp: async () => ({ data: null, error: new Error('Mock mode - use server actions') }),
@@ -21,7 +21,7 @@ const createMockServerClient = () => {
       update: () => ({ data: null, error: null }),
       delete: () => ({ data: null, error: null })
     })
-  }
+  } as unknown as ReturnType<typeof createServerClient>
 }
 
 export async function createClient() {
@@ -30,7 +30,7 @@ export async function createClient() {
 
   if (useMock) {
     console.warn('Using mock Supabase server client for development')
-    return createMockServerClient() as any
+    return createMockServerClient()
   }
 
   const cookieStore = await cookies()

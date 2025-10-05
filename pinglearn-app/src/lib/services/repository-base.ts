@@ -116,7 +116,7 @@ export abstract class BaseRepository<T extends RepositoryTypes.BaseEntity> imple
           limit: options.limit,
           offset: options.offset,
           orderBy: options.orderBy ? [{
-            field: options.orderBy.field as any,
+            field: options.orderBy.field as RepositoryTypes.SortField<T>,
             direction: options.orderBy.direction
           }] : undefined,
         }
@@ -494,9 +494,10 @@ export abstract class BaseRepository<T extends RepositoryTypes.BaseEntity> imple
     }
 
     try {
+      // Use unknown intermediate to safely update the deleted_at field
       await this.update(id, {
         deleted_at: new Date().toISOString(),
-      } as any);
+      } as unknown as Partial<T>);
 
       return true;
     } catch {
@@ -518,9 +519,10 @@ export abstract class BaseRepository<T extends RepositoryTypes.BaseEntity> imple
     }
 
     try {
+      // Use unknown intermediate to safely update the deleted_at field
       await this.update(id, {
         deleted_at: null,
-      } as any);
+      } as unknown as Partial<T>);
 
       return true;
     } catch {
@@ -582,7 +584,7 @@ export class SupabaseRepository<T extends RepositoryTypes.BaseEntity> extends Ba
       options: {
         ...options,
         include: select,
-        orderBy: options?.orderBy as any,
+        orderBy: options?.orderBy as QueryOptions['orderBy'],
       },
     };
   }

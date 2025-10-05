@@ -24,6 +24,25 @@ import {
   DEFAULT_RECOVERY_CONFIG
 } from '@/services/voice-session-recovery';
 
+/**
+ * Recovery metrics from the voice session recovery service
+ */
+interface RecoveryMetrics {
+  attempts: number;
+  successRate: number;
+  lastRecovery: number | null;
+}
+
+/**
+ * Recovery stats structure returned by getRecoveryStats
+ */
+interface RecoveryStatsResult {
+  retryAttempts?: number;
+  circuitBreakerOpen?: boolean;
+  hasCheckpoint?: boolean;
+  metrics?: RecoveryMetrics | null;
+}
+
 export interface VoiceSessionState {
   sessionId: string | null;
   isConnected: boolean;
@@ -219,17 +238,17 @@ export function useVoiceSessionRecovery(options: VoiceRecoveryOptions = {}): [Vo
     if (!recoveryServiceRef.current || !state.sessionId) return;
 
     const updateStats = () => {
-      const stats = recoveryServiceRef.current!.getRecoveryStats(state.sessionId!);
+      const stats = recoveryServiceRef.current!.getRecoveryStats(state.sessionId!) as RecoveryStatsResult;
 
       setState(prevState => ({
         ...prevState,
-        retryCount: (stats.retryAttempts as number) || 0,
-        circuitBreakerOpen: (stats.circuitBreakerOpen as boolean) || false,
-        hasCheckpoint: (stats.hasCheckpoint as boolean) || false,
+        retryCount: stats.retryAttempts ?? 0,
+        circuitBreakerOpen: stats.circuitBreakerOpen ?? false,
+        hasCheckpoint: stats.hasCheckpoint ?? false,
         recoveryStats: {
-          totalAttempts: (stats.metrics as any)?.attempts || 0,
-          successRate: (stats.metrics as any)?.successRate || 0,
-          lastRecovery: (stats.metrics as any)?.lastRecovery || null
+          totalAttempts: stats.metrics?.attempts ?? 0,
+          successRate: stats.metrics?.successRate ?? 0,
+          lastRecovery: stats.metrics?.lastRecovery ?? null
         }
       }));
     };
@@ -438,7 +457,7 @@ function calculateBackoffDelay(retryCount: number, config: Partial<RecoveryConfi
 /**
  * Higher-order component that provides voice recovery capabilities
  */
-export function withVoiceRecovery<P extends Record<string, any>>(
+export function withVoiceRecovery<P extends Record<string, unknown>>(
   Component: React.ComponentType<P>,
   recoveryOptions?: VoiceRecoveryOptions
 ): React.ComponentType<P> {

@@ -195,11 +195,15 @@ export class PerformanceTracker {
     // Skip in Edge Runtime (serverless - no meaningful memory tracking)
     // Using bracket notation to avoid Next.js Edge Runtime static analysis
     // This method is never called from middleware, only from Node.js API routes
-    if (typeof process === 'undefined' || !(process as any)['memoryUsage']) {
+    type NodeProcess = typeof process & {
+      memoryUsage?: () => { heapUsed: number; heapTotal: number; external: number; rss: number };
+    };
+
+    if (typeof process === 'undefined' || !(process as NodeProcess).memoryUsage) {
       return;
     }
 
-    const usage = (process as any)['memoryUsage']();
+    const usage = (process as NodeProcess).memoryUsage!();
     const metric: MemoryMetric = {
       heapUsed: usage.heapUsed,
       heapTotal: usage.heapTotal,

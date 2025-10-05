@@ -12,7 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { EnhancedUploadFlow } from '@/components/textbook/EnhancedUploadFlow'
+// NOTE: EnhancedUploadFlow removed - use /textbooks/upload page instead
 import { ContentManagementDashboard } from '@/components/textbook/ContentManagementDashboard'
 import { getTextbooks, deleteTextbook, retryProcessing } from '@/lib/textbook/actions'
 import { Textbook } from '@/types/textbook'
@@ -196,11 +196,27 @@ export function TextbooksClientEnhanced({
             </Button>
           </div>
 
-          <EnhancedUploadFlow
-            userGrade={userGrade}
-            userSubject={selectedSubject}
-            onComplete={handleUploadComplete}
-          />
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Upload className="h-5 w-5" />
+                Upload New Textbook
+              </CardTitle>
+              <CardDescription>
+                Use our enhanced upload wizard to organize your textbook chapters
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button
+                onClick={() => window.location.href = '/textbooks/upload'}
+                className="w-full"
+                size="lg"
+              >
+                <Upload className="mr-2 h-5 w-5" />
+                Go to Upload Wizard
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       ) : (
         <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -322,11 +338,14 @@ export function TextbooksClientEnhanced({
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <EnhancedUploadFlow
-                  userGrade={userGrade}
-                  userSubject={selectedSubject}
-                  onComplete={handleUploadComplete}
-                />
+                <Button
+                  onClick={() => window.location.href = '/textbooks/upload'}
+                  className="w-full"
+                  size="lg"
+                >
+                  <Upload className="mr-2 h-5 w-5" />
+                  Go to Upload Wizard
+                </Button>
               </CardContent>
             </Card>
           </TabsContent>

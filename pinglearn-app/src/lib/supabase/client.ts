@@ -1,7 +1,8 @@
 import { createBrowserClient } from '@supabase/ssr'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 // Mock client for development when Supabase is not available
-const createMockClient = () => {
+const createMockClient = (): ReturnType<typeof createBrowserClient> => {
   const mockAuth = {
     signInWithPassword: async () => ({ data: null, error: new Error('Mock mode - use server actions') }),
     signUp: async () => ({ data: null, error: new Error('Mock mode - use server actions') }),
@@ -20,7 +21,7 @@ const createMockClient = () => {
       update: () => ({ data: null, error: null }),
       delete: () => ({ data: null, error: null })
     })
-  }
+  } as unknown as ReturnType<typeof createBrowserClient>
 }
 
 export function createClient() {
@@ -29,7 +30,7 @@ export function createClient() {
 
   if (useMock) {
     console.warn('Using mock Supabase client for development')
-    return createMockClient() as any
+    return createMockClient()
   }
 
   // Use new Publishable Key (2025 standard) - fallback to legacy anon key if needed

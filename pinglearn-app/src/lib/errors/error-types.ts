@@ -36,6 +36,8 @@ export enum ErrorCode {
   DATABASE_ERROR = 'DATABASE_ERROR',
   DATABASE_CONNECTION_ERROR = 'DATABASE_CONNECTION_ERROR',
   DATA_INTEGRITY_ERROR = 'DATA_INTEGRITY_ERROR',
+  FOREIGN_KEY_VIOLATION = 'FOREIGN_KEY_VIOLATION',
+  DUPLICATE_ENTRY = 'DUPLICATE_ENTRY',
 
   // External Service Errors
   EXTERNAL_SERVICE_ERROR = 'EXTERNAL_SERVICE_ERROR',
@@ -153,6 +155,8 @@ export const ERROR_CODE_TO_HTTP_STATUS: Record<ErrorCode, number> = {
   [ErrorCode.DATABASE_ERROR]: 500,
   [ErrorCode.DATABASE_CONNECTION_ERROR]: 503,
   [ErrorCode.DATA_INTEGRITY_ERROR]: 500,
+  [ErrorCode.FOREIGN_KEY_VIOLATION]: 400,
+  [ErrorCode.DUPLICATE_ENTRY]: 409,
   [ErrorCode.EXTERNAL_SERVICE_ERROR]: 502,
   [ErrorCode.API_TIMEOUT]: 504,
   [ErrorCode.NETWORK_ERROR]: 503,
@@ -184,6 +188,8 @@ export const USER_FRIENDLY_MESSAGES: Record<ErrorCode, string> = {
   [ErrorCode.DATABASE_ERROR]: 'A data error occurred. Please try again.',
   [ErrorCode.DATABASE_CONNECTION_ERROR]: 'Database is temporarily unavailable.',
   [ErrorCode.DATA_INTEGRITY_ERROR]: 'Data validation failed. Please check your input.',
+  [ErrorCode.FOREIGN_KEY_VIOLATION]: 'The referenced resource does not exist.',
+  [ErrorCode.DUPLICATE_ENTRY]: 'This record already exists.',
   [ErrorCode.EXTERNAL_SERVICE_ERROR]: 'External service is temporarily unavailable.',
   [ErrorCode.API_TIMEOUT]: 'Request timed out. Please try again.',
   [ErrorCode.NETWORK_ERROR]: 'Network connection error. Please check your connection.',

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import type { DisplayItem } from '@/protected-core';
+import type { DisplayItem, DisplayBuffer } from '@/protected-core';
 
 interface UseStreamingTranscriptReturn {
   messages: DisplayItem[];
@@ -15,7 +15,7 @@ export function useStreamingTranscript(sessionId?: string): UseStreamingTranscri
   const [error, setError] = useState<string | null>(null);
 
   // Refs for tracking state
-  const displayBufferRef = useRef<any>(null);
+  const displayBufferRef = useRef<DisplayBuffer | null>(null);
 
   // PC-015: Process buffer items with subscription callback
   const processDisplayBuffer = useCallback((items: DisplayItem[]) => {

@@ -290,6 +290,26 @@ const ERROR_MESSAGE_TEMPLATES: Record<ErrorCode, EnhancedErrorMessage> = {
     severity: 'error',
   },
 
+  [ErrorCode.FOREIGN_KEY_VIOLATION]: {
+    title: 'Reference Not Found',
+    message:
+      "The item you're trying to reference doesn't exist. This could happen if something was deleted or if you're using an incorrect ID.",
+    action:
+      "Make sure the item you're referencing still exists and try again.",
+    icon: 'alert-circle',
+    severity: 'warning',
+  },
+
+  [ErrorCode.DUPLICATE_ENTRY]: {
+    title: 'Already Exists',
+    message:
+      'This record already exists in the system. Each record must be unique.',
+    action:
+      'Please check if this entry already exists, or modify the details to make it unique.',
+    icon: 'alert-circle',
+    severity: 'warning',
+  },
+
   [ErrorCode.INTERNAL_SERVER_ERROR]: {
     title: 'Something Went Wrong',
     message:

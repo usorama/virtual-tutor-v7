@@ -195,7 +195,12 @@ class PerformanceMonitor {
    * Process First Input Delay
    */
   private processFIDEntry(entry: PerformanceEntry): PerformanceMetric {
-    const fidEntry = entry as any; // PerformanceEventTiming
+    // PerformanceEventTiming type with the properties we need
+    type PerformanceEventTiming = PerformanceEntry & {
+      processingStart: number;
+      startTime: number;
+    };
+    const fidEntry = entry as PerformanceEventTiming;
     return {
       name: 'first-input-delay',
       value: fidEntry.processingStart - fidEntry.startTime,
@@ -209,7 +214,11 @@ class PerformanceMonitor {
    * Process Cumulative Layout Shift
    */
   private processCLSEntry(entry: PerformanceEntry): PerformanceMetric {
-    const clsEntry = entry as any; // LayoutShift
+    // LayoutShift type with the properties we need
+    type LayoutShift = PerformanceEntry & {
+      value: number;
+    };
+    const clsEntry = entry as LayoutShift;
     return {
       name: 'cumulative-layout-shift',
       value: clsEntry.value,
@@ -392,7 +401,15 @@ class PerformanceMonitor {
   getMemoryUsage(): PerformanceMetric | null {
     if (!this.isSupported()) return null;
 
-    const memory = (performance as any).memory;
+    // Chrome-specific memory API
+    type PerformanceWithMemory = Performance & {
+      memory?: {
+        usedJSHeapSize: number;
+        totalJSHeapSize: number;
+        jsHeapSizeLimit: number;
+      };
+    };
+    const memory = (performance as PerformanceWithMemory).memory;
     if (!memory) return null;
 
     return {

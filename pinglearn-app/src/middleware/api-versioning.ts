@@ -90,6 +90,9 @@ export function detectApiVersion(pathname: string): VersionDetectionResult {
     'theme',
     'contact',
     'transcription',
+    'textbooks',
+    'admin',
+    'health',
   ];
 
   const isNonVersioned = nonVersionedRoutes.some(route => pathAfterApi.startsWith(route));

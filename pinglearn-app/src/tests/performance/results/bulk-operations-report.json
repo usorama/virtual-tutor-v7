@@ -1,0 +1,20 @@
+{
+  "timestamp": "2025-10-04T14:47:59.268Z",
+  "performanceTargets": {
+    "seriesCreation": 500,
+    "bookCreation": 500,
+    "bulkChapterInsert50": 2000,
+    "fileUpload1MB": 2000,
+    "multiUpload10Files": 10000,
+    "completeWorkflow": 15000,
+    "errorDetection": 500
+  },
+  "metrics": [],
+  "summary": {
+    "totalOperations": 0,
+    "withinTarget": 0,
+    "slowerThanTarget": 0,
+    "avgDuration": null,
+    "avgMemoryDelta": null
+  }
+}
