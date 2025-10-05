@@ -15,6 +15,34 @@
 
 ---
 
+## 🧠 MEMORY SYSTEM (NEW - October 2025)
+
+**PingLearn now has a fool-proof, always-updated memory system** that ensures Claude Code maintains perfect context across sessions.
+
+**Quick Reference**:
+- **Location**: `.memories/` directory (auto-maintained)
+- **Codebase Map**: `.memories/codebase-map.json` (auto-updated after every file operation)
+- **Protected Boundaries**: `.memories/validated/protected-core-boundaries.md`
+- **System Guide**: `.memories/README.md`
+
+**Auto-Update Mechanisms** (ALWAYS ACTIVE):
+- ✅ **PostToolUse Hook**: Updates memory after EVERY file write/edit (<100ms)
+- ✅ **UserPromptSubmit Hook**: Checks memory freshness before EVERY task
+- ✅ **Git post-commit Hook**: Auto-commits memory changes with code
+- ✅ **Manual Refresh**: `/refresh-memory` command available
+
+**Memory is ALWAYS up-to-date**. No manual maintenance required.
+
+**Why This Matters**:
+- Prevents protected-core violations (automatic boundary awareness)
+- Eliminates duplicate work (knows what exists where)
+- Maintains context across sessions (survives context window resets)
+- Enforces --rules default (development process is safe)
+
+**Complete Documentation**: `MEMORY-SYSTEM-IMPLEMENTATION-COMPLETE.md`
+
+---
+
 ## 🔴 CRITICAL BOUNDARIES - NEVER CROSS
 
 ### ⛔ PROTECTED CORE - NEVER MODIFY
