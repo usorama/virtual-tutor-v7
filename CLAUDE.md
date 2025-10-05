@@ -258,3 +258,4 @@ claude --type-strict [your task]
 - **LIVEKIT SERVICE**: Python LiveKit agent service must be running for voice functionality
 - Python Livekit service runs in venv and is available at the root folder @livekit-agent/
 - PingLearn app is available @pinglearn-app/
+- our textbooks are in `/Users/umasankrudhya/Projects/pinglearn/text-books`.  since all textbooks are uploaded, you can choose one book from db, pick it's corresponding folder in this folder, delete it from db and upload through UI for testing purposes.  Remember, deleting a text book means, deleting all information associated with that text book and metadata.

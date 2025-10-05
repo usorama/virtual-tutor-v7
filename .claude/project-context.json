@@ -1,0 +1,83 @@
+{
+  "project": {
+    "name": "PingLearn",
+    "type": "ai-tutoring-platform",
+    "root": "/Users/umasankrudhya/Projects/pinglearn",
+    "description": "AI-powered learning platform with Gemini Live API, LiveKit voice, KaTeX math rendering"
+  },
+  "structure": {
+    "frontend": {
+      "path": "pinglearn-app/",
+      "port": 3006,
+      "framework": "Next.js 15.5.3",
+      "logFile": "/tmp/pinglearn-nextjs.log"
+    },
+    "backend": {
+      "path": "livekit-agent/",
+      "framework": "Python LiveKit Agent",
+      "logFile": "/tmp/pinglearn-livekit.log"
+    }
+  },
+  "documentation": {
+    "uatPlan": "pinglearn-app/docs/UAT-MONITORING-PLAN.md",
+    "restartGuide": "pinglearn-app/docs/UAT-RESTART-GUIDE.md",
+    "issueTracker": "~/.claude/docs/issue-tracker.md",
+    "changeRecords": "pinglearn-app/docs/change_records/",
+    "masterPlan": "pinglearn-app/docs/new-arch-impl-planning/MASTER-PLAN.md"
+  },
+  "configuration": {
+    "mcpServers": ".mcp.json",
+    "claudeSettings": ".claude/settings.json",
+    "projectCommands": ".claude/commands/"
+  },
+  "uatMonitoring": {
+    "enabled": true,
+    "evidencePath": "pinglearn-app/docs/uat-evidence/",
+    "activeIssues": 5,
+    "criticalIssues": 3,
+    "priorities": [
+      {
+        "id": "007",
+        "severity": "P0",
+        "title": "Metadata Pipeline Broken",
+        "component": "Frontend → Python Agent metadata pipeline"
+      },
+      {
+        "id": "008",
+        "severity": "P0",
+        "title": "Show-Then-Tell Inverted",
+        "component": "Python LiveKit Agent + Frontend timing"
+      },
+      {
+        "id": "010",
+        "severity": "P0",
+        "title": "Textbook Content Inaccessible",
+        "component": "Python Agent RAG pipeline"
+      },
+      {
+        "id": "009",
+        "severity": "P1",
+        "title": "Message Bubble Containers Obstructing View",
+        "component": "TeachingBoardSimple.tsx rendering"
+      },
+      {
+        "id": "011",
+        "severity": "P2",
+        "title": "Curriculum Panel Wrong Data Display",
+        "component": "Curriculum panel UI component"
+      }
+    ]
+  },
+  "monitoring": {
+    "browserDebugPort": 9222,
+    "frontendUrl": "http://localhost:3006",
+    "mcpServer": "chrome-devtools",
+    "fallbackMcp": "playwright"
+  },
+  "credentials": {
+    "test": {
+      "email": "test@example.com",
+      "password": "TestPassword123!"
+    }
+  }
+}
